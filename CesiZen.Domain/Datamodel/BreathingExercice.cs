@@ -6,7 +6,7 @@ public class BreathingExercice : AId
 {
     public int UserId { get; }
 
-    public Exercice Exercice { get; set; }
+    public ExerciceType Exercice { get; set; }
 
     public Timer Timer { get; set; }
 
