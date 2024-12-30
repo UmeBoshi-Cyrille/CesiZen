@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CesiZen.Application\CesiZen.Application.csproj" />
+    <ProjectReference Include="..\CesiZen.Infrastructure\CesiZen.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
