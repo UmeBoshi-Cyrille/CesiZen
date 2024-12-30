@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CesiZen.Domain.Interface.QueryInterfaces.RepositoryQuery
+namespace CesiZen.Application.Services.CommandServices
 {
-    internal interface IUserQuerService
+    internal class UserCommandService
     {
     }
 }

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CesiZen.Domain.Datamodel;
 
-namespace CesiZen.Domain.Interface.CommandInterfaces.RepositoryCommand
+namespace CesiZen.Domain.Interface;
+
+public interface IUserCommand : ICommandInterface<User>
 {
-    internal interface IUserCommand
-    {
-    }
 }

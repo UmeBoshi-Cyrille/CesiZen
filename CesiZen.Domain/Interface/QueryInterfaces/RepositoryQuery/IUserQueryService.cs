@@ -2,6 +2,6 @@
 
 namespace CesiZen.Domain.Interface;
 
-public interface IUserQuery : IQueryInterface<User>
+public interface IUserQueryService : IQueryServiceInterface<User>
 {
 }

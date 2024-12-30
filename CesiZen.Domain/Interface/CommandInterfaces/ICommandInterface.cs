@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace CesiZen.Domain.Interface;
 
-namespace CesiZen.Domain.Interface.CommandInterfaces
+public interface ICommandInterface<T> : ICommand<T> where T : class
 {
-    internal interface ICommandInterface
-    {
-    }
 }

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace CesiZen.Domain.Interface;
 
-namespace CesiZen.Domain.Interface.QueryInterfaces
+public interface IQuery<T>
 {
-    internal interface IQuery
-    {
-    }
+    T GetOne(int id);
+
+    IEnumerable<T> GetAll();
 }
