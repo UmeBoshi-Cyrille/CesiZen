@@ -4,7 +4,7 @@ using Serilog;
 
 namespace CesiZen.Application.Services;
 
-public class UserQueryService : IUserQuery
+public class UserQueryService : IUserQueryService
 {
     private readonly IUserQuery query;
     private readonly ILogger logger;
