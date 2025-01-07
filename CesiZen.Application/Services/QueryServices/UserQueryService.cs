@@ -1,12 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CesiZen.Domain.Datamodel;
+using CesiZen.Domain.Interface;
+using Serilog;
 
-namespace CesiZen.Application.Services.QueryServices
+namespace CesiZen.Application.Services;
+
+public class UserQueryService : IUserQuery
 {
-    internal class UserQueryService
+    private readonly IUserQuery query;
+    private readonly ILogger logger;
+
+    public UserQueryService(
+        IUserQuery query,
+        ILogger logger)
     {
+        this.query = query;
+        this.logger = logger;
+    }
+
+    public IEnumerable<User> GetAll()
+    {
+        throw new NotImplementedException();
+    }
+
+    public User GetOne(int id)
+    {
+        throw new NotImplementedException();
     }
 }
