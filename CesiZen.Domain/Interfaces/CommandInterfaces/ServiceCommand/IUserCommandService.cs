@@ -4,7 +4,5 @@ namespace CesiZen.Domain.Interface;
 
 public interface IUserCommandService : ICommandServiceInterface<User>
 {
-    Task<IResult> UpdatePostalCode(int id, uint postalCode);
-
-    Task<IResult> UpdateUserName(int id, string userName);
+    Task<IResult> UpdateUserName(string id, string userName);
 }

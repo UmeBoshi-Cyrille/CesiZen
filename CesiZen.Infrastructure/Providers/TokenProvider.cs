@@ -3,6 +3,10 @@ using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interface;
 using CesiZen.Domain.Interfaces;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
+using Serilog;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -13,7 +17,7 @@ public class TokenProvider : ITokenProvider
 {
     private readonly ISessionQuery sessionQuery;
     private readonly ISessionCommand sessionCommand;
-    private readonly ITokenCommand tokenCommand;
+    private readonly IRefreshTokenCommand tokenCommand;
     private readonly IRefreshTokenQuery tokenQuery;
     private readonly ILogger logger;
     private readonly JwtSettings jwtSettings;
@@ -21,7 +25,7 @@ public class TokenProvider : ITokenProvider
     public TokenProvider(
         ISessionQuery sessionQuery,
         ISessionCommand sessionCommand,
-        ITokenCommand tokenCommand,
+        IRefreshTokenCommand tokenCommand,
         IRefreshTokenQuery tokenQuery,
         ILogger logger,
         JwtSettings jwtSettings)

@@ -22,6 +22,8 @@ public sealed class Error
     public static Error NotUnique(string message) => new(ErrorType.NotUnique, message);
     public static Error WrongFormat(string message) => new(ErrorType.WrongFormat, message);
     public static Error NotMatch(string message) => new(ErrorType.NotMatch, message);
+    public static Error NullOrWhiteSpace(string message) => new(ErrorType.NullOrWhiteSpace, message);
+    public static Error NullOrEmpty(string message) => new(ErrorType.NullOrEmpty, message);
 
 }
 
@@ -34,5 +36,7 @@ public enum ErrorType
     OperationFailed,
     NotUnique,
     WrongFormat,
-    NotMatch
+    NotMatch,
+    NullOrWhiteSpace,
+    NullOrEmpty
 }

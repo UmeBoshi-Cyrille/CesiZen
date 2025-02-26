@@ -6,5 +6,5 @@ public interface ICommand<T>
 
     Task<IResult> Update(T entity);
 
-    Task<IResult> Delete(int id);
+    Task<IResult> Delete(string id);
 }

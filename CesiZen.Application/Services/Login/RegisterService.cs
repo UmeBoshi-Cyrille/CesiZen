@@ -1,13 +1,12 @@
-﻿using RE.Domain.Datamodel;
-using RE.Domain.DataTransfertObjects;
-using RE.Domain.Interfaces;
-using RE.Domain.Interfaces.IServices;
-using RE.Domain.Mapper;
-using RE.Domain.Result;
-using RE.Domain.Results;
+﻿using CesiZen.Domain.BusinessResult;
+using CesiZen.Domain.Datamodel;
+using CesiZen.Domain.DataTransfertObject;
+using CesiZen.Domain.Interface;
+using CesiZen.Domain.Interfaces;
+using CesiZen.Domain.Mapper;
 using Serilog;
 
-namespace RE.Application.Services;
+namespace CesiZen.Application.Services;
 
 public class RegisterService : ALoginService, IRegisterService
 {
