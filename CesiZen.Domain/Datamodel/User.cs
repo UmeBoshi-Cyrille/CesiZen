@@ -46,5 +46,5 @@ public class User : IdentityUser
     public DateTime? RefreshTokenExpiryTime { get; set; }
 
     [BsonElement("login")]
-    public Login login { get; set; } = new();
+    public Login Login { get; set; } = new();
 }
