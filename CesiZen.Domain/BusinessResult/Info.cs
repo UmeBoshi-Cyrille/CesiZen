@@ -2,11 +2,11 @@
 
 public class Info
 {
-    private readonly string message;
-    private readonly InfoType type;
+    private string message;
+    private InfoType type;
 
-    public string Message => message;
-    public InfoType Type => type;
+    public string Message => !string.IsNullOrEmpty(message) ? message : string.Empty;
+    public InfoType Type => type != InfoType.None ? type : type = InfoType.None;
 
     public Info(InfoType type, string message)
     {
@@ -22,9 +22,8 @@ public class Info
 public enum InfoType
 {
     None,
-    Authentified,
     ProcessComplete,
-    StepComplete,
     Success,
+    Authentified
 }
 
