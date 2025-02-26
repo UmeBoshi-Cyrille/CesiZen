@@ -4,7 +4,7 @@ namespace CesiZen.Infrastructure.Repository;
 
 public class AbstractRepository
 {
-    private readonly MongoDbContext context;
+    protected readonly MongoDbContext context;
 
     public AbstractRepository(MongoDbContext context)
     {
