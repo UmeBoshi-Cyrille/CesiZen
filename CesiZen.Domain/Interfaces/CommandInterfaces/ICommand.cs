@@ -2,9 +2,9 @@
 
 public interface ICommand<T>
 {
-    void Insert(T entity);
+    Task<IResult> Insert(T entity);
 
-    void Update(T entity);
+    Task<IResult> Update(T entity);
 
-    void Delete(int id);
+    Task<IResult> Delete(int id);
 }
