@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CesiZen.Api", "CesiZen\CesiZen.Api.csproj", "{0F981A04-E73C-4C35-8A18-BC44FB051DAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CesiZen.Api", "CesiZen\CesiZen.Api.csproj", "{0F981A04-E73C-4C35-8A18-BC44FB051DAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CesiZen.Application", "CesiZen.Application\CesiZen.Application.csproj", "{3A5E275C-22B9-4431-877D-950B8CBEB00E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CesiZen.Application", "CesiZen.Application\CesiZen.Application.csproj", "{3A5E275C-22B9-4431-877D-950B8CBEB00E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CesiZen.Infrastructure", "CesiZen.Infrastructure\CesiZen.Infrastructure.csproj", "{2B609D1E-8B41-4711-A87E-4BC56D1E43DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CesiZen.Infrastructure", "CesiZen.Infrastructure\CesiZen.Infrastructure.csproj", "{2B609D1E-8B41-4711-A87E-4BC56D1E43DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CesiZen.Domain", "CesiZen.Domain\CesiZen.Domain.csproj", "{71133B4C-4447-4AC7-9A24-D580CB1A4780}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CesiZen.Domain", "CesiZen.Domain\CesiZen.Domain.csproj", "{71133B4C-4447-4AC7-9A24-D580CB1A4780}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{0C78E316-CC93-4BA0-B51C-A7E1DBD273BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{71133B4C-4447-4AC7-9A24-D580CB1A4780}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71133B4C-4447-4AC7-9A24-D580CB1A4780}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71133B4C-4447-4AC7-9A24-D580CB1A4780}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C78E316-CC93-4BA0-B51C-A7E1DBD273BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C78E316-CC93-4BA0-B51C-A7E1DBD273BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C78E316-CC93-4BA0-B51C-A7E1DBD273BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C78E316-CC93-4BA0-B51C-A7E1DBD273BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

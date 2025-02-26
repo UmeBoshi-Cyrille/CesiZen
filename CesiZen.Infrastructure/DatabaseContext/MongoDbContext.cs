@@ -7,6 +7,9 @@ namespace CesiZen.Infrastructure.DatabaseContext;
 public class MongoDbContext : DbContext
 {
     public DbSet<User> Users { get; set; }
+    public DbSet<Login> Logins { get; set; }
+    public DbSet<Session> Sessions { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     public MongoDbContext(DbContextOptions options)
         : base(options)
