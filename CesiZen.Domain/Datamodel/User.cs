@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace CesiZen.Domain.Datamodel;
 
@@ -12,22 +13,16 @@ public class User : IdentityUser
     public string Id { get; set; }
 
     [BsonElement("firstName")]
-    public string FirstName { get; set; }
+    [MaxLength(50)]
+    public required string FirstName { get; set; }
 
     [BsonElement("lastName")]
-    public string LastName { get; set; }
+    [MaxLength(50)]
+    public required string LastName { get; set; }
 
     [BsonElement("username")]
-    public string Username { get; set; }
-
-    [BsonElement("email")]
-    public string Email { get; set; }
-
-    [BsonElement("passwordHash")]
-    public string PasswordHash { get; set; }
-
-    [BsonElement("salt")]
-    public string Salt { get; set; }
+    [MaxLength(50)]
+    public string? Username { get; set; }
 
     [BsonElement("createdAt")]
     public DateTime CreatedAt { get; set; }
@@ -42,11 +37,14 @@ public class User : IdentityUser
     public bool IsActive { get; set; }
 
     [BsonElement("role")]
-    public RoleType Role { get; set; }
+    public RoleType Role { get; set; } = RoleType.NONE;
 
     [BsonElement("refreshToken")]
-    public string RefreshToken { get; set; }
+    public string? RefreshToken { get; set; }
 
     [BsonElement("refreshTokenExpiryTime")]
     public DateTime? RefreshTokenExpiryTime { get; set; }
+
+    [BsonElement("login")]
+    public Login login { get; set; } = new();
 }
