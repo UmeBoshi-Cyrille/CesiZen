@@ -24,8 +24,7 @@ public class SessionCommand : AbstractRepository, ISessionCommand
 
             if (session is not null)
             {
-                entity.Id = session.Id;
-                Update(entity);
+                session.SessionId = entity.SessionId;
             }
             else
             {
@@ -50,26 +49,26 @@ public class SessionCommand : AbstractRepository, ISessionCommand
         return Result.Success();
     }
 
-    public async Task<IResult> Delete(string id)
+    public async Task<IResult> Delete(string sessionId)
     {
         try
         {
             var result = await context.Sessions
-                 .Where(s => s.Id == id)
+                 .Where(s => s.SessionId == sessionId)
                  .ExecuteDeleteAsync();
 
             if (result <= 0)
             {
                 return Result.Failure(
                     Error.OperationFailed(string.Format(
-                        Message.GetResource("ErrorMessages", "LOG_DELETE_OPERATIONFAILED"), "Session", id)));
+                        Message.GetResource("ErrorMessages", "LOG_DELETE_OPERATIONFAILED"), "Session", "-")));
             }
         }
         catch (DbUpdateException ex)
         {
             return Result.Failure(
                 Error.OperationFailed(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_DELETE_OPERATIONFAILED"), "Session", id)));
+                    Message.GetResource("ErrorMessages", "LOG_DELETE_OPERATIONFAILED"), "Session", "-")));
         }
 
         return Result.Success();
@@ -80,8 +79,11 @@ public class SessionCommand : AbstractRepository, ISessionCommand
         context.Sessions.Add(entity);
     }
 
-    private void Update(Session entity)
+    private async Task Update(string sessionId, Session entity)
     {
-        context.Sessions.Update(entity);
+        await context.Sessions
+                .Where(p => p.SessionId == sessionId)
+                .ExecuteUpdateAsync(p => p
+                    .SetProperty(p => p.SessionId, entity.SessionId));
     }
 }

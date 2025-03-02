@@ -16,20 +16,20 @@ public class TokenCommand : AbstractRepository, IRefreshTokenCommand
 
     public async Task<IResult> UpSert(RefreshToken entity)
     {
-        var token = await context.RefreshTokens.FirstOrDefaultAsync(r => r.UserId == entity.UserId);
-
-        if (token is not null)
-        {
-            entity.Id = token.Id;
-            Update(entity);
-        }
-        else
-        {
-            Insert(entity);
-        }
-
         try
         {
+            var token = await context.RefreshTokens.FirstOrDefaultAsync(r => r.UserId == entity.UserId);
+
+            if (token is not null)
+            {
+                token.Token = entity.Token;
+                token.ExpirationTime = entity.ExpirationTime;
+            }
+            else
+            {
+                Insert(entity);
+            }
+
             await context.SaveChangesAsync();
         }
         catch (UniqueConstraintException ex)
@@ -67,10 +67,5 @@ public class TokenCommand : AbstractRepository, IRefreshTokenCommand
     private void Insert(RefreshToken entity)
     {
         context.RefreshTokens.Add(entity);
-    }
-
-    private void Update(RefreshToken entity)
-    {
-        context.RefreshTokens.Update(entity);
     }
 }
