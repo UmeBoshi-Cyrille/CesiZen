@@ -75,4 +75,22 @@ public class UserQuery : AbstractRepository, IUserQuery
 
         return Result<User>.Success(user);
     }
+
+    public async Task<IResult<string>> GetUserId(string sessionId)
+    {
+        var userId = await context.Sessions
+                                .Where(p => p.SessionId == sessionId)
+                                .Select(p => p.UserId)
+                                .FirstOrDefaultAsync();
+
+
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Result<string>.Failure(
+                Error.NotFound(string.Format(
+                    Message.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "User", "-")));
+        }
+
+        return Result<string>.Success(userId);
+    }
 }
