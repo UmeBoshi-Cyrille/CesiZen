@@ -70,7 +70,7 @@ public class AuthenticationController : ControllerBase
         Response.Cookies.Delete("JWTCookie");
 
         // Clear any other session-related data if necessary
-        HttpContext.Session.Clear();
+        //HttpContext.Session.Clear();
 
         return Ok("Logged out successfully");
     }
