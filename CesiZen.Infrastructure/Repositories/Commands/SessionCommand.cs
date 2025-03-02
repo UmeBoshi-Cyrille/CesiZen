@@ -50,7 +50,7 @@ public class SessionCommand : AbstractRepository, ISessionCommand
         return Result.Success();
     }
 
-    public async Task<IResult> Delete(int id)
+    public async Task<IResult> Delete(string id)
     {
         try
         {

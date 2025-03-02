@@ -14,7 +14,7 @@ public class SessionQuery : AbstractRepository, ISessionQuery
     {
     }
 
-    public async Task<IResult<int>> GetId(string id)
+    public async Task<IResult<string>> GetId(string id)
     {
         var result = await context.Sessions
                 .AsNoTracking()
@@ -24,11 +24,11 @@ public class SessionQuery : AbstractRepository, ISessionQuery
 
         if (result == null)
         {
-            return Result<int>.Failure(
+            return Result<string>.Failure(
                 Error.NotFound(string.Format(
                     Message.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "RefreshToken", id)));
         }
 
-        return Result<int>.Success(result);
+        return Result<string>.Success(result);
     }
 }

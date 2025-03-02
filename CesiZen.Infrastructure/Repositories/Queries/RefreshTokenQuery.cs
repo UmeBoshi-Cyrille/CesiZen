@@ -30,7 +30,7 @@ public class RefreshTokenQuery : AbstractRepository, IRefreshTokenQuery
         return Result<RefreshToken>.Success(result);
     }
 
-    public async Task<IResult<int>> GetId(string userId)
+    public async Task<IResult<string>> GetId(string userId)
     {
         var result = await context.RefreshTokens
                 .AsNoTracking()
@@ -38,14 +38,14 @@ public class RefreshTokenQuery : AbstractRepository, IRefreshTokenQuery
                 .Select(p => p.Id)
                 .FirstOrDefaultAsync();
 
-        if (result <= 0)
+        if (string.IsNullOrEmpty(result))
         {
-            return Result<int>.Failure(
+            return Result<string>.Failure(
                 Error.NotFound(string.Format(
                     Message.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "RefreshToken", userId)));
         }
 
-        return Result<int>.Success(result);
+        return Result<string>.Success(result);
     }
 }
 

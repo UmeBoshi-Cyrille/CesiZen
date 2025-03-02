@@ -48,7 +48,7 @@ public class TokenCommand : AbstractRepository, IRefreshTokenCommand
         return Result.Success();
     }
 
-    public async Task<IResult> Delete(int id)
+    public async Task<IResult> Delete(string id)
     {
         var result = await context.RefreshTokens
                 .Where(x => x.Id == id)

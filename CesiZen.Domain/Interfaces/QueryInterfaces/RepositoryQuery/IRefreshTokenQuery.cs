@@ -6,5 +6,5 @@ public interface IRefreshTokenQuery
 {
     Task<IResult<RefreshToken>> GetById(string loginId);
 
-    Task<IResult<int>> GetId(string userId);
+    Task<IResult<string>> GetId(string userId);
 }

@@ -7,7 +7,7 @@ public class RefreshToken
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public int Id { get; set; }
+    public string Id { get; set; }
 
     [BsonElement("refreshToken")]
     public string Token { get; set; }

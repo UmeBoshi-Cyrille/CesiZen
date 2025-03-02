@@ -8,7 +8,7 @@ public class Session
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public int Id { get; set; }
+    public string Id { get; set; }
 
     [BsonElement("sessionId")]
     public string SessionId { get; set; }
