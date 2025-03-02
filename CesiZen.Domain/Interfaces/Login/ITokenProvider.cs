@@ -9,4 +9,8 @@ public interface ITokenProvider
     Task<IResult<string>> RefreshAccessTokenAsync(string userId, string accessToken);
 
     Task<IResult> InvalidateTokens(string userId);
+
+    bool CheckAccessTokenExpirationTime(string token);
+
+    string GetTokenSessionId(string token);
 }

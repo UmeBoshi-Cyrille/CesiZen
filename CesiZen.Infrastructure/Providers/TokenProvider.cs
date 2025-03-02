@@ -38,6 +38,7 @@ public class TokenProvider : ITokenProvider
         this.jwtSettings = jwtSettings;
     }
 
+    #region Public Methods
     public string GenerateAccessToken(string userId)
     {
         var sessionId = GenerateSessionId();
@@ -94,6 +95,25 @@ public class TokenProvider : ITokenProvider
 
         return Result.Success();
     }
+
+    public bool CheckAccessTokenExpirationTime(string token)
+    {
+        var expirationTime = GetAccessTokenExpirationTime(token);
+        var remainingTime = expirationTime - DateTime.UtcNow;
+
+        if (remainingTime <= TimeSpan.FromMinutes(1))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public string GetTokenSessionId(string token)
+    {
+        return GetAccessTokenSessionId(token);
+    }
+    #endregion
 
     #region Private AccessToken methods
     private string GenerateAccessToken(
@@ -161,24 +181,20 @@ public class TokenProvider : ITokenProvider
         return new JwtSecurityTokenHandler().ValidateToken(token, validation, out _);
     }
 
-    private bool CheckAccessTokenExpirationTime(string token)
-    {
-        var expirationTime = GetAccessTokenExpirationTime(token);
-        var remainingTime = expirationTime - DateTime.UtcNow;
-
-        if (remainingTime <= TimeSpan.FromMinutes(1))
-        {
-            return true;
-        }
-
-        return false;
-    }
-
     private DateTime GetAccessTokenExpirationTime(string token)
     {
         var handler = new JwtSecurityTokenHandler();
         var jwtSecurityToken = handler.ReadJwtToken(token);
         return jwtSecurityToken.ValidTo;
+    }
+
+    private string GetAccessTokenSessionId(string token)
+    {
+        var handler = new JwtSecurityTokenHandler();
+        var jwtSecurityToken = handler.ReadJwtToken(token);
+        var session = jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == "session_id")?.Value;
+
+        return session;
     }
     #endregion
 
