@@ -39,12 +39,15 @@ public class User : IdentityUser
     [BsonElement("role")]
     public RoleType Role { get; set; } = RoleType.NONE;
 
-    [BsonElement("refreshToken")]
-    public string? RefreshToken { get; set; }
-
     [BsonElement("refreshTokenExpiryTime")]
     public DateTime? RefreshTokenExpiryTime { get; set; }
 
     [BsonElement("login")]
-    public Login Login { get; set; } = new();
+    public Login Login { get; set; }
+
+    [BsonElement("refreshToken")]
+    public RefreshToken? RefreshToken { get; set; }
+
+    [BsonElement("session")]
+    public Session? Session { get; set; }
 }

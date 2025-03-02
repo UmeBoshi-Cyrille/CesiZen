@@ -14,12 +14,12 @@ public class Session
     public string SessionId { get; set; }
 
     [JsonIgnore]
-    public int UserId { get; set; }
+    public string UserId { get; set; }
 
     [JsonIgnore]
     public User User { get; set; }
 
-    public Session(string sessionId, int userId)
+    public Session(string sessionId, string userId)
     {
         SessionId = sessionId;
         UserId = userId;

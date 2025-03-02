@@ -38,7 +38,7 @@ public class TokenProvider : ITokenProvider
         this.jwtSettings = jwtSettings;
     }
 
-    public string GenerateAccessToken(int userId)
+    public string GenerateAccessToken(string userId)
     {
         var sessionId = GenerateSessionId();
         var tokenId = GenerateTokenId();
@@ -59,7 +59,7 @@ public class TokenProvider : ITokenProvider
         return token;
     }
 
-    public async Task<IResult<string>> RefreshAccessTokenAsync(int userId, string accessToken)
+    public async Task<IResult<string>> RefreshAccessTokenAsync(string userId, string accessToken)
     {
         if (CheckRefreshTokenValidity(userId, accessToken))
         {
@@ -73,7 +73,7 @@ public class TokenProvider : ITokenProvider
         return Result<string>.Failure(Error.AuthenticationFailed("Token has expired"));
     }
 
-    public async Task<IResult> InvalidateTokens(int userId)
+    public async Task<IResult> InvalidateTokens(string userId)
     {
         var sessionId = sessionQuery.GetId(userId).Result.Value;
         var tokenId = tokenQuery.GetId(userId).Result.Value;
@@ -211,7 +211,7 @@ public class TokenProvider : ITokenProvider
         return Convert.ToHexString(hash);
     }
 
-    private void SaveRefreshToken(int userId, string refreshToken)
+    private void SaveRefreshToken(string userId, string refreshToken)
     {
         var token = new RefreshToken()
         {
@@ -223,7 +223,7 @@ public class TokenProvider : ITokenProvider
         tokenCommand.UpSert(token);
     }
 
-    private bool CheckRefreshTokenValidity(int userId, string providedAccessToken)
+    private bool CheckRefreshTokenValidity(string userId, string providedAccessToken)
     {
         var currentToken = tokenQuery.GetById(userId).Result.Value;
         var providedToken = GetProvidedRefreshToken(providedAccessToken);

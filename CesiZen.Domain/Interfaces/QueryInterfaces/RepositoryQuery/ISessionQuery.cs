@@ -4,6 +4,6 @@ namespace CesiZen.Domain.Interfaces;
 
 public interface ISessionQuery
 {
-    Task<IResult<int>> GetId(int id);
+    Task<IResult<int>> GetId(string id);
 }
 

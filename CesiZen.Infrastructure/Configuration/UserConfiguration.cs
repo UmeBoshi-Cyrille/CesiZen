@@ -34,5 +34,20 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .IsRequired();
 
         builder.Property(u => u.Role);
+
+        builder.HasOne(x => x.Login)
+           .WithOne(x => x.User)
+           .HasForeignKey<Login>(x => x.UserId)
+           .IsRequired();
+
+        builder.HasOne(x => x.Session)
+            .WithOne(x => x.User)
+            .HasForeignKey<Session>(x => x.UserId)
+            .IsRequired();
+
+        builder.HasOne(x => x.RefreshToken)
+            .WithOne(x => x.User)
+            .HasForeignKey<RefreshToken>(x => x.UserId)
+            .IsRequired();
     }
 }

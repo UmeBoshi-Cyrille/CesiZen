@@ -33,7 +33,7 @@ public class LoginCommand : AbstractRepository, ILoginCommand
         return Result.Success();
     }
 
-    public async Task<IResult> UpdateEmail(int userId, string email)
+    public async Task<IResult> UpdateEmail(string userId, string email)
     {
         try
         {
@@ -51,7 +51,7 @@ public class LoginCommand : AbstractRepository, ILoginCommand
         return Result.Success();
     }
 
-    public async Task<IResult> UpdatePassword(int userId, string password)
+    public async Task<IResult> UpdatePassword(string userId, string password)
     {
         try
         {
@@ -69,7 +69,7 @@ public class LoginCommand : AbstractRepository, ILoginCommand
         return Result.Success();
     }
 
-    public async Task<IResult> UpdateSalt(int userId, string salt)
+    public async Task<IResult> UpdateSalt(string userId, string salt)
     {
         try
         {

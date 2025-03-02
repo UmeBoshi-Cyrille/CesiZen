@@ -14,7 +14,7 @@ public class RefreshTokenQuery : AbstractRepository, IRefreshTokenQuery
     {
     }
 
-    public async Task<IResult<RefreshToken>> GetById(int userId)
+    public async Task<IResult<RefreshToken>> GetById(string userId)
     {
         var result = await context.RefreshTokens
                 .AsNoTracking()
@@ -30,7 +30,7 @@ public class RefreshTokenQuery : AbstractRepository, IRefreshTokenQuery
         return Result<RefreshToken>.Success(result);
     }
 
-    public async Task<IResult<int>> GetId(int userId)
+    public async Task<IResult<int>> GetId(string userId)
     {
         var result = await context.RefreshTokens
                 .AsNoTracking()

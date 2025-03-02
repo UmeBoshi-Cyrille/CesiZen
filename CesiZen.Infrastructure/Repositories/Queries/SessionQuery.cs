@@ -14,7 +14,7 @@ public class SessionQuery : AbstractRepository, ISessionQuery
     {
     }
 
-    public async Task<IResult<int>> GetId(int id)
+    public async Task<IResult<int>> GetId(string id)
     {
         var result = await context.Sessions
                 .AsNoTracking()

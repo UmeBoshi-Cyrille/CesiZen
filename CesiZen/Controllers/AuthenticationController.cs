@@ -49,7 +49,7 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost("invalidate-tokens")]
-    public IActionResult InvalidateTokens(int userId)
+    public IActionResult InvalidateTokens(string userId)
     {
         var result = tokenProvider.InvalidateTokens(userId).Result;
 

@@ -40,7 +40,7 @@ public class RegisterService : ALoginService, IRegisterService
 
         result = await userCommand.Insert(user);
 
-        await emailService.SendVerificationEmailAsync(dto.Email, verificationToken);
+        //await emailService.SendVerificationEmailAsync(dto.Email, verificationToken);
 
         return result;
     }
