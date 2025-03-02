@@ -38,7 +38,8 @@ public class AuthenticationController : ControllerBase
 
         Response.Cookies.Append("JWTCookie", response.Value.Token!, cookieOptions);
 
-        return Ok(response.Info.Message);
+        //return Ok(response.Info.Message);
+        return Ok(response.Value.Token);
     }
 
     [HttpGet("delete-cookie")]
@@ -61,6 +62,19 @@ public class AuthenticationController : ControllerBase
         return Ok(Message.GetResource("InfoMessages", "CLIENT_SESSION_CLOSED"));
     }
 
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout(string accessToken)
+    {
+        var result = authenticateService.Disconnect(accessToken);
+
+        Response.Cookies.Delete("JWTCookie");
+
+        // Clear any other session-related data if necessary
+        HttpContext.Session.Clear();
+
+        return Ok("Logged out successfully");
+    }
+
     [HttpGet("Verify")]
     public async Task<IActionResult> VerifyEmail(string token, string email)
     {
@@ -73,6 +87,8 @@ public class AuthenticationController : ControllerBase
 
         return Ok("Email confirmed.");
     }
+
+
 
 
     /* Authentication Task

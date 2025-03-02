@@ -8,4 +8,6 @@ public interface IAuthenticateService
     Task<IResult<AuthenticateResponseDto>> Authenticate(AuthenticateRequestDto model);
 
     Task<IResult> VerifyEmail(string token, string email);
+
+    Task<IResult> Disconnect(string accessToken);
 }

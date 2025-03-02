@@ -12,10 +12,12 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
 {
     private readonly ITokenProvider tokenProvider;
     private readonly ILoginCommand loginCommand;
+    private readonly IUserQuery userQuery;
 
     public AuthenticationService(
         ILogger logger,
         IUserCommand userCommand,
+        IUserQuery userQuery,
         IPasswordService passwordService,
         ILoginQuery loginQuery,
         ILoginCommand loginCommand,
@@ -25,6 +27,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
     {
         this.tokenProvider = tokenProvider;
         this.loginCommand = loginCommand;
+        this.userQuery = userQuery;
     }
 
     public async Task<IResult<AuthenticateResponseDto>> Authenticate(AuthenticateRequestDto request)
@@ -88,6 +91,17 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
 
         return Result.Success(
                 Info.Success(Message.GetResource("InfoMessages", "CLIENT_EMAIL_VERIFIED")));
+    }
+
+    public async Task<IResult> Disconnect(string accessToken)
+    {
+        var sessionId = tokenProvider.GetTokenSessionId(accessToken);
+
+        var userId = userQuery.GetUserId(sessionId).Result;
+
+        await tokenProvider.InvalidateTokens(userId.Value);
+
+        return Result.Success();
     }
 
     #region Private Methods
