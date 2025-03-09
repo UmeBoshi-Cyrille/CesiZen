@@ -10,18 +10,21 @@ public class ALoginService : AService
     protected readonly ILoginQuery loginQuery;
     protected readonly IPasswordService passwordService;
     protected readonly IEmailService emailService;
+    protected readonly ITokenProvider tokenProvider;
 
     public ALoginService(
         ILogger logger,
         IUserCommand userCommand,
         IPasswordService passwordService,
         ILoginQuery loginQuery,
-        IEmailService emailService
+        IEmailService emailService,
+        ITokenProvider tokenProvider
         ) : base(logger)
     {
         this.loginQuery = loginQuery;
         this.userCommand = userCommand;
         this.passwordService = passwordService;
         this.emailService = emailService;
+        this.tokenProvider = tokenProvider;
     }
 }

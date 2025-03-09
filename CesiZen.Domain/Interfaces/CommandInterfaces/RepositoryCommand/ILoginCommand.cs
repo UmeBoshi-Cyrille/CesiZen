@@ -5,7 +5,7 @@ namespace CesiZen.Domain.Interface;
 
 public interface ILoginCommand
 {
-    Task<IResult> UpdateLogin(EmailVerificationDto dto);
+    Task<IResult> UpdateEmailVerification(EmailVerificationDto dto);
     Task<IResult> UpdateEmail(string userId, string email);
 
     Task<IResult> UpdatePassword(string userId, string password);

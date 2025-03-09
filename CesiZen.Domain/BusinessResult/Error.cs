@@ -24,6 +24,7 @@ public sealed class Error
     public static Error NotMatch(string message) => new(ErrorType.NotMatch, message);
     public static Error NullOrWhiteSpace(string message) => new(ErrorType.NullOrWhiteSpace, message);
     public static Error NullOrEmpty(string message) => new(ErrorType.NullOrEmpty, message);
+    public static Error TimeOut(string message) => new(ErrorType.TimeOut, message);
 
 }
 
@@ -38,5 +39,6 @@ public enum ErrorType
     WrongFormat,
     NotMatch,
     NullOrWhiteSpace,
-    NullOrEmpty
+    NullOrEmpty,
+    TimeOut
 }

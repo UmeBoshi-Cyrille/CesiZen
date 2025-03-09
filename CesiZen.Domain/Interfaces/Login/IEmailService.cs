@@ -4,5 +4,7 @@ public interface IEmailService
 {
     Task SendVerificationEmailAsync(string email, string verificationToken);
 
-    string GenerateVerificationToken();
+    Task SendEmailAsync(string email, string template, string subject);
+
+    string ReplaceLinkContent(string template, string link, string content);
 }

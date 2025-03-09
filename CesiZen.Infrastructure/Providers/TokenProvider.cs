@@ -109,6 +109,11 @@ public class TokenProvider : ITokenProvider
         return false;
     }
 
+    public string GenerateVerificationToken()
+    {
+        return Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+    }
+
     public string GetTokenSessionId(string token)
     {
         return GetAccessTokenSessionId(token);

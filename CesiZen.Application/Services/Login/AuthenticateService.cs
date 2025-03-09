@@ -23,7 +23,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
         ILoginCommand loginCommand,
         ITokenProvider tokenProvider,
         IEmailService emailService
-        ) : base(logger, userCommand, passwordService, loginQuery, emailService)
+        ) : base(logger, userCommand, passwordService, loginQuery, emailService, tokenProvider)
     {
         this.tokenProvider = tokenProvider;
         this.loginCommand = loginCommand;
@@ -77,10 +77,10 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
         {
             Email = email,
             EmailVerified = true,
-            EmailVerificationToken = token
+            EmailVerificationToken = null
         };
 
-        var result = await loginCommand.UpdateLogin(dto);
+        var result = await loginCommand.UpdateEmailVerification(dto);
 
         if (result.IsFailure)
         {

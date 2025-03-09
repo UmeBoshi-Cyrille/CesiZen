@@ -18,6 +18,9 @@ public class Login
     [BsonElement("email")]
     public string Email { get; set; } = string.Empty;
 
+    [BsonElement("emailVerified")]
+    public bool EmailVerified { get; set; } = false;
+
     [MaxLength(150)]
     [MinLength(12)]
     [Required(ErrorMessage = "Invalid Password")]
@@ -30,10 +33,7 @@ public class Login
     public bool EmailVerified { get; set; } = false;
 
     [BsonElement("emailVerificationToken")]
-    public string EmailVerificationToken { get; set; }
-
-    [BsonElement("salt")]
-    public string Salt { get; set; } = string.Empty;
+    public string? EmailVerificationToken { get; set; }
 
     [BsonElement("accessFailedCount")]
     public int AccessFailedCount { get; set; }

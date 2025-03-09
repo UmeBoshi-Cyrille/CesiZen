@@ -13,7 +13,7 @@ public class LoginCommand : AbstractRepository, ILoginCommand
     {
     }
 
-    public async Task<IResult> UpdateLogin(EmailVerificationDto dto)
+    public async Task<IResult> UpdateEmailVerification(EmailVerificationDto dto)
     {
         try
         {
@@ -64,6 +64,58 @@ public class LoginCommand : AbstractRepository, ILoginCommand
             Result.Failure(
                 Error.OperationFailed(string.Format(
                     Message.GetResource("ErrorMessages", "LOG_UPDATE_PROPERTY_OPERATIONFAILED"), "Login", "Password", $"Id: {userId}")));
+        }
+
+        return Result.Success();
+    }
+
+    public async Task<IResult> ResetPassword(string token, string password)
+    {
+        try
+        {
+
+            var login = await context.Logins
+                         .FirstOrDefaultAsync(t => t.EmailVerificationToken == token);
+
+            if (login == null)
+            {
+                return Result.Failure(
+                Error.NotFound(string.Format(
+                    Message.GetResource("ErrorMessages", "CLIENT_NOTFOUND"), "Login")));
+            }
+
+            login.Password = password;
+            login.PasswordResetToken = null;
+            login.PasswordResetTokenExpiry = null;
+
+            context.Logins.Update(login);
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+        {
+            Result.Failure(
+                Error.OperationFailed(string.Format(
+                    Message.GetResource("ErrorMessages", "LOG_UPDATE_PROPERTY_OPERATIONFAILED"), "Login", "Password", $"Token: {token}")));
+        }
+
+        return Result.Success();
+    }
+
+    public async Task<IResult> UpdateResetPasswordToken(Login login)
+    {
+        try
+        {
+            await context.Logins
+               .Where(x => x.UserId == login.UserId)
+               .ExecuteUpdateAsync(o => o
+                    .SetProperty(x => x.PasswordResetToken, login.PasswordResetToken)
+                    .SetProperty(x => x.PasswordResetTokenExpiry, login.PasswordResetTokenExpiry));
+        }
+        catch (DbUpdateException ex)
+        {
+            Result.Failure(
+                Error.OperationFailed(string.Format(
+                    Message.GetResource("ErrorMessages", "LOG_UPDATE_PROPERTY_OPERATIONFAILED"), "Login", "Password Reset Token", $"Id: {login.Id}")));
         }
 
         return Result.Success();

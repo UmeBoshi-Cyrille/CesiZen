@@ -20,6 +20,26 @@ public class AuthenticationController : ControllerBase
         this.tokenProvider = tokenProvider;
     }
 
+    [HttpGet("Verify")]
+    public async Task<IActionResult> VerifyEmail(string token, string email)
+    {
+        var result = authenticateService.VerifyEmail(token, email);
+
+        if (result.Result.IsFailure)
+        {
+            return BadRequest(result.Result.Error.Message);
+        }
+
+        return Ok("Email confirmed.");
+    }
+
+    [HttpGet("delete-cookie")]
+    public IActionResult DeleteCookie()
+    {
+        Response.Cookies.Delete("JWTCookie");
+        return Ok(string.Format(Message.GetResource("InfoMessages", "CLIENT_DELETE_SUCCESS"), "Cookie"));
+    }
+
     [HttpPost("authenticate")]
     public async Task<IActionResult> Authenticate(AuthenticateRequestDto model)
     {

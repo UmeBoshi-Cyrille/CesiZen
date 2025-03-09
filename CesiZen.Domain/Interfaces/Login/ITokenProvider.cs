@@ -13,4 +13,6 @@ public interface ITokenProvider
     bool CheckAccessTokenExpirationTime(string token);
 
     string GetTokenSessionId(string token);
+
+    string GenerateVerificationToken();
 }
