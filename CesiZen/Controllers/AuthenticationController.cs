@@ -1,5 +1,6 @@
 ﻿using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
+using CesiZen.Domain.Interface;
 using CesiZen.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,13 +12,19 @@ public class AuthenticationController : ControllerBase
 {
     private readonly IAuthenticateService authenticateService;
     private readonly ITokenProvider tokenProvider;
+    private readonly ILoginQuery loginQuery;
+    private readonly IPasswordService passwordService;
 
     public AuthenticationController(
         IAuthenticateService authenticateService,
-        ITokenProvider tokenProvider)
+        ITokenProvider tokenProvider,
+        ILoginQuery loginQuery,
+        IPasswordService passwordService)
     {
         this.authenticateService = authenticateService;
         this.tokenProvider = tokenProvider;
+        this.loginQuery = loginQuery;
+        this.passwordService = passwordService;
     }
 
     [HttpGet("Verify")]
@@ -62,13 +69,6 @@ public class AuthenticationController : ControllerBase
         return Ok(response.Value.Token);
     }
 
-    [HttpGet("delete-cookie")]
-    public IActionResult DeleteCookie()
-    {
-        Response.Cookies.Delete("JWTCookie");
-        return Ok(string.Format(Message.GetResource("InfoMessages", "CLIENT_DELETE_SUCCESS"), "Cookie"));
-    }
-
     [HttpPost("invalidate-tokens")]
     public IActionResult InvalidateTokens(string userId)
     {
@@ -95,20 +95,29 @@ public class AuthenticationController : ControllerBase
         return Ok("Logged out successfully");
     }
 
-    [HttpGet("Verify")]
-    public async Task<IActionResult> VerifyEmail(string token, string email)
+
+
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword(PasswordResetRequestDto request)
     {
-        var result = authenticateService.VerifyEmail(token, email);
+        var result = await passwordService.ForgotPassword(request);
 
-        if (result.Result.IsFailure)
-        {
-            return BadRequest(result.Result.Error.Message);
-        }
+        if (result.IsSuccess)
+            return Ok("If the email exists, a password reset link has been sent.");
 
-        return Ok("Email confirmed.");
+        return BadRequest("Couldn't send email to the provided adress");
     }
 
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword(PasswordResetDto dto)
+    {
+        var result = passwordService.ResetPassword(dto).Result;
 
+        if (result.IsFailure)
+            return BadRequest("Invalid or expired token.");
+
+        return Ok("Password has been reset successfully.");
+    }
 
 
     /* Authentication Task

@@ -44,6 +44,22 @@ public class LoginQuery : AbstractRepository, ILoginQuery
         return Result<Login>.Success(login);
     }
 
+    public async Task<IResult<Login>> GetByResetPasswordToken(string token)
+    {
+        var login = await context.Logins
+                           .AsNoTracking()
+                           .FirstOrDefaultAsync(x => x.PasswordResetToken == token);
+
+        if (login == null)
+        {
+            return Result<Login>.Failure(
+                Error.NotFound(string.Format(
+                    Message.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "Login", token)));
+        }
+
+        return Result<Login>.Success(login);
+    }
+
     public async Task<IResult> CheckEmail(string providedEmail)
     {
         var exist = await context.Logins

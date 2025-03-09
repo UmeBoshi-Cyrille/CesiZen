@@ -129,6 +129,9 @@
   <data name="CLIENT_EMAIL_VERIFICATION_FAILED" xml:space="preserve">
     <value>Email failed to be verified.</value>
   </data>
+  <data name="CLIENT_EXPIRED_LINK" xml:space="preserve">
+    <value>The link for reset password has expired.</value>
+  </data>
   <data name="CLIENT_INSERTION_FAILED" xml:space="preserve">
     <value>Failed to create {0}</value>
   </data>
@@ -137,6 +140,12 @@
   </data>
   <data name="CLIENT_LOGINATTEMPS_LOCKTIME" xml:space="preserve">
     <value>Account is locked for {0} minutes.</value>
+  </data>
+  <data name="CLIENT_NOTFOUND" xml:space="preserve">
+    <value>{0} not found;</value>
+  </data>
+  <data name="CLIENT_RESETPASSWORD_NOTMATCH" xml:space="preserve">
+    <value>New password doesn't match with confirmed password !</value>
   </data>
   <data name="CLIENT_UNICITY_CONSTRAINT" xml:space="preserve">
     <value>Provided {0} already exist.</value>

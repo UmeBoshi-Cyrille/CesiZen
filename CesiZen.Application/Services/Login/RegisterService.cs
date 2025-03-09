@@ -10,14 +10,19 @@ namespace CesiZen.Application.Services;
 
 public class RegisterService : ALoginService, IRegisterService
 {
+    private readonly ILoginCommand loginCommand;
+
     public RegisterService(
         ILogger logger,
         IUserCommand command,
         IPasswordService passwordService,
         ILoginQuery query,
-        IEmailService emailService
-        ) : base(logger, command, passwordService, query, emailService)
+        ILoginCommand loginCommand,
+        IEmailService emailService,
+        ITokenProvider tokenProvider
+        ) : base(logger, command, passwordService, query, emailService, tokenProvider)
     {
+        this.loginCommand = loginCommand;
     }
 
     public async Task<IResult> Register(UserDto dto)
@@ -32,7 +37,7 @@ public class RegisterService : ALoginService, IRegisterService
                         Message.GetResource("ErrorMessages", "CLIENT_UNICITY_CONSTRAINT"), "Email")));
         }
 
-        string verificationToken = emailService.GenerateVerificationToken();
+        string verificationToken = tokenProvider.GenerateVerificationToken();
 
         var authentifier = passwordService.HashPassword(dto.Password);
 
@@ -40,7 +45,7 @@ public class RegisterService : ALoginService, IRegisterService
 
         result = await userCommand.Insert(user);
 
-        //await emailService.SendVerificationEmailAsync(dto.Email, verificationToken);
+        await emailService.SendVerificationEmailAsync(dto.Email, verificationToken);
 
         return result;
     }

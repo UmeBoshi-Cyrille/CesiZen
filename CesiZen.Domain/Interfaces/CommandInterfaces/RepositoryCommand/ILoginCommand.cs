@@ -10,6 +10,10 @@ public interface ILoginCommand
 
     Task<IResult> UpdatePassword(string userId, string password);
 
+    Task<IResult> ResetPassword(string token, string password);
+
+    Task<IResult> UpdateResetPasswordToken(Login login);
+
     Task<IResult> UpdateSalt(string userId, string salt);
 
     Task<IResult> UpdateLoginAttempsCount(Login login);

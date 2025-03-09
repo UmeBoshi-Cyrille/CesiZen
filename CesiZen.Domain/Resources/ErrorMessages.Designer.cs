@@ -97,6 +97,15 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The link for reset password has expired..
+        /// </summary>
+        internal static string CLIENT_EXPIRED_LINK {
+            get {
+                return ResourceManager.GetString("CLIENT_EXPIRED_LINK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to create {0}.
         /// </summary>
         internal static string CLIENT_INSERTION_FAILED {
@@ -120,6 +129,24 @@ namespace CesiZen.Domain.Resources {
         internal static string CLIENT_LOGINATTEMPS_LOCKTIME {
             get {
                 return ResourceManager.GetString("CLIENT_LOGINATTEMPS_LOCKTIME", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} not found;.
+        /// </summary>
+        internal static string CLIENT_NOTFOUND {
+            get {
+                return ResourceManager.GetString("CLIENT_NOTFOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New password doesn&apos;t match with confirmed password !.
+        /// </summary>
+        internal static string CLIENT_RESETPASSWORD_NOTMATCH {
+            get {
+                return ResourceManager.GetString("CLIENT_RESETPASSWORD_NOTMATCH", resourceCulture);
             }
         }
         

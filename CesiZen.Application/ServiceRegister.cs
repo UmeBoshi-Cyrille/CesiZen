@@ -18,7 +18,7 @@ public static class ServiceRegister
 
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
-        services.AddSingleton<IPasswordService, PasswordService>();
+        services.AddScoped<IPasswordService, PasswordService>();
         services.AddScoped<IAuthenticateService, AuthenticationService>();
         services.AddScoped<IRegisterService, RegisterService>();
 

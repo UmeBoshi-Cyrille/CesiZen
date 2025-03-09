@@ -88,11 +88,29 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An email has been sent for email verification..
+        /// </summary>
+        internal static string CLIENT_EMAIL_VERIFICATION {
+            get {
+                return ResourceManager.GetString("CLIENT_EMAIL_VERIFICATION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email has been verified..
         /// </summary>
         internal static string CLIENT_EMAIL_VERIFIED {
             get {
                 return ResourceManager.GetString("CLIENT_EMAIL_VERIFIED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password has been successfully modified..
+        /// </summary>
+        internal static string CLIENT_RESETPASSWORD_SUCCESS {
+            get {
+                return ResourceManager.GetString("CLIENT_RESETPASSWORD_SUCCESS", resourceCulture);
             }
         }
         

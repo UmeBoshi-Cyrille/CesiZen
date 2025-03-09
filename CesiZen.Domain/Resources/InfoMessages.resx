@@ -126,8 +126,14 @@
   <data name="CLIENT_DELETE_SUCCESS" xml:space="preserve">
     <value>{0} has been successfully deleted</value>
   </data>
+  <data name="CLIENT_EMAIL_VERIFICATION" xml:space="preserve">
+    <value>An email has been sent for email verification.</value>
+  </data>
   <data name="CLIENT_EMAIL_VERIFIED" xml:space="preserve">
     <value>Email has been verified.</value>
+  </data>
+  <data name="CLIENT_RESETPASSWORD_SUCCESS" xml:space="preserve">
+    <value>Password has been successfully modified.</value>
   </data>
   <data name="CLIENT_SESSION_CLOSED" xml:space="preserve">
     <value>Session is closed</value>

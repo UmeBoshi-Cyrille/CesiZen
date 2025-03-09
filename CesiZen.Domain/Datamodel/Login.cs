@@ -29,8 +29,14 @@ public class Login
     [BsonElement("password")]
     public string Password { get; set; } = string.Empty;
 
-    [BsonElement("emailVerified")]
-    public bool EmailVerified { get; set; } = false;
+    [BsonElement("salt")]
+    public string Salt { get; set; } = string.Empty;
+
+    [BsonElement("passwordResetToken")]
+    public string? PasswordResetToken { get; set; }
+
+    [BsonElement("PasswordResetTokenExpiry")]
+    public DateTime? PasswordResetTokenExpiry { get; set; }
 
     [BsonElement("emailVerificationToken")]
     public string? EmailVerificationToken { get; set; }

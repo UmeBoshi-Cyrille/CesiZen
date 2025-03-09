@@ -10,7 +10,6 @@ namespace CesiZen.Application.Services;
 
 public sealed class AuthenticationService : ALoginService, IAuthenticateService
 {
-    private readonly ITokenProvider tokenProvider;
     private readonly ILoginCommand loginCommand;
     private readonly IUserQuery userQuery;
 
@@ -25,7 +24,6 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
         IEmailService emailService
         ) : base(logger, userCommand, passwordService, loginQuery, emailService, tokenProvider)
     {
-        this.tokenProvider = tokenProvider;
         this.loginCommand = loginCommand;
         this.userQuery = userQuery;
     }
