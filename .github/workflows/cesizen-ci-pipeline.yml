@@ -31,7 +31,7 @@ jobs:
     # Step 3: Restore dependencies
     - name: Restore dependencies
       run: dotnet restore
-    # Step 4: Build Application
+    # Step 4: Build api Application
     - name: Build
       run: dotnet build --no-restore --configuration Release 
     # Step 5: Launch Test if it does exist
