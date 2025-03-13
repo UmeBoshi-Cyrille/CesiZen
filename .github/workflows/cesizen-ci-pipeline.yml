@@ -1,0 +1,67 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: CI Pipeline for CesiZen-Web-Api
+
+on:
+  push:
+    branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
+
+env:
+  DOCKER_IMAGE_NAME: cesizen-api
+  DOCKER_IMAGE_TAG: latest
+
+jobs:
+  build-test-job:
+    name: Cesizen Web API Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1 : Checkout code from repository
+    - name: Checkout code
+      uses: actions/checkout@v4
+    # Step 2: Setup of .Net Sdk v8
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+        
+    # Step 3: Restore dependencies
+    - name: Restore dependencies
+      run: dotnet restore
+    # Step 4: Build Application
+    - name: Build
+      run: dotnet build --no-restore --configuration Release 
+    # Step 5: Launch Test if it does exist
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+
+  docker-build-and-push:
+    name: Docker Image Builder Rules
+    needs: build-test-job
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout Code
+    - name: Checkout code
+      uses: actions/checkout@v4
+    # Step 2: Login to Docker Hub
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.Docker_PASSWORD }}
+    # Step 3: Docker - Build and push Image to Hub
+    - name: Docker Image - Build and push to Hub
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: true
+        tags: cesizen-webapi:latest
+    # Step 4: Check Image Exist
+    - name: Check Image
+      run : |
+        echo "Docker Image has been successfully pushed."
+    
