@@ -1,4 +1,4 @@
-﻿using CesiZen.Domain.Interface;
+﻿using CesiZen.Domain.Interfaces;
 using CesiZen.Domain.Interfaces;
 using Serilog;
 

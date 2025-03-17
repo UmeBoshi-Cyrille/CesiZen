@@ -1,5 +1,5 @@
 ﻿using CesiZen.Domain.Datamodel;
-using CesiZen.Domain.Interface;
+using CesiZen.Domain.Interfaces;
 
 namespace CesiZen.Application.Services;
 
