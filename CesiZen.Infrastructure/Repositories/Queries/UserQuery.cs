@@ -13,7 +13,7 @@ public class UserQuery : AbstractRepository, IUserQuery
     {
     }
 
-    public async Task<IResult<PagedResult<User>>> GetUsersByTermAsync(PageParameters parameters, string searchTerm)
+    public async Task<IResult<PagedResult<User>>> SearchUsers(PageParameters parameters, string searchTerm)
     {
         try
         {
@@ -49,7 +49,7 @@ public class UserQuery : AbstractRepository, IUserQuery
         }
     }
 
-    public async Task<IResult<IEnumerable<User>>> GetAllAsync(int pageNumber, int pageSize)
+    public async Task<IResult<PagedResult<User>>> GetAllAsync(int pageNumber, int pageSize)
     {
         var users = await context.Users
                 .AsNoTracking()
@@ -60,12 +60,20 @@ public class UserQuery : AbstractRepository, IUserQuery
 
         if (!users.Any())
         {
-            return Result<IEnumerable<User>>.Failure(
+            return Result<PagedResult<User>>.Failure(
                 Error.NotFound(string.Format(
                     Message.GetResource("ErrorMessages", "LOG_GET_MULTIPLE_NOTFOUND"), "Users")));
         }
 
-        return Result<IEnumerable<User>>.Success(users);
+        var result = new PagedResult<User>
+        {
+            Data = users,
+            TotalCount = users.Count,
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        };
+
+        return Result<PagedResult<User>>.Success(result);
     }
 
     public async Task<IResult<User>> GetByIdAsync(int id)

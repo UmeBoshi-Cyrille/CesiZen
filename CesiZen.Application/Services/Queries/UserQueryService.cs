@@ -15,9 +15,9 @@ public class UserQueryService : AService, IUserQueryService
         this.query = query;
     }
 
-    public async Task<IResult<PagedResult<UserRequestDto>>> GetUsersByTermAsync(PageParameters parameters, string searchTerm)
+    public async Task<IResult<PagedResult<UserRequestDto>>> SearchUsers(PageParameters parameters, string searchTerm)
     {
-        var result = await query.GetUsersByTermAsync(parameters, searchTerm);
+        var result = await query.SearchUsers(parameters, searchTerm);
 
         if (result.IsFailure)
         {
