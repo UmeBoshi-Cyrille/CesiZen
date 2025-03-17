@@ -27,11 +27,11 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .ValueGeneratedOnAdd()
             .HasValueGenerator<ObjectIdProvider>();
 
-        builder.Property(u => u.FirstName)
+        builder.Property(u => u.Firstname)
             .HasMaxLength(255)
             .IsRequired();
 
-        builder.Property(u => u.LastName)
+        builder.Property(u => u.Lastname)
             .HasMaxLength(255)
             .IsRequired();
 

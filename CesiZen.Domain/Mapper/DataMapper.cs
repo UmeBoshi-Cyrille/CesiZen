@@ -6,20 +6,44 @@ namespace CesiZen.Domain.Mapper;
 public static class DataMapper
 {
     #region Simple Mapper Methods
-    public static User MapUser(this User user, UserDto dto, Authentifier authentifier, string emailVerificationToken)
+    public static User Map(this UserDto dto, Authentifier authentifier, string emailVerificationToken)
     {
+        User user = new();
+
         Login login = new()
         {
-            Email = dto.Email,
+            Email = user.Email,
             Password = authentifier.Password,
             Salt = authentifier.HashSalt,
             EmailVerified = false,
             EmailVerificationToken = emailVerificationToken,
         };
 
-        user.Firstname = dto.FirstName;
-        user.Lastname = dto.LastName;
-        user.UserName = dto.Username;
+        user.Firstname = user.Firstname;
+        user.Lastname = user.Lastname;
+        user.UserName = user.Username;
+        user.IsActive = true;
+        user.Login = login;
+
+        return user;
+    }
+
+    public static User Map(this UserDto dto)
+    {
+        User user = new();
+
+        Login login = new()
+        {
+            Email = dto.Email,
+            Password = dto.Password,
+            Salt = dto.HashSalt,
+            EmailVerified = false,
+            EmailVerificationToken = dto.EmailVerificationToken,
+        };
+
+        user.Firstname = user.Firstname;
+        user.Lastname = user.Lastname;
+        user.UserName = user.Username;
         user.IsActive = true;
         user.Login = login;
 

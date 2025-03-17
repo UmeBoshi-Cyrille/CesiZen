@@ -1,6 +1,7 @@
 ﻿using CesiZen.Domain.BusinessResult;
-using CesiZen.Domain.Datamodel;
+using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interface;
+using CesiZen.Domain.Mapper;
 using Serilog;
 
 namespace CesiZen.Application.Services;
@@ -14,27 +15,10 @@ public class UserCommandService : AService, IUserCommandService
         this.command = command;
     }
 
-    public async Task<IResult> Insert(User entity)
+    public async Task<IResult> Update(UserDto dto)
     {
-        var result = await command.Insert(entity);
-
-        if (result.IsSuccess)
-        {
-            logger.Information(result.Info.Message);
-            return Result.Success(
-                        Info.Success(string.Format(
-                            Message.GetResource("InfoMessages", "CLIENT_CREATION_SUCCESS"), "User")));
-        }
-
-        logger.Error(result.Error.Message);
-        return Result.Failure(
-                  Error.OperationFailed(string.Format(
-                      Message.GetResource("ErrorMessages", "CLIENT_INSERTION_FAILED"), "User")));
-    }
-
-    public async Task<IResult> Update(User entity)
-    {
-        var result = await command.Update(entity);
+        var user = dto.Map();
+        var result = await command.Update(user);
 
         if (result.IsSuccess)
         {
