@@ -14,11 +14,11 @@ public class User : IdentityUser
 
     [BsonElement("firstName")]
     [MaxLength(50)]
-    public string FirstName { get; set; }
+    public string Firstname { get; set; }
 
     [BsonElement("lastName")]
     [MaxLength(50)]
-    public string LastName { get; set; }
+    public string Lastname { get; set; }
 
     [BsonElement("username")]
     [MaxLength(50)]
