@@ -1,5 +1,6 @@
 ﻿using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Datamodel;
+using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interface;
 using CesiZen.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
@@ -12,21 +13,43 @@ public class UserQuery : AbstractRepository, IUserQuery
     {
     }
 
-    public async Task<IResult<IEnumerable<User>>> GetAllAsync()
+    public async Task<IResult<PagedResult<User>>> GetUsersByTermAsync(PageParameters parameters, string searchTerm)
     {
-        var users = await context.Users.AsNoTracking().ToListAsync();
-
-        if (!users.Any())
+        try
         {
-            return Result<IEnumerable<User>>.Failure(
+            var query = context.Users.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                query = query.Where(a => a.Firstname.Contains(searchTerm) || a.Lastname.Contains(searchTerm));
+            }
+
+            var totalCount = await query.CountAsync();
+            var Users = await query
+                .OrderByDescending(a => a.CreatedAt)
+                .Skip((parameters.PageNumber - 1) * parameters.PageSize)
+                .Take(parameters.PageSize)
+                .ToListAsync();
+
+            var result = new PagedResult<User>
+            {
+                Data = Users,
+                TotalCount = totalCount,
+                PageNumber = parameters.PageNumber,
+                PageSize = parameters.PageSize
+            };
+
+            return Result<PagedResult<User>>.Success(result);
+        }
+        catch (Exception ex)
+        {
+            return Result<PagedResult<User>>.Failure(
                 Error.NotFound(string.Format(
                     Message.GetResource("ErrorMessages", "LOG_GET_MULTIPLE_NOTFOUND"), "Users")));
         }
-
-        return Result<IEnumerable<User>>.Success(users);
     }
 
-    public async Task<IResult<IEnumerable<User>>> GetAllPaginatedAsync(int pageNumber, int pageSize)
+    public async Task<IResult<IEnumerable<User>>> GetAllAsync(int pageNumber, int pageSize)
     {
         var users = await context.Users
                 .AsNoTracking()

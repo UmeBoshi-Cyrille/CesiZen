@@ -1,34 +1,77 @@
-﻿using CesiZen.Domain.Datamodel;
+﻿using CesiZen.Domain.BusinessResult;
+using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interface;
+using CesiZen.Domain.Mapper;
+using Serilog;
 
 namespace CesiZen.Application.Services;
 
-public class UserQueryService : IUserQueryService
+public class UserQueryService : AService, IUserQueryService
 {
-    private readonly IUserQuery queries;
+    private readonly IUserQuery query;
 
-    public UserQueryService(IUserQuery queries)
+    public UserQueryService(IUserQuery query, ILogger logger) : base(logger)
     {
-        this.queries = queries;
+        this.query = query;
     }
 
-    public Task<IResult<IEnumerable<User>>> GetAllAsync()
+    public async Task<IResult<PagedResult<UserRequestDto>>> GetUsersByTermAsync(PageParameters parameters, string searchTerm)
     {
-        throw new NotImplementedException();
+        var result = await query.GetUsersByTermAsync(parameters, searchTerm);
+
+        if (result.IsFailure)
+        {
+            logger.Error(result.Error.Message);
+            return Result<PagedResult<UserRequestDto>>.Failure(Error.NullValue(""));
+        }
+
+        var dtos = result.Value.Map();
+
+        return Result<PagedResult<UserRequestDto>>.Success(dtos);
     }
 
-    public Task<IResult<IEnumerable<User>>> GetAllPaginatedAsync(int pageNumber, int pageSize)
+    public async Task<IResult<PagedResult<UserRequestDto>>> GetAllAsync(int pageNumber, int pageSize)
     {
-        throw new NotImplementedException();
+        var result = await query.GetAllAsync(pageNumber, pageSize);
+
+        if (result.IsFailure)
+        {
+            logger.Error(result.Error.Message);
+            return Result<PagedResult<UserRequestDto>>.Failure(Error.NullValue(""));
+        }
+
+        var dto = result.Value.Map();
+
+        return Result<PagedResult<UserRequestDto>>.Success(dto);
     }
 
-    public Task<IResult<User>> GetByIdAsync(int id)
+    public async Task<IResult<UserRequestDto>> GetByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        var result = await query.GetByIdAsync(id);
+
+        if (result.IsFailure)
+        {
+            logger.Error(result.Error.Message);
+            return Result<UserRequestDto>.Failure(Error.NullValue(""));
+        }
+
+        var dto = result.Value.Map();
+
+        return Result<UserRequestDto>.Success(dto);
     }
 
-    public Task<IResult<User>> GetByUsername(string username)
+    public async Task<IResult<UserRequestDto>> GetByUsername(string username)
     {
-        throw new NotImplementedException();
+        var result = await query.GetByUsername(username);
+
+        if (result.IsFailure)
+        {
+            logger.Error(result.Error.Message);
+            return Result<UserRequestDto>.Failure(Error.NullValue(""));
+        }
+
+        var dto = result.Value.Map();
+
+        return Result<UserRequestDto>.Success(dto);
     }
 }
