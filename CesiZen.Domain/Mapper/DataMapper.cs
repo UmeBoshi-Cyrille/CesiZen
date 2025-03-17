@@ -36,9 +36,7 @@ public static class DataMapper
         {
             Email = dto.Email,
             Password = dto.Password,
-            Salt = dto.HashSalt,
             EmailVerified = false,
-            EmailVerificationToken = dto.EmailVerificationToken,
         };
 
         user.Firstname = user.Firstname;
