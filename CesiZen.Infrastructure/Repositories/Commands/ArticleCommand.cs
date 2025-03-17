@@ -1,7 +1,6 @@
 ﻿using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.Interfaces;
-using CesiZen.Domain.Interfaces;
 using CesiZen.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,9 +21,13 @@ public class ArticleCommand : AbstractRepository, IArticleCommand
 
             return Result.Success();
         }
+        catch (DbUpdateException ex)
+        {
+            return Result.Failure(ArticleErrors.OperationFailed("Insert", ex.Message));
+        }
         catch (Exception ex)
         {
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(ArticleErrors.OperationFailed("Insert", ex.Message));
         }
     }
 
@@ -38,9 +41,13 @@ public class ArticleCommand : AbstractRepository, IArticleCommand
 
             return Result.Success();
         }
+        catch (DbUpdateException ex)
+        {
+            return Result.Failure(ArticleErrors.OperationFailed("Update", ex.Message));
+        }
         catch (Exception ex)
         {
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(ArticleErrors.OperationFailed("Update", ex.Message));
         }
     }
 
@@ -56,9 +63,13 @@ public class ArticleCommand : AbstractRepository, IArticleCommand
 
             return Result.Success();
         }
+        catch (DbUpdateException ex)
+        {
+            return Result.Failure(ArticleErrors.OperationFailed("Update", ex.Message));
+        }
         catch (Exception ex)
         {
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(ArticleErrors.OperationFailed("Update", ex.Message));
         }
     }
 
@@ -74,9 +85,13 @@ public class ArticleCommand : AbstractRepository, IArticleCommand
 
             return Result.Success();
         }
+        catch (DbUpdateException ex)
+        {
+            return Result.Failure(ArticleErrors.OperationFailed("UpdateDescription", ex.Message));
+        }
         catch (Exception ex)
         {
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(ArticleErrors.OperationFailed("UpdateDescription", ex.Message));
         }
     }
 
@@ -92,9 +107,13 @@ public class ArticleCommand : AbstractRepository, IArticleCommand
 
             return Result.Success();
         }
+        catch (DbUpdateException ex)
+        {
+            return Result.Failure(ArticleErrors.OperationFailed("Delete", ex.Message));
+        }
         catch (Exception ex)
         {
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(ArticleErrors.OperationFailed("Delete", ex.Message));
         }
     }
 
@@ -111,11 +130,15 @@ public class ArticleCommand : AbstractRepository, IArticleCommand
                 return Result.Success();
             }
 
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(ArticleErrors.DeletionFailedToLog);
+        }
+        catch (DbUpdateException ex)
+        {
+            return Result.Failure(ArticleErrors.OperationFailed("Delete", ex.Message));
         }
         catch (Exception ex)
         {
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(ArticleErrors.OperationFailed("Delete", ex.Message));
         }
     }
 }

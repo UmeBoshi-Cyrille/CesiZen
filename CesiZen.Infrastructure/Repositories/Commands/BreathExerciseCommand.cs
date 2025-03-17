@@ -21,9 +21,13 @@ public class BreathExerciseCommand : AbstractRepository, IBreathExerciseCommand
 
             return Result.Success();
         }
+        catch (DbUpdateException ex)
+        {
+            return Result.Failure(ArticleErrors.OperationFailed("Insert", ex.Message));
+        }
         catch (Exception ex)
         {
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(ArticleErrors.OperationFailed("Delete", ex.Message));
         }
     }
 

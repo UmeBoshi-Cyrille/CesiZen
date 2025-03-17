@@ -61,7 +61,7 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Incorrect Email or password..
+        ///   Looks up a localized string similar to Email ou Mot de passe incorrect..
         /// </summary>
         internal static string CLIENT_AUTHENTICATION_FAILED {
             get {
@@ -70,16 +70,7 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Incorrect Email or password provided..
-        /// </summary>
-        internal static string CLIENT_AUTHENTICATION_MISMATCH {
-            get {
-                return ResourceManager.GetString("CLIENT_AUTHENTICATION_MISMATCH", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Failed to delete {0}.
+        ///   Looks up a localized string similar to échec de suppression : {0}.
         /// </summary>
         internal static string CLIENT_DELETION_FAILED {
             get {
@@ -88,7 +79,7 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Email failed to be verified..
+        ///   Looks up a localized string similar to échec de la vérification du de l&apos;email.
         /// </summary>
         internal static string CLIENT_EMAIL_VERIFICATION_FAILED {
             get {
@@ -97,7 +88,7 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The link for reset password has expired..
+        ///   Looks up a localized string similar to Le lien a expiré..
         /// </summary>
         internal static string CLIENT_EXPIRED_LINK {
             get {
@@ -106,7 +97,7 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to create {0}.
+        ///   Looks up a localized string similar to échec de la création : {0}.
         /// </summary>
         internal static string CLIENT_INSERTION_FAILED {
             get {
@@ -115,7 +106,7 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have reached the maximum attempts! Your account is locked for 5 minutes..
+        ///   Looks up a localized string similar to Vous avez atteint le nombre maximum de tentatives de connexion ! Votre compte est bloqué pendant 5 minutes..
         /// </summary>
         internal static string CLIENT_LOGINATTEMPS {
             get {
@@ -124,7 +115,7 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Account is locked for {0} minutes..
+        ///   Looks up a localized string similar to Votre compte est bloqué pendant {0} minutes..
         /// </summary>
         internal static string CLIENT_LOGINATTEMPS_LOCKTIME {
             get {
@@ -133,7 +124,7 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} not found;.
+        ///   Looks up a localized string similar to {0} introuvable..
         /// </summary>
         internal static string CLIENT_NOTFOUND {
             get {
@@ -142,7 +133,7 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New password doesn&apos;t match with confirmed password !.
+        ///   Looks up a localized string similar to Le mot de passe doit correspondre au mot de passe de confirmation..
         /// </summary>
         internal static string CLIENT_RESETPASSWORD_NOTMATCH {
             get {
@@ -151,7 +142,7 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provided {0} already exist..
+        ///   Looks up a localized string similar to L&apos;élément fourni : {0} existe déjà...
         /// </summary>
         internal static string CLIENT_UNICITY_CONSTRAINT {
             get {
@@ -160,20 +151,11 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to update {0}.
+        ///   Looks up a localized string similar to échec de la mise à jour : {0}.
         /// </summary>
         internal static string CLIENT_UPDATE_FAILED {
             get {
                 return ResourceManager.GetString("CLIENT_UPDATE_FAILED", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Failed to update {0}.
-        /// </summary>
-        internal static string CLIENT_UPDATE_PROPERTY_FAILED {
-            get {
-                return ResourceManager.GetString("CLIENT_UPDATE_PROPERTY_FAILED", resourceCulture);
             }
         }
         
@@ -210,6 +192,25 @@ namespace CesiZen.Domain.Resources {
         internal static string LOG_GETONE_NOTFOUND {
             get {
                 return ResourceManager.GetString("LOG_GETONE_NOTFOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Couldn&apos;t save data into Database..
+        /// </summary>
+        internal static string LOG_INSERTION_OPERATIONFAILED {
+            get {
+                return ResourceManager.GetString("LOG_INSERTION_OPERATIONFAILED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current operation failed : {0}
+        ///Exception message : {1}.
+        /// </summary>
+        internal static string LOG_OPERATIONFAILED {
+            get {
+                return ResourceManager.GetString("LOG_OPERATIONFAILED", resourceCulture);
             }
         }
         

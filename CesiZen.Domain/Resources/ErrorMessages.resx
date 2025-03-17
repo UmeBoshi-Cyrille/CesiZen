@@ -118,43 +118,37 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CLIENT_AUTHENTICATION_FAILED" xml:space="preserve">
-    <value>Incorrect Email or password.</value>
-  </data>
-  <data name="CLIENT_AUTHENTICATION_MISMATCH" xml:space="preserve">
-    <value>Incorrect Email or password provided.</value>
+    <value>Email ou Mot de passe incorrect.</value>
   </data>
   <data name="CLIENT_DELETION_FAILED" xml:space="preserve">
-    <value>Failed to delete {0}</value>
+    <value>échec de suppression : {0}</value>
   </data>
   <data name="CLIENT_EMAIL_VERIFICATION_FAILED" xml:space="preserve">
-    <value>Email failed to be verified.</value>
+    <value>échec de la vérification du de l'email</value>
   </data>
   <data name="CLIENT_EXPIRED_LINK" xml:space="preserve">
-    <value>The link for reset password has expired.</value>
+    <value>Le lien a expiré.</value>
   </data>
   <data name="CLIENT_INSERTION_FAILED" xml:space="preserve">
-    <value>Failed to create {0}</value>
+    <value>échec de la création : {0}</value>
   </data>
   <data name="CLIENT_LOGINATTEMPS" xml:space="preserve">
-    <value>You have reached the maximum attempts! Your account is locked for 5 minutes.</value>
+    <value>Vous avez atteint le nombre maximum de tentatives de connexion ! Votre compte est bloqué pendant 5 minutes.</value>
   </data>
   <data name="CLIENT_LOGINATTEMPS_LOCKTIME" xml:space="preserve">
-    <value>Account is locked for {0} minutes.</value>
+    <value>Votre compte est bloqué pendant {0} minutes.</value>
   </data>
   <data name="CLIENT_NOTFOUND" xml:space="preserve">
-    <value>{0} not found;</value>
+    <value>{0} introuvable.</value>
   </data>
   <data name="CLIENT_RESETPASSWORD_NOTMATCH" xml:space="preserve">
-    <value>New password doesn't match with confirmed password !</value>
+    <value>Le mot de passe doit correspondre au mot de passe de confirmation.</value>
   </data>
   <data name="CLIENT_UNICITY_CONSTRAINT" xml:space="preserve">
-    <value>Provided {0} already exist.</value>
+    <value>L'élément fourni : {0} existe déjà..</value>
   </data>
   <data name="CLIENT_UPDATE_FAILED" xml:space="preserve">
-    <value>Failed to update {0}</value>
-  </data>
-  <data name="CLIENT_UPDATE_PROPERTY_FAILED" xml:space="preserve">
-    <value>Failed to update {0}</value>
+    <value>échec de la mise à jour : {0}</value>
   </data>
   <data name="LOG_CHECK_UNICITY_CONSTRAINT" xml:space="preserve">
     <value>Current {0} already exist in the Database. [info : {1}]</value>
@@ -176,5 +170,12 @@
   </data>
   <data name="LOG_UPDATE_PROPERTY_OPERATIONFAILED" xml:space="preserve">
     <value>Update operation failed for {0} property {1} [info: {2}]</value>
+  </data>
+  <data name="LOG_INSERTION_OPERATIONFAILED" xml:space="preserve">
+    <value>Couldn't save data into Database.</value>
+  </data>
+  <data name="LOG_OPERATIONFAILED" xml:space="preserve">
+    <value>Current operation failed : {0}
+Exception message : {1}</value>
   </data>
 </root>
