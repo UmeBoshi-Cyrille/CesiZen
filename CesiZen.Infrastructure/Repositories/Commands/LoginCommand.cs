@@ -5,7 +5,7 @@ using CesiZen.Domain.Interface;
 using CesiZen.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
-namespace CesiZen.Infrastructure.Repository;
+namespace CesiZen.Infrastructure.Repositories;
 
 public class LoginCommand : AbstractRepository, ILoginCommand
 {

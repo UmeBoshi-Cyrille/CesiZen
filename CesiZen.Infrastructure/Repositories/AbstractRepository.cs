@@ -1,6 +1,6 @@
 ﻿using CesiZen.Infrastructure.DatabaseContext;
 
-namespace CesiZen.Infrastructure.Repository;
+namespace CesiZen.Infrastructure.Repositories;
 
 public class AbstractRepository
 {
