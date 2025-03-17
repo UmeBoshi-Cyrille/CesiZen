@@ -12,6 +12,7 @@ public class MongoDbContext : DbContext
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<Article> Articles { get; set; }
     public DbSet<BreathExercise> BreathExercises { get; set; }
+    public DbSet<Category> Categories { get; set; }
 
     public MongoDbContext(DbContextOptions options)
         : base(options)
