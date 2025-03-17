@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CesiZen\CesiZen\CesiZen.Api.csproj" />
+    <ProjectReference Include="..\CesiZen\CesiZen.Api.csproj" />
   </ItemGroup>
 
   <ItemGroup>

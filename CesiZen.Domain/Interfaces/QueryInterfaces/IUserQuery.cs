@@ -1,7 +1,7 @@
 ﻿using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
 
-namespace CesiZen.Domain.Interface;
+namespace CesiZen.Domain.Interfaces;
 
 public interface IUserQuery : IQueryInterface<User>
 {

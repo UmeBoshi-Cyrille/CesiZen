@@ -1,7 +1,7 @@
 ﻿using CesiZen.Application.Services;
 using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Datamodel;
-using CesiZen.Domain.Interface;
+using CesiZen.Domain.Interfaces;
 using CesiZen.Domain.Mapper;
 using CesiZen.Infrastructure.DatabaseContext;
 using CesiZen.Test.Fakers;
