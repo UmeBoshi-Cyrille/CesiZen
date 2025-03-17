@@ -8,11 +8,11 @@ public class UserDto
     [MaxLength(54)]
     [MinLength(2)]
     [Required(ErrorMessage = "FirstName is required")]
-    public required string FirstName { get; set; }
+    public required string Firstname { get; set; }
     [MaxLength(54)]
     [MinLength(2)]
     [Required(ErrorMessage = "LastName is required")]
-    public required string LastName { get; set; }
+    public required string Lastname { get; set; }
 
     [MaxLength(54)]
     [MinLength(3)]

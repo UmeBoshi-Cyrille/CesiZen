@@ -87,7 +87,7 @@ public class EmailService : IEmailService
         }
     }
 
-    public string ReplaceLinkContent(string template, string link, string content)
+    public static string ReplaceLinkContent(string template, string link, string content)
     {
         return template.Replace($"{{{content}}}", link);
     }
