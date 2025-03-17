@@ -33,7 +33,7 @@ public class ArticleQueryController : ControllerBase
         );
     }
 
-    [HttpGet]
+    [HttpGet("articles")]
     public async Task<ActionResult<PagedResult<ArticleDto>>> GetArticles([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string searchTerm = null)
     {
         var result = await articleService.GetAllAsync(pageNumber, pageSize);
@@ -44,7 +44,7 @@ public class ArticleQueryController : ControllerBase
         );
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("article/{id}")]
     public async Task<ActionResult<ArticleDto>> GetArticle(int id)
     {
         var result = await articleService.GetByIdAsync(id);
