@@ -1,0 +1,109 @@
+﻿using CesiZen.Application.Services;
+using CesiZen.Domain.BusinessResult;
+using CesiZen.Domain.Datamodel;
+using CesiZen.Domain.DataTransfertObject;
+using CesiZen.Domain.Interfaces;
+using CesiZen.Test.Fakers;
+using Moq;
+using Serilog;
+
+namespace CesiZen.Test.QueryServices;
+
+public class CategoryQueryServiceTests
+{
+    private readonly Mock<ILogger> mockLogger;
+    private readonly Mock<ICategoryQuery> mockQuery;
+    private readonly CategoryQueryService service;
+
+    public CategoryQueryServiceTests()
+    {
+        mockLogger = new Mock<ILogger>();
+        mockQuery = new Mock<ICategoryQuery>();
+        service = new CategoryQueryService(mockLogger.Object, mockQuery.Object);
+    }
+
+    [Fact]
+    public async Task GetAllAsyncTest_Success_WhenQuerySucceeds()
+    {
+        // Arrange
+        int pageNumber = 1, pageSize = 10;
+        var categories = CategoryFaker.FakeCategoryGenerator().Generate(34);
+        var pagedResult = new PagedResult<Category>
+        {
+            Data = categories,
+            TotalCount = categories.Count,
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        };
+
+        mockQuery.Setup(q => q.GetAllAsync(pageNumber, pageSize))
+                  .ReturnsAsync(Result<PagedResult<Category>>.Success(pagedResult));
+
+        // Act
+        var result = await service.GetAllAsync(pageNumber, pageSize);
+
+        // Assert
+        Assert.True(result.IsSuccess);
+        Assert.NotNull(result.Value);
+        Assert.Single(result.Value.Data);
+        Assert.Equal(categories[0].Name, result.Value.Data[0].Name);
+    }
+
+    [Fact]
+    public async Task GetAllAsyncTest_Failure_WhenQueryFails()
+    {
+        // Arrange
+        int pageNumber = 1, pageSize = 10;
+
+        mockQuery.Setup(q => q.GetAllAsync(pageNumber, pageSize))
+                  .ReturnsAsync(Result<PagedResult<Category>>.Failure(
+                        Error.NullValue("Error occurred")));
+
+        // Act
+        var result = await service.GetAllAsync(pageNumber, pageSize);
+
+        // Assert
+        Assert.True(result.IsFailure);
+        Assert.Null(result.Value);
+        mockLogger.Verify(l => l.Error(It.IsAny<string>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task GetByIdAsyncTest_Success_WhenQuerySucceeds()
+    {
+        // Arrange
+        string id = "1";
+        var category = CategoryFaker.FakeCategoryGenerator().Generate();
+
+        mockQuery.Setup(q => q.GetByIdAsync(id))
+                  .ReturnsAsync(Result<Category>.Success(category));
+
+        // Act
+        var result = await service.GetByIdAsync(id);
+
+        // Assert
+        Assert.True(result.IsSuccess);
+        Assert.NotNull(result.Value);
+        Assert.Equal(category.Name, result.Value.Name);
+    }
+
+    [Fact]
+    public async Task GetByIdAsyncTest_Failure_WhenQueryFails()
+    {
+        // Arrange
+        string id = "1";
+        var queryResult = Result<Category>.Failure(
+            Error.NullValue("Error occurred"));
+
+        mockQuery.Setup(q => q.GetByIdAsync(id))
+                  .ReturnsAsync(queryResult);
+
+        // Act
+        var result = await service.GetByIdAsync(id);
+
+        // Assert
+        Assert.True(result.IsFailure);
+        Assert.Null(result.Value);
+        mockLogger.Verify(l => l.Error(It.IsAny<string>()), Times.Once);
+    }
+}
