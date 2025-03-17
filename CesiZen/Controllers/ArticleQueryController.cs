@@ -1,0 +1,56 @@
+﻿using CesiZen.Domain.BusinessResult;
+using CesiZen.Domain.DataTransfertObject;
+using CesiZen.Domain.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+
+namespace CesiZen.Api.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class ArticleQueryController : ControllerBase
+{
+    private readonly IArticleQueryService articleService;
+
+    public ArticleQueryController(IArticleQueryService articleService)
+    {
+        this.articleService = articleService;
+    }
+
+    [HttpGet("search-articles")]
+    public async Task<ActionResult<PagedResult<ArticleDto>>> SearchArticles([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string searchTerm = null)
+    {
+        var parameters = new PageParameters()
+        {
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+        };
+
+        var result = await articleService.SearchArticles(parameters, searchTerm);
+
+        return result.Match<ActionResult, PagedResult<ArticleDto>>(
+             success: value => Ok(new { value }),
+             failure: error => BadRequest(new { error })
+        );
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<PagedResult<ArticleDto>>> GetArticles([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string searchTerm = null)
+    {
+        var result = await articleService.GetAllAsync(pageNumber, pageSize);
+
+        return result.Match<ActionResult, PagedResult<ArticleDto>>(
+             success: value => Ok(new { value }),
+             failure: error => BadRequest(new { error })
+        );
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<ArticleDto>> GetArticle(int id)
+    {
+        var result = await articleService.GetByIdAsync(id);
+        return result.Match<ActionResult, ArticleDto>(
+            success: value => Ok(new { value }),
+            failure: error => BadRequest(new { error })
+        );
+    }
+}

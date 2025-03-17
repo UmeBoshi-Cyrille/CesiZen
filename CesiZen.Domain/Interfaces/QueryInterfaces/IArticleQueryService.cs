@@ -3,8 +3,7 @@ using CesiZen.Domain.Interface;
 
 namespace CesiZen.Domain.Interfaces;
 
-public interface IArticleQueryService
+public interface IArticleQueryService : IQueryServiceInterface<ArticleDto>
 {
-    Task<IResult<PagedResult<ArticleDto>>> GetArticlesAsync(PageParameters parameters, string searchTerm = null);
-    Task<IResult<ArticleDto>> GetByIdAsync(int id);
+    Task<IResult<PagedResult<ArticleDto>>> SearchArticles(PageParameters parameters, string searchTerm = null);
 }
