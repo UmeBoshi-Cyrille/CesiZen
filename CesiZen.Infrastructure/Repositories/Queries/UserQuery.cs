@@ -76,7 +76,7 @@ public class UserQuery : AbstractRepository, IUserQuery
         return Result<PagedResult<User>>.Success(result);
     }
 
-    public async Task<IResult<User>> GetByIdAsync(int id)
+    public async Task<IResult<User>> GetByIdAsync(string id)
     {
         var user = await context.Users.FindAsync(id);
 

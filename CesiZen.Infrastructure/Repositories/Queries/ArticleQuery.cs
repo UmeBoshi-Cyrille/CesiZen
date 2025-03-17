@@ -2,7 +2,6 @@
 using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
-using CesiZen.Domain.Interfaces;
 using CesiZen.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -80,7 +79,7 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
         throw new NotImplementedException();
     }
 
-    public async Task<IResult<Article>> GetByIdAsync(int id)
+    public async Task<IResult<Article>> GetByIdAsync(string id)
     {
         try
         {

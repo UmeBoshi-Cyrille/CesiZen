@@ -45,7 +45,7 @@ public class ArticleQueryController : ControllerBase
     }
 
     [HttpGet("article/{id}")]
-    public async Task<ActionResult<ArticleDto>> GetArticle(int id)
+    public async Task<ActionResult<ArticleDto>> GetArticle(string id)
     {
         var result = await articleService.GetByIdAsync(id);
         return result.Match<ActionResult, ArticleDto>(
