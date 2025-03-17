@@ -1,6 +1,4 @@
-﻿using CesiZen.Application.Services;
-using CesiZen.Domain.DataTransfertObject;
-using CesiZen.Domain.Interfaces;
+﻿using CesiZen.Domain.DataTransfertObject;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -101,9 +99,6 @@ internal static class ServiceRegister
         });
 
         services.AddAuthorization();
-
-        services.AddScoped<IEmailService, EmailService>();
-
 
         return services;
     }
