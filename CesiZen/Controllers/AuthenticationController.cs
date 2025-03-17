@@ -30,21 +30,23 @@ public class AuthenticationController : ControllerBase
     [HttpGet("Verify")]
     public async Task<IActionResult> VerifyEmail(string token, string email)
     {
-        var result = authenticateService.VerifyEmail(token, email);
+        var result = await authenticateService.VerifyEmail(token, email);
 
-        if (result.Result.IsFailure)
+        if (result.IsFailure)
         {
-            return BadRequest(result.Result.Error.Message);
+            return BadRequest(new { result.Error.Message });
         }
 
-        return Ok("Email confirmed.");
+        return Ok(new { result.Info.Message });
     }
 
     [HttpGet("delete-cookie")]
     public IActionResult DeleteCookie()
     {
         Response.Cookies.Delete("JWTCookie");
-        return Ok(string.Format(Message.GetResource("InfoMessages", "CLIENT_DELETE_SUCCESS"), "Cookie"));
+
+        var successMessage = string.Format(Message.GetResource("InfoMessages", "CLIENT_DELETE_SUCCESS"), "Cookie");
+        return Ok(new { successMessage });
     }
 
     [HttpPost("authenticate")]
@@ -65,8 +67,8 @@ public class AuthenticationController : ControllerBase
 
         Response.Cookies.Append("JWTCookie", response.Value.Token!, cookieOptions);
 
-        //return Ok(response.Info.Message);
-        return Ok(response.Value.Token);
+        return Ok(new { response.Info.Message });
+        //return Ok(response.Value.Token);
     }
 
     [HttpPost("invalidate-tokens")]
@@ -79,20 +81,22 @@ public class AuthenticationController : ControllerBase
             return Unauthorized();
         }
 
-        return Ok(Message.GetResource("InfoMessages", "CLIENT_SESSION_CLOSED"));
+        var successMessage = Message.GetResource("InfoMessages", "CLIENT_SESSION_CLOSED");
+
+        return Ok(new { result.Info.Message });
     }
 
     [HttpPost("logout")]
     public async Task<IActionResult> Logout(string accessToken)
     {
-        var result = authenticateService.Disconnect(accessToken);
+        var result = await authenticateService.Disconnect(accessToken);
 
         Response.Cookies.Delete("JWTCookie");
 
         // Clear any other session-related data if necessary
         //HttpContext.Session.Clear();
-
-        return Ok("Logged out successfully");
+        var message = "Logged out successfully";
+        return Ok(new { result.Info.Message });
     }
 
 
@@ -102,10 +106,13 @@ public class AuthenticationController : ControllerBase
     {
         var result = await passwordService.ForgotPassword(request);
 
-        if (result.IsSuccess)
-            return Ok("If the email exists, a password reset link has been sent.");
+        var successMessage = "If the email exists, a password reset link has been sent.";
+        var failedMessage = "Couldn't send email to the provided adress";
 
-        return BadRequest("Couldn't send email to the provided adress");
+        if (result.IsSuccess)
+            return Ok(new { result.Info.Message });
+
+        return BadRequest(new { result.Error.Message });
     }
 
     [HttpPost("reset-password")]
@@ -113,10 +120,13 @@ public class AuthenticationController : ControllerBase
     {
         var result = passwordService.ResetPassword(dto).Result;
 
-        if (result.IsFailure)
-            return BadRequest("Invalid or expired token.");
+        var successMessage = "Password has been reset successfully.";
+        var failedMessage = "Invalid or expired token.";
 
-        return Ok("Password has been reset successfully.");
+        if (result.IsFailure)
+            return BadRequest(new { result.Error.Message });
+
+        return Ok(new { result.Info.Message });
     }
 
 
