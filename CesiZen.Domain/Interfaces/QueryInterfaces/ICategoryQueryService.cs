@@ -1,5 +1,7 @@
-﻿namespace CesiZen.Domain.Interfaces;
+﻿using CesiZen.Domain.DataTransfertObject;
 
-public interface ICategoryQueryService
+namespace CesiZen.Domain.Interfaces;
+
+public interface ICategoryQueryService : IQuery<CategoryRequestDto>
 {
 }

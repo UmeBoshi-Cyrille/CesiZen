@@ -1,5 +1,7 @@
-﻿namespace CesiZen.Domain.Interfaces;
+﻿using CesiZen.Domain.DataTransfertObject;
 
-public interface ICategoryCommandService
+namespace CesiZen.Domain.Interfaces;
+
+public interface ICategoryCommandService : ICommand<CategoryDto>
 {
 }
