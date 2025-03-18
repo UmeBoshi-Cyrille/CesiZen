@@ -29,7 +29,7 @@ public class ArticleQueryController : ControllerBase
 
         return result.Match<ActionResult, PagedResult<ArticleDto>>(
              success: value => Ok(new { value }),
-             failure: error => BadRequest(new { error })
+             failure: error => BadRequest(new { message = error.Message })
         );
     }
 
@@ -40,7 +40,7 @@ public class ArticleQueryController : ControllerBase
 
         return result.Match<ActionResult, PagedResult<ArticleDto>>(
              success: value => Ok(new { value }),
-             failure: error => BadRequest(new { error })
+             failure: error => BadRequest(new { message = error.Message })
         );
     }
 
@@ -50,7 +50,7 @@ public class ArticleQueryController : ControllerBase
         var result = await articleService.GetByIdAsync(id);
         return result.Match<ActionResult, ArticleDto>(
             success: value => Ok(new { value }),
-            failure: error => BadRequest(new { error })
+            failure: error => BadRequest(new { message = error.Message })
         );
     }
 }

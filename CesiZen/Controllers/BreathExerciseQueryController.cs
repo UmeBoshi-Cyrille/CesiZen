@@ -23,7 +23,7 @@ public class BreathExerciseQueryController : ControllerBase
 
         return result.Match<ActionResult, List<BreathExerciseDto>>(
              success: value => Ok(new { value }),
-             failure: error => BadRequest(new { error })
+             failure: error => BadRequest(new { message = error.Message })
         );
     }
 
@@ -34,7 +34,7 @@ public class BreathExerciseQueryController : ControllerBase
 
         return result.Match<ActionResult, BreathExerciseDto>(
             success: value => Ok(new { value }),
-            failure: error => BadRequest(new { error })
+            failure: error => BadRequest(new { message = error.Message })
         );
     }
 }

@@ -26,8 +26,8 @@ public class BreathExerciseCommandController : ControllerBase
             success: () => CreatedAtAction(
                 nameof(BreathExerciseQueryController.GetExercise),
                 nameof(BreathExerciseQueryController),
-                new { title = dto.Title, exercise = dto }),
-            failure: error => BadRequest(new { error })
+                new { title = dto.Title, exercise = dto, message = result.Info.Message }),
+            failure: error => BadRequest(new { message = error.Message })
         );
     }
 
@@ -38,8 +38,8 @@ public class BreathExerciseCommandController : ControllerBase
 
         var message = "Ok";
         return result.Match<IActionResult>(
-            success: () => Ok(new { message }),
-            failure: error => BadRequest(new { error })
+            success: () => Ok(new { message = result.Info.Message }),
+            failure: error => BadRequest(new { message = error.Message })
         );
     }
 
@@ -51,8 +51,8 @@ public class BreathExerciseCommandController : ControllerBase
         var message = "Ok";
 
         return result.Match<IActionResult>(
-            success: () => Ok(new { message }),
-            failure: error => BadRequest(new { error })
+            success: () => Ok(new { message = result.Info.Message }),
+            failure: error => BadRequest(new { message = error.Message })
         );
     }
 }

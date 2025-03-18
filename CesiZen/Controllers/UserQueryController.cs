@@ -30,7 +30,7 @@ public class UserQueryController : ControllerBase
 
         return result.Match<ActionResult, PagedResult<UserRequestDto>>(
              success: value => Ok(new { value }),
-             failure: error => BadRequest(new { error })
+             failure: error => BadRequest(new { message = error.Message })
         );
     }
 
@@ -41,7 +41,7 @@ public class UserQueryController : ControllerBase
 
         return result.Match<ActionResult, PagedResult<UserRequestDto>>(
              success: value => Ok(new { value }),
-             failure: error => BadRequest(new { error })
+             failure: error => BadRequest(new { message = error.Message })
         );
     }
 
@@ -51,7 +51,7 @@ public class UserQueryController : ControllerBase
         var result = await queryService.GetByIdAsync(id);
         return result.Match<ActionResult, UserRequestDto>(
             success: value => Ok(new { value }),
-            failure: error => BadRequest(new { error })
+            failure: error => BadRequest(new { message = error.Message })
         );
     }
 
@@ -62,7 +62,7 @@ public class UserQueryController : ControllerBase
 
         return result.Match<ActionResult, UserRequestDto>(
             success: value => Ok(new { value }),
-            failure: error => BadRequest(new { error })
+            failure: error => BadRequest(new { message = error.Message })
         );
     }
 }

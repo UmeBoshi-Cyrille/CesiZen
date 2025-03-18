@@ -1,7 +1,6 @@
 ﻿using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
-using CesiZen.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CesiZen.Api.Controllers;
@@ -34,10 +33,10 @@ public class AuthenticationController : ControllerBase
 
         if (result.IsFailure)
         {
-            return BadRequest(new { result.Error.Message });
+            return BadRequest(new { message = result.Error.Message });
         }
 
-        return Ok(new { result.Info.Message });
+        return Ok(new { message = result.Info.Message });
     }
 
     [HttpGet("delete-cookie")]
@@ -46,7 +45,7 @@ public class AuthenticationController : ControllerBase
         Response.Cookies.Delete("JWTCookie");
 
         var successMessage = string.Format(Message.GetResource("InfoMessages", "CLIENT_DELETE_SUCCESS"), "Cookie");
-        return Ok(new { successMessage });
+        return Ok(new { message = successMessage });
     }
 
     [HttpPost("authenticate")]
@@ -67,7 +66,7 @@ public class AuthenticationController : ControllerBase
 
         Response.Cookies.Append("JWTCookie", response.Value.Token!, cookieOptions);
 
-        return Ok(new { response.Info.Message });
+        return Ok(new { message = response.Info.Message });
         //return Ok(response.Value.Token);
     }
 
@@ -83,7 +82,7 @@ public class AuthenticationController : ControllerBase
 
         var successMessage = Message.GetResource("InfoMessages", "CLIENT_SESSION_CLOSED");
 
-        return Ok(new { result.Info.Message });
+        return Ok(new { message = result.Info.Message });
     }
 
     [HttpPost("logout")]
@@ -95,8 +94,8 @@ public class AuthenticationController : ControllerBase
 
         // Clear any other session-related data if necessary
         //HttpContext.Session.Clear();
-        var message = "Logged out successfully";
-        return Ok(new { result.Info.Message });
+
+        return Ok(new { message = result.Info.Message });
     }
 
 
@@ -106,13 +105,10 @@ public class AuthenticationController : ControllerBase
     {
         var result = await passwordService.ForgotPassword(request);
 
-        var successMessage = "If the email exists, a password reset link has been sent.";
-        var failedMessage = "Couldn't send email to the provided adress";
+        if (result.IsFailure)
+            return BadRequest(new { message = result.Error.Message });
 
-        if (result.IsSuccess)
-            return Ok(new { result.Info.Message });
-
-        return BadRequest(new { result.Error.Message });
+        return Ok(new { message = result.Info.Message });
     }
 
     [HttpPost("reset-password")]
@@ -120,13 +116,10 @@ public class AuthenticationController : ControllerBase
     {
         var result = passwordService.ResetPassword(dto).Result;
 
-        var successMessage = "Password has been reset successfully.";
-        var failedMessage = "Invalid or expired token.";
-
         if (result.IsFailure)
-            return BadRequest(new { result.Error.Message });
+            return BadRequest(new { message = result.Error.Message });
 
-        return Ok(new { result.Info.Message });
+        return Ok(new { message = result.Info.Message });
     }
 
 
