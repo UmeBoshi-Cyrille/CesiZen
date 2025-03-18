@@ -10,7 +10,7 @@ public class MongoDbContext : DbContext
     public DbSet<Login> Logins { get; set; }
     public DbSet<Session> Sessions { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
-    public DbSet<Article> Articles { get; set; }
+    public virtual DbSet<Article> Articles { get; set; }
 
     public MongoDbContext(DbContextOptions options)
         : base(options)

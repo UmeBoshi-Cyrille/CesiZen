@@ -117,6 +117,19 @@ public static class DataMapper
         return dto;
     }
 
+    public static List<Article> Map(this List<ArticleDto> dto)
+    {
+        List<Article> model = new();
+
+        for (var i = 0; i < dto.Count; i++)
+        {
+            var item = dto[i].Map();
+            model.Add(item);
+        }
+
+        return model;
+    }
+
     public static List<UserRequestDto> Map(this List<User> model)
     {
         List<UserRequestDto> dto = new();
