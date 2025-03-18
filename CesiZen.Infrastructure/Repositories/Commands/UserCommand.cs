@@ -47,7 +47,7 @@ internal class UserCommand : AbstractRepository, IUserCommand
 
         if (user == null)
         {
-            Result.Failure(
+            return Result.Failure(
                 Error.NotFound(string.Format(
                     Message.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "User", entity.Login.Email)));
         }
@@ -57,15 +57,15 @@ internal class UserCommand : AbstractRepository, IUserCommand
         try
         {
             await context.SaveChangesAsync();
+
+            return Result.Success();
         }
         catch (DbUpdateException ex)
         {
-            Result.Failure(
+            return Result.Failure(
                 Error.OperationFailed(string.Format(
                     Message.GetResource("ErrorMessages", "LOG_UPDATE_OPERATIONFAILED"), "User", entity.Login.Email)));
         }
-
-        return Result.Success();
     }
 
     public async Task<IResult> UpdateUserName(string id, string userName)
@@ -77,15 +77,35 @@ internal class UserCommand : AbstractRepository, IUserCommand
         try
         {
             await context.SaveChangesAsync();
+
+            return Result.Success();
         }
         catch (DbUpdateException ex)
         {
-            Result.Failure(
+            return Result.Failure(
                 Error.OperationFailed(string.Format(
                     Message.GetResource("ErrorMessages", "LOG_UPDATE_PROPERTY_OPERATIONFAILED"), "User", "UserName", userName)));
         }
+    }
 
-        return Result.Success();
+    public async Task<IResult> ActivationAsync(User entity)
+    {
+        context.Attach(entity);
+        context.Entry(entity).Property(p => p.IsActive).IsModified = true;
+        context.Entry(entity).Property(p => p.UpdatedAt).IsModified = true;
+
+        try
+        {
+            await context.SaveChangesAsync();
+
+            return Result.Success();
+        }
+        catch (DbUpdateException ex)
+        {
+            return Result.Failure(
+                Error.OperationFailed(string.Format(
+                    Message.GetResource("ErrorMessages", "LOG_UPDATE_PROPERTY_OPERATIONFAILED"), "User", "UserName")));
+        }
     }
 
     public async Task<IResult> Delete(string id)
@@ -95,6 +115,8 @@ internal class UserCommand : AbstractRepository, IUserCommand
             await context.Users
                 .Where(x => x.Id == id)
                 .ExecuteDeleteAsync();
+
+            return Result.Success();
         }
         catch (DbUpdateException ex)
         {
@@ -102,7 +124,5 @@ internal class UserCommand : AbstractRepository, IUserCommand
                     Error.OperationFailed(string.Format(
                         Message.GetResource("ErrorMessages", "LOG_DELETE_OPERATIONFAILED"), "User", $"id {id}")));
         }
-
-        return Result.Success();
     }
 }

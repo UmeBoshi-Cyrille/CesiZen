@@ -41,7 +41,7 @@ public class RegisterService : ALoginService, IRegisterService
 
         var authentifier = passwordService.HashPassword(dto.Password);
 
-        user.MapUser(dto, authentifier, verificationToken);
+        user = dto.Map(authentifier, verificationToken);
 
         result = await userCommand.Insert(user);
 

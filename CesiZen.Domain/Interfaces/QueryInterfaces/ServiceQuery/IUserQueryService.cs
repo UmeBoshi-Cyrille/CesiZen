@@ -1,10 +1,9 @@
-﻿using CesiZen.Domain.Datamodel;
+using CesiZen.Domain.DataTransfertObject;
 
 namespace CesiZen.Domain.Interface;
 
-public interface IUserQueryService : IQueryServiceInterface<User>
+public interface IUserQueryService : IQueryServiceInterface<UserRequestDto>
 {
-    Task<IResult<User>> GetByUsername(string username);
-
-    Task<IResult<IEnumerable<User>>> GetAllPaginatedAsync(int pageNumber, int pageSize);
+    Task<IResult<PagedResult<UserRequestDto>>> SearchUsers(PageParameters parameters, string searchTerm);
+    Task<IResult<UserRequestDto>> GetByUsername(string username);
 }
