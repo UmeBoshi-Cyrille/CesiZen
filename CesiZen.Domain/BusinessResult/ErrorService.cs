@@ -81,10 +81,10 @@ public static class ErrorService
         Info? info = null)
     {
         if (string.IsNullOrEmpty(argument))
-            return Result<string>.Failure(Error.NullOrEmpty(argument, ""), logger);
+            return Result<string>.Failure(Error.NullOrEmpty(""), logger);
 
         if (string.IsNullOrWhiteSpace(argument))
-            return Result<string>.Failure(Error.NullOrWhiteSpace(argument, ""), logger);
+            return Result<string>.Failure(Error.NullOrWhiteSpace(""), logger);
 
 
         if (info != null)
@@ -99,10 +99,10 @@ public static class ErrorService
         Info? info = null) where E : Exception, new()
     {
         if (string.IsNullOrEmpty(argument))
-            return Result<string>.Failure<E>(Error.NullOrEmpty(argument, ""), logger);
+            return Result<string>.Failure<E>(Error.NullValue(""), logger);
 
         if (string.IsNullOrWhiteSpace(argument))
-            return Result<string>.Failure<E>(Error.NullOrWhiteSpace(argument, ""), logger);
+            return Result<string>.Failure<E>(Error.NullOrWhiteSpace(""), logger);
 
         if (info != null)
             return Result<string>.Success(argument, logger, info);
@@ -566,7 +566,7 @@ public static class ErrorService
         if (!argument.Any())
         {
             if (error == null)
-                return Result<IEnumerable<T>>.Failure(Error.EmptyValue(argument, ""), logger);
+                return Result<IEnumerable<T>>.Failure(Error.NullValue(""), logger);
 
             return Result<IEnumerable<T>>.Failure(error, logger);
         }
@@ -586,7 +586,7 @@ public static class ErrorService
         if (!argument.Any())
         {
             if (error == null)
-                return Result<IEnumerable<T>>.Failure<E>(Error.EmptyValue(argument, ""), logger);
+                return Result<IEnumerable<T>>.Failure<E>(Error.NullValue(""), logger);
 
             return Result<IEnumerable<T>>.Failure<E>(error, logger);
         }

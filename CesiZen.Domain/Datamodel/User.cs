@@ -1,14 +1,53 @@
 ﻿using CesiZen.Domain.Enum;
+using Microsoft.AspNetCore.Identity;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace CesiZen.Domain.Datamodel;
 
-public class User : AUser
+public class User : IdentityUser
 {
-    public string FirstName { get; set; } = string.Empty;
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; }
 
-    public string LastName { get; set; } = string.Empty;
+    [BsonElement("firstName")]
+    [MaxLength(50)]
+    public string FirstName { get; set; }
 
-    public Login Login { get; set; } = new();
+    [BsonElement("lastName")]
+    [MaxLength(50)]
+    public string LastName { get; set; }
 
-    public RoleType Role { get; set; }
+    [BsonElement("username")]
+    [MaxLength(50)]
+    public string? Username { get; set; }
+
+    [BsonElement("createdAt")]
+    public DateTime CreatedAt { get; set; }
+
+    [BsonElement("lastLoginAt")]
+    public DateTime? LastLoginAt { get; set; }
+
+    [BsonElement("updatedAt")]
+    public DateTime? UpdatedAt { get; set; }
+
+    [BsonElement("isActive")]
+    public bool IsActive { get; set; }
+
+    [BsonElement("role")]
+    public RoleType Role { get; set; } = RoleType.NONE;
+
+    [BsonElement("refreshTokenExpiryTime")]
+    public DateTime? RefreshTokenExpiryTime { get; set; }
+
+    [BsonElement("login")]
+    public Login Login { get; set; }
+
+    [BsonElement("refreshToken")]
+    public RefreshToken? RefreshToken { get; set; }
+
+    [BsonElement("session")]
+    public Session? Session { get; set; }
 }
