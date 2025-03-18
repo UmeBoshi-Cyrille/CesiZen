@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  cesizen.api:
+    image: ${DOCKER_REGISTRY-}cesizenapi
+    build:
+      context: .
+      dockerfile: CesiZen/Dockerfile
