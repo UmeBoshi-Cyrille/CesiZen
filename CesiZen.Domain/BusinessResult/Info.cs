@@ -21,9 +21,21 @@ public class Info
 
 public enum InfoType
 {
+    Authentified,
+    CollectCompleted,
+    DeleteCompleted,
+    EmailVerified,
+    FormatCompleted,
+    InsertionSucceeded,
     None,
+    PasswordModified,
     ProcessComplete,
     Success,
-    Authentified
+    SessionClosed,
+    UpdateProperty,
+    UpdateSucceeded,
+    VerificationEmailSent,
+
+
 }
 
