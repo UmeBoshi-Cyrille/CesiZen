@@ -1,4 +1,4 @@
-﻿using CesiZen.Domain.BusinessResult;
+using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Interfaces;
 using MailKit.Security;
 using Microsoft.Extensions.Configuration;

@@ -1,4 +1,5 @@
-﻿using CesiZen.Domain.Datamodel;
+using CesiZen.Domain.Datamodel;
+
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 

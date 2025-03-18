@@ -1,4 +1,4 @@
-﻿namespace CesiZen.Domain.Interface;
+namespace CesiZen.Domain.Interface;
 
 public interface ICommandServiceInterface<T>
 {
