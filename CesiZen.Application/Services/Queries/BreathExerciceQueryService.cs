@@ -22,7 +22,7 @@ public class BreathExerciseQueryService : AService, IBreathExerciseQueryService
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result<List<BreathExerciseDto>>.Failure(Error.NullValue(""));
+            return Result<List<BreathExerciseDto>>.Failure(BreathExerciseErrors.ClientMultipleNotFound);
         }
 
         var dto = result.Value.Map();
@@ -37,7 +37,7 @@ public class BreathExerciseQueryService : AService, IBreathExerciseQueryService
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result<BreathExerciseDto>.Failure(Error.NullValue(""));
+            return Result<BreathExerciseDto>.Failure(BreathExerciseErrors.ClientNotFound);
         }
 
         var dto = result.Value.Map();

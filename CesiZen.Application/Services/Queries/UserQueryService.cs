@@ -22,7 +22,7 @@ public class UserQueryService : AService, IUserQueryService
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result<PagedResult<UserRequestDto>>.Failure(Error.NullValue(""));
+            return Result<PagedResult<UserRequestDto>>.Failure(UserErrors.ClientMultipleNotFound);
         }
 
         var dtos = result.Value.Map();
@@ -37,7 +37,7 @@ public class UserQueryService : AService, IUserQueryService
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result<PagedResult<UserRequestDto>>.Failure(Error.NullValue(""));
+            return Result<PagedResult<UserRequestDto>>.Failure(UserErrors.ClientMultipleNotFound);
         }
 
         var dto = result.Value.Map();
@@ -52,7 +52,7 @@ public class UserQueryService : AService, IUserQueryService
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result<UserRequestDto>.Failure(Error.NullValue(""));
+            return Result<UserRequestDto>.Failure(UserErrors.ClientNotFound);
         }
 
         var dto = result.Value.Map();
@@ -67,7 +67,7 @@ public class UserQueryService : AService, IUserQueryService
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result<UserRequestDto>.Failure(Error.NullValue(""));
+            return Result<UserRequestDto>.Failure(UserErrors.ClientNotFound);
         }
 
         var dto = result.Value.Map();

@@ -25,10 +25,10 @@ public class BreathExerciseCommandService : AService, IBreathExerciseCommandServ
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(BreathExerciseErrors.ClientInsertionFailed);
         }
 
-        return Result.Success();
+        return Result.Success(BreathExerciseInfos.ClientInsertionSucceeded);
     }
 
     public async Task<IResult> Update(BreathExerciseDto dto)
@@ -39,10 +39,10 @@ public class BreathExerciseCommandService : AService, IBreathExerciseCommandServ
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(BreathExerciseErrors.ClientUpdateFailed);
         }
 
-        return Result.Success();
+        return Result.Success(BreathExerciseInfos.ClientUpdateSucceeded);
     }
 
     public async Task<IResult> Delete(string id)
@@ -52,9 +52,9 @@ public class BreathExerciseCommandService : AService, IBreathExerciseCommandServ
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(BreathExerciseErrors.ClientDeletionFailed);
         }
 
-        return Result.Success();
+        return Result.Success(BreathExerciseInfos.ClientDeleteCompleted);
     }
 }

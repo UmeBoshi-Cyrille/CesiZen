@@ -22,7 +22,7 @@ public class ArticleQueryService : AService, IArticleQueryService
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result<PagedResult<ArticleDto>>.Failure(Error.NullValue(""));
+            return Result<PagedResult<ArticleDto>>.Failure(ArticleErrors.ClientMultipleNotFound);
         }
 
         var dto = result.Value.Map();
@@ -37,7 +37,7 @@ public class ArticleQueryService : AService, IArticleQueryService
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result<ArticleDto>.Failure(Error.NullValue(""));
+            return Result<ArticleDto>.Failure(ArticleErrors.ClientNotFound);
         }
 
         var dto = result.Value.Map();
@@ -52,7 +52,7 @@ public class ArticleQueryService : AService, IArticleQueryService
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result<PagedResult<ArticleDto>>.Failure(Error.NullValue(""));
+            return Result<PagedResult<ArticleDto>>.Failure(ArticleErrors.ClientMultipleNotFound);
         }
 
         var dto = result.Value.Map();

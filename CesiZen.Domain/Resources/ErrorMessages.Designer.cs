@@ -61,6 +61,15 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} {1} existe déjà...
+        /// </summary>
+        internal static string CLIENT_ACCOUNT__UNICITY_CONSTRAINT {
+            get {
+                return ResourceManager.GetString("CLIENT_ACCOUNT_ UNICITY_CONSTRAINT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email ou Mot de passe incorrect..
         /// </summary>
         internal static string CLIENT_AUTHENTICATION_FAILED {
@@ -156,15 +165,6 @@ namespace CesiZen.Domain.Resources {
         internal static string CLIENT_RESET_PASSWORD_ATTEMPS_REACHED {
             get {
                 return ResourceManager.GetString("CLIENT_RESET_PASSWORD_ATTEMPS_REACHED", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to L&apos;élément fourni : {0} existe déjà...
-        /// </summary>
-        internal static string CLIENT_UNICITY_CONSTRAINT {
-            get {
-                return ResourceManager.GetString("CLIENT_UNICITY_CONSTRAINT", resourceCulture);
             }
         }
         

@@ -27,7 +27,7 @@ public class LoginCommand : AbstractRepository, ILoginCommand
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(UserErrors.EmailVerificationFailed);
+            return Result.Failure(UserErrors.ClientEmailVerificationFailed);
         }
     }
 

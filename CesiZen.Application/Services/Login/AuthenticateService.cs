@@ -2,7 +2,6 @@
 using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
-using CesiZen.Domain.Interfaces;
 using Serilog;
 using System.Text.RegularExpressions;
 
@@ -35,9 +34,8 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
 
         if (login.Value == null)
         {
-            return Result<AuthenticateResponseDto>.Failure(
-                Error.NotFound(
-                    Message.GetResource("ErrorMessages", "CLIENT_AUTHENTICATION_FAILED")));
+            logger.Error(login.Error.Message);
+            return Result<AuthenticateResponseDto>.Failure(UserErrors.ClientAuthenticationFailed);
         }
 
         var result = LoginAttemps(login.Value, request.Password).Result;
@@ -46,17 +44,13 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
 
         if (!response.IsLoggedIn)
         {
-            return Result<AuthenticateResponseDto>.Failure(
-                Error.AuthenticationFailed(
-                    Message.GetResource("ErrorMessages", "CLIENT_AUTHENTICATION_MISMATCH")));
+            return Result<AuthenticateResponseDto>.Failure(UserErrors.ClientAuthenticationFailed);
         }
 
         var token = tokenProvider.GenerateAccessToken(login.Value.UserId);
         response.Token = token;
 
-        return Result<AuthenticateResponseDto>.Success(response,
-                    Info.Success(
-                        Message.GetResource("InfoMessages", "CLIENT_AUTHENTICATION_SUCCESS")));
+        return Result<AuthenticateResponseDto>.Success(response, UserInfos.ClientAuthentified);
     }
 
     public async Task<IResult> VerifyEmail(string token, string email)
@@ -64,11 +58,12 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
         var login = await loginQuery.GetByEmail(email);
         if (login == null)
         {
-            return Result.Failure(Error.NotFound(login.Error.Message));
+            logger.Error(login.Error.Message);
+            return Result.Failure(UserErrors.ClientNotFound);
         }
         else if (login.Value.EmailVerificationToken != token)
         {
-            return Result.Failure(Error.NotMatch(login.Error.Message));
+            return Result.Failure(UserErrors.ClientEmailVerificationFailed);
         }
 
         var dto = new EmailVerificationDto
@@ -83,12 +78,10 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result.Failure(
-                Error.OperationFailed(Message.GetResource("ErrorMessages", "CLIENT_EMAIL_VERIFICATION_FAILED")));
+            return Result.Failure(UserErrors.ClientEmailVerificationFailed);
         }
 
-        return Result.Success(
-                Info.Success(Message.GetResource("InfoMessages", "CLIENT_EMAIL_VERIFIED")));
+        return Result.Success(UserInfos.ClientEmailVerified);
     }
 
     public async Task<IResult> Disconnect(string accessToken)

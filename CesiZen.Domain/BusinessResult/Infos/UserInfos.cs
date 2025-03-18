@@ -3,14 +3,14 @@
 public static class UserInfos
 {
     #region Client Messages
-    public static Info InsertionSucceeded => new(InfoType.InsertionSucceeded, string.Format(Message.GetResource("InfoMessages", "CLIENT_INSERTION_SUCCESS"), "Votre Compte"));
-    public static Info UpdateSucceeded => new(InfoType.UpdateSucceeded, string.Format(Message.GetResource("InfoMessages", "CLIENT_UPDATE_SUCCESS"), "L'utilisateur"));
-    public static Info DeleteCompleted => new(InfoType.DeleteCompleted, string.Format(Message.GetResource("InfoMessages", "CLIENT_DELETE_SUCCESS"), "L'utilisateur"));
-    public static Info SessionClosed => new(InfoType.SessionClosed, Message.GetResource("InfoMessages", "CLIENT_SESSION_CLOSED"));
-    public static Info EmailVerified => new(InfoType.EmailVerified, Message.GetResource("InfoMessages", "CLIENT_EMAIL_VERIFIED"));
-    public static Info VerificationEmailSent => new(InfoType.VerificationEmailSent, Message.GetResource("InfoMessages", "CLIENT_EMAIL_VERIFICATION"));
-    public static Info Authentified => new(InfoType.Authentified, Message.GetResource("InfoMessages", "CLIENT_AUTHENTIFIED"));
-    public static Info PasswordModified => new(InfoType.PasswordModified, Message.GetResource("InfoMessages", "LOG_PASSWORD_MODIFICATION"));
+    public static Info ClientInsertionSucceeded => new(InfoType.InsertionSucceeded, string.Format(Message.GetResource("InfoMessages", "CLIENT_INSERTION_SUCCESS"), "Votre Compte"));
+    public static Info ClientUpdateSucceeded => new(InfoType.UpdateSucceeded, string.Format(Message.GetResource("InfoMessages", "CLIENT_UPDATE_SUCCESS"), "L'utilisateur"));
+    public static Info ClientDeleteCompleted => new(InfoType.DeleteCompleted, string.Format(Message.GetResource("InfoMessages", "CLIENT_DELETE_SUCCESS"), "L'utilisateur"));
+    public static Info ClientSessionClosed => new(InfoType.SessionClosed, Message.GetResource("InfoMessages", "CLIENT_SESSION_CLOSED"));
+    public static Info ClientEmailVerified => new(InfoType.EmailVerified, Message.GetResource("InfoMessages", "CLIENT_EMAIL_VERIFIED"));
+    public static Info ClientVerificationEmailSent => new(InfoType.VerificationEmailSent, Message.GetResource("InfoMessages", "CLIENT_EMAIL_VERIFICATION"));
+    public static Info ClientAuthentified => new(InfoType.Authentified, Message.GetResource("InfoMessages", "CLIENT_AUTHENTIFIED"));
+    public static Info ClientPasswordModified => new(InfoType.PasswordModified, Message.GetResource("InfoMessages", "LOG_PASSWORD_MODIFICATION"));
     #endregion
 
     #region Log Messages

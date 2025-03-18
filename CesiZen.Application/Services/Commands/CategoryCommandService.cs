@@ -22,10 +22,11 @@ public class CategoryCommandService : AService, ICategoryCommandService
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(CategoryErrors.ClientInsertionFailed);
         }
 
-        return Result.Success();
+        logger.Information(result.Info.Message);
+        return Result.Success(CategoryInfos.ClientInsertionSucceeded);
     }
 
     public async Task<IResult> Update(CategoryDto dto)
@@ -36,10 +37,11 @@ public class CategoryCommandService : AService, ICategoryCommandService
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(CategoryErrors.ClientUpdateFailed);
         }
 
-        return Result.Success();
+        logger.Information(result.Info.Message);
+        return Result.Success(CategoryInfos.ClientUpdateSucceeded);
     }
 
     public async Task<IResult> Delete(string id)
@@ -49,9 +51,10 @@ public class CategoryCommandService : AService, ICategoryCommandService
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(CategoryErrors.ClientDeletionFailed);
         }
 
-        return Result.Success();
+        logger.Information(result.Info.Message);
+        return Result.Success(CategoryInfos.ClientDeleteCompleted);
     }
 }

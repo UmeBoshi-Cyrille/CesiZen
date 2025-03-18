@@ -3,18 +3,19 @@
 public static class UserErrors
 {
     #region Client Messages
-    public static Error RegisterFailed => new(ErrorType.RegisterFailed, Message.GetResource("ErrorMessages", "CLIENT_INSERTION_FAILED"));
-    public static Error UpdateFailed => new(ErrorType.UpdateFailed, Message.GetResource("ErrorMessages", "CLIENT_UPDATE_FAILED"));
-    public static Error DeletionFailed => new(ErrorType.DeletionFailed, Message.GetResource("ErrorMessages", "CLIENT_DELETION_FAILED"));
-    public static Error NotFound => new(ErrorType.NotFound, string.Format(Message.GetResource("ErrorMessages", "CLIENT_NOTFOUND"), "Utilisateur"));
-    public static Error MultipleNotFound => new(ErrorType.NotFound, string.Format(Message.GetResource("ErrorMessages", "CLIENT_MULTIPLE_NOTFOUND"), "Utilisateurs"));
-    public static Error AuthenticationFailed => new(ErrorType.AuthenticationFailed, Message.GetResource("ErrorMessages", "CLIENT_AUTHENTICATION_FAILED"));
-    public static Error EmailVerificationFailed => new(ErrorType.EmailVerificationFailed, Message.GetResource("ErrorMessages", "CLIENT_EMAIL_VERIFICATION_FAILED"));
-    public static Error ExpiredLink => new(ErrorType.ExpiredLink, Message.GetResource("ErrorMessages", "CLIENT_EXPIRED_LINK"));
-    public static Error LoginAttempsReached => new(ErrorType.LoginAttempsReached, Message.GetResource("ErrorMessages", "CLIENT_LOGIN_ATTEMPS_REACHED"));
-    public static Error LockTime(string lockTime) => new(ErrorType.LockTime, string.Format(Message.GetResource("ErrorMessages", "CLIENT_LOCKTIME"), lockTime));
-    public static Error ResetPasswordAttempsReached => new(ErrorType.ResetPasswordAttempsReached, Message.GetResource("ErrorMessages", "CLIENT_RESET_PASSWORD_ATTEMPS_REACHED"));
-    public static Error PasswordNotMatch => new(ErrorType.PasswordNotMatch, Message.GetResource("ErrorMessages", "CLIENT_PASSWORD_NOTMATCH"));
+    public static Error ClientRegisterFailed => new(ErrorType.RegisterFailed, Message.GetResource("ErrorMessages", "CLIENT_INSERTION_FAILED"));
+    public static Error ClientUpdateFailed => new(ErrorType.UpdateFailed, Message.GetResource("ErrorMessages", "CLIENT_UPDATE_FAILED"));
+    public static Error ClientDeletionFailed => new(ErrorType.DeletionFailed, Message.GetResource("ErrorMessages", "CLIENT_DELETION_FAILED"));
+    public static Error ClientNotFound => new(ErrorType.NotFound, string.Format(Message.GetResource("ErrorMessages", "CLIENT_NOTFOUND"), "Utilisateur"));
+    public static Error ClientMultipleNotFound => new(ErrorType.NotFound, string.Format(Message.GetResource("ErrorMessages", "CLIENT_MULTIPLE_NOTFOUND"), "Utilisateurs"));
+    public static Error ClientAuthenticationFailed => new(ErrorType.AuthenticationFailed, Message.GetResource("ErrorMessages", "CLIENT_AUTHENTICATION_FAILED"));
+    public static Error ClientEmailVerificationFailed => new(ErrorType.EmailVerificationFailed, Message.GetResource("ErrorMessages", "CLIENT_EMAIL_VERIFICATION_FAILED"));
+    public static Error ClientExpiredLink => new(ErrorType.ExpiredLink, Message.GetResource("ErrorMessages", "CLIENT_EXPIRED_LINK"));
+    public static Error ClientLoginAttempsReached => new(ErrorType.LoginAttempsReached, Message.GetResource("ErrorMessages", "CLIENT_LOGIN_ATTEMPS_REACHED"));
+    public static Error ClientLockTime(string lockTime) => new(ErrorType.LockTime, string.Format(Message.GetResource("ErrorMessages", "CLIENT_LOCKTIME"), lockTime));
+    public static Error ClientResetPasswordAttempsReached => new(ErrorType.ResetPasswordAttempsReached, Message.GetResource("ErrorMessages", "CLIENT_RESET_PASSWORD_ATTEMPS_REACHED"));
+    public static Error ClientPasswordNotMatch => new(ErrorType.PasswordNotMatch, Message.GetResource("ErrorMessages", "CLIENT_PASSWORD_NOTMATCH"));
+    public static Error ClientNotUnique(string value) => new(ErrorType.NotUnique, string.Format(Message.GetResource("ErrorMessages", "CLIENT_ACCOUNT_ UNICITY_CONSTRAINT"), "L'email", value));
     #endregion
 
     #region Log Messages
@@ -28,7 +29,6 @@ public static class UserErrors
     public static Error LogResetPasswordAttempsReached(string identifier) => new(ErrorType.ResetPasswordAttempsReached, string.Format(Message.GetResource("ErrorMessages", "LOG_RESET_PASSWORD_ATTEMPS_REACHED"), identifier));
     public static Error LogEmailVerificationFailed(string email) => new(ErrorType.EmailVerificationFailed, string.Format(Message.GetResource("ErrorMessages", "LOG_EMAIL_VERIFICATION_FAILED"), email));
     public static Error LogLoginAttempsCount(string attemps, string email) => new(ErrorType.LoginAttempsCount, string.Format(Message.GetResource("ErrorMessages", "LOG_LOGIN_ATTEMPS_COUNT"), attemps, email));
-
     public static Error LogNotUnique(string value) => new(ErrorType.NotUnique, string.Format(Message.GetResource("ErrorMessages", "LOG_UNICITY_CONSTRAINT"), "User", value));
     #endregion
 }

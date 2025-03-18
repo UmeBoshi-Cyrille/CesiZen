@@ -144,8 +144,8 @@
   <data name="CLIENT_PASSWORD_NOTMATCH" xml:space="preserve">
     <value>Le mot de passe doit correspondre au mot de passe de confirmation.</value>
   </data>
-  <data name="CLIENT_UNICITY_CONSTRAINT" xml:space="preserve">
-    <value>L'élément fourni : {0} existe déjà..</value>
+  <data name="CLIENT_ACCOUNT_ UNICITY_CONSTRAINT" xml:space="preserve">
+    <value>{0} {1} existe déjà..</value>
   </data>
   <data name="CLIENT_UPDATE_FAILED" xml:space="preserve">
     <value>échec de la mise à jour.</value>
