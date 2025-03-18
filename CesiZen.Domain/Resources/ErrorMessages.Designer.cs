@@ -97,7 +97,7 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to échec de la création : {0}.
+        ///   Looks up a localized string similar to échec de la création..
         /// </summary>
         internal static string CLIENT_INSERTION_FAILED {
             get {
@@ -106,20 +106,29 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vous avez atteint le nombre maximum de tentatives de connexion ! Votre compte est bloqué pendant 5 minutes..
+        ///   Looks up a localized string similar to Votre compte est bloqué pendant {0} minutes..
         /// </summary>
-        internal static string CLIENT_LOGINATTEMPS {
+        internal static string CLIENT_LOCKTIME {
             get {
-                return ResourceManager.GetString("CLIENT_LOGINATTEMPS", resourceCulture);
+                return ResourceManager.GetString("CLIENT_LOCKTIME", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Votre compte est bloqué pendant {0} minutes..
+        ///   Looks up a localized string similar to Vous avez atteint le nombre maximum de tentatives de connexion ! Votre compte est bloqué pendant 5 minutes..
         /// </summary>
-        internal static string CLIENT_LOGINATTEMPS_LOCKTIME {
+        internal static string CLIENT_LOGIN_ATTEMPS_REACHED {
             get {
-                return ResourceManager.GetString("CLIENT_LOGINATTEMPS_LOCKTIME", resourceCulture);
+                return ResourceManager.GetString("CLIENT_LOGIN_ATTEMPS_REACHED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} introuvables..
+        /// </summary>
+        internal static string CLIENT_MULTIPLE_NOTFOUND {
+            get {
+                return ResourceManager.GetString("CLIENT_MULTIPLE_NOTFOUND", resourceCulture);
             }
         }
         
@@ -135,9 +144,18 @@ namespace CesiZen.Domain.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Le mot de passe doit correspondre au mot de passe de confirmation..
         /// </summary>
-        internal static string CLIENT_RESETPASSWORD_NOTMATCH {
+        internal static string CLIENT_PASSWORD_NOTMATCH {
             get {
-                return ResourceManager.GetString("CLIENT_RESETPASSWORD_NOTMATCH", resourceCulture);
+                return ResourceManager.GetString("CLIENT_PASSWORD_NOTMATCH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vous avez atteint le nombre maximum de tentatives de renouvellement du mot de passe ! Votre compte est bloqué pendant 1 heure..
+        /// </summary>
+        internal static string CLIENT_RESET_PASSWORD_ATTEMPS_REACHED {
+            get {
+                return ResourceManager.GetString("CLIENT_RESET_PASSWORD_ATTEMPS_REACHED", resourceCulture);
             }
         }
         
@@ -151,7 +169,7 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to échec de la mise à jour : {0}.
+        ///   Looks up a localized string similar to échec de la mise à jour..
         /// </summary>
         internal static string CLIENT_UPDATE_FAILED {
             get {
@@ -160,20 +178,20 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Current {0} already exist in the Database. [info : {1}].
+        ///   Looks up a localized string similar to Delete operation failed for {0} with Id {1}..
         /// </summary>
-        internal static string LOG_CHECK_UNICITY_CONSTRAINT {
+        internal static string LOG_DELETE_FAILED {
             get {
-                return ResourceManager.GetString("LOG_CHECK_UNICITY_CONSTRAINT", resourceCulture);
+                return ResourceManager.GetString("LOG_DELETE_FAILED", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete operation failed for {0} with Id {1}..
+        ///   Looks up a localized string similar to User with email: {0} couldn&apos;t be verified..
         /// </summary>
-        internal static string LOG_DELETE_OPERATIONFAILED {
+        internal static string LOG_EMAIL_VERIFICATION_FAILED {
             get {
-                return ResourceManager.GetString("LOG_DELETE_OPERATIONFAILED", resourceCulture);
+                return ResourceManager.GetString("LOG_EMAIL_VERIFICATION_FAILED", resourceCulture);
             }
         }
         
@@ -187,7 +205,7 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Requested {0} not found in the Database.  [info: {1}].
+        ///   Looks up a localized string similar to Requested {0} not found in the Database.  [Id: {1}].
         /// </summary>
         internal static string LOG_GETONE_NOTFOUND {
             get {
@@ -196,7 +214,7 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Couldn&apos;t save data into Database..
+        ///   Looks up a localized string similar to Couldn&apos;t save {0} into Database..
         /// </summary>
         internal static string LOG_INSERTION_OPERATIONFAILED {
             get {
@@ -205,8 +223,25 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Current operation failed : {0}
-        ///Exception message : {1}.
+        ///   Looks up a localized string similar to  {0} attemps has been made for user account {1}.
+        /// </summary>
+        internal static string LOG_LOGIN_ATTEMPS_COUNT {
+            get {
+                return ResourceManager.GetString("LOG_LOGIN_ATTEMPS_COUNT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User {0} has reached login limit attemps. Account is locked for 5 minutes..
+        /// </summary>
+        internal static string LOG_LOGIN_ATTEMPS_REACHED {
+            get {
+                return ResourceManager.GetString("LOG_LOGIN_ATTEMPS_REACHED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current operation failed : {0}.
         /// </summary>
         internal static string LOG_OPERATIONFAILED {
             get {
@@ -215,29 +250,47 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Insertion operation of new {0} failed .
+        ///   Looks up a localized string similar to Insertion operation of new user {0} failed. .
         /// </summary>
-        internal static string LOG_REGISTER_OPERATIONFAILED {
+        internal static string LOG_REGISTER_FAILED {
             get {
-                return ResourceManager.GetString("LOG_REGISTER_OPERATIONFAILED", resourceCulture);
+                return ResourceManager.GetString("LOG_REGISTER_FAILED", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update {0} operation failed. [info: {1}].
+        ///   Looks up a localized string similar to User {0} has reached reset password limit attemps. Account locked for 1 hour..
         /// </summary>
-        internal static string LOG_UPDATE_OPERATIONFAILED {
+        internal static string LOG_RESET_PASSWORD_ATTEMPS_REACHED {
             get {
-                return ResourceManager.GetString("LOG_UPDATE_OPERATIONFAILED", resourceCulture);
+                return ResourceManager.GetString("LOG_RESET_PASSWORD_ATTEMPS_REACHED", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update operation failed for {0} property {1} [info: {2}].
+        ///   Looks up a localized string similar to provided {0} already exist in the Database. [value: {1}].
         /// </summary>
-        internal static string LOG_UPDATE_PROPERTY_OPERATIONFAILED {
+        internal static string LOG_UNICITY_CONSTRAINT {
             get {
-                return ResourceManager.GetString("LOG_UPDATE_PROPERTY_OPERATIONFAILED", resourceCulture);
+                return ResourceManager.GetString("LOG_UNICITY_CONSTRAINT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to update {0} with Id: {1}.
+        /// </summary>
+        internal static string LOG_UPDATE_FAILED {
+            get {
+                return ResourceManager.GetString("LOG_UPDATE_FAILED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to update {0} {1} property .
+        /// </summary>
+        internal static string LOG_UPDATE_PROPERTY_FAILED {
+            get {
+                return ResourceManager.GetString("LOG_UPDATE_PROPERTY_FAILED", resourceCulture);
             }
         }
     }

@@ -130,52 +130,69 @@
     <value>Le lien a expiré.</value>
   </data>
   <data name="CLIENT_INSERTION_FAILED" xml:space="preserve">
-    <value>échec de la création : {0}</value>
+    <value>échec de la création.</value>
   </data>
-  <data name="CLIENT_LOGINATTEMPS" xml:space="preserve">
-    <value>Vous avez atteint le nombre maximum de tentatives de connexion ! Votre compte est bloqué pendant 5 minutes.</value>
+  <data name="CLIENT_RESET_PASSWORD_ATTEMPS_REACHED" xml:space="preserve">
+    <value>Vous avez atteint le nombre maximum de tentatives de renouvellement du mot de passe ! Votre compte est bloqué pendant 1 heure.</value>
   </data>
-  <data name="CLIENT_LOGINATTEMPS_LOCKTIME" xml:space="preserve">
+  <data name="CLIENT_LOCKTIME" xml:space="preserve">
     <value>Votre compte est bloqué pendant {0} minutes.</value>
   </data>
   <data name="CLIENT_NOTFOUND" xml:space="preserve">
     <value>{0} introuvable.</value>
   </data>
-  <data name="CLIENT_RESETPASSWORD_NOTMATCH" xml:space="preserve">
+  <data name="CLIENT_PASSWORD_NOTMATCH" xml:space="preserve">
     <value>Le mot de passe doit correspondre au mot de passe de confirmation.</value>
   </data>
   <data name="CLIENT_UNICITY_CONSTRAINT" xml:space="preserve">
     <value>L'élément fourni : {0} existe déjà..</value>
   </data>
   <data name="CLIENT_UPDATE_FAILED" xml:space="preserve">
-    <value>échec de la mise à jour : {0}</value>
+    <value>échec de la mise à jour.</value>
   </data>
-  <data name="LOG_CHECK_UNICITY_CONSTRAINT" xml:space="preserve">
-    <value>Current {0} already exist in the Database. [info : {1}]</value>
+  <data name="LOG_UNICITY_CONSTRAINT" xml:space="preserve">
+    <value>provided {0} already exist in the Database. [value: {1}]</value>
   </data>
-  <data name="LOG_DELETE_OPERATIONFAILED" xml:space="preserve">
+  <data name="LOG_DELETE_FAILED" xml:space="preserve">
     <value>Delete operation failed for {0} with Id {1}.</value>
   </data>
   <data name="LOG_GETONE_NOTFOUND" xml:space="preserve">
-    <value>Requested {0} not found in the Database.  [info: {1}]</value>
+    <value>Requested {0} not found in the Database.  [Id: {1}]</value>
   </data>
   <data name="LOG_GET_MULTIPLE_NOTFOUND" xml:space="preserve">
     <value>Requested {0} not found in the Database. Check database connection.</value>
   </data>
-  <data name="LOG_REGISTER_OPERATIONFAILED" xml:space="preserve">
-    <value>Insertion operation of new {0} failed </value>
+  <data name="LOG_REGISTER_FAILED" xml:space="preserve">
+    <value>Insertion operation of new user {0} failed. </value>
   </data>
-  <data name="LOG_UPDATE_OPERATIONFAILED" xml:space="preserve">
-    <value>Update {0} operation failed. [info: {1}]</value>
+  <data name="LOG_UPDATE_FAILED" xml:space="preserve">
+    <value>Failed to update {0} with Id: {1}</value>
   </data>
-  <data name="LOG_UPDATE_PROPERTY_OPERATIONFAILED" xml:space="preserve">
-    <value>Update operation failed for {0} property {1} [info: {2}]</value>
+  <data name="LOG_UPDATE_PROPERTY_FAILED" xml:space="preserve">
+    <value>Failed to update {0} {1} property </value>
   </data>
   <data name="LOG_INSERTION_OPERATIONFAILED" xml:space="preserve">
-    <value>Couldn't save data into Database.</value>
+    <value>Couldn't save {0} into Database.</value>
   </data>
   <data name="LOG_OPERATIONFAILED" xml:space="preserve">
-    <value>Current operation failed : {0}
-Exception message : {1}</value>
+    <value>Current operation failed : {0}</value>
+  </data>
+  <data name="CLIENT_LOGIN_ATTEMPS_REACHED" xml:space="preserve">
+    <value>Vous avez atteint le nombre maximum de tentatives de connexion ! Votre compte est bloqué pendant 5 minutes.</value>
+  </data>
+  <data name="LOG_LOGIN_ATTEMPS_REACHED" xml:space="preserve">
+    <value>User {0} has reached login limit attemps. Account is locked for 5 minutes.</value>
+  </data>
+  <data name="CLIENT_MULTIPLE_NOTFOUND" xml:space="preserve">
+    <value>{0} introuvables.</value>
+  </data>
+  <data name="LOG_RESET_PASSWORD_ATTEMPS_REACHED" xml:space="preserve">
+    <value>User {0} has reached reset password limit attemps. Account locked for 1 hour.</value>
+  </data>
+  <data name="LOG_EMAIL_VERIFICATION_FAILED" xml:space="preserve">
+    <value>User with email: {0} couldn't be verified.</value>
+  </data>
+  <data name="LOG_LOGIN_ATTEMPS_COUNT" xml:space="preserve">
+    <value> {0} attemps has been made for user account {1}</value>
   </data>
 </root>

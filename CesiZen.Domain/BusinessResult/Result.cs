@@ -1,5 +1,4 @@
 ﻿using CesiZen.Domain.Interfaces;
-using Serilog;
 //using IResult = CesiZen.Domain.Interface.IResult;
 
 namespace CesiZen.Domain.BusinessResult;
@@ -8,6 +7,8 @@ public class Result : IResult
 {
     protected Error error;
     protected Info info;
+    protected string exceptionMessage;
+    protected string identifier;
 
     public Error Error => error != Error.None ? error : Error.None;
     public Info Info => info != Info.None ? info : Info.None;
@@ -34,6 +35,21 @@ public class Result : IResult
         this.error = error;
     }
 
+    public Result(Error error, string exception)
+    {
+        IsSuccess = false;
+        this.error = error;
+        exceptionMessage = exception;
+    }
+
+    public Result(Error error, string identifier, string exception)
+    {
+        IsSuccess = false;
+        this.error = error;
+        exceptionMessage = exception;
+        this.identifier = identifier;
+    }
+
     /// <summary>
     /// Create a new Success Result
     /// </summary>
@@ -48,19 +64,6 @@ public class Result : IResult
     public static Result Success(Info info) => new(info);
 
     /// <summary>
-    /// Create a new Success Result which log the information. 
-    /// </summary>
-    /// <param name="info">The first value</param>
-    /// <param name="logger">The second value</param>
-    /// <returns>A new Success Result with an Info</returns>
-    public static Result Success(Info info, ILogger logger)
-    {
-        logger.Information(InfoMessage(info));
-
-        return Success(info);
-    }
-
-    /// <summary>
     /// return a new Result with an Error.
     /// </summary>
     /// <param name="error">The first value</param>
@@ -68,45 +71,18 @@ public class Result : IResult
     public static Result Failure(Error error) => new(error);
 
     /// <summary>
-    /// Log an Error with it's type and message
+    /// return a new Result with an Error.
     /// </summary>
     /// <param name="error">The first value</param>
-    /// <param name="logger">The second value</param>
     /// <returns>a new Failure Result with an Error</returns>
-    public static Result Failure(Error error, ILogger logger)
-    {
-        logger.Error(ErrorMessage(error));
-
-        return Failure(error);
-    }
+    public static Result Failure(Error error, string exception) => new(error, exception);
 
     /// <summary>
-    /// Log an Error with it's type and message and throw the choosen exception.
+    /// return a new Result with an Error.
     /// </summary>
-    /// <typeparam name="E">The Defined exception</typeparam>
     /// <param name="error">The first value</param>
-    /// <param name="logger">The second value</param>
-    /// <returns>throw the defined exception</returns>
-    public static Result Failure<E>(
-        Error error,
-        ILogger logger) where E : Exception, new()
-    {
-        logger.Error(ErrorMessage(error));
-
-        E exception = (E)Activator.CreateInstance(typeof(E), ErrorMessage(error));
-
-        throw exception;
-    }
-
-    protected static string ErrorMessage(Error error)
-    {
-        return $"[ERROR][Type: {error.Type}] -Message: {error.Message}";
-    }
-
-    protected static string InfoMessage(Info info)
-    {
-        return $"[INFO][Type: {info.Type}] -Message: {info.Message}";
-    }
+    /// <returns>a new Failure Result with an Error</returns>
+    public static Result Failure(Error error, string identifier, string exception) => new(error, identifier, exception);
 }
 
 public class Result<TValue> : Result, IResult<TValue>
@@ -130,6 +106,16 @@ public class Result<TValue> : Result, IResult<TValue>
         this.value = default!;
     }
 
+    private Result(Error error, string exception) : base(error, exception)
+    {
+        this.value = default!;
+    }
+
+    private Result(Error error, string identifier, string exception) : base(error, identifier, exception)
+    {
+        this.value = default!;
+    }
+
     /// <summary>
     /// Create a new Success Result with a value
     /// </summary>
@@ -146,20 +132,6 @@ public class Result<TValue> : Result, IResult<TValue>
     public static Result<TValue> Success(TValue value, Info info) => new(value, info);
 
     /// <summary>
-    /// Create a new Success Result which log the information. 
-    /// </summary>
-    /// <param name="value">The first value</param>
-    /// <param name="info">The second value</param>
-    /// <param name="logger">The Third value</param>
-    /// <returns>A new Success Result with the value</returns>
-    public static Result<TValue> Success(TValue value, ILogger logger, Info info)
-    {
-        logger.Information(InfoMessage(info));
-
-        return new(value);
-    }
-
-    /// <summary>
     /// Create a new Failure Result with an Error.
     /// </summary>
     /// <param name="error">The first value</param>
@@ -167,33 +139,16 @@ public class Result<TValue> : Result, IResult<TValue>
     public static new Result<TValue> Failure(Error error) => new(error);
 
     /// <summary>
-    /// Log an Error with it's type and message
+    /// Create a new Failure Result with an Error.
     /// </summary>
     /// <param name="error">The first value</param>
-    /// <param name="logger">The second value</param>
     /// <returns>a new Failure Result with an Error</returns>
-    public static new Result<TValue> Failure(Error error, ILogger logger)
-    {
-        logger.Error(ErrorMessage(error));
-
-        return new(error);
-    }
+    public static new Result<TValue> Failure(Error error, string exception) => new(error, exception);
 
     /// <summary>
-    /// Log an Error with it's type and message and throw the choosen exception.
+    /// return a new Result with an Error.
     /// </summary>
-    /// <typeparam name="E">The Defined exception</typeparam>
     /// <param name="error">The first value</param>
-    /// <param name="logger">The second value</param>
-    /// <returns>throw the defined exception</returns>
-    public static new Result<TValue> Failure<E>(
-        Error error,
-        ILogger logger) where E : Exception, new()
-    {
-        logger.Error(ErrorMessage(error));
-
-        E exception = (E)Activator.CreateInstance(typeof(E), ErrorMessage(error));
-
-        throw exception;
-    }
+    /// <returns>a new Failure Result with an Error</returns>
+    public static new Result<TValue> Failure(Error error, string identifier, string exception) => new(error, identifier, exception);
 }

@@ -61,25 +61,16 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Successfully connected.
+        ///   Looks up a localized string similar to Vous êtes maintenant connecté !.
         /// </summary>
-        internal static string CLIENT_AUTHENTICATION_SUCCESS {
+        internal static string CLIENT_AUTHENTIFIED {
             get {
-                return ResourceManager.GetString("CLIENT_AUTHENTICATION_SUCCESS", resourceCulture);
+                return ResourceManager.GetString("CLIENT_AUTHENTIFIED", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} has been successfully created.
-        /// </summary>
-        internal static string CLIENT_CREATION_SUCCESS {
-            get {
-                return ResourceManager.GetString("CLIENT_CREATION_SUCCESS", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} has been successfully deleted.
+        ///   Looks up a localized string similar to {0} a été supprimé..
         /// </summary>
         internal static string CLIENT_DELETE_SUCCESS {
             get {
@@ -88,7 +79,7 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An email has been sent for email verification..
+        ///   Looks up a localized string similar to Un Email a été envoyé pour la vérification..
         /// </summary>
         internal static string CLIENT_EMAIL_VERIFICATION {
             get {
@@ -97,7 +88,7 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Email has been verified..
+        ///   Looks up a localized string similar to Votre email a été vérifié..
         /// </summary>
         internal static string CLIENT_EMAIL_VERIFIED {
             get {
@@ -106,7 +97,16 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password has been successfully modified..
+        ///   Looks up a localized string similar to {0} a été créé..
+        /// </summary>
+        internal static string CLIENT_INSERTION_SUCCESS {
+            get {
+                return ResourceManager.GetString("CLIENT_INSERTION_SUCCESS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mot de passe modifié..
         /// </summary>
         internal static string CLIENT_RESETPASSWORD_SUCCESS {
             get {
@@ -115,7 +115,7 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Session is closed.
+        ///   Looks up a localized string similar to Session Fermé..
         /// </summary>
         internal static string CLIENT_SESSION_CLOSED {
             get {
@@ -124,7 +124,7 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} has been successfully updated.
+        ///   Looks up a localized string similar to {0} a été mis à jour..
         /// </summary>
         internal static string CLIENT_UPDATE_SUCCESS {
             get {
@@ -133,11 +133,110 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New {0} successfully registered.
+        ///   Looks up a localized string similar to Author : {0}, created new article entitled : {1}.
+        /// </summary>
+        internal static string LOG_ARTICLE__INSERTION {
+            get {
+                return ResourceManager.GetString("LOG_ARTICLE_ INSERTION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User {0} has been authentified.
+        /// </summary>
+        internal static string LOG_AUTHENTIFIED {
+            get {
+                return ResourceManager.GetString("LOG_AUTHENTIFIED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} {1} has been retrieved..
+        /// </summary>
+        internal static string LOG_COLLECT_COMPLETED {
+            get {
+                return ResourceManager.GetString("LOG_COLLECT_COMPLETED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} has been deleted..
+        /// </summary>
+        internal static string LOG_DELETION_SUCCESS {
+            get {
+                return ResourceManager.GetString("LOG_DELETION_SUCCESS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verification email has been sent to {0}.
+        /// </summary>
+        internal static string LOG_EMAIL_VERIFICATION {
+            get {
+                return ResourceManager.GetString("LOG_EMAIL_VERIFICATION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The email {0} has been verified..
+        /// </summary>
+        internal static string LOG_EMAIL_VERIFIED {
+            get {
+                return ResourceManager.GetString("LOG_EMAIL_VERIFIED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} {1} has been formated..
+        /// </summary>
+        internal static string LOG_FORMAT_COMPLETED {
+            get {
+                return ResourceManager.GetString("LOG_FORMAT_COMPLETED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New {0} {1} has been registered.
         /// </summary>
         internal static string LOG_INSERT_SUCCESS {
             get {
                 return ResourceManager.GetString("LOG_INSERT_SUCCESS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password for account {0} has been modified.
+        /// </summary>
+        internal static string LOG_PASSWORD_MODIFICATION {
+            get {
+                return ResourceManager.GetString("LOG_PASSWORD_MODIFICATION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Session for user {0} is closed.
+        /// </summary>
+        internal static string LOG_SESSION_CLOSED {
+            get {
+                return ResourceManager.GetString("LOG_SESSION_CLOSED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} {1} has been updated..
+        /// </summary>
+        internal static string LOG_UPDATE_PROPERTY {
+            get {
+                return ResourceManager.GetString("LOG_UPDATE_PROPERTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} has been updated..
+        /// </summary>
+        internal static string LOG_UPDATE_SUCCESS {
+            get {
+                return ResourceManager.GetString("LOG_UPDATE_SUCCESS", resourceCulture);
             }
         }
     }
