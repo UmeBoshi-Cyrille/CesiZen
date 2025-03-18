@@ -3,7 +3,6 @@ using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.Interface;
 using CesiZen.Domain.Interfaces;
 using CesiZen.Infrastructure.DatabaseContext;
-using CesiZen.Infrastructure.Repository;
 using EntityFramework.Exceptions.Common;
 using Microsoft.EntityFrameworkCore;
 
