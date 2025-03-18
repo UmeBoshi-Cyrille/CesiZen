@@ -27,10 +27,9 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-        
     # Step 3: Restore dependencies
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore CesiZen.sln
     # Step 4: Build api Application
     - name: Build
       run: dotnet build --no-restore --configuration Release 
