@@ -31,8 +31,8 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore CesiZen.sln
     # Step 4: Build api Application
-    - name: Build CesiZen.sln
-      run: dotnet build --no-restore --configuration Release 
+    - name: Build
+      run: dotnet build --no-restore --configuration Release CesiZen.sln
     # Step 5: Launch Test if it does exist
     - name: Test
       run: dotnet test --no-build --verbosity normal
