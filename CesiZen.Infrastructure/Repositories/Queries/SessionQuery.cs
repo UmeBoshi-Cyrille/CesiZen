@@ -4,7 +4,7 @@ using CesiZen.Domain.Interfaces;
 using CesiZen.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
-namespace CesiZen.Infrastructure.Repository;
+namespace CesiZen.Infrastructure.Repositories;
 
 public class SessionQuery : AbstractRepository, ISessionQuery
 {

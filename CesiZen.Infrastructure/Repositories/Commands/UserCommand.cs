@@ -4,7 +4,7 @@ using CesiZen.Domain.Interface;
 using CesiZen.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
-namespace CesiZen.Infrastructure.Repository;
+namespace CesiZen.Infrastructure.Repositories;
 
 internal class UserCommand : AbstractRepository, IUserCommand
 {
@@ -70,9 +70,10 @@ internal class UserCommand : AbstractRepository, IUserCommand
 
     public async Task<IResult> UpdateUserName(string id, string userName)
     {
-        var user = new User() { Id = id, UserName = userName };
+        var user = new User() { Id = id, UserName = userName, UpdatedAt = DateTime.Now };
         context.Attach(user);
         context.Entry(user).Property(p => p.UserName).IsModified = true;
+        context.Entry(user).Property(p => p.UpdatedAt).IsModified = true;
 
         try
         {

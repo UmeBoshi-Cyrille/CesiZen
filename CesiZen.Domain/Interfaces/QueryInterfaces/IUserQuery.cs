@@ -1,4 +1,4 @@
-using CesiZen.Domain.Datamodel;
+﻿using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
 
 namespace CesiZen.Domain.Interface;

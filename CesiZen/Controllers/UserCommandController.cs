@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CesiZen.Api.Controllers;
 
-public class UserCommandController : Controller
+[ApiController]
+[Route("api/[controller]")]
+public class UserCommandController : ControllerBase
 {
     private readonly IUserCommandService userCommandService;
 

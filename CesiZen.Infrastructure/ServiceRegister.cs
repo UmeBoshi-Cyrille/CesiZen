@@ -3,7 +3,6 @@ using CesiZen.Domain.Interfaces;
 using CesiZen.Infrastructure.DatabaseContext;
 using CesiZen.Infrastructure.Providers;
 using CesiZen.Infrastructure.Repositories;
-using CesiZen.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

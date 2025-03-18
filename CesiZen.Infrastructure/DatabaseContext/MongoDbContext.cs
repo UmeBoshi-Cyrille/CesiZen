@@ -1,4 +1,4 @@
-﻿using CesiZen.Domain.Datamodel;
+using CesiZen.Domain.Datamodel;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -10,6 +10,7 @@ public class MongoDbContext : DbContext
     public DbSet<Login> Logins { get; set; }
     public DbSet<Session> Sessions { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
+    public DbSet<Article> Articles { get; set; }
 
     public MongoDbContext(DbContextOptions options)
         : base(options)
