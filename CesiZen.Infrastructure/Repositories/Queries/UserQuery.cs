@@ -43,9 +43,7 @@ public class UserQuery : AbstractRepository, IUserQuery
         }
         catch (Exception ex)
         {
-            return Result<PagedResult<User>>.Failure(
-                Error.NotFound(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_GET_MULTIPLE_NOTFOUND"), "Users")));
+            return Result<PagedResult<User>>.Failure(UserErrors.LogMultipleNotFound, ex.Message);
         }
     }
 
@@ -60,9 +58,7 @@ public class UserQuery : AbstractRepository, IUserQuery
 
         if (!users.Any())
         {
-            return Result<PagedResult<User>>.Failure(
-                Error.NotFound(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_GET_MULTIPLE_NOTFOUND"), "Users")));
+            return Result<PagedResult<User>>.Failure(UserErrors.LogMultipleNotFound);
         }
 
         var result = new PagedResult<User>
@@ -82,9 +78,7 @@ public class UserQuery : AbstractRepository, IUserQuery
 
         if (user == null)
         {
-            return Result<User>.Failure(
-                Error.NotFound(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "User", id)));
+            return Result<User>.Failure(UserErrors.LogNotFound(id));
         }
 
         return Result<User>.Success(user);
@@ -99,9 +93,7 @@ public class UserQuery : AbstractRepository, IUserQuery
 
         if (user == null)
         {
-            return Result<User>.Failure(
-                Error.NotFound(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "User", username)));
+            return Result<User>.Failure(UserErrors.LogNotFound(username));
         }
 
         return Result<User>.Success(user);
@@ -117,9 +109,7 @@ public class UserQuery : AbstractRepository, IUserQuery
 
         if (string.IsNullOrEmpty(userId))
         {
-            return Result<string>.Failure(
-                Error.NotFound(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "User", "-")));
+            return Result<string>.Failure(UserErrors.LogNotFound(sessionId));
         }
 
         return Result<string>.Success(userId);
