@@ -12,6 +12,7 @@ on:
 env:
   DOCKER_IMAGE_NAME: cesizen-api
   DOCKER_IMAGE_TAG: latest
+  SOLUTION: CesiZen.sln
 
 jobs:
   build-test-job:
@@ -29,13 +30,13 @@ jobs:
         dotnet-version: 8.0.x
     # Step 3: Restore dependencies
     - name: Restore dependencies
-      run: dotnet restore CesiZen.sln
+      run: dotnet restore ${{ SOLUTION }}
     # Step 4: Build api Application
     - name: Build
-      run: dotnet build --no-restore --configuration Release CesiZen.sln
+      run: dotnet build --no-restore --configuration Release ${{ SOLUTION }}
     # Step 5: Launch Test if it does exist
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal ${{ SOLUTION }}
 
   docker-build-and-push:
     name: Docker Image Builder Rules
