@@ -19,15 +19,15 @@ public class BreathExerciseCommand : AbstractRepository, IBreathExerciseCommand
             context.BreathExercises.Add(entity);
             await context.SaveChangesAsync();
 
-            return Result.Success();
+            return Result.Success(BreathExerciseInfos.LogInsertionSucceeded(entity.Title));
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(ArticleErrors.OperationFailed("Insert", ex.Message));
+            return Result.Failure(BreathExerciseErrors.LogInsertionFailed(entity.Title), entity.UserId, ex.Message);
         }
         catch (Exception ex)
         {
-            return Result.Failure(ArticleErrors.OperationFailed("Delete", ex.Message));
+            return Result.Failure(BreathExerciseErrors.LogInsertionFailed(entity.Title), entity.UserId, ex.Message);
         }
     }
 
@@ -38,11 +38,15 @@ public class BreathExerciseCommand : AbstractRepository, IBreathExerciseCommand
             context.Entry(entity).State = EntityState.Modified;
             await context.SaveChangesAsync();
 
-            return Result.Success();
+            return Result.Success(BreathExerciseInfos.LogUpdateSucceeded(entity.Id));
+        }
+        catch (DbUpdateException ex)
+        {
+            return Result.Failure(BreathExerciseErrors.LogUpdateFailed(entity.Id), entity.Id, ex.Message);
         }
         catch (Exception ex)
         {
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(BreathExerciseErrors.LogUpdateFailed(entity.Id), entity.Id, ex.Message);
         }
     }
 
@@ -56,14 +60,18 @@ public class BreathExerciseCommand : AbstractRepository, IBreathExerciseCommand
                 context.BreathExercises.Remove(result);
                 await context.SaveChangesAsync();
 
-                return Result.Success();
+                return Result.Success(BreathExerciseInfos.LogDeleteCompleted(id));
             }
 
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(BreathExerciseErrors.LogDeletionFailed(id));
+        }
+        catch (DbUpdateException ex)
+        {
+            return Result.Failure(BreathExerciseErrors.LogDeletionFailed(id), id, ex.Message);
         }
         catch (Exception ex)
         {
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(BreathExerciseErrors.LogDeletionFailed(id), id, ex.Message);
         }
     }
 }

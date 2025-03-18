@@ -19,26 +19,20 @@ internal class UserCommand : AbstractRepository, IUserCommand
             context.Users.Add(entity);
             context.Logins.Add(entity.Login);
             await context.SaveChangesAsync();
+
+            return Result.Success(UserInfos.LogInsertionSucceeded(entity.Username));
         }
         catch (DbUpdateException ex)
         {
             if (ex.InnerException?.Message.Contains("IX_Logins_Email") == true)
             {
-                return Result.Failure(
-                    Error.NotUnique(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_CHECK_UNICITY_CONSTRAINT"), "User", entity.Login.Email)));
+                return Result.Failure(UserErrors.LogNotUnique(entity.Email), entity.Email, ex.Message);
             }
         }
         catch (Exception ex)
         {
-            return Result.Failure(
-                Error.OperationFailed(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_REGISTER_OPERATIONFAILED"), "User")));
+            return Result.Failure(UserErrors.LogRegisterFailed(entity.Email), entity.Email, ex.Message);
         }
-
-        return Result.Success(
-                Info.Success(string.Format(
-                    Message.GetResource("InfoMessages", "LOG_INSERT_SUCCESS"), "User")));
     }
 
     public async Task<IResult> Update(User entity)
@@ -47,9 +41,7 @@ internal class UserCommand : AbstractRepository, IUserCommand
 
         if (user == null)
         {
-            return Result.Failure(
-                Error.NotFound(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "User", entity.Login.Email)));
+            return Result.Failure(UserErrors.LogUpdateFailed(entity.Id));
         }
 
         context.Users.Update(entity);
@@ -58,13 +50,11 @@ internal class UserCommand : AbstractRepository, IUserCommand
         {
             await context.SaveChangesAsync();
 
-            return Result.Success();
+            return Result.Success(UserInfos.LogUpdateSucceeded(entity.Id));
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(
-                Error.OperationFailed(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_UPDATE_OPERATIONFAILED"), "User", entity.Login.Email)));
+            return Result.Failure(UserErrors.LogUpdateFailed(entity.Id), entity.Id, ex.Message);
         }
     }
 
@@ -79,13 +69,11 @@ internal class UserCommand : AbstractRepository, IUserCommand
         {
             await context.SaveChangesAsync();
 
-            return Result.Success();
+            return Result.Success(UserInfos.LogUpdateProperty("Username", id));
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(
-                Error.OperationFailed(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_UPDATE_PROPERTY_OPERATIONFAILED"), "User", "UserName", userName)));
+            return Result.Failure(UserErrors.LogUpdatePropertyFailed("Username", id), id, ex.Message);
         }
     }
 
@@ -103,9 +91,7 @@ internal class UserCommand : AbstractRepository, IUserCommand
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(
-                Error.OperationFailed(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_UPDATE_PROPERTY_OPERATIONFAILED"), "User", "UserName")));
+            return Result.Failure(UserErrors.LogUpdatePropertyFailed("IsActive", entity.Id), entity.Id, ex.Message);
         }
     }
 
@@ -117,13 +103,11 @@ internal class UserCommand : AbstractRepository, IUserCommand
                 .Where(x => x.Id == id)
                 .ExecuteDeleteAsync();
 
-            return Result.Success();
+            return Result.Success(UserInfos.LogDeleteCompleted(id));
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(
-                    Error.OperationFailed(string.Format(
-                        Message.GetResource("ErrorMessages", "LOG_DELETE_OPERATIONFAILED"), "User", $"id {id}")));
+            return Result.Failure(UserErrors.LogDeletionFailed(id), id, ex.Message);
         }
     }
 }

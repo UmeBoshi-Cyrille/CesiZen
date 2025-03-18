@@ -22,15 +22,13 @@ public class LoginCommand : AbstractRepository, ILoginCommand
                 .ExecuteUpdateAsync(o => o
                     .SetProperty(x => x.EmailVerified, dto.EmailVerified)
                     .SetProperty(x => x.EmailVerificationToken, dto.EmailVerificationToken));
+
+            return Result.Success(UserInfos.LogEmailVerified(dto.Email));
         }
         catch (DbUpdateException ex)
         {
-            Result.Failure(
-                Error.OperationFailed(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_UPDATE_PROPERTY_OPERATIONFAILED"), "Login", "Email", $"Email: {dto.Email}")));
+            return Result.Failure(UserErrors.EmailVerificationFailed);
         }
-
-        return Result.Success();
     }
 
     public async Task<IResult> UpdateEmail(string userId, string email)
@@ -40,15 +38,13 @@ public class LoginCommand : AbstractRepository, ILoginCommand
             await context.Logins
                 .Where(x => x.UserId == userId)
                 .ExecuteUpdateAsync(o => o.SetProperty(x => x.Email, email));
+
+            return Result.Success(UserInfos.LogUpdateProperty("email", userId));
         }
         catch (DbUpdateException ex)
         {
-            Result.Failure(
-                Error.OperationFailed(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_UPDATE_PROPERTY_OPERATIONFAILED"), "Login", "Email", $"Id: {userId}")));
+            return Result.Failure(UserErrors.LogUpdatePropertyFailed("email", $"{userId}"), userId, ex.Message);
         }
-
-        return Result.Success();
     }
 
     public async Task<IResult> UpdatePassword(string userId, string password)
@@ -58,30 +54,25 @@ public class LoginCommand : AbstractRepository, ILoginCommand
             await context.Logins
                .Where(x => x.UserId == userId)
                .ExecuteUpdateAsync(o => o.SetProperty(x => x.Password, password));
+
+            return Result.Success(UserInfos.LogUpdateProperty("password", userId));
         }
         catch (DbUpdateException ex)
         {
-            Result.Failure(
-                Error.OperationFailed(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_UPDATE_PROPERTY_OPERATIONFAILED"), "Login", "Password", $"Id: {userId}")));
+            return Result.Failure(UserErrors.LogUpdatePropertyFailed("password", $"{userId}"), userId, ex.Message);
         }
-
-        return Result.Success();
     }
 
     public async Task<IResult> ResetPassword(string token, string password)
     {
         try
         {
-
             var login = await context.Logins
                          .FirstOrDefaultAsync(t => t.EmailVerificationToken == token);
 
             if (login == null)
             {
-                return Result.Failure(
-                Error.NotFound(string.Format(
-                    Message.GetResource("ErrorMessages", "CLIENT_NOTFOUND"), "Login")));
+                return Result.Failure(UserErrors.LogNotFound(login.Id));
             }
 
             login.Password = password;
@@ -90,15 +81,13 @@ public class LoginCommand : AbstractRepository, ILoginCommand
 
             context.Logins.Update(login);
             await context.SaveChangesAsync();
+
+            return Result.Success();
         }
         catch (DbUpdateException ex)
         {
-            Result.Failure(
-                Error.OperationFailed(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_UPDATE_PROPERTY_OPERATIONFAILED"), "Login", "Password", $"Token: {token}")));
+            return Result.Failure(UserErrors.LogUpdatePropertyFailed("password", $"{token}"), token, ex.Message);
         }
-
-        return Result.Success();
     }
 
     public async Task<IResult> UpdateResetPasswordToken(Login login)
@@ -110,15 +99,13 @@ public class LoginCommand : AbstractRepository, ILoginCommand
                .ExecuteUpdateAsync(o => o
                     .SetProperty(x => x.PasswordResetToken, login.PasswordResetToken)
                     .SetProperty(x => x.PasswordResetTokenExpiry, login.PasswordResetTokenExpiry));
+
+            return Result.Success();
         }
         catch (DbUpdateException ex)
         {
-            Result.Failure(
-                Error.OperationFailed(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_UPDATE_PROPERTY_OPERATIONFAILED"), "Login", "Password Reset Token", $"Id: {login.Id}")));
+            return Result.Failure(UserErrors.LogUpdatePropertyFailed("PasswordResetToken", login.Id), login.Id, ex.Message);
         }
-
-        return Result.Success();
     }
 
     public async Task<IResult> UpdateSalt(string userId, string salt)
@@ -128,15 +115,13 @@ public class LoginCommand : AbstractRepository, ILoginCommand
             await context.Logins
                .Where(x => x.UserId == userId)
                .ExecuteUpdateAsync(o => o.SetProperty(x => x.Salt, salt));
+
+            return Result.Success();
         }
         catch (DbUpdateException ex)
         {
-            Result.Failure(
-                Error.OperationFailed(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_UPDATE_PROPERTY_OPERATIONFAILED"), "Login", "Salt", $"Id: {userId}")));
+            return Result.Failure(UserErrors.LogUpdatePropertyFailed("Salt", userId), userId, ex.Message);
         }
-
-        return Result.Success();
     }
 
     public async Task<IResult> UpdateLoginAttempsCount(Login login)
@@ -146,15 +131,13 @@ public class LoginCommand : AbstractRepository, ILoginCommand
             await context.Logins
                 .Where(x => x.Id == login.Id)
                 .ExecuteUpdateAsync(o => o.SetProperty(x => x.AccessFailedCount, login.AccessFailedCount));
+
+            return Result.Success();
         }
         catch (DbUpdateException ex)
         {
-            Result.Failure(
-                Error.OperationFailed(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_UPDATE_PROPERTY_OPERATIONFAILED"), "Login", "AccessFailedCount", login.AccessFailedCount)));
+            return Result.Failure(UserErrors.LogLoginAttempsCount(login.AccessFailedCount.ToString(), login.Email), login.Email, ex.Message);
         }
-
-        return Result.Success();
     }
 
     public async Task<IResult> UpdateLoginAttemps(Login login)
@@ -167,14 +150,12 @@ public class LoginCommand : AbstractRepository, ILoginCommand
                 .SetProperty(x => x.AccessFailedCount, login.AccessFailedCount)
                 .SetProperty(x => x.IsLocked, login.IsLocked)
                 .SetProperty(x => x.LockoutEndTime, login.LockoutEndTime));
+
+            return Result.Success();
         }
         catch (DbUpdateException ex)
         {
-            Result.Failure(
-                Error.OperationFailed(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_UPDATE_OPERATIONFAILED"), "Login", "LoginAttemps properties", $"IsLocked: {login.IsLocked}")));
+            return Result.Failure(UserErrors.LogLoginAttempsReached(login.Email), login.Email, ex.Message);
         }
-
-        return Result.Success();
     }
 }

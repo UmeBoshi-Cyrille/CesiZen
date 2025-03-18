@@ -29,21 +29,17 @@ public class TokenCommand : AbstractRepository, IRefreshTokenCommand
             }
 
             await context.SaveChangesAsync();
+
+            return Result.Success();
         }
         catch (UniqueConstraintException ex)
         {
-            return Result.Failure(
-                Error.NotUnique(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_CHECK_UNICITY_CONSTRAINT"), "RefreshToken", entity.Id)));
+            return Result.Failure(RefreshTokenErrors.LogNotUnique(entity.Token), entity.Token, ex.Message);
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(
-               Error.OperationFailed(string.Format(
-                   Message.GetResource("ErrorMessages", "LOG_UPDATE_OPERATIONFAILED"), "RefreshToken", entity.Id)));
+            return Result.Failure(RefreshTokenErrors.LogUpdateFailed(entity.Token), entity.Token, ex.Message);
         }
-
-        return Result.Success();
     }
 
     public async Task<IResult> Delete(string id)
@@ -54,9 +50,7 @@ public class TokenCommand : AbstractRepository, IRefreshTokenCommand
 
         if (result <= 0)
         {
-            return Result.Failure(
-                Error.OperationFailed(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_DELETE_OPERATIONFAILED"), "RefreshToken", id)));
+            return Result.Failure(RefreshTokenErrors.LogDeletionFailed(id));
         }
 
         return Result.Success();

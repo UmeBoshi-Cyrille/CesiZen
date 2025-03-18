@@ -30,21 +30,17 @@ public class SessionCommand : AbstractRepository, ISessionCommand
             }
 
             await context.SaveChangesAsync();
+
+            return Result.Success();
         }
         catch (UniqueConstraintException ex)
         {
-            return Result.Failure(
-                Error.NotUnique(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_CHECK_UNICITY_CONSTRAINT"), "Session", entity.SessionId)));
+            return Result.Failure(SessionErrors.LogNotUnique(entity.SessionId), entity.SessionId, ex.Message);
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(
-               Error.OperationFailed(string.Format(
-                   Message.GetResource("ErrorMessages", "LOG_UPDATE_OPERATIONFAILED"), "Session", entity.SessionId)));
+            return Result.Failure(SessionErrors.LogUpdateFailed(entity.SessionId), entity.SessionId, ex.Message);
         }
-
-        return Result.Success();
     }
 
     public async Task<IResult> Delete(string sessionId)
@@ -57,19 +53,15 @@ public class SessionCommand : AbstractRepository, ISessionCommand
 
             if (result <= 0)
             {
-                return Result.Failure(
-                    Error.OperationFailed(string.Format(
-                        Message.GetResource("ErrorMessages", "LOG_DELETE_OPERATIONFAILED"), "Session", "-")));
+                return Result.Failure(SessionErrors.LogDeletionFailed(sessionId));
             }
+
+            return Result.Success();
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(
-                Error.OperationFailed(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_DELETE_OPERATIONFAILED"), "Session", "-")));
+            return Result.Failure(SessionErrors.LogDeletionFailed(sessionId), sessionId, ex.Message);
         }
-
-        return Result.Success();
     }
 
     private void Insert(Session entity)
