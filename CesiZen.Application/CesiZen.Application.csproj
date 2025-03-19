@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MailKit" Version="4.10.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\CesiZen.Domain\CesiZen.Domain.csproj" />
   </ItemGroup>
 
