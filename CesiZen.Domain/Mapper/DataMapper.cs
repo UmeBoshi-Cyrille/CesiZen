@@ -40,16 +40,16 @@ public static class DataMapper
 
         Login login = new()
         {
-            Email = user.Email,
+            Email = dto.Email,
             Password = authentifier.Password,
             Salt = authentifier.HashSalt,
             EmailVerified = false,
             EmailVerificationToken = emailVerificationToken,
         };
 
-        user.Firstname = user.Firstname;
-        user.Lastname = user.Lastname;
-        user.UserName = user.Username;
+        user.Firstname = dto.Firstname;
+        user.Lastname = dto.Lastname;
+        user.UserName = dto.Username;
         user.IsActive = true;
         user.Login = login;
 
@@ -67,9 +67,9 @@ public static class DataMapper
             EmailVerified = false,
         };
 
-        user.Firstname = user.Firstname;
-        user.Lastname = user.Lastname;
-        user.UserName = user.Username;
+        user.Firstname = dto.Firstname;
+        user.Lastname = dto.Lastname;
+        user.UserName = dto.Username;
         user.IsActive = true;
         user.Login = login;
 
@@ -142,8 +142,33 @@ public static class DataMapper
 
         return dto;
     }
-    #endregion
 
+    public static List<User> Map(this List<UserRequestDto> dto)
+    {
+        List<User> model = new();
+
+        for (var i = 0; i < dto.Count; i++)
+        {
+            var item = dto[i].Map();
+            model.Add(item);
+        }
+
+        return model;
+    }
+
+    public static List<User> Map(this List<UserDto> dto)
+    {
+        List<User> model = new();
+
+        for (var i = 0; i < dto.Count; i++)
+        {
+            var item = dto[i].Map();
+            model.Add(item);
+        }
+
+        return model;
+    }
+    #endregion
 
     #region Paginated Mapper Methods
     public static PagedResult<ArticleDto> Map(this PagedResult<Article> model)
