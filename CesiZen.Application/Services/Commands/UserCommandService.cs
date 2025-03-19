@@ -57,4 +57,25 @@ public class UserCommandService : AService, IUserCommandService
         logger.Error(result.Error.Message);
         return Result.Failure(UserErrors.ClientUpdateFailed);
     }
+
+    public async Task<IResult> ActivationAsync(AccountActivationDto dto)
+    {
+        var user = dto.Map();
+        var result = await command.ActivationAsync(user);
+
+        if (result.IsSuccess)
+        {
+            Info info = new();
+            if (dto.IsActive)
+                info = UserInfos.ClientAccountEnabled;
+            else
+                info = UserInfos.ClientAccountDisabled;
+
+            logger.Information(result.Info.Message);
+            return Result.Success(info);
+        }
+
+        logger.Error(result.Error.Message);
+        return Result.Failure(UserErrors.ClientUpdateFailed);
+    }
 }

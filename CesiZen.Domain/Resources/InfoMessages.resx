@@ -177,4 +177,16 @@
   <data name="LOG_ARTICLE_ INSERTION" xml:space="preserve">
     <value>Author : {0}, created new article entitled : {1}</value>
   </data>
+  <data name="LOG_ACCOUNT_ACTIVATED" xml:space="preserve">
+    <value>User Account number {0} has been activate.</value>
+  </data>
+  <data name="LOG_ACCOUNT_DISACTIVATED" xml:space="preserve">
+    <value>User Account number {0} has been disactivate.</value>
+  </data>
+  <data name="CLIENT_ACCOUNT_DISABLED" xml:space="preserve">
+    <value>Le compte a été désactivé.</value>
+  </data>
+  <data name="CLIENT_ACCOUNT_ENABLED" xml:space="preserve">
+    <value>Le compte a été activé.</value>
+  </data>
 </root>

@@ -11,6 +11,8 @@ public static class UserInfos
     public static Info ClientVerificationEmailSent => new(InfoType.VerificationEmailSent, Message.GetResource("InfoMessages", "CLIENT_EMAIL_VERIFICATION"));
     public static Info ClientAuthentified => new(InfoType.Authentified, Message.GetResource("InfoMessages", "CLIENT_AUTHENTIFIED"));
     public static Info ClientPasswordModified => new(InfoType.PasswordModified, Message.GetResource("InfoMessages", "LOG_PASSWORD_MODIFICATION"));
+    public static Info ClientAccountEnabled => new(InfoType.AccountEnabled, Message.GetResource("InfoMessages", "CLIENT_ACCOUNT_ENABLED"));
+    public static Info ClientAccountDisabled => new(InfoType.AccountDisabled, Message.GetResource("InfoMessages", "CLIENT_ACCOUNT_DISABLED"));
     #endregion
 
     #region Log Messages
@@ -25,5 +27,7 @@ public static class UserInfos
     public static Info LogVerificationEmailSent(string email) => new(InfoType.EmailVerified, string.Format(Message.GetResource("InfoMessages", "LOG_EMAIL_VERIFICATION"), email));
     public static Info LogAuthentified(string identifier) => new(InfoType.Authentified, string.Format(Message.GetResource("InfoMessages", "LOG_AUTHENTIFIED"), identifier));
     public static Info LogPasswordModified(string identifier) => new(InfoType.PasswordModified, string.Format(Message.GetResource("InfoMessages", "LOG_PASSWORD_MODIFICATION"), identifier));
+    public static Info LogAccountEnabled(string identifier) => new(InfoType.AccountEnabled, string.Format(Message.GetResource("InfoMessages", "LOG_ACCOUNT_ACTIVATED"), identifier));
+    public static Info LogAccountDisabled(string identifier) => new(InfoType.AccountDisabled, string.Format(Message.GetResource("InfoMessages", "LOG_ACCOUNT_DISACTIVATED"), identifier));
     #endregion
 }

@@ -91,7 +91,13 @@ internal class UserCommand : AbstractRepository, IUserCommand
         {
             await context.SaveChangesAsync();
 
-            return Result.Success();
+            Info info = new();
+            if (entity.IsActive)
+                info = UserInfos.LogAccountEnabled(entity.Id);
+            else
+                info = UserInfos.LogAccountDisabled(entity.Id);
+
+            return Result.Success(info);
         }
         catch (DbUpdateException ex)
         {

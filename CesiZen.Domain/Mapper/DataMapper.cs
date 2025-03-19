@@ -101,6 +101,16 @@ public static class DataMapper
             IsActive = model.IsActive,
         };
     }
+
+    public static User Map(this AccountActivationDto dto)
+    {
+        User user = new();
+
+        user.Id = dto.Id;
+        user.IsActive = true;
+
+        return user;
+    }
     #endregion
 
     #region Collection Mapper Nethods

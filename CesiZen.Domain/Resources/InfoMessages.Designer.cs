@@ -61,6 +61,24 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Le compte a été désactivé..
+        /// </summary>
+        internal static string CLIENT_ACCOUNT_DISABLED {
+            get {
+                return ResourceManager.GetString("CLIENT_ACCOUNT_DISABLED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Le compte a été activé..
+        /// </summary>
+        internal static string CLIENT_ACCOUNT_ENABLED {
+            get {
+                return ResourceManager.GetString("CLIENT_ACCOUNT_ENABLED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vous êtes maintenant connecté !.
         /// </summary>
         internal static string CLIENT_AUTHENTIFIED {
@@ -129,6 +147,24 @@ namespace CesiZen.Domain.Resources {
         internal static string CLIENT_UPDATE_SUCCESS {
             get {
                 return ResourceManager.GetString("CLIENT_UPDATE_SUCCESS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Account number {0} has been activate..
+        /// </summary>
+        internal static string LOG_ACCOUNT_ACTIVATED {
+            get {
+                return ResourceManager.GetString("LOG_ACCOUNT_ACTIVATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Account number {0} has been disactivate..
+        /// </summary>
+        internal static string LOG_ACCOUNT_DISACTIVATED {
+            get {
+                return ResourceManager.GetString("LOG_ACCOUNT_DISACTIVATED", resourceCulture);
             }
         }
         
