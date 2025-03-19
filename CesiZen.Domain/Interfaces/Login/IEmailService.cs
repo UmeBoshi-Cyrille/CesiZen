@@ -1,10 +1,8 @@
-﻿namespace CesiZen.Domain.Interfaces;
+namespace CesiZen.Domain.Interfaces;
 
 public interface IEmailService
 {
     Task SendVerificationEmailAsync(string email, string verificationToken);
 
     Task SendEmailAsync(string email, string template, string subject);
-
-    string ReplaceLinkContent(string template, string link, string content);
 }

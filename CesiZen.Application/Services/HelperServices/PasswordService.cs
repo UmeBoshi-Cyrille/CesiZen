@@ -1,4 +1,4 @@
-﻿using CesiZen.Application.Helper;
+using CesiZen.Application.Helper;
 using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
@@ -175,7 +175,8 @@ public class PasswordService : IPasswordService
     {
         var resetLink = $"https://yourapp.com/reset-password?token={token}";
         var resetPasswordTemplate = Message.GetResource("Templates", "RESET_PASSWORD");
-        var templateContent = emailService.ReplaceLinkContent(resetPasswordTemplate, resetLink, "resetLink");
+        var templateContent = EmailService.ReplaceLinkContent(resetPasswordTemplate, resetLink, "resetLink");
+
         var subject = configuration["Email:ResetPwdSubject"];
 
         await emailService.SendEmailAsync(email, templateContent, subject);

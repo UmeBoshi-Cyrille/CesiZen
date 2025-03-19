@@ -1,4 +1,4 @@
-﻿using CesiZen.Domain.BusinessResult;
+using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Interfaces;
 using MailKit.Security;
 using Microsoft.Extensions.Configuration;
@@ -87,7 +87,7 @@ public class EmailService : IEmailService
         }
     }
 
-    public string ReplaceLinkContent(string template, string link, string content)
+    public static string ReplaceLinkContent(string template, string link, string content)
     {
         return template.Replace($"{{{content}}}", link);
     }
