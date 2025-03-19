@@ -37,7 +37,7 @@ public class CategoryCommandServiceTests
         mockSet = CommonFaker.CreateMockDbSet(entities);
         mockContext.Setup(c => c.Categories).Returns(mockSet.Object);
         mockCommand.Setup(c => c.Insert(It.IsAny<Category>()))
-                    .ReturnsAsync(Result.Success());
+                    .ReturnsAsync(Result.Success(CategoryInfos.LogInsertionSucceeded(entities[0].Name)));
 
         // Act
         var result = await service.Insert(dtos[0]);
@@ -157,7 +157,7 @@ public class CategoryCommandServiceTests
                             entity.Name = updatedArticle.Name;
                         }
                     }
-                ).ReturnsAsync(Result.Success());
+                ).ReturnsAsync(Result.Success(CategoryInfos.LogUpdateSucceeded(It.IsAny<string>())));
                 break;
             case CommandSelector.C2:
                 mockCommand.Setup(c => c.Delete(It.IsAny<string>())).Callback<string>(
@@ -169,7 +169,7 @@ public class CategoryCommandServiceTests
                             entities.Remove(entity);
                         }
                     }
-                ).ReturnsAsync(Result.Success());
+                ).ReturnsAsync(Result.Success(CategoryInfos.LogDeleteCompleted(It.IsAny<string>())));
                 break;
         }
     }

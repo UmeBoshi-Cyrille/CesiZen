@@ -155,7 +155,7 @@ public class UserCommandServiceTests
                             entity.Firstname = update.Firstname;
                         }
                     }
-                ).ReturnsAsync(Result.Success());
+                ).ReturnsAsync(Result.Success(UserInfos.LogUpdateSucceeded(It.IsAny<string>())));
                 break;
             case CommandSelector.C2:
                 mockCommand.Setup(c => c.Delete(It.IsAny<string>())).Callback<string>(
@@ -167,7 +167,7 @@ public class UserCommandServiceTests
                             entities.Remove(entity);
                         }
                     }
-                ).ReturnsAsync(Result.Success());
+                ).ReturnsAsync(Result.Success(UserInfos.LogDeleteCompleted(It.IsAny<string>())));
                 break;
             case CommandSelector.C3:
                 mockCommand.Setup(c => c.UpdateUserName(It.IsAny<string>(), It.IsAny<string>()))
@@ -179,7 +179,7 @@ public class UserCommandServiceTests
                             entity.Username = name;
                         }
                     }
-                ).ReturnsAsync(Result.Success());
+                ).ReturnsAsync(Result.Success(UserInfos.LogUpdateProperty("Username", It.IsAny<string>())));
                 break;
         }
     }
