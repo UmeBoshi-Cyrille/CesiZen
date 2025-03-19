@@ -35,7 +35,7 @@ jobs:
       run: dotnet build --no-restore --configuration Release CesiZen.sln
     # Step 5: Launch Test if it does exist
     - name: Test
-      run: dotnet test --no-build --verbosity normal CesiZen.sln
+      run: dotnet test --configuration Release --verbosity normal --no-build CesiZen.sln
 
   docker-build-and-push:
     name: Docker Image Builder Rules
