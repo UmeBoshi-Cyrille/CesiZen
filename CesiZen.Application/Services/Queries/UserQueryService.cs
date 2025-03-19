@@ -1,6 +1,6 @@
 using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
-using CesiZen.Domain.Interface;
+using CesiZen.Domain.Interfaces;
 using CesiZen.Domain.Mapper;
 using Serilog;
 

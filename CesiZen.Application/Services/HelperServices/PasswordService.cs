@@ -2,7 +2,6 @@ using CesiZen.Application.Helper;
 using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
-using CesiZen.Domain.Interface;
 using CesiZen.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
 using System.Security.Cryptography;

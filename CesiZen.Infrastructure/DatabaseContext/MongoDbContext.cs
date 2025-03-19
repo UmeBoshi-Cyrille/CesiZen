@@ -12,6 +12,8 @@ public class MongoDbContext : DbContext
     public virtual DbSet<Session> Sessions { get; set; }
     public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
     public virtual DbSet<Article> Articles { get; set; }
+    public virtual DbSet<BreathExercise> BreathExercises { get; set; }
+
 
     public MongoDbContext(DbContextOptions options)
         : base(options)

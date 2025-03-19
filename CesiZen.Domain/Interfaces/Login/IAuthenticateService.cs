@@ -1,5 +1,5 @@
 ﻿using CesiZen.Domain.DataTransfertObject;
-using CesiZen.Domain.Interface;
+using CesiZen.Domain.Interfaces;
 
 namespace CesiZen.Domain.Interfaces;
 

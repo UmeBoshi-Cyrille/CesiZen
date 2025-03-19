@@ -1,0 +1,54 @@
+﻿using CesiZen.Domain.Datamodel;
+using CesiZen.Domain.DataTransfertObject;
+
+namespace CesiZen.Domain.Mapper;
+
+public static class BreathExerciseMapper
+{
+    public static BreathExercise Map(this BreathExerciseDto dto)
+    {
+        return new BreathExercise
+        {
+            Id = dto.Id,
+            Title = dto.Title,
+            Time = dto.Time,
+            ExerciseType = dto.ExerciseType
+        };
+    }
+
+    public static BreathExerciseDto Map(this BreathExercise model)
+    {
+        return new BreathExerciseDto
+        {
+            Title = model.Title,
+            Time = model.Time,
+            ExerciseType = model.ExerciseType
+        };
+    }
+
+    public static List<BreathExerciseDto> Map(this List<BreathExercise> model)
+    {
+        List<BreathExerciseDto> dto = new();
+
+        for (var i = 0; i < model.Count; i++)
+        {
+            var item = model[i].Map();
+            dto.Add(item);
+        }
+
+        return dto;
+    }
+
+    public static List<BreathExercise> Map(this List<BreathExerciseDto> dto)
+    {
+        List<BreathExercise> model = new();
+
+        for (var i = 0; i < dto.Count; i++)
+        {
+            var item = dto[i].Map();
+            model.Add(item);
+        }
+
+        return model;
+    }
+}

@@ -1,6 +1,6 @@
 ﻿using CesiZen.Domain.BusinessResult;
 
-namespace CesiZen.Domain.Interface;
+namespace CesiZen.Domain.Interfaces;
 
 public interface IResult
 {

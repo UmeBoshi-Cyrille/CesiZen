@@ -1,6 +1,6 @@
 using CesiZen.Domain.DataTransfertObject;
 
-namespace CesiZen.Domain.Interface;
+namespace CesiZen.Domain.Interfaces;
 
 public interface IQuery<T>
 {
