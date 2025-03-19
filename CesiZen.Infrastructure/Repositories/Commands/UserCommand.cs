@@ -24,10 +24,14 @@ internal class UserCommand : AbstractRepository, IUserCommand
         }
         catch (DbUpdateException ex)
         {
+            Error error = new();
+
             if (ex.InnerException?.Message.Contains("IX_Logins_Email") == true)
             {
-                return Result.Failure(UserErrors.LogNotUnique(entity.Email), entity.Email, ex.Message);
+                error = UserErrors.LogNotUnique(entity.Email);
             }
+
+            return Result.Failure(error, entity.Email, ex.Message);
         }
         catch (Exception ex)
         {

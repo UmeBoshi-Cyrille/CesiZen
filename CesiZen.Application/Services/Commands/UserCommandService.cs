@@ -27,9 +27,7 @@ public class UserCommandService : AService, IUserCommandService
         }
 
         logger.Error(result.Error.Message);
-        return Result.Failure(
-                    Error.OperationFailed(string.Format(
-                      Message.GetResource("ErrorMessages", "CLIENT_UPDATE_FAILED"), "User")));
+        return Result.Failure(UserErrors.ClientUpdateFailed);
     }
 
     public async Task<IResult> Delete(string id)

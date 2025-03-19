@@ -2,7 +2,6 @@
 using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
-using CesiZen.Domain.Interfaces;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
@@ -85,12 +84,12 @@ public class TokenProvider : ITokenProvider
         if (sessionResult.IsFailure)
         {
             logger.Error(sessionResult.Error.Message);
-            return Result.Failure(Error.OperationFailed(""));
+            return Result.Failure(SessionErrors.LogDeletionFailed(sessionId));
         }
         else if (tokenResult.IsFailure)
         {
             logger.Error(tokenResult.Error.Message);
-            return Result.Failure(Error.OperationFailed(""));
+            return Result.Failure(RefreshTokenErrors.LogDeletionFailed(sessionId));
         }
 
         return Result.Success();

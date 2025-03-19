@@ -127,62 +127,6 @@ public static class ErrorService
         return IsNullValue(argument, null, info);
     }
 
-    /// <summary>
-    /// Check whether the value is null or not. 
-    /// </summary>
-    /// <typeparam name="T">Generic type argument</typeparam>
-    /// <param name="argument">First argument</param>
-    /// <returns>a new Failure Result with the Error or a new Success Result with the value</returns>
-    public static Result<T> IsNull<T>(
-        this T argument)
-    {
-        return IsNullValue(argument);
-    }
-
-    /// <summary>
-    /// Check whether the value is null or not.
-    /// </summary>
-    /// <typeparam name="T">Generic type argument</typeparam>
-    /// <param name="argument">First argument</param>
-    /// <param name="info">Fourth argument</param>
-    /// <returns>a new Failure Result with the Error or a new Success Result with the value</returns>
-    public static Result<T> IsNull<T>(
-        this T argument,
-        Info info)
-    {
-        return IsNullValue(argument, null, info);
-    }
-
-    /// <summary>
-    /// Check whether the value is null or not. 
-    /// </summary>
-    /// <typeparam name="T">Generic type argument</typeparam>
-    /// <param name="argument">First argument</param>
-    /// <param name="error">Third argument</param>
-    /// <returns>a new Failure Result with the Error or a new Success Result with the value</returns>
-    public static Result<T> IsNull<T>(
-        this T argument,
-        Error error)
-    {
-        return IsNullValue(argument, error);
-    }
-
-    /// <summary>
-    /// Check whether the value is null or not.
-    /// </summary>
-    /// <typeparam name="T">Generic type argument</typeparam>
-    /// <param name="argument">First argument</param>
-    /// <param name="error">Third argument</param>
-    /// <param name="info">Fourth argument</param>
-    /// <returns>a new Failure Result with the Error or a new Success Result with the value</returns>
-    public static Result<T> IsNull<T>(
-        this T argument,
-        Error error,
-        Info info)
-    {
-        return IsNullValue(argument, error, info);
-    }
-
     private static Result<T> IsNullValue<T>(
         this T argument,
         Error? error = null,
@@ -295,7 +239,7 @@ public static class ErrorService
     /// <param name="logger">Second argument</param>
     /// <returns>a new Failure Result with the Error or a new Success Result with the value</returns>
     public static Result<IEnumerable<T>> HasAny<T>(
-        this IEnumerable<T> argument,
+        this IEnumerable<T> argument
         )
     {
         return HasAnyValue(argument);
@@ -311,10 +255,9 @@ public static class ErrorService
     /// <returns>a new Failure Result with the Error or a new Success Result with the value</returns>
     public static Result<IEnumerable<T>> HasAny<T>(
         this IEnumerable<T> argument,
-
         Info info)
     {
-        return HasAnyValue(argument, null, info);
+        return HasAnyValue(argument, info: info);
     }
 
     /// <summary>
@@ -327,10 +270,9 @@ public static class ErrorService
     /// <returns>a new Failure Result with the Error or a new Success Result with the value</returns>
     public static Result<IEnumerable<T>> HasAny<T>(
         this IEnumerable<T> argument,
-
         Error error)
     {
-        return HasAnyValue(argumentrror);
+        return HasAnyValue(argument, error);
     }
 
     /// <summary>
@@ -344,88 +286,14 @@ public static class ErrorService
     /// <returns>a new Failure Result with the Error or a new Success Result with the value</returns>
     public static Result<IEnumerable<T>> HasAny<T>(
         this IEnumerable<T> argument,
-
         Error error,
         Info info)
     {
-        return HasAnyValue(argumentrror, info);
-    }
-
-    /// <summary>
-    /// Check IEnumerable's content and return the proper Result type.
-    /// Depending on the Result and arguments: Log an Error and send an Exception or return the value and Log the Success Info
-    /// </summary>
-    /// <typeparam name="T">Generic value type of IEnumerable</typeparam>
-
-    /// <param name="argument">First argument</param>
-    /// <param name="logger">Second argument</param>
-    /// <returns>a new Failure Result with the Error or a new Success Result with the value</returns>
-    public static Result<IEnumerable<T>> HasAny<T>(
-        this IEnumerable<T> argument,
-        )
-    {
-        return HasAnyValue<T>(argument);
-    }
-
-    /// <summary>
-    /// Check IEnumerable's content and return the proper Result type.
-    /// Depending on the Result: Log an Error and send an Exception or return the value and Log the Success Info
-    /// </summary>
-    /// <typeparam name="T">Generic value type of IEnumerable</typeparam>
-
-    /// <param name="argument">First argument</param>
-    /// <param name="logger">Second argument</param>
-    /// <param name="info">Fourth argument</param>
-    /// <returns>a new Failure Result with the Error or a new Success Result with the value</returns>
-    public static Result<IEnumerable<T>> HasAny<T>(
-        this IEnumerable<T> argument,
-
-        Info info)
-    {
-        return HasAnyValue<T>(argument, null, info);
-    }
-
-    /// <summary>
-    /// Check IEnumerable's content and return the proper Result type.
-    /// Depending on the Result: Log an Error and send an Exception or return the value and Log a Success Info
-    /// </summary>
-    /// <typeparam name="T">Generic value type of IEnumerable</typeparam>
-
-    /// <param name="argument">First argument</param>
-    /// <param name="logger">Second argument</param>
-    /// <param name="error">Third argument</param>
-    /// <returns>a new Failure Result with the Error or a new Success Result with the value</returns>
-    public static Result<IEnumerable<T>> HasAny<T>(
-        this IEnumerable<T> argument,
-
-        Error error)
-    {
-        return HasAnyValue<T>(argumentrror);
-    }
-
-    /// <summary>
-    /// Check IEnumerable's content and return the proper Result type.
-    /// Depending on the Result: Log an Error and send an Exception or return the value and Log the Success Info
-    /// </summary>
-    /// <typeparam name="T">Generic value type of IEnumerable</typeparam>
-
-    /// <param name="argument">First argument</param>
-    /// <param name="logger">Second argument</param>
-    /// <param name="error">Third argument</param>
-    /// <param name="info">Fourth argument</param>
-    /// <returns>a new Failure Result with the Error or a new Success Result with the value</returns>
-    public static Result<IEnumerable<T>> HasAny<T>(
-        this IEnumerable<T> argument,
-
-        Error error,
-        Info info)
-    {
-        return HasAnyValue<T>(argumentrror, info);
+        return HasAnyValue(argument, error, info);
     }
 
     private static Result<IEnumerable<T>> HasAnyValue<T>(
         IEnumerable<T> argument,
-
         Error? error = null,
         Info? info = null)
     {
@@ -435,26 +303,6 @@ public static class ErrorService
                 return Result<IEnumerable<T>>.Failure(Error.NullValue(""));
 
             return Result<IEnumerable<T>>.Failure(error);
-        }
-
-        if (info != null)
-            return Result<IEnumerable<T>>.Success(argument, info);
-
-        return Result<IEnumerable<T>>.Success(argument);
-    }
-
-    private static Result<IEnumerable<T>> HasAnyValue<T>(
-        IEnumerable<T> argument,
-
-        Error? error = null,
-        Info? info = null)
-    {
-        if (!argument.Any())
-        {
-            if (error == null)
-                return Result<IEnumerable<T>>.Failure<E>(Error.NullValue(""));
-
-            return Result<IEnumerable<T>>.Failure<E>(error);
         }
 
         if (info != null)
