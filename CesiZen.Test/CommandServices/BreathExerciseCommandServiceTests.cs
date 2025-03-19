@@ -22,13 +22,9 @@ public class BreathExerciseCommandServiceTests
 
     public BreathExerciseCommandServiceTests()
     {
-        var options = new DbContextOptionsBuilder<MongoDbContext>()
-            .UseMongoDB("mongodb://localhost:27017", "TestDB")
-            .Options;
-
         loggerMock = new Mock<ILogger>();
         mockCommand = new Mock<IBreathExerciseCommand>();
-        mockContext = new Mock<MongoDbContext>(options);
+        mockContext = new Mock<MongoDbContext>(Tools.SetContext());
         service = new BreathExerciseCommandService(loggerMock.Object, mockCommand.Object);
     }
 
@@ -48,7 +44,8 @@ public class BreathExerciseCommandServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        mockCommand.Verify(c => c.Insert(It.Is<BreathExercise>(e => e.Title == entities[0].Title)), Times.Once);
+        mockCommand.Verify(c => c.Insert(
+            It.Is<BreathExercise>(e => e.Title == entities[0].Title)), Times.Once);
         Assert.True(mockContext.Object.BreathExercises.FirstOrDefault().Title == entities[0].Title);
     }
 
@@ -75,6 +72,7 @@ public class BreathExerciseCommandServiceTests
         var dtos = BreathExerciseFaker.FakeBreathExerciseDtoGenerator().Generate(10);
         var entities = dtos.Map();
         MockSetter(entities, CommandSelector.C1);
+        dtos[0].Title = "New";
 
         // Act
         var result = await service.Update(dtos[0]);
@@ -144,18 +142,18 @@ public class BreathExerciseCommandServiceTests
         MockCommandSelector(entities, commandSelector);
     }
 
-    private void MockCommandSelector(List<BreathExercise> articles, CommandSelector commandSelector)
+    private void MockCommandSelector(List<BreathExercise> entities, CommandSelector commandSelector)
     {
         switch (commandSelector)
         {
             case CommandSelector.C1:
                 mockCommand.Setup(c => c.Update(It.IsAny<BreathExercise>())).Callback<BreathExercise>(
-                    updatedArticle =>
+                    updated =>
                     {
-                        var article = articles.FirstOrDefault(a => a.Id == updatedArticle.Id);
-                        if (article != null)
+                        var entity = entities.FirstOrDefault(a => a.Id == updated.Id);
+                        if (entity != null)
                         {
-                            article.Title = updatedArticle.Title;
+                            entity.Title = updated.Title;
                         }
                     }
                 ).ReturnsAsync(Result.Success());
@@ -164,10 +162,10 @@ public class BreathExerciseCommandServiceTests
                 mockCommand.Setup(c => c.Delete(It.IsAny<string>())).Callback<string>(
                     id =>
                     {
-                        var article = articles.FirstOrDefault(a => a.Id == id);
-                        if (article != null)
+                        var entity = entities.FirstOrDefault(a => a.Id == id);
+                        if (entity != null)
                         {
-                            articles.Remove(article);
+                            entities.Remove(entity);
                         }
                     }
                 ).ReturnsAsync(Result.Success());
