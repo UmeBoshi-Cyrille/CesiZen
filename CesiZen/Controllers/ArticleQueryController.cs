@@ -17,7 +17,7 @@ public class ArticleQueryController : ControllerBase
     }
 
     [HttpGet("search-articles")]
-    public async Task<ActionResult<PagedResult<ArticleDto>>> SearchArticles([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string searchTerm = null)
+    public async Task<ActionResult<PagedResult<ArticleDto>>> SearchArticles(int pageNumber = 1, int pageSize = 10, [FromQuery] string searchTerm = null)
     {
         var parameters = new PageParameters()
         {
@@ -34,7 +34,7 @@ public class ArticleQueryController : ControllerBase
     }
 
     [HttpGet("articles")]
-    public async Task<ActionResult<PagedResult<ArticleDto>>> GetArticles([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string searchTerm = null)
+    public async Task<ActionResult<PagedResult<ArticleDto>>> GetArticles(int pageNumber = 1, int pageSize = 10, [FromQuery] string searchTerm = null)
     {
         var result = await articleService.GetAllAsync(pageNumber, pageSize);
 
@@ -45,7 +45,7 @@ public class ArticleQueryController : ControllerBase
     }
 
     [HttpGet("article/{id}")]
-    public async Task<ActionResult<ArticleDto>> GetArticle(int id)
+    public async Task<ActionResult<ArticleDto>> GetArticle(string id)
     {
         var result = await articleService.GetByIdAsync(id);
         return result.Match<ActionResult, ArticleDto>(

@@ -46,7 +46,7 @@ public class UserQueryController : ControllerBase
     }
 
     [HttpGet("user/{id}")]
-    public async Task<ActionResult<UserRequestDto>> GetById(int id)
+    public async Task<ActionResult<UserRequestDto>> GetById(string id)
     {
         var result = await queryService.GetByIdAsync(id);
         return result.Match<ActionResult, UserRequestDto>(

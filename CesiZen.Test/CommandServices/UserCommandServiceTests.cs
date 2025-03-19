@@ -22,13 +22,9 @@ public class UserCommandServiceTests
 
     public UserCommandServiceTests()
     {
-        var options = new DbContextOptionsBuilder<MongoDbContext>()
-            .UseMongoDB("mongodb://localhost:27017", "TestDB")
-            .Options;
-
         mockLogger = new Mock<ILogger>();
         mockCommand = new Mock<IUserCommand>();
-        mockContext = new Mock<MongoDbContext>(options);
+        mockContext = new Mock<MongoDbContext>(Tools.SetContext());
         service = new UserCommandService(mockCommand.Object, mockLogger.Object);
     }
 

@@ -39,17 +39,27 @@ public static class ServiceRegister
         services.AddScoped<IUserQuery, UserQuery>();
         services.AddScoped<ILoginQuery, LoginQuery>();
 
+        services.AddScoped<IArticleQuery, ArticleQuery>();
+        services.AddScoped<ICategoryQuery, CategoryQuery>();
+        services.AddScoped<IBreathExerciseQuery, BreathExerciseQuery>();
+        services.AddScoped<IUserQuery, UserQuery>();
+
         return services;
     }
 
     private static IServiceCollection AddInfrastructureCommandServices(this IServiceCollection services)
     {
+        services.AddScoped<ITokenProvider, TokenProvider>();
+
         services.AddScoped<ISessionCommand, SessionCommand>();
         services.AddScoped<IRefreshTokenCommand, TokenCommand>();
         services.AddScoped<IUserCommand, UserCommand>();
         services.AddScoped<ILoginCommand, LoginCommand>();
 
-        services.AddScoped<ITokenProvider, TokenProvider>();
+        services.AddScoped<ICategoryCommand, CategoryCommand>();
+        services.AddScoped<IArticleCommand, ArticleCommand>();
+        services.AddScoped<IBreathExerciseCommand, BreathExerciseCommand>();
+        services.AddScoped<IUserCommand, UserCommand>();
 
         return services;
     }

@@ -1,7 +1,6 @@
 ﻿using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
-using CesiZen.Domain.Interfaces;
 using CesiZen.Domain.Mapper;
 using Serilog;
 
@@ -31,7 +30,7 @@ public class ArticleQueryService : AService, IArticleQueryService
         return Result<PagedResult<ArticleDto>>.Success(dto);
     }
 
-    public async Task<IResult<ArticleDto>> GetByIdAsync(int id)
+    public async Task<IResult<ArticleDto>> GetByIdAsync(string id)
     {
         var result = await query.GetByIdAsync(id);
 

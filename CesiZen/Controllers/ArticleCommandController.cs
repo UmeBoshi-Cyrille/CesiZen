@@ -44,7 +44,7 @@ public class ArticleCommandController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateTitle([FromBody] string id, [FromBody] string title)
+    public async Task<IActionResult> UpdateTitle(string id, [FromBody] string title)
     {
         var result = await articleCommandService.UpdateTitleAsync(id, title);
 
@@ -56,7 +56,7 @@ public class ArticleCommandController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateDescription([FromBody] string id, [FromBody] string description)
+    public async Task<IActionResult> UpdateDescription(string id, [FromBody] string description)
     {
         var result = await articleCommandService.UpdateDescriptionAsync(id, description);
 
@@ -68,7 +68,7 @@ public class ArticleCommandController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateContent([FromBody] string id, [FromBody] string content)
+    public async Task<IActionResult> UpdateContent(string id, [FromBody] string content)
     {
         var result = await articleCommandService.UpdateContentAsync(id, content);
 

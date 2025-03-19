@@ -1,4 +1,4 @@
-using CesiZen.Application.Services;
+﻿using CesiZen.Application.Services;
 using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
@@ -27,7 +27,7 @@ public class UserQueryServiceTests
     public async Task GetByIdAsyncTest_Success_ReturnsUserDto()
     {
         // Arrange
-        int userId = 1;
+        string userId = "1";
         var user = UserFaker.FakeUserGenerator().Generate();
         var expectedDto = user.Map();
 
@@ -48,7 +48,7 @@ public class UserQueryServiceTests
     public async Task GetByIdAsyncTest_Failure_ReturnsFailureResult()
     {
         // Arrange
-        int userId = 1;
+        string userId = "1";
         mockUserQuery.Setup(q => q.GetByIdAsync(userId))
             .ReturnsAsync(Result<User>.Failure(Error.NullValue("Error Message")));
 
