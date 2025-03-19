@@ -1,4 +1,4 @@
-﻿using CesiZen.Infrastructure.DatabaseContext;
+using CesiZen.Infrastructure.DatabaseContext;
 
 namespace CesiZen.Infrastructure.Repositories;
 

@@ -1,4 +1,4 @@
-﻿using CesiZen.Domain.BusinessResult;
+using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;

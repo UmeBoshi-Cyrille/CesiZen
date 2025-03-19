@@ -22,7 +22,7 @@ public class UserCommandService : AService, IUserCommandService
 
         if (result.IsSuccess)
         {
-            logger.Information(result.Info.Message);
+            //logger.Information(result.Info.Message);
             return Result.Success(
                         Info.Success(string.Format(
                             Message.GetResource("InfoMessages", "CLIENT_UPDATE_SUCCESS"), "User")));
@@ -40,7 +40,7 @@ public class UserCommandService : AService, IUserCommandService
 
         if (result.IsSuccess)
         {
-            logger.Information(result.Info.Message);
+            //logger.Information(result.Info.Message);
             return Result.Success(
                         Info.Success(string.Format(
                             Message.GetResource("InfoMessages", "CLIENT_DELETE_SUCCESS"), "User")));
@@ -57,7 +57,7 @@ public class UserCommandService : AService, IUserCommandService
 
         if (result.IsSuccess)
         {
-            logger.Information(result.Info.Message);
+            //logger.Information(result.Info.Message);
             return Result.Success(
                         Info.Success(string.Format(
                             Message.GetResource("InfoMessages", "CLIENT_UPDATE_SUCCESS"), "User")));
