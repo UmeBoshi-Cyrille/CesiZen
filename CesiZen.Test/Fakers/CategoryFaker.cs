@@ -23,6 +23,7 @@ internal class CategoryFaker
     public static Faker<CategoryDto> FakeCategoryDtoGenerator()
     {
         return new Faker<CategoryDto>()
+            .RuleFor(a => a.Id, f => f.Random.Guid().ToString())
             .RuleFor(a => a.Name, f => f.Name.JobTitle());
     }
 }

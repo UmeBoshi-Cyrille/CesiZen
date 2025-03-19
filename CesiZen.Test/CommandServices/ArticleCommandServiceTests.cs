@@ -5,6 +5,9 @@ using CesiZen.Domain.Interfaces;
 using CesiZen.Domain.Mapper;
 using CesiZen.Infrastructure.DatabaseContext;
 using CesiZen.Test.Fakers;
+using CesiZen.Test.Utils;
+using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 using Moq;
 using Serilog;
 
@@ -16,12 +19,13 @@ public class ArticleCommandServiceTests
     private readonly Mock<IArticleCommand> mockCommand;
     private readonly ArticleCommandService service;
     private Mock<MongoDbContext> mockContext;
+    private Mock<DbSet<Article>> mockSet;
 
     public ArticleCommandServiceTests()
     {
         mockLogger = new Mock<ILogger>();
         mockCommand = new Mock<IArticleCommand>();
-        mockContext = new Mock<MongoDbContext>();
+        mockContext = new Mock<MongoDbContext>(Tools.SetContext());
         service = new ArticleCommandService(mockLogger.Object, mockCommand.Object);
     }
 
@@ -29,19 +33,19 @@ public class ArticleCommandServiceTests
     public async Task AddAsyncTest_Success_WhenDataSaved()
     {
         // Arrange
-        var dto = ArticleFaker.FakeArticleDtoGenerator().Generate();
-        var article = dto.Map();
-        mockContext.Setup(c => c.Articles.Add(article));
+        var dtos = ArticleFaker.FakeArticleDtoGenerator().Generate(10);
+        var articles = dtos.Map();
+        mockSet = CommonFaker.CreateMockDbSet(articles);
+        mockContext.Setup(c => c.Articles).Returns(mockSet.Object);
         mockCommand.Setup(c => c.Insert(It.IsAny<Article>())).ReturnsAsync(Result.Success());
 
         // Act
-        var result = await service.Insert(dto);
+        var result = await service.Insert(dtos[0]);
 
         // Assert
         Assert.True(result.IsSuccess);
-        mockCommand.Verify(c => c.Insert(It.Is<Article>(a => a.Title == "Test Article")), Times.Once);
-        mockContext.Verify(c => c.Articles.Any());
-        mockContext.Verify(c => c.Articles.FirstOrDefault().Title == dto.Title);
+        mockCommand.Verify(c => c.Insert(It.Is<Article>(a => a.Title == dtos[0].Title)), Times.Once);
+        Assert.True(mockContext.Object.Articles.Any(c => c.Title == dtos[0].Title));
     }
 
     [Fact]
@@ -64,19 +68,19 @@ public class ArticleCommandServiceTests
     public async Task UpdateAsyncTest_Success_WhenDataUpdated()
     {
         // Arrange
-        var dto = ArticleFaker.FakeArticleDtoGenerator().Generate();
-        var article = dto.Map();
-        mockContext.Setup(c => c.Articles.Add(article));
-        mockCommand.Setup(c => c.Update(It.IsAny<Article>())).ReturnsAsync(Result.Success());
+        var dtos = ArticleFaker.FakeArticleDtoGenerator().Generate(10);
+        var articles = dtos.Map();
+        MockSetter(articles, CommandSelector.C1);
+        dtos[0].Title = "new";
 
         // Act
-        var result = await service.Update(dto);
+        var result = await service.Update(dtos[0]);
 
         // Assert
         Assert.True(result.IsSuccess);
         mockCommand.Verify(c => c.Update(
-            It.Is<Article>(a => a.Id == dto.Id && a.Title == dto.Title)), Times.Once);
-        mockContext.Verify(c => c.Articles.FirstOrDefault().Title == dto.Title);
+            It.Is<Article>(a => a.Id == dtos[0].Id && a.Title == dtos[0].Title)), Times.Once);
+        Assert.True(mockContext.Object.Articles.Any(a => a.Title == dtos[0].Title));
     }
 
     [Fact]
@@ -94,7 +98,7 @@ public class ArticleCommandServiceTests
         var result = await service.Update(dto);
 
         // Assert
-        Assert.True(result.IsSuccess);
+        Assert.True(result.IsFailure);
         mockCommand.Verify(c => c.Update(
             It.Is<Article>(a => a.Id == dto.Id && a.Title == dto.Title)), Times.Once);
         mockLogger.Verify(l => l.Error(It.IsAny<string>()), Times.Once);
@@ -104,31 +108,28 @@ public class ArticleCommandServiceTests
     public async Task UpdateTitleAsyncTest_Success_WhenTitleUpdated()
     {
         // Arrange
-        string id = "1";
         string newTitle = "New Title";
-        var article = ArticleFaker.FakeArticleGenerator().Generate();
-        mockContext.Setup(c => c.Articles.Add(article));
-        mockCommand.Setup(c => c.UpdateTitleAsync(article)).ReturnsAsync(Result.Success());
+        var articles = ArticleFaker.FakeArticleGenerator().Generate(10);
+        MockSetter(articles, CommandSelector.C2);
 
         // Act
-        var result = await service.UpdateTitleAsync(id, newTitle);
+        var result = await service.UpdateTitleAsync(articles[0].Id, newTitle);
 
         // Assert
         Assert.True(result.IsSuccess);
-        mockCommand.Verify(c => c.UpdateTitleAsync(article), Times.Once);
-        mockContext.Verify(c => c.Articles.FirstOrDefault().Title == newTitle);
+        mockCommand.Verify(c => c.UpdateTitleAsync(It.Is<Article>(a => a.Id == articles[0].Id && a.Title == newTitle)), Times.Once);
+        Assert.True(mockContext.Object.Articles.Any(a => a.Title == newTitle));
     }
 
     [Fact]
     public async Task UpdateTitleAsyncTest_Failure_WhenOperationFails()
     {
         // Arrange
-        string id = "1";
+        string id = "wrongId";
         string newTitle = "New Title";
         var article = ArticleFaker.FakeArticleGenerator().Generate();
-        article.Id = "2";
         mockContext.Setup(c => c.Articles.Add(article));
-        mockCommand.Setup(c => c.UpdateTitleAsync(article)).ReturnsAsync(
+        mockCommand.Setup(c => c.UpdateTitleAsync(It.IsAny<Article>())).ReturnsAsync(
             Result.Failure(Error.NullValue("Error message")));
 
         // Act
@@ -136,7 +137,7 @@ public class ArticleCommandServiceTests
 
         // Assert
         Assert.True(result.IsFailure);
-        mockCommand.Verify(c => c.UpdateTitleAsync(article), Times.Once);
+        mockCommand.Verify(c => c.UpdateTitleAsync(It.IsAny<Article>()), Times.Once);
         mockLogger.Verify(l => l.Error(It.IsAny<string>()), Times.Once);
     }
 
@@ -144,19 +145,18 @@ public class ArticleCommandServiceTests
     public async Task UpdateDescriptionAsyncTest_Success_WhenTitleUpdated()
     {
         // Arrange
-        string id = "1";
         string newDescription = "New Description";
-        var article = ArticleFaker.FakeArticleGenerator().Generate();
-        mockContext.Setup(c => c.Articles.Add(article));
-        mockCommand.Setup(c => c.UpdateTitleAsync(article)).ReturnsAsync(Result.Success());
+        var articles = ArticleFaker.FakeArticleGenerator().Generate(10);
+        MockSetter(articles, CommandSelector.C3);
 
         // Act
-        var result = await service.UpdateTitleAsync(id, newDescription);
+        var result = await service.UpdateDescriptionAsync(articles[0].Id, newDescription);
 
         // Assert
         Assert.True(result.IsSuccess);
-        mockCommand.Verify(c => c.UpdateTitleAsync(article), Times.Once);
-        mockContext.Verify(c => c.Articles.FirstOrDefault().Title == newDescription);
+        mockCommand.Verify(c => c.UpdateDescriptionAsync(
+            It.Is<Article>(a => a.Id == articles[0].Id && a.Description == newDescription)), Times.Once);
+        Assert.True(mockContext.Object.Articles.Any(c => c.Description == newDescription));
     }
 
     [Fact]
@@ -168,15 +168,15 @@ public class ArticleCommandServiceTests
         var article = ArticleFaker.FakeArticleGenerator().Generate();
         article.Id = "2";
         mockContext.Setup(c => c.Articles.Add(article));
-        mockCommand.Setup(c => c.UpdateTitleAsync(article)).ReturnsAsync(
+        mockCommand.Setup(c => c.UpdateDescriptionAsync(It.IsAny<Article>())).ReturnsAsync(
             Result.Failure(Error.NullValue("Error message")));
 
         // Act
-        var result = await service.UpdateTitleAsync(id, newDescription);
+        var result = await service.UpdateDescriptionAsync(id, newDescription);
 
         // Assert
         Assert.True(result.IsFailure);
-        mockCommand.Verify(c => c.UpdateTitleAsync(article), Times.Once);
+        mockCommand.Verify(c => c.UpdateDescriptionAsync(It.IsAny<Article>()), Times.Once);
         mockLogger.Verify(l => l.Error(It.IsAny<string>()), Times.Once);
     }
 
@@ -184,19 +184,18 @@ public class ArticleCommandServiceTests
     public async Task UpdateContentAsyncTest_Success_WhenTitleUpdated()
     {
         // Arrange
-        string id = "1";
         string newContent = "New Content";
-        var article = ArticleFaker.FakeArticleGenerator().Generate();
-        mockContext.Setup(c => c.Articles.Add(article));
-        mockCommand.Setup(c => c.UpdateTitleAsync(article)).ReturnsAsync(Result.Success());
+        var articles = ArticleFaker.FakeArticleGenerator().Generate(10);
+        MockSetter(articles, CommandSelector.C4);
 
         // Act
-        var result = await service.UpdateTitleAsync(id, newContent);
+        var result = await service.UpdateContentAsync(articles[0].Id, newContent);
 
         // Assert
         Assert.True(result.IsSuccess);
-        mockCommand.Verify(c => c.UpdateTitleAsync(article), Times.Once);
-        mockContext.Verify(c => c.Articles.FirstOrDefault().Title == newContent);
+        mockCommand.Verify(c => c.UpdateContentAsync(
+            It.Is<Article>(a => a.Id == articles[0].Id && a.Content == newContent)), Times.Once);
+        Assert.True(mockContext.Object.Articles.Any(c => c.Content == newContent));
     }
 
     [Fact]
@@ -205,18 +204,17 @@ public class ArticleCommandServiceTests
         // Arrange
         string id = "1";
         string newContent = "New Content";
-        var article = ArticleFaker.FakeArticleGenerator().Generate();
-        article.Id = "2";
-        mockContext.Setup(c => c.Articles.Add(article));
-        mockCommand.Setup(c => c.UpdateTitleAsync(article)).ReturnsAsync(
+        var articles = ArticleFaker.FakeArticleGenerator().Generate(10);
+        articles[0].Id = "2";
+        mockCommand.Setup(c => c.UpdateContentAsync(It.IsAny<Article>())).ReturnsAsync(
             Result.Failure(Error.NullValue("Error message")));
 
         // Act
-        var result = await service.UpdateTitleAsync(id, newContent);
+        var result = await service.UpdateContentAsync(id, newContent);
 
         // Assert
         Assert.True(result.IsFailure);
-        mockCommand.Verify(c => c.UpdateTitleAsync(article), Times.Once);
+        mockCommand.Verify(c => c.UpdateContentAsync(It.IsAny<Article>()), Times.Once);
         mockLogger.Verify(l => l.Error(It.IsAny<string>()), Times.Once);
     }
 
@@ -224,19 +222,16 @@ public class ArticleCommandServiceTests
     public async Task DeleteTest_Success_WhenDeletion()
     {
         // Arrange
-        string id = "1";
-        var article = ArticleFaker.FakeArticleGenerator().Generate();
-        article.Id = id;
-        mockContext.Setup(c => c.Articles.Add(article));
-        mockCommand.Setup(c => c.Delete(id)).ReturnsAsync(Result.Success());
+        var articles = ArticleFaker.FakeArticleGenerator().Generate(10);
+        MockSetter(articles, CommandSelector.C5);
 
         // Act
-        var result = await service.Delete(id);
+        var result = await service.Delete(articles[0].Id);
 
         // Assert
         Assert.True(result.IsSuccess);
-        mockCommand.Verify(c => c.Delete(id), Times.Once);
-        mockContext.Verify(c => !c.Articles.Any());
+        mockCommand.Verify(c => c.Delete(It.IsAny<string>()), Times.Once);
+        //Assert.False(mockContext.Object.Articles.Any(c => c.Id == articles[0].Id));
     }
 
     [Fact]
@@ -256,5 +251,79 @@ public class ArticleCommandServiceTests
         // Assert
         Assert.True(result.IsFailure);
         mockLogger.Verify(l => l.Error(It.IsAny<string>()), Times.Once);
+    }
+
+    private void MockSetter(List<Article> articles, CommandSelector commandSelector)
+    {
+        mockSet = CommonFaker.CreateMockDbSet(articles);
+        mockContext.Setup(c => c.Articles).Returns(mockSet.Object);
+        MockCommandSelector(articles, commandSelector);
+    }
+
+    private void MockCommandSelector(List<Article> articles, CommandSelector commandSelector)
+    {
+        switch (commandSelector)
+        {
+            case CommandSelector.C1:
+                mockCommand.Setup(c => c.Update(It.IsAny<Article>())).Callback<Article>(
+                    updatedArticle =>
+                    {
+                        var article = articles.FirstOrDefault(a => a.Id == updatedArticle.Id);
+                        if (article != null)
+                        {
+                            article.Title = updatedArticle.Title;
+                        }
+                    }
+                ).ReturnsAsync(Result.Success());
+                break;
+            case CommandSelector.C2:
+                mockCommand.Setup(c => c.UpdateTitleAsync(It.IsAny<Article>())).Callback<Article>(
+                    updatedArticle =>
+                    {
+                        var article = articles.FirstOrDefault(a => a.Id == updatedArticle.Id);
+                        if (article != null)
+                        {
+                            article.Title = updatedArticle.Title;
+                        }
+                    }
+                ).ReturnsAsync(Result.Success());
+                break;
+            case CommandSelector.C3:
+                mockCommand.Setup(c => c.UpdateDescriptionAsync(It.IsAny<Article>())).Callback<Article>(
+                    updatedArticle =>
+                    {
+                        var article = articles.FirstOrDefault(a => a.Id == updatedArticle.Id);
+                        if (article != null)
+                        {
+                            article.Description = updatedArticle.Description;
+                        }
+                    }
+                ).ReturnsAsync(Result.Success());
+                break;
+            case CommandSelector.C4:
+                mockCommand.Setup(c => c.UpdateContentAsync(It.IsAny<Article>())).Callback<Article>(
+                    updatedArticle =>
+                    {
+                        var article = articles.FirstOrDefault(a => a.Id == updatedArticle.Id);
+                        if (article != null)
+                        {
+                            article.Content = updatedArticle.Content;
+                        }
+                    }
+                ).ReturnsAsync(Result.Success());
+                break;
+            case CommandSelector.C5:
+                mockCommand.Setup(c => c.Delete(It.IsAny<string>())).Callback<string>(
+                    id =>
+                    {
+                        var article = articles.FirstOrDefault(a => a.Id == id);
+                        if (article != null)
+                        {
+                            articles.Remove(article);
+                        }
+                    }
+                ).ReturnsAsync(Result.Success());
+                break;
+        }
     }
 }

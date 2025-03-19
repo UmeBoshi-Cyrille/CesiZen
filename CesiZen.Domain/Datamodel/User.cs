@@ -1,4 +1,4 @@
-﻿using CesiZen.Domain.Enum;
+using CesiZen.Domain.Enum;
 using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;

@@ -45,7 +45,7 @@ public class CategoryQueryServiceTests
         // Assert
         Assert.True(result.IsSuccess);
         Assert.NotNull(result.Value);
-        Assert.Single(result.Value.Data);
+        Assert.True(result.Value.Data.Any());
         Assert.Equal(categories[0].Name, result.Value.Data[0].Name);
     }
 

@@ -38,4 +38,17 @@ public static class BreathExerciseMapper
 
         return dto;
     }
+
+    public static List<BreathExercise> Map(this List<BreathExerciseDto> dto)
+    {
+        List<BreathExercise> model = new();
+
+        for (var i = 0; i < dto.Count; i++)
+        {
+            var item = dto[i].Map();
+            model.Add(item);
+        }
+
+        return model;
+    }
 }
