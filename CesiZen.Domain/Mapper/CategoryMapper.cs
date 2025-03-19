@@ -9,6 +9,7 @@ public static class CategoryMapper
     {
         return new Category
         {
+            Id = dto.Id,
             Name = dto.Name,
         };
     }
@@ -50,6 +51,32 @@ public static class CategoryMapper
         }
 
         return dto;
+    }
+
+    public static List<Category> Map(this List<CategoryRequestDto> dto)
+    {
+        List<Category> model = new();
+
+        for (var i = 0; i < dto.Count; i++)
+        {
+            var item = dto[i].Map();
+            model.Add(item);
+        }
+
+        return model;
+    }
+
+    public static List<Category> Map(this List<CategoryDto> dto)
+    {
+        List<Category> model = new();
+
+        for (var i = 0; i < dto.Count; i++)
+        {
+            var item = dto[i].Map();
+            model.Add(item);
+        }
+
+        return model;
     }
 
     public static PagedResult<CategoryRequestDto> Map(this PagedResult<Category> model)
