@@ -40,7 +40,6 @@ public static class ServiceRegister
 
     private static IServiceCollection AddCommandServices(this IServiceCollection services)
     {
-        services.AddScoped<ILoginCommandService, LoginCommandService>();
         services.AddScoped<IUserCommandService, UserCommandService>();
 
         services.AddScoped<ICategoryCommandService, CategoryCommandService>();
