@@ -1,6 +1,5 @@
 ﻿using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Interfaces;
-using CesiZen.Domain.Interfaces;
 using CesiZen.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,9 +23,7 @@ public class SessionQuery : AbstractRepository, ISessionQuery
 
         if (result == null)
         {
-            return Result<string>.Failure(
-                Error.NotFound(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "RefreshToken", id)));
+            return Result<string>.Failure(SessionErrors.LogNotFound(id));
         }
 
         return Result<string>.Success(result);

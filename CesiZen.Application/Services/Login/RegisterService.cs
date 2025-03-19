@@ -2,7 +2,6 @@
 using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
-using CesiZen.Domain.Interfaces;
 using CesiZen.Domain.Mapper;
 using Serilog;
 
@@ -32,9 +31,7 @@ public class RegisterService : ALoginService, IRegisterService
 
         if (IsEmailUnique(dto.Email).IsFailure)
         {
-            return Result.Failure(
-                    Error.NotUnique(string.Format(
-                        Message.GetResource("ErrorMessages", "CLIENT_UNICITY_CONSTRAINT"), "Email")));
+            return Result.Failure(UserErrors.ClientNotUnique(dto.Email));
         }
 
         string verificationToken = tokenProvider.GenerateVerificationToken();
@@ -47,7 +44,8 @@ public class RegisterService : ALoginService, IRegisterService
 
         await emailService.SendVerificationEmailAsync(dto.Email, verificationToken);
 
-        return result;
+        logger.Information(result.Info.Message);
+        return Result.Success(UserInfos.ClientInsertionSucceeded);
     }
 
     private IResult IsEmailUnique(string email)

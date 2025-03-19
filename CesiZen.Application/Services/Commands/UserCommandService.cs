@@ -22,16 +22,12 @@ public class UserCommandService : AService, IUserCommandService
 
         if (result.IsSuccess)
         {
-            //logger.Information(result.Info.Message);
-            return Result.Success(
-                        Info.Success(string.Format(
-                            Message.GetResource("InfoMessages", "CLIENT_UPDATE_SUCCESS"), "User")));
+            logger.Information(result.Info.Message);
+            return Result.Success(UserInfos.ClientUpdateSucceeded);
         }
 
         logger.Error(result.Error.Message);
-        return Result.Failure(
-                    Error.OperationFailed(string.Format(
-                      Message.GetResource("ErrorMessages", "CLIENT_UPDATE_FAILED"), "User")));
+        return Result.Failure(UserErrors.ClientUpdateFailed);
     }
 
     public async Task<IResult> Delete(string id)
@@ -40,15 +36,12 @@ public class UserCommandService : AService, IUserCommandService
 
         if (result.IsSuccess)
         {
-            //logger.Information(result.Info.Message);
-            return Result.Success(
-                        Info.Success(string.Format(
-                            Message.GetResource("InfoMessages", "CLIENT_DELETE_SUCCESS"), "User")));
+            logger.Information(result.Info.Message);
+            return Result.Success(UserInfos.ClientDeleteCompleted);
         }
 
         logger.Error(result.Error.Message);
-        return Result.Failure(Error.OperationFailed(string.Format(
-                      Message.GetResource("ErrorMessages", "CLIENT_DELETION_FAILED"), "User")));
+        return Result.Failure(UserErrors.ClientDeletionFailed);
     }
 
     public async Task<IResult> UpdateUserName(string id, string userName)
@@ -57,15 +50,32 @@ public class UserCommandService : AService, IUserCommandService
 
         if (result.IsSuccess)
         {
-            //logger.Information(result.Info.Message);
-            return Result.Success(
-                        Info.Success(string.Format(
-                            Message.GetResource("InfoMessages", "CLIENT_UPDATE_SUCCESS"), "User")));
+            logger.Information(result.Info.Message);
+            return Result.Success(UserInfos.ClientUpdateSucceeded);
         }
 
         logger.Error(result.Error.Message);
-        return Result.Failure(
-                   Error.OperationFailed(string.Format(
-                      Message.GetResource("ErrorMessages", "CLIENT_UPDATE_PROPERTY_FAILED"), "UserName")));
+        return Result.Failure(UserErrors.ClientUpdateFailed);
+    }
+
+    public async Task<IResult> ActivationAsync(AccountActivationDto dto)
+    {
+        var user = dto.Map();
+        var result = await command.ActivationAsync(user);
+
+        if (result.IsSuccess)
+        {
+            Info info = new();
+            if (dto.IsActive)
+                info = UserInfos.ClientAccountEnabled;
+            else
+                info = UserInfos.ClientAccountDisabled;
+
+            logger.Information(result.Info.Message);
+            return Result.Success(info);
+        }
+
+        logger.Error(result.Error.Message);
+        return Result.Failure(UserErrors.ClientUpdateFailed);
     }
 }

@@ -20,9 +20,7 @@ public class LoginQuery : AbstractRepository, ILoginQuery
 
         if (login == null)
         {
-            return Result<Login>.Failure(
-                Error.NotFound(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "Login", email)));
+            return Result<Login>.Failure(UserErrors.LogNotFound(email));
         }
 
         return Result<Login>.Success(login);
@@ -36,9 +34,7 @@ public class LoginQuery : AbstractRepository, ILoginQuery
 
         if (login == null)
         {
-            return Result<Login>.Failure(
-                Error.NotFound(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "Login", userId)));
+            return Result<Login>.Failure(UserErrors.LogNotFound(userId));
         }
 
         return Result<Login>.Success(login);
@@ -52,9 +48,7 @@ public class LoginQuery : AbstractRepository, ILoginQuery
 
         if (login == null)
         {
-            return Result<Login>.Failure(
-                Error.NotFound(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "Login", token)));
+            return Result<Login>.Failure(UserErrors.LogNotFound(token));
         }
 
         return Result<Login>.Success(login);
@@ -68,9 +62,7 @@ public class LoginQuery : AbstractRepository, ILoginQuery
 
         if (exist)
         {
-            return Result.Failure(
-                Error.NotUnique(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_CHECK_UNICITY_CONSTRAINT"), "Email", providedEmail)));
+            return Result<Login>.Failure(UserErrors.LogNotUnique(providedEmail));
         }
 
         return Result.Success();

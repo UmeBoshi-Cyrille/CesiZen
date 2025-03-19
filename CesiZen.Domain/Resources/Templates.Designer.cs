@@ -62,17 +62,17 @@ namespace CesiZen.Domain.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
-        ///&lt;html lang=&quot;&quot;en&quot;&quot;&gt;
+        ///&lt;html lang=&quot;en&quot;&gt;
         ///&lt;head&gt;
-        ///    &lt;meta charset=&quot;&quot;UTF-8&quot;&quot;&gt;
-        ///    &lt;meta name=&quot;&quot;viewport&quot;&quot; content=&quot;&quot;width=device-width, initial-scale=1.0&quot;&quot;&gt;
+        ///    &lt;meta charset=&quot;UTF-8&quot;&gt;
+        ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
         ///    &lt;title&gt;Reset Password&lt;/title&gt;
         ///&lt;/head&gt;
-        ///&lt;body style=&quot;&quot;font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4;&quot;&quot;&gt;
-        ///    &lt;table width=&quot;&quot;100%&quot;&quot; cellpadding=&quot;&quot;0&quot;&quot; cellspacing=&quot;&quot;0&quot;&quot; border=&quot;&quot;0&quot;&quot;&gt;
+        ///&lt;body style=&quot;font-family:Arial, sans-serif; margin:0; padding:0; background-color:#f4f4f4;&quot;&gt;
+        ///    &lt;table width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;
         ///        &lt;tr&gt;
-        ///            &lt;td align=&quot;&quot;center&quot;&quot; style=&quot;&quot;padding: 20px 0;&quot;&quot;&gt;
-        ///                &lt;table width=&quot;&quot;600&quot;&quot; cellpadding=&quot;&quot;0&quot;&quot; cells [rest of string was truncated]&quot;;.
+        ///            &lt;td align=&quot;center&quot; style=&quot;padding:20px 0;&quot;&gt;
+        ///                &lt;table width=&quot;600&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;ba [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string RESET_PASSWORD {
             get {
@@ -82,16 +82,17 @@ namespace CesiZen.Domain.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
-        ///&lt;html lang=&quot;&quot;en&quot;&quot;&gt;
+        ///&lt;html lang=&quot;en&quot;&gt;
         ///&lt;head&gt;
-        ///    &lt;meta charset=&quot;&quot;UTF-8&quot;&quot;&gt;
-        ///    &lt;meta name=&quot;&quot;viewport&quot;&quot; content=&quot;&quot;width=device-width, initial-scale=1.0&quot;&quot;&gt;
+        ///    &lt;meta charset=&quot;UTF-8&quot;&gt;
+        ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
         ///    &lt;title&gt;Email Verification&lt;/title&gt;
         ///&lt;/head&gt;
-        ///&lt;body style=&quot;&quot;font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0;&quot;&quot;&gt;
-        ///    &lt;table width=&quot;&quot;100%&quot;&quot; cellspacing=&quot;&quot;0&quot;&quot; cellpadding=&quot;&quot;0&quot;&quot; style=&quot;&quot;max-width: 600px; margin: 0 auto; background-color: #f9f9f9;&quot;&quot;&gt;
+        ///&lt;body style=&quot;font-family:Arial, sans-serif; line-height:1.6; color:#333; margin:0; padding:0;&quot;&gt;
+        ///    &lt;table width=&quot;100%&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot; style=&quot;max-width:600px; margin:0 auto; background-color:#f9f9f9;&quot;&gt;
         ///        &lt;tr&gt;
-        ///            &lt;td align=&quot;&quot;center&quot;&quot; style=&quot;&quot;padding: 40px 2 [rest of string was truncated]&quot;;.
+        ///            &lt;td align=&quot;center&quot; style=&quot;padding:40px 20px;&quot;&gt;
+        ///                &lt;table [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string VERIFICATION_EMAIL {
             get {

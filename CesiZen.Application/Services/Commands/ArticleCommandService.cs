@@ -2,7 +2,6 @@
 using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
-using CesiZen.Domain.Interfaces;
 using CesiZen.Domain.Mapper;
 using Serilog;
 
@@ -26,10 +25,10 @@ public class ArticleCommandService : AService, IArticleCommandService
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(ArticleErrors.ClientInsertionFailed);
         }
 
-        return Result.Success();
+        return Result.Success(ArticleInfos.ClientInsertionSucceeded);
     }
 
     public async Task<IResult> Update(ArticleDto dto)
@@ -41,10 +40,10 @@ public class ArticleCommandService : AService, IArticleCommandService
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(ArticleErrors.ClientUpdateFailed);
         }
 
-        return Result.Success();
+        return Result.Success(ArticleInfos.ClientUpdateSucceeded);
     }
 
     public async Task<IResult> UpdateTitleAsync(string id, string title)
@@ -56,10 +55,10 @@ public class ArticleCommandService : AService, IArticleCommandService
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(ArticleErrors.ClientUpdateFailed);
         }
 
-        return Result.Success();
+        return Result.Success(ArticleInfos.ClientUpdateSucceeded);
     }
 
     public async Task<IResult> UpdateDescriptionAsync(string id, string description)
@@ -70,10 +69,10 @@ public class ArticleCommandService : AService, IArticleCommandService
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(ArticleErrors.ClientUpdateFailed);
         }
 
-        return Result.Success();
+        return Result.Success(ArticleInfos.ClientUpdateSucceeded);
     }
 
     public async Task<IResult> UpdateContentAsync(string id, string content)
@@ -84,10 +83,10 @@ public class ArticleCommandService : AService, IArticleCommandService
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(ArticleErrors.ClientUpdateFailed);
         }
 
-        return Result.Success();
+        return Result.Success(ArticleInfos.ClientUpdateSucceeded);
     }
 
     public async Task<IResult> Delete(string id)
@@ -97,9 +96,9 @@ public class ArticleCommandService : AService, IArticleCommandService
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(ArticleErrors.ClientDeletionFailed);
         }
 
-        return Result.Success();
+        return Result.Success(ArticleInfos.ClientDeleteCompleted);
     }
 }

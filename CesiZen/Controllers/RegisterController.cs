@@ -22,9 +22,9 @@ public class RegisterController : ControllerBase
         var response = registerService.Register(user).Result;
         if (response.IsFailure)
         {
-            return BadRequest(response.Error.Message);
+            return BadRequest(new { message = response.Error.Message });
         };
 
-        return Ok($"{response.Info.Message} Please check your email for verification.");
+        return Ok(new { message = response.Info.Message });
     }
 }

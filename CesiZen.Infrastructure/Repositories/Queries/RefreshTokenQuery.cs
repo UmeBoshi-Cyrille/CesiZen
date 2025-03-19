@@ -1,6 +1,5 @@
 ﻿using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Interfaces;
-using CesiZen.Domain.Interfaces;
 using CesiZen.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,9 +21,7 @@ public class RefreshTokenQuery : AbstractRepository, IRefreshTokenQuery
 
         if (result == null)
         {
-            return Result<RefreshToken>.Failure(
-                Error.NotFound(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "RefreshToken", userId)));
+            return Result<RefreshToken>.Failure(RefreshTokenErrors.LogNotFound(userId));
         }
 
         return Result<RefreshToken>.Success(result);
@@ -40,9 +37,7 @@ public class RefreshTokenQuery : AbstractRepository, IRefreshTokenQuery
 
         if (string.IsNullOrEmpty(result))
         {
-            return Result<string>.Failure(
-                Error.NotFound(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "RefreshToken", userId)));
+            return Result<string>.Failure(RefreshTokenErrors.LogNotFound(userId));
         }
 
         return Result<string>.Success(result);

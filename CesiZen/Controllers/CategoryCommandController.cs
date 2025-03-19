@@ -26,8 +26,8 @@ public class CategoryCommandController : ControllerBase
             success: () => CreatedAtAction(
                 nameof(CategoryQueryController.GetCategory),
                 nameof(CategoryQueryController),
-                new { name = dto.Name }, dto),
-            failure: error => BadRequest(error)
+                new { name = dto.Name, message = result.Info.Message }, dto),
+            failure: error => BadRequest(new { message = error.Message })
         );
     }
 
@@ -37,8 +37,8 @@ public class CategoryCommandController : ControllerBase
         var result = await categoryService.Update(dto);
 
         return result.Match<IActionResult>(
-            success: () => Ok("Ok"),
-            failure: error => BadRequest(error)
+            success: () => Ok(new { result.Info.Message }),
+            failure: error => BadRequest(new { message = error.Message })
         );
     }
 
@@ -48,8 +48,8 @@ public class CategoryCommandController : ControllerBase
         var result = await categoryService.Delete(id);
 
         return result.Match<IActionResult>(
-            success: () => Ok("Ok"),
-            failure: error => BadRequest(error)
+            success: () => Ok(new { result.Info.Message }),
+            failure: error => BadRequest(new { message = error.Message })
         );
     }
 }

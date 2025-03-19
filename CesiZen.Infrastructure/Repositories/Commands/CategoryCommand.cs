@@ -19,11 +19,15 @@ public class CategoryCommand : AbstractRepository, ICategoryCommand
             context.Categories.Add(entity);
             await context.SaveChangesAsync();
 
-            return Result.Success();
+            return Result.Success(CategoryInfos.LogInsertionSucceeded(entity.Name));
+        }
+        catch (DbUpdateException ex)
+        {
+            return Result.Failure(CategoryErrors.LogInsertionFailed(entity.Name), entity.Name, ex.Message);
         }
         catch (Exception ex)
         {
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(CategoryErrors.LogInsertionFailed(entity.Name), entity.Name, ex.Message);
         }
     }
 
@@ -35,11 +39,15 @@ public class CategoryCommand : AbstractRepository, ICategoryCommand
         {
             await context.SaveChangesAsync();
 
-            return Result.Success();
+            return Result.Success(CategoryInfos.LogUpdateSucceeded(entity.Id));
+        }
+        catch (DbUpdateException ex)
+        {
+            return Result.Failure(CategoryErrors.LogUpdateFailed(entity.Id), entity.Id, ex.Message);
         }
         catch (Exception ex)
         {
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(CategoryErrors.LogUpdateFailed(entity.Id), entity.Id, ex.Message);
         }
     }
 
@@ -53,14 +61,18 @@ public class CategoryCommand : AbstractRepository, ICategoryCommand
                 context.Categories.Remove(Article);
                 await context.SaveChangesAsync();
 
-                return Result.Success();
+                return Result.Success(CategoryInfos.LogDeleteCompleted(id));
             }
 
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(CategoryErrors.LogDeletionFailed(id));
+        }
+        catch (DbUpdateException ex)
+        {
+            return Result.Failure(CategoryErrors.LogDeletionFailed(id), id, ex.Message);
         }
         catch (Exception ex)
         {
-            return Result.Failure(Error.NullValue(""));
+            return Result.Failure(CategoryErrors.LogDeletionFailed(id), id, ex.Message);
         }
     }
 }

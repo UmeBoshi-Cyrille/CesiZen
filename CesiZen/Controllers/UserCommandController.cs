@@ -23,8 +23,8 @@ public class UserCommandController : ControllerBase
         var result = await userCommandService.Update(dto);
 
         return result.Match<IActionResult>(
-            success: () => Ok(new { result.Info.Message }),
-            failure: error => BadRequest(new { error })
+            success: () => Ok(new { message = result.Info.Message }),
+            failure: error => BadRequest(new { message = error.Message })
         );
     }
 
@@ -34,8 +34,8 @@ public class UserCommandController : ControllerBase
         var result = await userCommandService.Delete(id);
 
         return result.Match<IActionResult>(
-            success: () => Ok(new { result.Info.Message }),
-            failure: error => BadRequest(new { error })
+            success: () => Ok(new { message = result.Info.Message }),
+            failure: error => BadRequest(new { message = error.Message })
         );
     }
 }

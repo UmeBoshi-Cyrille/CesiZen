@@ -26,8 +26,8 @@ public class ArticleCommandController : ControllerBase
             success: () => CreatedAtAction(
                 nameof(ArticleQueryController.GetArticle),
                 nameof(ArticleQueryController),
-                new { id = article.Id, article = article }),
-            failure: error => BadRequest(error)
+                new { id = article.Id, article = article, message = result.Info.Message }),
+            failure: error => BadRequest(new { message = error.Message })
         );
     }
 
@@ -36,10 +36,9 @@ public class ArticleCommandController : ControllerBase
     {
         var result = await articleCommandService.Update(article);
 
-        var message = "OK";
         return result.Match<IActionResult>(
-            success: () => Ok(new { message }),
-            failure: error => BadRequest(new { error })
+            success: () => Ok(new { message = result.Info.Message }),
+            failure: error => BadRequest(new { message = error.Message })
         );
     }
 
@@ -48,10 +47,9 @@ public class ArticleCommandController : ControllerBase
     {
         var result = await articleCommandService.UpdateTitleAsync(id, title);
 
-        var message = "OK";
         return result.Match<IActionResult>(
-            success: () => Ok(new { message }),
-            failure: error => BadRequest(new { error })
+            success: () => Ok(new { message = result.Info.Message }),
+            failure: error => BadRequest(new { message = error.Message })
         );
     }
 
@@ -60,10 +58,9 @@ public class ArticleCommandController : ControllerBase
     {
         var result = await articleCommandService.UpdateDescriptionAsync(id, description);
 
-        var message = "OK";
         return result.Match<IActionResult>(
-            success: () => Ok(new { message }),
-            failure: error => BadRequest(new { error })
+            success: () => Ok(new { message = result.Info.Message }),
+            failure: error => BadRequest(new { message = error.Message })
         );
     }
 
@@ -72,10 +69,9 @@ public class ArticleCommandController : ControllerBase
     {
         var result = await articleCommandService.UpdateContentAsync(id, content);
 
-        var message = "OK";
         return result.Match<IActionResult>(
-            success: () => Ok(new { message }),
-            failure: error => BadRequest(new { error })
+            success: () => Ok(new { message = result.Info.Message }),
+            failure: error => BadRequest(new { message = error.Message })
         );
     }
 
@@ -85,10 +81,9 @@ public class ArticleCommandController : ControllerBase
     {
         var result = await articleCommandService.Delete(id);
 
-        var message = "OK";
         return result.Match<IActionResult>(
-            success: () => Ok(new { message }),
-            failure: error => BadRequest(new { error })
+            success: () => Ok(new { message = result.Info.Message }),
+            failure: error => BadRequest(new { message = error.Message })
         );
     }
 }

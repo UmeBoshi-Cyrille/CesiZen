@@ -117,31 +117,76 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CLIENT_AUTHENTICATION_SUCCESS" xml:space="preserve">
-    <value>Successfully connected</value>
+  <data name="CLIENT_AUTHENTIFIED" xml:space="preserve">
+    <value>Vous êtes maintenant connecté !</value>
   </data>
-  <data name="CLIENT_CREATION_SUCCESS" xml:space="preserve">
-    <value>{0} has been successfully created</value>
+  <data name="CLIENT_INSERTION_SUCCESS" xml:space="preserve">
+    <value>{0} a été créé.</value>
   </data>
   <data name="CLIENT_DELETE_SUCCESS" xml:space="preserve">
-    <value>{0} has been successfully deleted</value>
+    <value>{0} a été supprimé.</value>
   </data>
   <data name="CLIENT_EMAIL_VERIFICATION" xml:space="preserve">
-    <value>An email has been sent for email verification.</value>
+    <value>Un Email a été envoyé pour la vérification.</value>
   </data>
   <data name="CLIENT_EMAIL_VERIFIED" xml:space="preserve">
-    <value>Email has been verified.</value>
+    <value>Votre email a été vérifié.</value>
   </data>
   <data name="CLIENT_RESETPASSWORD_SUCCESS" xml:space="preserve">
-    <value>Password has been successfully modified.</value>
+    <value>Mot de passe modifié.</value>
   </data>
   <data name="CLIENT_SESSION_CLOSED" xml:space="preserve">
-    <value>Session is closed</value>
+    <value>Session Fermé.</value>
   </data>
   <data name="CLIENT_UPDATE_SUCCESS" xml:space="preserve">
-    <value>{0} has been successfully updated</value>
+    <value>{0} a été mis à jour.</value>
   </data>
   <data name="LOG_INSERT_SUCCESS" xml:space="preserve">
-    <value>New {0} successfully registered</value>
+    <value>New {0} {1} has been registered</value>
+  </data>
+  <data name="LOG_DELETION_SUCCESS" xml:space="preserve">
+    <value>{0} has been deleted.</value>
+  </data>
+  <data name="LOG_UPDATE_SUCCESS" xml:space="preserve">
+    <value>{0} has been updated.</value>
+  </data>
+  <data name="LOG_EMAIL_VERIFIED" xml:space="preserve">
+    <value>The email {0} has been verified.</value>
+  </data>
+  <data name="LOG_EMAIL_VERIFICATION" xml:space="preserve">
+    <value>Verification email has been sent to {0}</value>
+  </data>
+  <data name="LOG_PASSWORD_MODIFICATION" xml:space="preserve">
+    <value>Password for account {0} has been modified</value>
+  </data>
+  <data name="LOG_AUTHENTIFIED" xml:space="preserve">
+    <value>User {0} has been authentified</value>
+  </data>
+  <data name="LOG_SESSION_CLOSED" xml:space="preserve">
+    <value>Session for user {0} is closed</value>
+  </data>
+  <data name="LOG_COLLECT_COMPLETED" xml:space="preserve">
+    <value>{0} {1} has been retrieved.</value>
+  </data>
+  <data name="LOG_FORMAT_COMPLETED" xml:space="preserve">
+    <value>{0} {1} has been formated.</value>
+  </data>
+  <data name="LOG_UPDATE_PROPERTY" xml:space="preserve">
+    <value>{0} {1} has been updated.</value>
+  </data>
+  <data name="LOG_ARTICLE_ INSERTION" xml:space="preserve">
+    <value>Author : {0}, created new article entitled : {1}</value>
+  </data>
+  <data name="LOG_ACCOUNT_ACTIVATED" xml:space="preserve">
+    <value>User Account number {0} has been activate.</value>
+  </data>
+  <data name="LOG_ACCOUNT_DISACTIVATED" xml:space="preserve">
+    <value>User Account number {0} has been disactivate.</value>
+  </data>
+  <data name="CLIENT_ACCOUNT_DISABLED" xml:space="preserve">
+    <value>Le compte a été désactivé.</value>
+  </data>
+  <data name="CLIENT_ACCOUNT_ENABLED" xml:space="preserve">
+    <value>Le compte a été activé.</value>
   </data>
 </root>

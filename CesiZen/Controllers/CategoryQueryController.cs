@@ -23,7 +23,7 @@ public class CategoryQueryController : ControllerBase
 
         return result.Match<ActionResult, PagedResult<CategoryRequestDto>>(
              success: value => Ok(new { value }),
-             failure: error => BadRequest(new { error })
+             failure: error => BadRequest(new { message = error.Message })
         );
     }
 
@@ -33,7 +33,7 @@ public class CategoryQueryController : ControllerBase
         var result = await categoryService.GetByIdAsync(id);
         return result.Match<ActionResult, CategoryRequestDto>(
             success: value => Ok(new { value }),
-            failure: error => BadRequest(new { error })
+            failure: error => BadRequest(new { message = error.Message })
         );
     }
 }

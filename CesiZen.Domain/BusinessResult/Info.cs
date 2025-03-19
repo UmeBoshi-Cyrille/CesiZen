@@ -8,6 +8,8 @@ public class Info
     public string Message => !string.IsNullOrEmpty(message) ? message : string.Empty;
     public InfoType Type => type != InfoType.None ? type : type = InfoType.None;
 
+    public Info() { }
+
     public Info(InfoType type, string message)
     {
         this.message = message;
@@ -21,9 +23,21 @@ public class Info
 
 public enum InfoType
 {
+    AccountEnabled,
+    AccountDisabled,
+    Authentified,
+    CollectCompleted,
+    DeleteCompleted,
+    EmailVerified,
+    FormatCompleted,
+    InsertionSucceeded,
     None,
+    PasswordModified,
     ProcessComplete,
     Success,
-    Authentified
+    SessionClosed,
+    UpdateProperty,
+    UpdateSucceeded,
+    VerificationEmailSent,
 }
 

@@ -59,31 +59,23 @@ public class PasswordService : IPasswordService
     {
         if (dto.NewPassword != dto.ConfirmPassword)
         {
-            return Result.Failure(
-                Error.NotMatch(
-                    Message.GetResource("ErrorMessages", "CLIENT_RESETPASSWORD_NOTMATCH")));
+            return Result.Failure(UserErrors.ClientPasswordNotMatch);
         }
 
         var login = await loginQuery.GetByResetPasswordToken(dto.Token);
         if (login.Value == null)
         {
-            return Result.Failure(
-                Error.NullValue(string.Format(
-                    Message.GetResource("ErrorMessages", "CLIENT_NOTFOUND"), "Login")));
+            return Result.Failure(UserErrors.ClientNotFound);
         }
         else if (login.Value.PasswordResetTokenExpiry < DateTime.UtcNow)
         {
-            return Result.Failure(
-                Error.TimeOut(
-                    Message.GetResource("ErrorMessages", "CLIENT_EXPIRED_LINK")));
+            return Result.Failure(UserErrors.ClientExpiredLink);
         }
 
         var authentifier = HashPassword(dto.NewPassword);
         await loginCommand.ResetPassword(dto.Token, authentifier.Password);
 
-        return Result.Success(
-            Info.Success(
-                Message.GetResource("InfoMessages", "CLIENT_RESETPASSWORD_SUCCESS")));
+        return Result.Success(UserInfos.ClientPasswordModified);
     }
 
     public async Task<IResult> ForgotPassword(PasswordResetRequestDto request)
@@ -92,9 +84,7 @@ public class PasswordService : IPasswordService
 
         if (login == null)
         {
-            return Result.Failure(
-                Error.NullValue(string.Format(
-                    Message.GetResource("ErrorMessages", "CLIENT_NOTFOUND"), "Login")));
+            return Result.Failure(UserErrors.ClientNotFound);
         }
 
         var token = tokenProvider.GenerateVerificationToken();
@@ -102,9 +92,7 @@ public class PasswordService : IPasswordService
         await SavePasswordResetToken(login.Value, token);
         await SendForgotPasswordEmail(login.Value.Email, token);
 
-        return Result.Success(
-            Info.Success(
-                Message.GetResource("InfoMessages", "CLIENT_EMAIL_VERIFICATION")));
+        return Result.Success(UserInfos.ClientVerificationEmailSent);
     }
     #endregion
 

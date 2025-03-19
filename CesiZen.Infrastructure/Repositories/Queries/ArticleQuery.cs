@@ -24,9 +24,7 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
 
         if (!articles.Any())
         {
-            return Result<PagedResult<Article>>.Failure(
-                Error.NotFound(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_GET_MULTIPLE_NOTFOUND"), "Users")));
+            return Result<PagedResult<Article>>.Failure(ArticleErrors.LogMultipleNotFound);
         }
 
         var result = new PagedResult<Article>
@@ -70,13 +68,8 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
         }
         catch (Exception ex)
         {
-            return Result<PagedResult<Article>>.Failure(Error.NullValue(""));
+            return Result<PagedResult<Article>>.Failure(ArticleErrors.LogMultipleNotFound, ex.Message);
         }
-    }
-
-    public Task<IResult<PagedResult<Article>>> GetArticlesAsync(PageParameters parameters, string searchTerm = null)
-    {
-        throw new NotImplementedException();
     }
 
     public async Task<IResult<Article>> GetByIdAsync(string id)
@@ -89,7 +82,7 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
         }
         catch (Exception ex)
         {
-            return Result<Article>.Failure(Error.NullValue(""));
+            return Result<Article>.Failure(ArticleErrors.LogNotFound(id), id, ex.Message);
         }
     }
 }

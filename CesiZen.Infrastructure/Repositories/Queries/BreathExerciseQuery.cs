@@ -22,14 +22,14 @@ public class BreathExerciseQuery : AbstractRepository, IBreathExerciseQuery
 
             if (result is null)
             {
-                return Result<List<BreathExercise>>.Failure(Error.NullValue(""));
+                return Result<List<BreathExercise>>.Failure(BreathExerciseErrors.LogMultipleNotFound);
             }
 
             return Result<List<BreathExercise>>.Success(result);
         }
         catch (Exception ex)
         {
-            return Result<List<BreathExercise>>.Failure(Error.NullValue(""));
+            return Result<List<BreathExercise>>.Failure(BreathExerciseErrors.LogMultipleNotFound, ex.Message);
         }
     }
 
@@ -43,7 +43,7 @@ public class BreathExerciseQuery : AbstractRepository, IBreathExerciseQuery
         }
         catch (Exception ex)
         {
-            return Result<BreathExercise>.Failure(Error.NullValue(""));
+            return Result<BreathExercise>.Failure(BreathExerciseErrors.LogNotFound(id), id, ex.Message);
         }
     }
 }

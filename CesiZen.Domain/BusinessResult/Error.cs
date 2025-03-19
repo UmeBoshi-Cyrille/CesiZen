@@ -8,6 +8,8 @@ public sealed class Error
     public string Message => type != ErrorType.None && !string.IsNullOrEmpty(message) ? message : string.Empty;
     public ErrorType Type => type != ErrorType.None ? type : type = ErrorType.None;
 
+    public Error() { }
+
     public Error(ErrorType type, string message)
     {
         this.message = message;
@@ -18,7 +20,7 @@ public sealed class Error
     public static Error NotFound(string message) => new(ErrorType.NotFound, message);
     public static Error NullValue(string message) => new(ErrorType.NullValue, message);
     public static Error AuthenticationFailed(string message) => new(ErrorType.AuthenticationFailed, message);
-    public static Error OperationFailed(string message) => new(ErrorType.OperationFailed, message);
+    public static Error OperationFailed => new(ErrorType.OperationFailed, "OperationFailed has failed for an unknow reason");
     public static Error NotUnique(string message) => new(ErrorType.NotUnique, message);
     public static Error WrongFormat(string message) => new(ErrorType.WrongFormat, message);
     public static Error NotMatch(string message) => new(ErrorType.NotMatch, message);
@@ -30,15 +32,27 @@ public sealed class Error
 
 public enum ErrorType
 {
+    AuthenticationFailed,
+    DeletionFailed,
+    EmailVerificationFailed,
+    ExpiredLink,
+    InsertionFailed,
+    LockTime,
+    LoginAttempsCount,
+    LoginAttempsReached,
     None,
     NotFound,
-    NullValue,
-    AuthenticationFailed,
-    OperationFailed,
-    NotUnique,
-    WrongFormat,
     NotMatch,
-    NullOrWhiteSpace,
+    NotUnique,
     NullOrEmpty,
-    TimeOut
+    NullOrWhiteSpace,
+    NullValue,
+    OperationFailed,
+    PasswordNotMatch,
+    RegisterFailed,
+    ResetPasswordAttempsReached,
+    TimeOut,
+    UpdateFailed,
+    UpdatePropertyFailed,
+    WrongFormat,
 }

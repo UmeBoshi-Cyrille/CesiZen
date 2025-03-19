@@ -34,8 +34,7 @@ public class CategoryQuery : AbstractRepository, ICategoryQuery
         }
         catch (Exception ex)
         {
-            return Result<PagedResult<Category>>.Failure(
-                Error.NullValue(""));
+            return Result<PagedResult<Category>>.Failure(CategoryErrors.LogMultipleNotFound, ex.Message);
         }
     }
 
@@ -49,8 +48,7 @@ public class CategoryQuery : AbstractRepository, ICategoryQuery
         }
         catch (Exception ex)
         {
-            return Result<Category>.Failure(
-                Error.NullValue(""));
+            return Result<Category>.Failure(CategoryErrors.LogNotFound(id), id, ex.Message);
         }
     }
 }
