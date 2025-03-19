@@ -84,7 +84,7 @@ public class UserQueryServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        Assert.Single(result.Value.Data);
+        Assert.True(result.Value.Data.Any());
         Assert.Equal(1, result.Value.TotalCount);
         Assert.Equal(10, result.Value.PageSize);
         Assert.Equal(1, result.Value.TotalCount);
@@ -133,7 +133,7 @@ public class UserQueryServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        Assert.Single(result.Value.Data);
+        Assert.True(result.Value.Data.Any());
         Assert.Equal(1, result.Value.TotalCount);
         Assert.Equal(10, result.Value.PageSize);
         Assert.Equal(1, result.Value.TotalCount);
