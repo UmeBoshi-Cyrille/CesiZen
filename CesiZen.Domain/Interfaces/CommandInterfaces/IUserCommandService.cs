@@ -6,5 +6,5 @@ public interface IUserCommandService : ICommandServiceInterface<UserDto>
 {
     Task<IResult> UpdateUserName(string id, string userName);
 
-    Task<IResult> ActivationAsync(UserDto dto);
+    Task<IResult> ActivationAsync(AccountActivationDto dto);
 }
