@@ -73,7 +73,7 @@ public class ArticleQueryServiceTests
             PageSize = parameters.PageSize,
         };
 
-        queryMock.Setup(q => q.SearchArticles(parameters, null!))
+        queryMock.Setup(q => q.SearchArticles(parameters, ""))
             .ReturnsAsync(Result<PagedResult<Article>>.Success(pagedResult));
 
         // Act
@@ -91,7 +91,7 @@ public class ArticleQueryServiceTests
     {
         // Arrange
         var parameters = CommonFaker.FakePageParametersGenerator().Generate();
-        queryMock.Setup(q => q.SearchArticles(parameters, null!))
+        queryMock.Setup(q => q.SearchArticles(parameters, ""))
             .ReturnsAsync(Result<PagedResult<Article>>.Failure(Error.NullValue("Error message")));
 
         // Act
