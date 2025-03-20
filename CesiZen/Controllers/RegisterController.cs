@@ -38,18 +38,20 @@ public class RegisterController : LoginController
         var response = await registerService.Register(dto);
         if (response.IsFailure)
         {
+            UnsubscribeNotifierEvent();
             return BadRequest(new { message = response.Error.Message });
-        };
+        }
 
         var message = BuildEmailVerificationMessage(dto.Email);
         notifier.NotifyObservers(message);
+        UnsubscribeNotifierEvent();
 
         return Ok(new { message = response.Info.Message });
     }
 
-    private MessageEventDto BuildEmailVerificationMessage(string email)
+    private MessageEventArgs BuildEmailVerificationMessage(string email)
     {
-        return new MessageEventDto
+        return new MessageEventArgs
         {
             Email = email,
             Subject = Message.GetResource("Templates", "SUBJECT_VERIFICATION_EMAIL"),

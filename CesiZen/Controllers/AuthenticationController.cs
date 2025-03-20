@@ -97,7 +97,6 @@ public class AuthenticationController : LoginController
         Response.Cookies.Append("JWTCookie", response.Value.Token!, cookieOptions);
 
         return Ok(new { message = response.Info.Message });
-        //return Ok(response.Value.Token);
     }
 
     /// <summary>
@@ -112,16 +111,14 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public IActionResult InvalidateTokens(string userId)
+    public async Task<IActionResult> InvalidateTokens(string userId)
     {
-        var result = tokenProvider.InvalidateTokens(userId).Result;
+        var result = await tokenProvider.InvalidateTokens(userId);
 
         if (result.IsFailure)
         {
             return Unauthorized();
         }
-
-        var successMessage = Message.GetResource("InfoMessages", "CLIENT_SESSION_CLOSED");
 
         return Ok(new { message = result.Info.Message });
     }
@@ -140,9 +137,6 @@ public class AuthenticationController : LoginController
         var result = await authenticateService.Disconnect(accessToken);
 
         Response.Cookies.Delete("JWTCookie");
-
-        // Clear any other session-related data if necessary
-        //HttpContext.Session.Clear();
 
         return Ok(new { message = result.Info.Message });
     }
@@ -164,10 +158,14 @@ public class AuthenticationController : LoginController
         var result = await passwordService.ForgotPassword(dto);
 
         if (result.IsFailure)
+        {
+            UnsubscribeNotifierEvent();
             return BadRequest(new { message = result.Error.Message });
+        }
 
         var message = BuildEmailVerificationMessage(dto.Email!);
         notifier.NotifyObservers(message);
+        UnsubscribeNotifierEvent();
 
         return Ok(new { message = result.Info.Message });
     }
@@ -194,9 +192,9 @@ public class AuthenticationController : LoginController
         return Ok(new { message = result.Info.Message });
     }
 
-    private MessageEventDto BuildEmailVerificationMessage(string email)
+    private MessageEventArgs BuildEmailVerificationMessage(string email)
     {
-        return new MessageEventDto
+        return new MessageEventArgs
         {
             Email = email,
             Subject = Message.GetResource("Templates", "SUBJECT_RESET_PASSWORD"),

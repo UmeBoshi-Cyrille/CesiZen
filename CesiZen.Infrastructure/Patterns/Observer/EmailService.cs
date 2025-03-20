@@ -16,7 +16,7 @@ public class EmailService : IObserver
         this.configuration = configuration;
     }
 
-    public async void Update(object sender, MessageEventDto dto)
+    public async void Update(object sender, MessageEventArgs dto)
     {
         await SendEmailAsync(dto.Email, dto.Subject, dto.Body);
     }

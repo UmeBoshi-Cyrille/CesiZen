@@ -4,7 +4,7 @@ namespace CesiZen.Domain.Interfaces;
 
 public interface INotifier
 {
-    event EventHandler<MessageEventDto> MessageEvent;
+    event EventHandler<MessageEventArgs> MessageEvent;
 
-    void NotifyObservers(MessageEventDto dto);
+    void NotifyObservers(MessageEventArgs dto);
 }

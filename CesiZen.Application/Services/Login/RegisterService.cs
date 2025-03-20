@@ -9,25 +9,21 @@ namespace CesiZen.Application.Services;
 
 public class RegisterService : ALoginService, IRegisterService
 {
-    private readonly ILoginCommand loginCommand;
-
     public RegisterService(
         ILogger logger,
         IUserCommand command,
         IPasswordService passwordService,
         ILoginQuery query,
-        ILoginCommand loginCommand,
         IEmailService emailService,
         ITokenProvider tokenProvider
         ) : base(logger, command, passwordService, query, emailService, tokenProvider)
     {
-        this.loginCommand = loginCommand;
     }
 
     public async Task<IResult> Register(UserDto dto)
     {
-        User user = new();
-        IResult result = new Result();
+        User user;
+        IResult result;
 
         if (IsEmailUnique(dto.Email).IsFailure)
         {

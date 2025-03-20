@@ -5,9 +5,9 @@ namespace CesiZen.Infrastructure;
 
 public class MessageNotifier : INotifier
 {
-    public event EventHandler<MessageEventDto>? MessageEvent;
+    public event EventHandler<MessageEventArgs>? MessageEvent;
 
-    public void NotifyObservers(MessageEventDto dto)
+    public void NotifyObservers(MessageEventArgs dto)
     {
         MessageEvent?.Invoke(this, dto);
     }

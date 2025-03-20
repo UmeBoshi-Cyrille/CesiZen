@@ -4,5 +4,5 @@ namespace CesiZen.Domain.Interfaces;
 
 public interface IObserver
 {
-    void Update(object sender, MessageEventDto dto);
+    void Update(object sender, MessageEventArgs dto);
 }

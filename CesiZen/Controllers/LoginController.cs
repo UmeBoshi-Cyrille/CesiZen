@@ -10,9 +10,14 @@ public abstract class LoginController : ControllerBase
     protected readonly INotifier notifier;
     protected readonly IObserver observer;
 
-    public LoginController(INotifier notifier, IObserver observer)
+    protected LoginController(INotifier notifier, IObserver observer)
     {
         this.notifier = notifier;
         this.observer = observer;
+    }
+
+    protected virtual void UnsubscribeNotifierEvent()
+    {
+        notifier.MessageEvent -= observer.Update!;
     }
 }
