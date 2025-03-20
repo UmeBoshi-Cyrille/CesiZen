@@ -1,27 +1,32 @@
 using CesiZen.Domain.Enum;
-using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace CesiZen.Domain.Datamodel;
 
-public class User : IdentityUser
+public class User
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; }
 
-    [BsonElement("firstName")]
     [MaxLength(50)]
+    [MinLength(2)]
+    [RegularExpression(@"^[a-zA-Z]+$")]
+    [BsonElement("firstName")]
     public string Firstname { get; set; }
 
-    [BsonElement("lastName")]
     [MaxLength(50)]
+    [MinLength(2)]
+    [RegularExpression(@"^[a-zA-Z]+$")]
+    [BsonElement("lastName")]
     public string Lastname { get; set; }
 
-    [BsonElement("username")]
     [MaxLength(50)]
+    [MinLength(2)]
+    [RegularExpression(@"^[a-zA-Z]+$")]
+    [BsonElement("username")]
     public string? Username { get; set; }
 
     [BsonElement("createdAt")]
@@ -37,7 +42,7 @@ public class User : IdentityUser
     public bool IsActive { get; set; }
 
     [BsonElement("role")]
-    public RoleType Role { get; set; } = RoleType.NONE;
+    public RoleType Role { get; set; }
 
     [BsonElement("refreshTokenExpiryTime")]
     public DateTime? RefreshTokenExpiryTime { get; set; }

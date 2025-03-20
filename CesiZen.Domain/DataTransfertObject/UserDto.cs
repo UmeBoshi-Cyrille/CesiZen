@@ -7,15 +7,21 @@ public class UserDto
 {
     [MaxLength(54)]
     [MinLength(2)]
+    [RegularExpression(@"^[a-zA-Z]+$",
+        ErrorMessage = "Invalid characters (no special characters")]
     [Required(ErrorMessage = "FirstName is required")]
     public required string Firstname { get; set; }
     [MaxLength(54)]
     [MinLength(2)]
+    [RegularExpression(@"^[a-zA-Z]+$",
+        ErrorMessage = "Invalid characters (no special characters")]
     [Required(ErrorMessage = "LastName is required")]
     public required string Lastname { get; set; }
 
     [MaxLength(54)]
     [MinLength(3)]
+    [RegularExpression(@"^[a-zA-Z]+$",
+        ErrorMessage = "Invalid characters (no special characters")]
     public required string Username { get; set; }
 
     [DefaultValue("example@gmail.com")]
