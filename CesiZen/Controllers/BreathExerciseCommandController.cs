@@ -20,6 +20,7 @@ public class BreathExerciseCommandController : ControllerBase
     [HttpPost("create")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Create([FromBody] BreathExerciseDto dto)
     {
         var result = await exerciseCommandService.Insert(dto);
@@ -36,6 +37,7 @@ public class BreathExerciseCommandController : ControllerBase
     [HttpPut("update/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Update([FromBody] BreathExerciseDto dto)
     {
         var result = await exerciseCommandService.Update(dto);

@@ -20,6 +20,7 @@ public class UserQueryController : ControllerBase
     [HttpGet("search-users")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<PagedResult<UserRequestDto>>> SearchUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string searchTerm = null)
     {
         var parameters = new PageParameters()
@@ -39,6 +40,7 @@ public class UserQueryController : ControllerBase
     [HttpGet("users")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<PagedResult<UserRequestDto>>> GetAllAsync([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var result = await queryService.GetAllAsync(pageNumber, pageSize);
@@ -52,6 +54,7 @@ public class UserQueryController : ControllerBase
     [HttpGet("user/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<UserRequestDto>> GetById(string id)
     {
         var result = await queryService.GetByIdAsync(id);
@@ -64,6 +67,7 @@ public class UserQueryController : ControllerBase
     [HttpGet("user")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<UserRequestDto>> GetByName([FromQuery] string username)
     {
         var result = await queryService.GetByUsername(username);

@@ -19,6 +19,7 @@ public class BreathExerciseQueryController : ControllerBase
     [HttpGet("exercises")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<List<BreathExerciseDto>>> GetExercises([FromQuery] string userId)
     {
         var result = await exerciseService.GetAllByIdAsync(userId);
@@ -32,6 +33,7 @@ public class BreathExerciseQueryController : ControllerBase
     [HttpGet("exercise/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<BreathExerciseDto>> GetExercise(string id)
     {
         var result = await exerciseService.GetByIdAsync(id);

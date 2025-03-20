@@ -19,6 +19,7 @@ public class ArticleQueryController : ControllerBase
     [HttpGet("search-articles")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<PagedResult<ArticleDto>>> SearchArticles(int pageNumber = 1, int pageSize = 10, [FromQuery] string searchTerm = "")
     {
         var parameters = new PageParameters()
@@ -38,6 +39,7 @@ public class ArticleQueryController : ControllerBase
     [HttpGet("articles")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<PagedResult<ArticleDto>>> GetArticles(int pageNumber = 1, int pageSize = 10, [FromQuery] string searchTerm = "")
     {
         var result = await articleService.GetAllAsync(pageNumber, pageSize);
@@ -51,6 +53,7 @@ public class ArticleQueryController : ControllerBase
     [HttpGet("article/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ArticleDto>> GetArticle(string id)
     {
         var result = await articleService.GetByIdAsync(id);

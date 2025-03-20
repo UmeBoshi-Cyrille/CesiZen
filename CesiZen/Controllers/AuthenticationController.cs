@@ -23,16 +23,26 @@ public class AuthenticationController : ControllerBase
         this.passwordService = passwordService;
     }
 
+    /// <summary>
+    /// Verify email Validity from the token provided.
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="email"></param>
+    /// <response code="200">email is valid</response>
+    /// <response code="404">email not found</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpGet("Verify")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> VerifyEmail(string token, string email)
     {
         var result = await authenticateService.VerifyEmail(token, email);
 
         if (result.IsFailure)
         {
-            return BadRequest(new { message = result.Error.Message });
+            return NotFound(new { message = result.Error.Message });
         }
 
         return Ok(new { message = result.Info.Message });
@@ -51,6 +61,7 @@ public class AuthenticationController : ControllerBase
     [HttpPost("authenticate")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Authenticate(AuthenticateRequestDto model)
     {
         var response = await authenticateService.Authenticate(model);
@@ -75,6 +86,7 @@ public class AuthenticationController : ControllerBase
     [HttpPost("invalidate-tokens")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public IActionResult InvalidateTokens(string userId)
     {
         var result = tokenProvider.InvalidateTokens(userId).Result;
@@ -90,6 +102,7 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost("logout")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> Logout(string accessToken)
     {
         var result = await authenticateService.Disconnect(accessToken);
@@ -105,6 +118,9 @@ public class AuthenticationController : ControllerBase
 
 
     [HttpPost("forgot-password")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> ForgotPassword(PasswordResetRequestDto request)
     {
         var result = await passwordService.ForgotPassword(request);
@@ -116,6 +132,9 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost("reset-password")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> ResetPassword(PasswordResetDto dto)
     {
         var result = await passwordService.ResetPassword(dto);

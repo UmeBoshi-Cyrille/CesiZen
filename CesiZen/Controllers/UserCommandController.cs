@@ -21,6 +21,7 @@ public class UserCommandController : ControllerBase
 
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Update([FromBody] UserDto dto)
     {
         var result = await userCommandService.Update(dto);
@@ -34,6 +35,7 @@ public class UserCommandController : ControllerBase
     [HttpDelete("delete/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Delete(string id)
     {
         var result = await userCommandService.Delete(id);

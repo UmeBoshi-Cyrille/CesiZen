@@ -19,6 +19,7 @@ public class CategoryQueryController : ControllerBase
     [HttpGet("categories")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<PagedResult<CategoryRequestDto>>> GetCategories([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var result = await categoryService.GetAllAsync(pageNumber, pageSize);
@@ -32,6 +33,7 @@ public class CategoryQueryController : ControllerBase
     [HttpGet("category/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<CategoryRequestDto>> GetCategory(string id)
     {
         var result = await categoryService.GetByIdAsync(id);
