@@ -17,30 +17,46 @@ public class ArticleCommandController : ControllerBase
         this.articleCommandService = articleCommandService;
     }
 
+    /// <summary>
+    /// Create new article
+    /// </summary>
+    /// <param name="dto">data provided by the client</param>
+    /// <response code="200">operation succeeded</response>
+    /// <response code="400">Bad request</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpPost("create")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Create([FromBody] ArticleDto article)
+    public async Task<IActionResult> Create([FromBody] ArticleDto dto)
     {
-        var result = await articleCommandService.Insert(article);
+        var result = await articleCommandService.Insert(dto);
 
         return result.Match<ActionResult>(
             success: () => CreatedAtAction(
                 nameof(ArticleQueryController.GetArticle),
                 nameof(ArticleQueryController),
-                new { id = article.Id, article = article, message = result.Info.Message }),
+                new { id = dto.Id, article = dto, message = result.Info.Message }),
             failure: error => BadRequest(new { message = error.Message })
         );
     }
 
+    /// <summary>
+    /// Update article data
+    /// </summary>
+    /// <param name="dto">data provided by the client</param>
+    /// <response code="200">operation succeeded</response>
+    /// <response code="400">Bad request</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpPut("update/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Update([FromBody] ArticleDto article)
+    public async Task<IActionResult> Update([FromBody] ArticleDto dto)
     {
-        var result = await articleCommandService.Update(article);
+        var result = await articleCommandService.Update(dto);
 
         return result.Match<IActionResult>(
             success: () => Ok(new { message = result.Info.Message }),
@@ -48,6 +64,15 @@ public class ArticleCommandController : ControllerBase
         );
     }
 
+    /// <summary>
+    /// Update article title
+    /// </summary>
+    /// <param name="id">id provided by the client</param>
+    /// <param name="title">title provided by the client</param>
+    /// <response code="200">operation succeeded</response>
+    /// <response code="400">Bad request</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpPut("update-title/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -62,6 +87,15 @@ public class ArticleCommandController : ControllerBase
         );
     }
 
+    /// <summary>
+    /// Update article description
+    /// </summary>
+    /// <param name="id">id provided by the client</param>
+    /// <param name="description">description provided by the client</param>
+    /// <response code="200">operation succeeded</response>
+    /// <response code="400">Bad request</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpPut("update-description/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -76,6 +110,15 @@ public class ArticleCommandController : ControllerBase
         );
     }
 
+    /// <summary>
+    /// Update article content
+    /// </summary>
+    /// <param name="id">id provided by the client</param>
+    /// <param name="content">content provided by the client</param>
+    /// <response code="200">operation succeeded</response>
+    /// <response code="400">Bad request</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpPut("update-content/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -90,7 +133,14 @@ public class ArticleCommandController : ControllerBase
         );
     }
 
-
+    /// <summary>
+    /// Delete article
+    /// </summary>
+    /// <param name="id">id provided by the client</param>
+    /// <response code="200">operation succeeded</response>
+    /// <response code="400">Bad request</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpDelete("delete/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

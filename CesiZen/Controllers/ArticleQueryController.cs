@@ -16,6 +16,16 @@ public class ArticleQueryController : ControllerBase
         this.articleService = articleService;
     }
 
+    /// <summary>
+    /// Get paginated articles by term.
+    /// </summary>
+    /// <param name="pageNumber">last record</param>
+    /// <param name="pageSize">number of element by page</param>
+    /// <param name="searchTerm">term provided by the client for the research</param>
+    /// <response code="200">data retrieved</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpGet("search-articles")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -36,6 +46,15 @@ public class ArticleQueryController : ControllerBase
         );
     }
 
+    /// <summary>
+    /// Get paginated articles
+    /// </summary>
+    /// <param name="pageNumber">last record</param>
+    /// <param name="pageSize">number of element by page</param>
+    /// <response code="200">data retrieved</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpGet("articles")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -50,6 +69,14 @@ public class ArticleQueryController : ControllerBase
         );
     }
 
+    /// <summary>
+    /// Get article by id
+    /// </summary>
+    /// <param name="id">id provided by the client</param>
+    /// <response code="200">data retrieved</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpGet("article/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
