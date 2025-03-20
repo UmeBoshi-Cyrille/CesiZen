@@ -24,6 +24,8 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpGet("Verify")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> VerifyEmail(string token, string email)
     {
         var result = await authenticateService.VerifyEmail(token, email);
@@ -37,6 +39,7 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpGet("delete-cookie")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public IActionResult DeleteCookie()
     {
         Response.Cookies.Delete("JWTCookie");
@@ -46,6 +49,8 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost("authenticate")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Authenticate(AuthenticateRequestDto model)
     {
         var response = await authenticateService.Authenticate(model);
@@ -68,6 +73,8 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost("invalidate-tokens")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public IActionResult InvalidateTokens(string userId)
     {
         var result = tokenProvider.InvalidateTokens(userId).Result;
@@ -111,7 +118,7 @@ public class AuthenticationController : ControllerBase
     [HttpPost("reset-password")]
     public async Task<IActionResult> ResetPassword(PasswordResetDto dto)
     {
-        var result = passwordService.ResetPassword(dto).Result;
+        var result = await passwordService.ResetPassword(dto);
 
         if (result.IsFailure)
             return BadRequest(new { message = result.Error.Message });

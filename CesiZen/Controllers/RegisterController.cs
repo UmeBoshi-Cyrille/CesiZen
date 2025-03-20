@@ -17,6 +17,8 @@ public class RegisterController : ControllerBase
     }
 
     [HttpPost("register")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Register([FromBody] UserDto user)
     {
         var response = await registerService.Register(user);

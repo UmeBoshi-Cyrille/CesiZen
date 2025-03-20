@@ -18,6 +18,8 @@ public class BreathExerciseCommandController : ControllerBase
     }
 
     [HttpPost("create")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create([FromBody] BreathExerciseDto dto)
     {
         var result = await exerciseCommandService.Insert(dto);
@@ -32,6 +34,8 @@ public class BreathExerciseCommandController : ControllerBase
     }
 
     [HttpPut("update/{id}")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Update([FromBody] BreathExerciseDto dto)
     {
         var result = await exerciseCommandService.Update(dto);
@@ -43,6 +47,8 @@ public class BreathExerciseCommandController : ControllerBase
     }
 
     [HttpDelete("delete/{id}")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Delete(string id)
     {
         var result = await exerciseCommandService.Delete(id);

@@ -18,6 +18,8 @@ public class CategoryCommandController : ControllerBase
     }
 
     [HttpPost("create")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create([FromBody] CategoryDto dto)
     {
         var result = await categoryService.Insert(dto);
@@ -32,6 +34,8 @@ public class CategoryCommandController : ControllerBase
     }
 
     [HttpPut("update/{id}")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Update([FromBody] CategoryDto dto)
     {
         var result = await categoryService.Update(dto);
@@ -43,6 +47,8 @@ public class CategoryCommandController : ControllerBase
     }
 
     [HttpDelete("delete/{id}")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Delete(string id)
     {
         var result = await categoryService.Delete(id);
