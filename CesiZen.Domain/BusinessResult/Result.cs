@@ -20,6 +20,9 @@ public class Result : IResult
     {
         IsSuccess = true;
         error = Error.None;
+        info = Info.None;
+        exceptionMessage = string.Empty;
+        identifier = string.Empty;
     }
 
     public Result(Info info)
@@ -27,12 +30,17 @@ public class Result : IResult
         IsSuccess = true;
         this.info = info;
         error = Error.None;
+        exceptionMessage = string.Empty;
+        identifier = string.Empty;
     }
 
     public Result(Error error)
     {
         IsSuccess = false;
         this.error = error;
+        info = Info.None;
+        exceptionMessage = string.Empty;
+        identifier = string.Empty;
     }
 
     public Result(Error error, string exception)
@@ -40,6 +48,8 @@ public class Result : IResult
         IsSuccess = false;
         this.error = error;
         exceptionMessage = exception;
+        info = Info.None;
+        identifier = string.Empty;
     }
 
     public Result(Error error, string identifier, string exception)
@@ -48,6 +58,7 @@ public class Result : IResult
         this.error = error;
         exceptionMessage = exception;
         this.identifier = identifier;
+        info = Info.None;
     }
 
     /// <summary>

@@ -26,7 +26,7 @@ public static class ServiceRegister
         var dbName = configuration.GetValue<string>("ConnectionStrings:MongoDbName");
 
         services.AddDbContext<MongoDbContext>(options =>
-            options.UseMongoDB(connectionString, dbName));
+            options.UseMongoDB(connectionString, dbName!));
 
 
         return services;

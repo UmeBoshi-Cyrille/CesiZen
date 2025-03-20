@@ -73,7 +73,7 @@ public class ArticleQueryServiceTests
             PageSize = parameters.PageSize,
         };
 
-        queryMock.Setup(q => q.SearchArticles(parameters, null))
+        queryMock.Setup(q => q.SearchArticles(parameters, null!))
             .ReturnsAsync(Result<PagedResult<Article>>.Success(pagedResult));
 
         // Act
@@ -82,8 +82,8 @@ public class ArticleQueryServiceTests
         // Assert
         Assert.True(result.IsSuccess);
         Assert.True(result.Value.Data.Any());
-        Assert.Equal(pagedResult.Data.FirstOrDefault().Id, result.Value.Data.First().Id);
-        Assert.Equal(pagedResult.Data.FirstOrDefault().Title, result.Value.Data.First().Title);
+        Assert.Equal(pagedResult.Data.FirstOrDefault()!.Id, result.Value.Data.FirstOrDefault()!.Id);
+        Assert.Equal(pagedResult.Data.FirstOrDefault()!.Title, result.Value.Data.FirstOrDefault()!.Title);
     }
 
     [Fact]
@@ -91,7 +91,7 @@ public class ArticleQueryServiceTests
     {
         // Arrange
         var parameters = CommonFaker.FakePageParametersGenerator().Generate();
-        queryMock.Setup(q => q.SearchArticles(parameters, null))
+        queryMock.Setup(q => q.SearchArticles(parameters, null!))
             .ReturnsAsync(Result<PagedResult<Article>>.Failure(Error.NullValue("Error message")));
 
         // Act
@@ -125,8 +125,8 @@ public class ArticleQueryServiceTests
         // Assert
         Assert.True(result.IsSuccess);
         Assert.True(result.Value.Data.Any());
-        Assert.Equal(pagedResult.Data.FirstOrDefault().Id, result.Value.Data.First().Id);
-        Assert.Equal(pagedResult.Data.FirstOrDefault().Title, result.Value.Data.First().Title);
+        Assert.Equal(pagedResult.Data.FirstOrDefault()!.Id, result.Value.Data.FirstOrDefault()!.Id);
+        Assert.Equal(pagedResult.Data.FirstOrDefault()!.Title, result.Value.Data.FirstOrDefault()!.Title);
     }
 
     [Fact]

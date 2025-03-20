@@ -72,7 +72,7 @@ public class EmailService : IEmailService
 
         try
         {
-            await client.ConnectAsync(configuration["Email:Host"], int.Parse(configuration["Email:Port"]), SecureSocketOptions.StartTls);
+            await client.ConnectAsync(configuration["Email:Host"], int.Parse(configuration["Email:Port"]!), SecureSocketOptions.StartTls);
             await client.AuthenticateAsync(configuration["Email:Username"], configuration["Email:Password"]);
             await client.SendAsync(message);
             await client.DisconnectAsync(true);

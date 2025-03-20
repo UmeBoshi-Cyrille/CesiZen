@@ -16,25 +16,47 @@ public class BreathExerciseQueryController : ControllerBase
         this.exerciseService = exerciseService;
     }
 
-    [HttpGet]
+    /// <summary>
+    /// Get breath exercices by user id
+    /// </summary>
+    /// <param name="userId">id provided by the client</param>
+    /// <response code="200">data retrieved</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
+    [HttpGet("exercises")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<List<BreathExerciseDto>>> GetExercises([FromQuery] string userId)
     {
         var result = await exerciseService.GetAllByIdAsync(userId);
 
         return result.Match<ActionResult, List<BreathExerciseDto>>(
              success: value => Ok(new { value }),
-             failure: error => BadRequest(new { message = error.Message })
+             failure: error => NotFound(new { message = error.Message })
         );
     }
 
-    [HttpGet("{id}")]
+    /// <summary>
+    /// Get breath exercice by id
+    /// </summary>
+    /// <param name="id">id provided by the client</param>
+    /// <response code="200">data retrieved</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
+    [HttpGet("exercise/{id}")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<BreathExerciseDto>> GetExercise(string id)
     {
         var result = await exerciseService.GetByIdAsync(id);
 
         return result.Match<ActionResult, BreathExerciseDto>(
             success: value => Ok(new { value }),
-            failure: error => BadRequest(new { message = error.Message })
+            failure: error => NotFound(new { message = error.Message })
         );
     }
 }

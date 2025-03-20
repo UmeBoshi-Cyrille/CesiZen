@@ -1,0 +1,269 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CesiZen.Api</name>
+    </assembly>
+    <members>
+        <member name="M:CesiZen.Api.Controllers.AuthenticationController.VerifyEmail(System.String,System.String)">
+            <summary>
+            Verify email Validity from the token provided.
+            </summary>
+            <param name="token"></param>
+            <param name="email"></param>
+            <response code="200">email is valid</response>
+            <response code="404">email not found</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.AuthenticationController.DeleteCookie">
+            <summary>
+            Remove JwtCookie to clean old accesstoken.
+            </summary>
+            <response code="200">cookie deleted</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.AuthenticationController.Authenticate(CesiZen.Domain.DataTransfertObject.AuthenticateRequestDto)">
+            <summary>
+            Allows to login or sign in into the application.
+            </summary>
+            <param name="dto">data provided by the client</param>
+            <response code="200">logged in</response>
+            <response code="401">not authorized</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.AuthenticationController.InvalidateTokens(System.String)">
+            <summary>
+            Allows the possibility to invalidate session and refresToken stored.
+            </summary>
+            <param name="userId">Id provided by the client</param>
+            <response code="200">operation succeeded</response>
+            <response code="401">not authorized</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.AuthenticationController.Logout(System.String)">
+            <summary>
+            Allows to log out from the application.
+            </summary>
+            <param name="accessToken">accessToken provided by the client</param>
+            <response code="200">operation succeeded</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.AuthenticationController.ForgotPassword(CesiZen.Domain.DataTransfertObject.PasswordResetRequestDto)">
+            <summary>
+            Allows to reset your password if lost or forgotten.
+            </summary>
+            <param name="dto">data provided by the client</param>
+            <response code="200">operation succeeded</response>
+            <response code="400">Bad request</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.AuthenticationController.ResetPassword(CesiZen.Domain.DataTransfertObject.PasswordResetDto)">
+            <summary>
+            Reset password with a new one
+            </summary>
+            <param name="dto">data provided by the client</param>
+            <response code="200">operation succeeded</response>
+            <response code="400">Bad request</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.BreathExerciseCommandController.Create(CesiZen.Domain.DataTransfertObject.BreathExerciseDto)">
+            <summary>
+            Create new breath exercise
+            </summary>
+            <param name="dto">data provided by the client</param>
+            <response code="200">operation succeeded</response>
+            <response code="400">Bad request</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.BreathExerciseCommandController.Update(CesiZen.Domain.DataTransfertObject.BreathExerciseDto)">
+            <summary>
+            Update breath exercise data
+            </summary>
+            <param name="dto">data provided by the client</param>
+            <response code="200">operation succeeded</response>
+            <response code="400">Bad request</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.BreathExerciseCommandController.Delete(System.String)">
+            <summary>
+            Delete breath exercise
+            </summary>
+            <param name="id">id provided by the client</param>
+            <response code="200">operation succeeded</response>
+            <response code="400">Bad request</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.BreathExerciseQueryController.GetExercises(System.String)">
+            <summary>
+            Get breath exercices by user id
+            </summary>
+            <param name="userId">id provided by the client</param>
+            <response code="200">data retrieved</response>
+            <response code="404">Not Found</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.BreathExerciseQueryController.GetExercise(System.String)">
+            <summary>
+            Get breath exercice by id
+            </summary>
+            <param name="id">id provided by the client</param>
+            <response code="200">data retrieved</response>
+            <response code="404">Not Found</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.CategoryCommandController.Create(CesiZen.Domain.DataTransfertObject.CategoryDto)">
+            <summary>
+            Create new category
+            </summary>
+            <param name="dto">data provided by the client</param>
+            <response code="200">operation succeeded</response>
+            <response code="400">Bad request</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.CategoryCommandController.Update(CesiZen.Domain.DataTransfertObject.CategoryDto)">
+            <summary>
+            Update category
+            </summary>
+            <param name="dto">data provided by the client</param>
+            <response code="200">operation succeeded</response>
+            <response code="400">Bad request</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.CategoryCommandController.Delete(System.String)">
+            <summary>
+            Delete category
+            </summary>
+            <param name="dto">data provided by the client</param>
+            <response code="200">operation succeeded</response>
+            <response code="400">Bad request</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.CategoryQueryController.GetCategories(System.Int32,System.Int32)">
+            <summary>
+            Get paginated categories
+            </summary>
+            <param name="pageNumber">last record</param>
+            <param name="pageSize">number of element by page</param>
+            <response code="200">data retrieved</response>
+            <response code="404">Not Found</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.CategoryQueryController.GetCategory(System.String)">
+            <summary>
+            Get category by id
+            </summary>
+            <param name="id">id provided by the client</param>
+            <response code="200">data retrieved</response>
+            <response code="404">Not Found</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.RegisterController.Register(CesiZen.Domain.DataTransfertObject.UserDto)">
+            <summary>
+            Register new user
+            </summary>
+            <param name="dto">data provided by the client</param>
+            <response code="200">operation succeeded</response>
+            <response code="400">Bad request</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.UserCommandController.Update(CesiZen.Domain.DataTransfertObject.UserDto)">
+            <summary>
+            Update user data
+            </summary>
+            <param name="dto">data provided by the client</param>
+            <response code="200">operation succeeded</response>
+            <response code="400">Bad request</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.UserCommandController.UpdateUsername(System.String,System.String)">
+            <summary>
+            Update user name
+            </summary>
+            <param name="dto">data provided by the client</param>
+            <response code="200">operation succeeded</response>
+            <response code="400">Bad request</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.UserCommandController.AccountActivation(CesiZen.Domain.DataTransfertObject.AccountActivationDto)">
+            <summary>
+            Enable/Disable user account
+            </summary>
+            <param name="dto">data provided by the client</param>
+            <response code="200">operation succeeded</response>
+            <response code="400">Bad request</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.UserCommandController.Delete(System.String)">
+            <summary>
+            Allows to delete User data and account
+            </summary>
+            <param name="id">id provided by the client</param>
+            <response code="200">operation succeeded</response>
+            <response code="400">Bad request</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.UserQueryController.SearchUsers(System.Int32,System.Int32,System.String)">
+            <summary>
+            Get paginated users by term.
+            </summary>
+            <param name="pageNumber">last record</param>
+            <param name="pageSize">number of element by page</param>
+            <param name="searchTerm">term provided by the client for the research</param>
+            <response code="200">data retrieved</response>
+            <response code="404">Not Found</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.UserQueryController.GetAllAsync(System.Int32,System.Int32)">
+            <summary>
+            Get paginated users
+            </summary>
+            <param name="pageNumber">last record</param>
+            <param name="pageSize">number of element by page</param>
+            <response code="200">data retrieved</response>
+            <response code="404">Not Found</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.UserQueryController.GetById(System.String)">
+            <summary>
+            Get user by id
+            </summary>
+            <param name="id">id provided by the client</param>
+            <response code="200">data retrieved</response>
+            <response code="404">Not Found</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+        <member name="M:CesiZen.Api.Controllers.UserQueryController.GetByName(System.String)">
+            <summary>
+            Get user by user name
+            </summary>
+            <param name="username">username provided by the client</param>
+            <response code="200">data retrieved</response>
+            <response code="404">Not Found</response>
+            <response code="500">service unvalaible</response>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

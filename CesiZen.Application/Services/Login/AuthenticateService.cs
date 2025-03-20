@@ -27,10 +27,10 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
         this.userQuery = userQuery;
     }
 
-    public async Task<IResult<AuthenticateResponseDto>> Authenticate(AuthenticateRequestDto request)
+    public async Task<IResult<AuthenticateResponseDto>> Authenticate(AuthenticateRequestDto dto)
     {
         var response = new AuthenticateResponseDto();
-        var login = await GetLogin(request.Identifier);
+        var login = await GetLogin(dto.Identifier);
 
         if (login.Value == null)
         {
@@ -38,7 +38,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
             return Result<AuthenticateResponseDto>.Failure(UserErrors.ClientAuthenticationFailed);
         }
 
-        var result = LoginAttemps(login.Value, request.Password).Result;
+        var result = LoginAttemps(login.Value, dto.Password);
 
         response.IsLoggedIn = result.IsSuccess;
 
@@ -58,7 +58,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
         var login = await loginQuery.GetByEmail(email);
         if (login == null)
         {
-            logger.Error(login.Error.Message);
+            logger.Error(login!.Error.Message);
             return Result.Failure(UserErrors.ClientNotFound);
         }
         else if (login.Value.EmailVerificationToken != token)
@@ -96,7 +96,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
     }
 
     #region Private Methods
-    private bool IsValidEmail(string email)
+    private static bool IsValidEmail(string email)
     {
         string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]{2,3}$";
         return Regex.IsMatch(email, pattern, RegexOptions.IgnoreCase);
@@ -104,16 +104,17 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
 
     private async Task<IResult<Login>> GetLogin(string identifier)
     {
-        Login login = null;
         var validity = IsValidEmail(identifier);
 
-        if (validity)
-            login = loginQuery.GetByEmail(identifier).Result.Value;
+        if (!validity)
+            return Result<Login>.Failure(UserErrors.LogNotFound(identifier));
 
-        return Result<Login>.Success(login);
+        var login = await loginQuery.GetByEmail(identifier);
+
+        return Result<Login>.Success(login.Value);
     }
 
-    private async Task<IResult> LoginAttemps(Login login, string password)
+    private IResult LoginAttemps(Login login, string password)
     {
         if (!IsLoginUnlocked(login).Result)
         {
@@ -177,9 +178,9 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
         return true;
     }
 
-    private int CalculateLockTime(Login login)
+    private static int CalculateLockTime(Login login)
     {
-        TimeSpan remainingTime = (TimeSpan)(login.LockoutEndTime - DateTime.UtcNow);
+        TimeSpan remainingTime = (TimeSpan)(login.LockoutEndTime - DateTime.UtcNow)!;
 
         return (int)remainingTime.TotalMinutes;
     }

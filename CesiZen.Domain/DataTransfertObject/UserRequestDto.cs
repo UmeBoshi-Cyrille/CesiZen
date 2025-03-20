@@ -2,15 +2,15 @@
 
 public record UserRequestDto
 {
-    public string Id { get; set; }
+    public string Id { get; set; } = string.Empty;
 
     public DateTime CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
 
-    public string Firstname { get; set; }
+    public string Firstname { get; set; } = string.Empty;
 
-    public string Lastname { get; set; }
+    public string Lastname { get; set; } = string.Empty;
 
     public bool IsActive { get; set; }
 }

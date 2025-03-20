@@ -198,7 +198,7 @@ public class TokenProvider : ITokenProvider
         var jwtSecurityToken = handler.ReadJwtToken(token);
         var session = jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == "session_id")?.Value;
 
-        return session;
+        return session!;
     }
     #endregion
 
@@ -265,9 +265,9 @@ public class TokenProvider : ITokenProvider
         var rawTokenId = principal?.FindFirstValue("token_id");
         var sessionId = principal?.FindFirstValue("session_id");
 
-        var tokenId = Convert.FromBase64String(rawTokenId);
+        var tokenId = Convert.FromBase64String(rawTokenId!);
 
-        var providedRefreshToken = HashToken(sessionId, tokenId);
+        var providedRefreshToken = HashToken(sessionId!, tokenId);
 
         return string.IsNullOrEmpty(providedRefreshToken) ? "" : providedRefreshToken;
     }

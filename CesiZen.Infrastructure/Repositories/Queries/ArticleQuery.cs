@@ -38,7 +38,7 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
         return Result<PagedResult<Article>>.Success(result);
     }
 
-    public async Task<IResult<PagedResult<Article>>> SearchArticles(PageParameters parameters, string searchTerm = null)
+    public async Task<IResult<PagedResult<Article>>> SearchArticles(PageParameters parameters, string searchTerm = "")
     {
         try
         {
@@ -78,7 +78,7 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
         {
             var result = await context.Articles.FindAsync(id);
 
-            return Result<Article>.Success(result);
+            return Result<Article>.Success(result!);
         }
         catch (Exception ex)
         {

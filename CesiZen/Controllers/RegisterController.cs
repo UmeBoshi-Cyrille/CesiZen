@@ -16,10 +16,21 @@ public class RegisterController : ControllerBase
         this.registerService = registerService;
     }
 
+    /// <summary>
+    /// Register new user
+    /// </summary>
+    /// <param name="dto">data provided by the client</param>
+    /// <response code="200">operation succeeded</response>
+    /// <response code="400">Bad request</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] UserDto user)
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> Register([FromBody] UserDto dto)
     {
-        var response = registerService.Register(user).Result;
+        var response = await registerService.Register(dto);
         if (response.IsFailure)
         {
             return BadRequest(new { message = response.Error.Message });

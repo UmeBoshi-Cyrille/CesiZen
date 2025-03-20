@@ -5,10 +5,10 @@ namespace CesiZen.Domain.DataTransfertObject;
 
 public class BreathExerciseDto
 {
-    public string Id { get; set; }
+    public string Id { get; set; } = string.Empty;
 
     [MaxLength(100)]
-    public string Title { get; set; }
+    public string Title { get; set; } = string.Empty;
 
     [Range(1, 600)]
     public int? Time { get; set; }

@@ -18,9 +18,11 @@ internal static class ServiceRegister
             options.SwaggerDoc("v1", new OpenApiInfo
             {
                 Version = "v1",
-                Title = "JWT Token Authentication API",
-                Description = ".NET 8 Web API"
+                Title = "CesiZen API",
+                Description = ".NET 8 Web API",
             });
+
+            options.IncludeXmlComments(Path.Combine(System.AppContext.BaseDirectory, "CesiZenAnnotation.xml"));
 
             var securityScheme = new OpenApiSecurityScheme
             {

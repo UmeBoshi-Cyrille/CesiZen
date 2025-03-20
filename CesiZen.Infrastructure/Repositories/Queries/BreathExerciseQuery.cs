@@ -39,7 +39,7 @@ public class BreathExerciseQuery : AbstractRepository, IBreathExerciseQuery
         {
             var result = await context.BreathExercises.FindAsync(id);
 
-            return Result<BreathExercise>.Success(result);
+            return Result<BreathExercise>.Success(result!);
         }
         catch (Exception ex)
         {

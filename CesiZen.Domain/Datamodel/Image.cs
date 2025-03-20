@@ -8,15 +8,15 @@ public class Image
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; }
+    public string Id { get; set; } = string.Empty;
 
     [MaxLength(100)]
     [BsonElement("title")]
-    public string Title { get; set; }
+    public string Title { get; set; } = string.Empty;
 
     [BsonElement("path")]
-    public string Path { get; set; }
+    public string Path { get; set; } = string.Empty;
 
-    public string ArticleId { get; set; }
-    public Article Article { get; set; }
+    public string ArticleId { get; set; } = string.Empty;
+    public Article? Article { get; set; }
 }

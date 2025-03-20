@@ -17,10 +17,21 @@ public class BreathExerciseCommandController : ControllerBase
         this.exerciseCommandService = exerciseCommandService;
     }
 
-    [HttpPost]
+    /// <summary>
+    /// Create new breath exercise
+    /// </summary>
+    /// <param name="dto">data provided by the client</param>
+    /// <response code="200">operation succeeded</response>
+    /// <response code="400">Bad request</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
+    [HttpPost("create")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Create([FromBody] BreathExerciseDto dto)
     {
-        var result = exerciseCommandService.Insert(dto).Result;
+        var result = await exerciseCommandService.Insert(dto);
 
         return result.Match<ActionResult>(
             success: () => CreatedAtAction(
@@ -31,24 +42,42 @@ public class BreathExerciseCommandController : ControllerBase
         );
     }
 
-    [HttpPut("{id}")]
+    /// <summary>
+    /// Update breath exercise data
+    /// </summary>
+    /// <param name="dto">data provided by the client</param>
+    /// <response code="200">operation succeeded</response>
+    /// <response code="400">Bad request</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
+    [HttpPut("update/{id}")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Update([FromBody] BreathExerciseDto dto)
     {
         var result = await exerciseCommandService.Update(dto);
 
-        var message = "Ok";
         return result.Match<IActionResult>(
             success: () => Ok(new { message = result.Info.Message }),
             failure: error => BadRequest(new { message = error.Message })
         );
     }
 
-    [HttpDelete("{id}")]
+    /// <summary>
+    /// Delete breath exercise
+    /// </summary>
+    /// <param name="id">id provided by the client</param>
+    /// <response code="200">operation succeeded</response>
+    /// <response code="400">Bad request</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
+    [HttpDelete("delete/{id}")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Delete(string id)
     {
         var result = await exerciseCommandService.Delete(id);
-
-        var message = "Ok";
 
         return result.Match<IActionResult>(
             success: () => Ok(new { message = result.Info.Message }),

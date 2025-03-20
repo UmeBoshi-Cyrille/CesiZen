@@ -17,10 +17,11 @@ public class Session
     public string UserId { get; set; }
 
     [JsonIgnore]
-    public User User { get; set; }
+    public User? User { get; set; }
 
     public Session(string sessionId, string userId)
     {
+        Id = string.Empty;
         SessionId = sessionId;
         UserId = userId;
     }

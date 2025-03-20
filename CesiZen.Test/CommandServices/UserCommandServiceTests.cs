@@ -26,6 +26,7 @@ public class UserCommandServiceTests
         mockCommand = new Mock<IUserCommand>();
         mockContext = new Mock<MongoDbContext>(Tools.SetContext());
         service = new UserCommandService(mockCommand.Object, mockLogger.Object);
+        mockSet = null!;
     }
 
     [Fact]

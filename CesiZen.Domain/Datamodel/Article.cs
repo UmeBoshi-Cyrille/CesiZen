@@ -8,7 +8,7 @@ public class Article
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; }
+    public string Id { get; set; } = string.Empty;
 
     [BsonElement("createdDate")]
     public DateTime CreatedAt { get; set; }
@@ -18,18 +18,18 @@ public class Article
 
     [MaxLength(255)]
     [BsonElement("title")]
-    public string Title { get; set; }
+    public string Title { get; set; } = string.Empty;
 
     [MaxLength(3000)]
     [BsonElement("description")]
-    public string Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
     [MaxLength(100)]
     [BsonElement("author")]
-    public string Author { get; set; }
+    public string Author { get; set; } = string.Empty;
 
     [BsonElement("content")]
-    public string Content { get; set; }
+    public string Content { get; set; } = string.Empty;
 
     public Image? Image { get; set; }
 
