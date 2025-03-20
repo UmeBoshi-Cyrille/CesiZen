@@ -2,13 +2,17 @@
 
 public class Info
 {
-    private string message;
+    private readonly string message;
     private InfoType type;
 
     public string Message => !string.IsNullOrEmpty(message) ? message : string.Empty;
     public InfoType Type => type != InfoType.None ? type : type = InfoType.None;
 
-    public Info() { }
+    public Info()
+    {
+        message = string.Empty;
+        type = InfoType.None;
+    }
 
     public Info(InfoType type, string message)
     {

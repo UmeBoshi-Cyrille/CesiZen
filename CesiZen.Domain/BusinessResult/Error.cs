@@ -2,13 +2,17 @@
 
 public sealed class Error
 {
-    private string message;
+    private readonly string message;
     private ErrorType type;
 
     public string Message => type != ErrorType.None && !string.IsNullOrEmpty(message) ? message : string.Empty;
     public ErrorType Type => type != ErrorType.None ? type : type = ErrorType.None;
 
-    public Error() { }
+    public Error()
+    {
+        message = string.Empty;
+        type = ErrorType.None;
+    }
 
     public Error(ErrorType type, string message)
     {
