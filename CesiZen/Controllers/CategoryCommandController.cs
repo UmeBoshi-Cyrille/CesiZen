@@ -17,7 +17,7 @@ public class CategoryCommandController : ControllerBase
         this.categoryService = categoryService;
     }
 
-    [HttpPost]
+    [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] CategoryDto dto)
     {
         var result = categoryService.Insert(dto).Result;
@@ -31,7 +31,7 @@ public class CategoryCommandController : ControllerBase
         );
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("update/{id}")]
     public async Task<IActionResult> Update([FromBody] CategoryDto dto)
     {
         var result = await categoryService.Update(dto);
@@ -42,7 +42,7 @@ public class CategoryCommandController : ControllerBase
         );
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("delete/{id}")]
     public async Task<IActionResult> Delete(string id)
     {
         var result = await categoryService.Delete(id);

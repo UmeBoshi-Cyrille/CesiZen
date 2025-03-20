@@ -17,7 +17,7 @@ public class BreathExerciseCommandController : ControllerBase
         this.exerciseCommandService = exerciseCommandService;
     }
 
-    [HttpPost]
+    [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] BreathExerciseDto dto)
     {
         var result = exerciseCommandService.Insert(dto).Result;
@@ -31,7 +31,7 @@ public class BreathExerciseCommandController : ControllerBase
         );
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("update/{id}")]
     public async Task<IActionResult> Update([FromBody] BreathExerciseDto dto)
     {
         var result = await exerciseCommandService.Update(dto);
@@ -43,7 +43,7 @@ public class BreathExerciseCommandController : ControllerBase
         );
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("delete/{id}")]
     public async Task<IActionResult> Delete(string id)
     {
         var result = await exerciseCommandService.Delete(id);

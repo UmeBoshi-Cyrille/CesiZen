@@ -16,7 +16,7 @@ public class CategoryQueryController : ControllerBase
         this.categoryService = categoryService;
     }
 
-    [HttpGet]
+    [HttpGet("categories")]
     public async Task<ActionResult<PagedResult<CategoryRequestDto>>> GetCategories([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var result = await categoryService.GetAllAsync(pageNumber, pageSize);
@@ -27,7 +27,7 @@ public class CategoryQueryController : ControllerBase
         );
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("category/{id}")]
     public async Task<ActionResult<CategoryRequestDto>> GetCategory(string id)
     {
         var result = await categoryService.GetByIdAsync(id);

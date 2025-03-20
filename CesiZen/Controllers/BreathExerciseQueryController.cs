@@ -16,7 +16,7 @@ public class BreathExerciseQueryController : ControllerBase
         this.exerciseService = exerciseService;
     }
 
-    [HttpGet]
+    [HttpGet("exercises")]
     public async Task<ActionResult<List<BreathExerciseDto>>> GetExercises([FromQuery] string userId)
     {
         var result = await exerciseService.GetAllByIdAsync(userId);
@@ -27,7 +27,7 @@ public class BreathExerciseQueryController : ControllerBase
         );
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("exercise/{id}")]
     public async Task<ActionResult<BreathExerciseDto>> GetExercise(string id)
     {
         var result = await exerciseService.GetByIdAsync(id);
