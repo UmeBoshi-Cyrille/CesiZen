@@ -17,6 +17,16 @@ public class UserQueryController : ControllerBase
         this.queryService = queryService;
     }
 
+    /// <summary>
+    /// Get paginated users by term.
+    /// </summary>
+    /// <param name="pageNumber">last record</param>
+    /// <param name="pageSize">number of element by page</param>
+    /// <param name="searchTerm">term provided by the client for the research</param>
+    /// <response code="200">data retrieved</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpGet("search-users")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -37,6 +47,15 @@ public class UserQueryController : ControllerBase
         );
     }
 
+    /// <summary>
+    /// Get paginated users
+    /// </summary>
+    /// <param name="pageNumber">last record</param>
+    /// <param name="pageSize">number of element by page</param>
+    /// <response code="200">data retrieved</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpGet("users")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -51,6 +70,14 @@ public class UserQueryController : ControllerBase
         );
     }
 
+    /// <summary>
+    /// Get user by id
+    /// </summary>
+    /// <param name="id">id provided by the client</param>
+    /// <response code="200">data retrieved</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpGet("user/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -64,6 +91,14 @@ public class UserQueryController : ControllerBase
         );
     }
 
+    /// <summary>
+    /// Get user by user name
+    /// </summary>
+    /// <param name="username">username provided by the client</param>
+    /// <response code="200">data retrieved</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpGet("user")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

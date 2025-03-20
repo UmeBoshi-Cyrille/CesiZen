@@ -17,6 +17,14 @@ public class CategoryCommandController : ControllerBase
         this.categoryService = categoryService;
     }
 
+    /// <summary>
+    /// Create new category
+    /// </summary>
+    /// <param name="dto">data provided by the client</param>
+    /// <response code="200">operation succeeded</response>
+    /// <response code="400">Bad request</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpPost("create")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -34,6 +42,14 @@ public class CategoryCommandController : ControllerBase
         );
     }
 
+    /// <summary>
+    /// Update category
+    /// </summary>
+    /// <param name="dto">data provided by the client</param>
+    /// <response code="200">operation succeeded</response>
+    /// <response code="400">Bad request</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpPut("update/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -48,6 +64,14 @@ public class CategoryCommandController : ControllerBase
         );
     }
 
+    /// <summary>
+    /// Delete category
+    /// </summary>
+    /// <param name="dto">data provided by the client</param>
+    /// <response code="200">operation succeeded</response>
+    /// <response code="400">Bad request</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpDelete("delete/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

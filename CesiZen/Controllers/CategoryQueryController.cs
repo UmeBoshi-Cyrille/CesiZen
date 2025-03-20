@@ -16,6 +16,15 @@ public class CategoryQueryController : ControllerBase
         this.categoryService = categoryService;
     }
 
+    /// <summary>
+    /// Get paginated categories
+    /// </summary>
+    /// <param name="pageNumber">last record</param>
+    /// <param name="pageSize">number of element by page</param>
+    /// <response code="200">data retrieved</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpGet("categories")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -30,6 +39,14 @@ public class CategoryQueryController : ControllerBase
         );
     }
 
+    /// <summary>
+    /// Get category by id
+    /// </summary>
+    /// <param name="id">id provided by the client</param>
+    /// <response code="200">data retrieved</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpGet("category/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

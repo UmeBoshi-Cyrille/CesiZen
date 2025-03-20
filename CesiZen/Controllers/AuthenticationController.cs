@@ -48,6 +48,11 @@ public class AuthenticationController : ControllerBase
         return Ok(new { message = result.Info.Message });
     }
 
+    /// <summary>
+    /// Remove JwtCookie to clean old accesstoken.
+    /// </summary>
+    /// <response code="200">cookie deleted</response>
+    /// <returns></returns>
     [HttpGet("delete-cookie")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public IActionResult DeleteCookie()
@@ -58,13 +63,21 @@ public class AuthenticationController : ControllerBase
         return Ok(new { message = successMessage });
     }
 
+    /// <summary>
+    /// Allows to login or sign in into the application.
+    /// </summary>
+    /// <param name="dto">data provided by the client</param>
+    /// <response code="200">logged in</response>
+    /// <response code="401">not authorized</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpPost("authenticate")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Authenticate(AuthenticateRequestDto model)
+    public async Task<IActionResult> Authenticate(AuthenticateRequestDto dto)
     {
-        var response = await authenticateService.Authenticate(model);
+        var response = await authenticateService.Authenticate(dto);
 
         if (response.IsFailure)
             return Unauthorized(new { message = response.Error.Message });
@@ -83,6 +96,14 @@ public class AuthenticationController : ControllerBase
         //return Ok(response.Value.Token);
     }
 
+    /// <summary>
+    /// Allows the possibility to invalidate session and refresToken stored.
+    /// </summary>
+    /// <param name="userId">Id provided by the client</param>
+    /// <response code="200">operation succeeded</response>
+    /// <response code="401">not authorized</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpPost("invalidate-tokens")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -101,6 +122,13 @@ public class AuthenticationController : ControllerBase
         return Ok(new { message = result.Info.Message });
     }
 
+    /// <summary>
+    /// Allows to log out from the application.
+    /// </summary>
+    /// <param name="accessToken">accessToken provided by the client</param>
+    /// <response code="200">operation succeeded</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpPost("logout")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> Logout(string accessToken)
@@ -115,15 +143,21 @@ public class AuthenticationController : ControllerBase
         return Ok(new { message = result.Info.Message });
     }
 
-
-
+    /// <summary>
+    /// Allows to reset your password if lost or forgotten.
+    /// </summary>
+    /// <param name="dto">data provided by the client</param>
+    /// <response code="200">operation succeeded</response>
+    /// <response code="400">Bad request</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpPost("forgot-password")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> ForgotPassword(PasswordResetRequestDto request)
+    public async Task<IActionResult> ForgotPassword(PasswordResetRequestDto dto)
     {
-        var result = await passwordService.ForgotPassword(request);
+        var result = await passwordService.ForgotPassword(dto);
 
         if (result.IsFailure)
             return BadRequest(new { message = result.Error.Message });
@@ -131,6 +165,14 @@ public class AuthenticationController : ControllerBase
         return Ok(new { message = result.Info.Message });
     }
 
+    /// <summary>
+    /// Reset password with a new one
+    /// </summary>
+    /// <param name="dto">data provided by the client</param>
+    /// <response code="200">operation succeeded</response>
+    /// <response code="400">Bad request</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
     [HttpPost("reset-password")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -144,33 +186,4 @@ public class AuthenticationController : ControllerBase
 
         return Ok(new { message = result.Info.Message });
     }
-
-
-    /* Authentication Task
-     *  1. Register User
-     *      > Check email unicity
-     *      > Check Email format
-     *      > Check password validity
-     *      > Check password confirmation
-     *      > Hash Password
-     *  2. Authenticate User
-     *      > Check Email Format
-     *      > Get Login
-     *      > Hash Password
-     *      > Compare Hashed Password
-     *      > Validate or reprove
-     *      > Limit Authentication Attempts (5)
-     *  3. Authentication Cycle
-     *      > Create AccessToken
-     *      > Create RefreshToken
-     *      > Send AccessToken into cookie scure httpOnly
-     *      > Save RefreshToken in Database
-     *      > Check Access token presence and signature for each request
-     *      > Check Access token expiration time
-     *      > Renew Access token every 5 minutes before expiration
-     *          > Check for refresh token
-     *  4. Log out
-     *      > Invalidate Tokens
-     *
-    */
 }
