@@ -17,7 +17,7 @@ internal class UserCommand : AbstractRepository, IUserCommand
         try
         {
             context.Users.Add(entity);
-            context.Logins.Add(entity.Login);
+            context.Logins.Add(entity.Login!);
             await context.SaveChangesAsync();
 
             return Result.Success(UserInfos.LogInsertionSucceeded(entity.Username!));
@@ -28,14 +28,14 @@ internal class UserCommand : AbstractRepository, IUserCommand
 
             if (ex.InnerException?.Message.Contains("IX_Logins_Email") == true)
             {
-                error = UserErrors.LogNotUnique(entity.Login.Email);
+                error = UserErrors.LogNotUnique(entity.Login!.Email);
             }
 
-            return Result.Failure(error, entity.Login.Email, ex.Message);
+            return Result.Failure(error, entity.Login!.Email, ex.Message);
         }
         catch (Exception ex)
         {
-            return Result.Failure(UserErrors.LogRegisterFailed(entity.Login.Email), entity.Login.Email, ex.Message);
+            return Result.Failure(UserErrors.LogRegisterFailed(entity.Login!.Email), entity.Login.Email, ex.Message);
         }
     }
 

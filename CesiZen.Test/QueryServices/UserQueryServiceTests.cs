@@ -145,7 +145,6 @@ public class UserQueryServiceTests
     {
         // Arrange
         var parameters = new PageParameters { PageNumber = 1, PageSize = 10 };
-        var searchTerm = "John";
 
         mockUserQuery.Setup(q => q.GetAllAsync(parameters.PageNumber, parameters.PageSize))
             .ReturnsAsync(Result<PagedResult<User>>.Failure(Error.NullValue("Error Message")));

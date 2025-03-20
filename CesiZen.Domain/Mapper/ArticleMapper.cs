@@ -28,8 +28,8 @@ public static class ArticleMapper
             Description = model.Description,
             Author = model.Author,
             Content = model.Content,
-            Image = model.Image,
-            Images = model.Images,
+            Image = model.Image!,
+            Images = model.Images!,
         };
     }
 

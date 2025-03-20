@@ -1,4 +1,5 @@
-﻿using CesiZen.Infrastructure.Providers;
+﻿using CesiZen.Domain.Datamodel;
+using CesiZen.Infrastructure.Providers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MongoDB.Bson;

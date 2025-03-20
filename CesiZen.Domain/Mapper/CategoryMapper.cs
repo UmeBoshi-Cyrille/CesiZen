@@ -5,7 +5,17 @@ namespace CesiZen.Domain.Mapper;
 
 public static class CategoryMapper
 {
+    #region Map Methods
     public static Category Map(this CategoryDto dto)
+    {
+        return new Category
+        {
+            Id = dto.Id!,
+            Name = dto.Name,
+        };
+    }
+
+    public static Category Map(this CategoryRequestDto dto)
     {
         return new Category
         {
@@ -22,15 +32,6 @@ public static class CategoryMapper
         };
     }
 
-    public static Category Map(this CategoryRequestDto dto)
-    {
-        return new Category
-        {
-            Id = dto.Id,
-            Name = dto.Name,
-        };
-    }
-
     public static CategoryRequestDto MapDto(this Category model)
     {
         return new CategoryRequestDto
@@ -39,6 +40,7 @@ public static class CategoryMapper
             Name = model.Name,
         };
     }
+    #endregion
 
     public static List<CategoryRequestDto> Map(this List<Category> model)
     {

@@ -2,7 +2,7 @@
 
 public record PasswordResetDto
 {
-    public string Token { get; set; }
-    public string NewPassword { get; set; }
-    public string ConfirmPassword { get; set; }
+    public string Token { get; set; } = string.Empty;
+    public string NewPassword { get; set; } = string.Empty;
+    public string ConfirmPassword { get; set; } = string.Empty;
 }

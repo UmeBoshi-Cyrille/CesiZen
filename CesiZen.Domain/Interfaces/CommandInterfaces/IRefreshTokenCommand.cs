@@ -1,4 +1,4 @@
-﻿using CesiZen.Domain.Interfaces;
+﻿using CesiZen.Domain.Datamodel;
 
 namespace CesiZen.Domain.Interfaces;
 

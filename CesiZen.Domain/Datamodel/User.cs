@@ -9,25 +9,25 @@ public class User
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; }
+    public string Id { get; set; } = string.Empty;
 
     [MaxLength(50)]
     [MinLength(2)]
     [RegularExpression(@"^[a-zA-Z]+$")]
     [BsonElement("firstName")]
-    public string Firstname { get; set; }
+    public string Firstname { get; set; } = string.Empty;
 
     [MaxLength(50)]
     [MinLength(2)]
     [RegularExpression(@"^[a-zA-Z]+$")]
     [BsonElement("lastName")]
-    public string Lastname { get; set; }
+    public string Lastname { get; set; } = string.Empty;
 
     [MaxLength(50)]
     [MinLength(2)]
     [RegularExpression(@"^[a-zA-Z]+$")]
     [BsonElement("username")]
-    public string? Username { get; set; }
+    public string? Username { get; set; } = string.Empty;
 
     [BsonElement("createdAt")]
     public DateTime CreatedAt { get; set; }
@@ -48,7 +48,7 @@ public class User
     public DateTime? RefreshTokenExpiryTime { get; set; }
 
     [BsonElement("login")]
-    public Login Login { get; set; }
+    public Login? Login { get; set; }
 
     [BsonElement("refreshToken")]
     public RefreshToken? RefreshToken { get; set; }

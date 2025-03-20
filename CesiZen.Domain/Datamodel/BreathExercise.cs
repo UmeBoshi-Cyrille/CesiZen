@@ -10,11 +10,11 @@ public class BreathExercise
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; }
+    public string Id { get; set; } = string.Empty;
 
     [MaxLength(100)]
     [BsonElement("title")]
-    public string Title { get; set; }
+    public string Title { get; set; } = string.Empty;
 
     [Range(1, 600)]
     [BsonElement("timer")]
@@ -24,8 +24,8 @@ public class BreathExercise
     public ExerciceType ExerciseType { get; set; }
 
     [BsonElement("userId")]
-    public string UserId { get; set; }
+    public string UserId { get; set; } = string.Empty;
 
     [JsonIgnore]
-    public User User { get; set; }
+    public User? User { get; set; }
 }

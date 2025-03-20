@@ -43,7 +43,8 @@ public class UserCommandController : ControllerBase
     /// <summary>
     /// Update user name
     /// </summary>
-    /// <param name="dto">data provided by the client</param>
+    /// <param name="id">id provided by the client</param>
+    /// <param name="username">username provided by the client</param>
     /// <response code="200">operation succeeded</response>
     /// <response code="400">Bad request</response>
     /// <response code="500">service unvalaible</response>
@@ -71,7 +72,7 @@ public class UserCommandController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [Authorize]
-    [HttpPut("update-username")]
+    [HttpPut("account-activation")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
