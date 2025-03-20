@@ -91,7 +91,7 @@ internal class UserCommand : AbstractRepository, IUserCommand
         {
             await context.SaveChangesAsync();
 
-            Info info = new();
+            Info info;
             if (entity.IsActive)
                 info = UserInfos.LogAccountEnabled(entity.Id);
             else
