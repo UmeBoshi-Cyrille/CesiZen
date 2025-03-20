@@ -45,7 +45,7 @@ public class ArticleQueryService : AService, IArticleQueryService
         return Result<ArticleDto>.Success(dto);
     }
 
-    public async Task<IResult<PagedResult<ArticleDto>>> SearchArticles(PageParameters parameters, string searchTerm = null)
+    public async Task<IResult<PagedResult<ArticleDto>>> SearchArticles(PageParameters parameters, string searchTerm = "")
     {
         var result = await query.SearchArticles(parameters, searchTerm);
 

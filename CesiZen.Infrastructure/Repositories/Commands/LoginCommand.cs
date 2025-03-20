@@ -27,7 +27,7 @@ public class LoginCommand : AbstractRepository, ILoginCommand
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(UserErrors.ClientEmailVerificationFailed);
+            return Result.Failure(UserErrors.ClientEmailVerificationFailed, dto.Email, ex.Message);
         }
     }
 
@@ -72,7 +72,7 @@ public class LoginCommand : AbstractRepository, ILoginCommand
 
             if (login == null)
             {
-                return Result.Failure(UserErrors.LogNotFound(login.Id));
+                return Result.Failure(UserErrors.LogNotFound(login!.Id));
             }
 
             login.Password = password;

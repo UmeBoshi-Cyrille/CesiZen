@@ -23,7 +23,7 @@ public static class UserMapper
 
         user.Firstname = dto.Firstname;
         user.Lastname = dto.Lastname;
-        user.UserName = dto.Username;
+        user.Username = dto.Username;
         user.IsActive = true;
         user.Login = login;
 
@@ -43,7 +43,7 @@ public static class UserMapper
 
         user.Firstname = dto.Firstname;
         user.Lastname = dto.Lastname;
-        user.UserName = dto.Username;
+        user.Username = dto.Username;
         user.IsActive = true;
         user.Login = login;
 

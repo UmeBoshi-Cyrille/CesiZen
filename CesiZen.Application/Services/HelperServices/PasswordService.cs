@@ -80,7 +80,7 @@ public class PasswordService : IPasswordService
 
     public async Task<IResult> ForgotPassword(PasswordResetRequestDto request)
     {
-        var login = await loginQuery.GetByEmail(request.Email);
+        var login = await loginQuery.GetByEmail(request.Email!);
 
         if (login == null)
         {
@@ -116,7 +116,7 @@ public class PasswordService : IPasswordService
     {
         var secret = configuration.GetValue<string>("Salt:Secret");
 
-        var hash = EncryptionHelper.HashString(secret, password, salt);
+        var hash = EncryptionHelper.HashString(secret!, password, salt);
 
         return hash;
     }
@@ -165,7 +165,7 @@ public class PasswordService : IPasswordService
         var templateContent = EmailService.ReplaceLinkContent(resetPasswordTemplate, resetLink, "resetLink");
         var subject = configuration["Email:ResetPwdSubject"];
 
-        await emailService.SendEmailAsync(email, templateContent, subject);
+        await emailService.SendEmailAsync(email, templateContent, subject!);
     }
     #endregion
 }

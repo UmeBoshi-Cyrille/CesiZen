@@ -38,7 +38,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
             return Result<AuthenticateResponseDto>.Failure(UserErrors.ClientAuthenticationFailed);
         }
 
-        var result = LoginAttemps(login.Value, request.Password).Result;
+        var result = LoginAttemps(login.Value, request.Password);
 
         response.IsLoggedIn = result.IsSuccess;
 
@@ -58,7 +58,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
         var login = await loginQuery.GetByEmail(email);
         if (login == null)
         {
-            logger.Error(login.Error.Message);
+            logger.Error(login!.Error.Message);
             return Result.Failure(UserErrors.ClientNotFound);
         }
         else if (login.Value.EmailVerificationToken != token)
@@ -104,7 +104,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
 
     private async Task<IResult<Login>> GetLogin(string identifier)
     {
-        Login login = null;
+        Login login = new();
         var validity = IsValidEmail(identifier);
 
         if (validity)
@@ -113,7 +113,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
         return Result<Login>.Success(login);
     }
 
-    private async Task<IResult> LoginAttemps(Login login, string password)
+    private IResult LoginAttemps(Login login, string password)
     {
         if (!IsLoginUnlocked(login).Result)
         {
@@ -179,7 +179,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
 
     private int CalculateLockTime(Login login)
     {
-        TimeSpan remainingTime = (TimeSpan)(login.LockoutEndTime - DateTime.UtcNow);
+        TimeSpan remainingTime = (TimeSpan)(login.LockoutEndTime - DateTime.UtcNow)!;
 
         return (int)remainingTime.TotalMinutes;
     }
