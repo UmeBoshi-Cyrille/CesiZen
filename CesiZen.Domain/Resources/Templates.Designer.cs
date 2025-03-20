@@ -61,6 +61,24 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mot de passe oublié : email de confirmation..
+        /// </summary>
+        internal static string SUBJECT_RESET_PASSWORD {
+            get {
+                return ResourceManager.GetString("SUBJECT_RESET_PASSWORD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email de vérification..
+        /// </summary>
+        internal static string SUBJECT_VERIFICATION_EMAIL {
+            get {
+                return ResourceManager.GetString("SUBJECT_VERIFICATION_EMAIL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
         ///&lt;html lang=&quot;en&quot;&gt;
         ///&lt;head&gt;
@@ -74,9 +92,9 @@ namespace CesiZen.Domain.Resources {
         ///            &lt;td align=&quot;center&quot; style=&quot;padding:20px 0;&quot;&gt;
         ///                &lt;table width=&quot;600&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;ba [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string RESET_PASSWORD {
+        internal static string TEMPLATE_RESET_PASSWORD {
             get {
-                return ResourceManager.GetString("RESET_PASSWORD", resourceCulture);
+                return ResourceManager.GetString("TEMPLATE_RESET_PASSWORD", resourceCulture);
             }
         }
         
@@ -94,9 +112,9 @@ namespace CesiZen.Domain.Resources {
         ///            &lt;td align=&quot;center&quot; style=&quot;padding:40px 20px;&quot;&gt;
         ///                &lt;table [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string VERIFICATION_EMAIL {
+        internal static string TEMPLATE_VERIFICATION_EMAIL {
             get {
-                return ResourceManager.GetString("VERIFICATION_EMAIL", resourceCulture);
+                return ResourceManager.GetString("TEMPLATE_VERIFICATION_EMAIL", resourceCulture);
             }
         }
     }

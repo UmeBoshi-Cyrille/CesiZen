@@ -7,7 +7,7 @@ namespace CesiZen.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthenticationController : ControllerBase
+public class AuthenticationController : LoginController
 {
     private readonly IAuthenticateService authenticateService;
     private readonly ITokenProvider tokenProvider;
@@ -16,11 +16,15 @@ public class AuthenticationController : ControllerBase
     public AuthenticationController(
         IAuthenticateService authenticateService,
         ITokenProvider tokenProvider,
-        IPasswordService passwordService)
+        IPasswordService passwordService,
+        IObserver observer,
+        INotifier notifier) : base(notifier, observer)
     {
         this.authenticateService = authenticateService;
         this.tokenProvider = tokenProvider;
         this.passwordService = passwordService;
+
+        notifier.MessageEvent += observer.Update!;
     }
 
     /// <summary>
@@ -162,6 +166,9 @@ public class AuthenticationController : ControllerBase
         if (result.IsFailure)
             return BadRequest(new { message = result.Error.Message });
 
+        var message = BuildEmailVerificationMessage(dto.Email!);
+        notifier.NotifyObservers(message);
+
         return Ok(new { message = result.Info.Message });
     }
 
@@ -185,5 +192,15 @@ public class AuthenticationController : ControllerBase
             return BadRequest(new { message = result.Error.Message });
 
         return Ok(new { message = result.Info.Message });
+    }
+
+    private MessageEventDto BuildEmailVerificationMessage(string email)
+    {
+        return new MessageEventDto
+        {
+            Email = email,
+            Subject = Message.GetResource("Templates", "SUBJECT_RESET_PASSWORD"),
+            Body = Message.GetResource("Templates", "TEMPLATE_RESET_PASSWORD"),
+        };
     }
 }

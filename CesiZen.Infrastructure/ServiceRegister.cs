@@ -50,6 +50,8 @@ public static class ServiceRegister
     private static IServiceCollection AddInfrastructureCommandServices(this IServiceCollection services)
     {
         services.AddScoped<ITokenProvider, TokenProvider>();
+        services.AddSingleton<INotifier, MessageNotifier>();
+        services.AddTransient<IObserver, EmailService>();
 
         services.AddScoped<ISessionCommand, SessionCommand>();
         services.AddScoped<IRefreshTokenCommand, TokenCommand>();
