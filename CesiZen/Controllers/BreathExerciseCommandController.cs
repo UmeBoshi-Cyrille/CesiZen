@@ -20,7 +20,7 @@ public class BreathExerciseCommandController : ControllerBase
     [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] BreathExerciseDto dto)
     {
-        var result = exerciseCommandService.Insert(dto).Result;
+        var result = await exerciseCommandService.Insert(dto);
 
         return result.Match<ActionResult>(
             success: () => CreatedAtAction(
@@ -36,7 +36,6 @@ public class BreathExerciseCommandController : ControllerBase
     {
         var result = await exerciseCommandService.Update(dto);
 
-        var message = "Ok";
         return result.Match<IActionResult>(
             success: () => Ok(new { message = result.Info.Message }),
             failure: error => BadRequest(new { message = error.Message })
@@ -47,8 +46,6 @@ public class BreathExerciseCommandController : ControllerBase
     public async Task<IActionResult> Delete(string id)
     {
         var result = await exerciseCommandService.Delete(id);
-
-        var message = "Ok";
 
         return result.Match<IActionResult>(
             success: () => Ok(new { message = result.Info.Message }),

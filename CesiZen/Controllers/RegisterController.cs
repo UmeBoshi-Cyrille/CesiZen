@@ -19,7 +19,7 @@ public class RegisterController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] UserDto user)
     {
-        var response = registerService.Register(user).Result;
+        var response = await registerService.Register(user);
         if (response.IsFailure)
         {
             return BadRequest(new { message = response.Error.Message });

@@ -11,18 +11,15 @@ public class AuthenticationController : ControllerBase
 {
     private readonly IAuthenticateService authenticateService;
     private readonly ITokenProvider tokenProvider;
-    private readonly ILoginQuery loginQuery;
     private readonly IPasswordService passwordService;
 
     public AuthenticationController(
         IAuthenticateService authenticateService,
         ITokenProvider tokenProvider,
-        ILoginQuery loginQuery,
         IPasswordService passwordService)
     {
         this.authenticateService = authenticateService;
         this.tokenProvider = tokenProvider;
-        this.loginQuery = loginQuery;
         this.passwordService = passwordService;
     }
 

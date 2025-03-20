@@ -20,7 +20,7 @@ public class CategoryCommandController : ControllerBase
     [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] CategoryDto dto)
     {
-        var result = categoryService.Insert(dto).Result;
+        var result = await categoryService.Insert(dto);
 
         return result.Match<ActionResult>(
             success: () => CreatedAtAction(

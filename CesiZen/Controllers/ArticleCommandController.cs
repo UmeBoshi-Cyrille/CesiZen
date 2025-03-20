@@ -20,7 +20,7 @@ public class ArticleCommandController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] ArticleDto article)
     {
-        var result = articleCommandService.Insert(article).Result;
+        var result = await articleCommandService.Insert(article);
 
         return result.Match<ActionResult>(
             success: () => CreatedAtAction(
