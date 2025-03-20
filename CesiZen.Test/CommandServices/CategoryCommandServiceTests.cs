@@ -26,6 +26,7 @@ public class CategoryCommandServiceTests
         mockCommand = new Mock<ICategoryCommand>();
         mockContext = new Mock<MongoDbContext>(Tools.SetContext());
         service = new CategoryCommandService(mockLogger.Object, mockCommand.Object);
+        mockSet = null!;
     }
 
     [Fact]

@@ -44,7 +44,7 @@ public class CategoryQuery : AbstractRepository, ICategoryQuery
         {
             var result = await context.Categories.FindAsync(id);
 
-            return Result<Category>.Success(result);
+            return Result<Category>.Success(result!);
         }
         catch (Exception ex)
         {

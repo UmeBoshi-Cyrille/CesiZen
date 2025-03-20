@@ -20,7 +20,7 @@ internal class UserCommand : AbstractRepository, IUserCommand
             context.Logins.Add(entity.Login);
             await context.SaveChangesAsync();
 
-            return Result.Success(UserInfos.LogInsertionSucceeded(entity.Username));
+            return Result.Success(UserInfos.LogInsertionSucceeded(entity.Username!));
         }
         catch (DbUpdateException ex)
         {
@@ -28,14 +28,14 @@ internal class UserCommand : AbstractRepository, IUserCommand
 
             if (ex.InnerException?.Message.Contains("IX_Logins_Email") == true)
             {
-                error = UserErrors.LogNotUnique(entity.Email);
+                error = UserErrors.LogNotUnique(entity.Login.Email);
             }
 
-            return Result.Failure(error, entity.Email, ex.Message);
+            return Result.Failure(error, entity.Login.Email, ex.Message);
         }
         catch (Exception ex)
         {
-            return Result.Failure(UserErrors.LogRegisterFailed(entity.Email), entity.Email, ex.Message);
+            return Result.Failure(UserErrors.LogRegisterFailed(entity.Login.Email), entity.Login.Email, ex.Message);
         }
     }
 
@@ -64,9 +64,9 @@ internal class UserCommand : AbstractRepository, IUserCommand
 
     public async Task<IResult> UpdateUserName(string id, string userName)
     {
-        var user = new User() { Id = id, UserName = userName, UpdatedAt = DateTime.Now };
+        var user = new User() { Id = id, Username = userName, UpdatedAt = DateTime.Now };
         context.Attach(user);
-        context.Entry(user).Property(p => p.UserName).IsModified = true;
+        context.Entry(user).Property(p => p.Username).IsModified = true;
         context.Entry(user).Property(p => p.UpdatedAt).IsModified = true;
 
         try

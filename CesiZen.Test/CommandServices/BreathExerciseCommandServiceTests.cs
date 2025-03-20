@@ -26,6 +26,7 @@ public class BreathExerciseCommandServiceTests
         mockCommand = new Mock<IBreathExerciseCommand>();
         mockContext = new Mock<MongoDbContext>(Tools.SetContext());
         service = new BreathExerciseCommandService(loggerMock.Object, mockCommand.Object);
+        mockSet = null!;
     }
 
     [Fact]
@@ -46,7 +47,7 @@ public class BreathExerciseCommandServiceTests
         Assert.True(result.IsSuccess);
         mockCommand.Verify(c => c.Insert(
             It.Is<BreathExercise>(e => e.Title == entities[0].Title)), Times.Once);
-        Assert.True(mockContext.Object.BreathExercises.FirstOrDefault().Title == entities[0].Title);
+        Assert.True(mockContext.Object.BreathExercises.Any(a => a.Title == entities[0].Title));
     }
 
     [Fact]

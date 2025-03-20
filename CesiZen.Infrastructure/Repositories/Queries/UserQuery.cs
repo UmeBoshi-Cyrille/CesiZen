@@ -51,7 +51,7 @@ public class UserQuery : AbstractRepository, IUserQuery
     {
         var users = await context.Users
                 .AsNoTracking()
-                .OrderBy(x => x.UserName)
+                .OrderBy(x => x.Username)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -89,7 +89,7 @@ public class UserQuery : AbstractRepository, IUserQuery
         User? user = await context.Users
                     .AsNoTracking()
                     .Include(x => x.Login)
-                    .FirstOrDefaultAsync(x => x.UserName == username);
+                    .FirstOrDefaultAsync(x => x.Username == username);
 
         if (user == null)
         {
