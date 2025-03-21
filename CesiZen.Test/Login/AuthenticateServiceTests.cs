@@ -212,7 +212,6 @@ public class AuthenticateServiceTests
         // Arrange
         var accessToken = "validtoken";
         var sessionId = "session";
-        var userId = "123";
         tokenProviderMock.Setup(x => x.GetTokenSessionId(accessToken)).Returns(sessionId);
         userQueryMock.Setup(x => x.GetUserId(sessionId))
             .ReturnsAsync(Result<string>.Failure(UserErrors.ClientNotFound));
