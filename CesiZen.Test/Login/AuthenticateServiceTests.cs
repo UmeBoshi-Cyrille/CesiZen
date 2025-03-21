@@ -3,7 +3,10 @@ using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
+using CesiZen.Infrastructure.Providers;
 using CesiZen.Test.Fakers;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Serilog;
 
@@ -11,7 +14,12 @@ namespace CesiZen.Test.LoginServices;
 
 public class AuthenticateServiceTests
 {
-
+    private readonly Mock<IConfiguration> configurationMock;
+    private readonly Mock<ISessionQuery> sessionQueryMock;
+    private readonly Mock<ISessionCommand> sessionCommandMock;
+    private readonly Mock<IRefreshTokenCommand> refreshTokenCommandMock;
+    private readonly Mock<IRefreshTokenQuery> refreshTokenQueryMock;
+    private readonly Mock<JwtSettings> settingsMock;
     private readonly Mock<ILogger> loggerMock;
     private readonly Mock<IUserCommand> userCommandMock;
     private readonly Mock<IUserQuery> userQueryMock;
@@ -22,8 +30,21 @@ public class AuthenticateServiceTests
     private readonly Mock<IEmailService> emailServiceMock;
     private readonly AuthenticationService authService;
 
+    private readonly TokenProvider tokenProvider;
+    private readonly PasswordService passwordService;
+
+    private readonly IServiceCollection services;
+    private readonly IServiceProvider serviceProvider;
+
     public AuthenticateServiceTests()
     {
+        configurationMock = new Mock<IConfiguration>();
+        sessionQueryMock = new Mock<ISessionQuery>();
+        sessionCommandMock = new Mock<ISessionCommand>();
+        refreshTokenCommandMock = new Mock<IRefreshTokenCommand>();
+        refreshTokenQueryMock = new Mock<IRefreshTokenQuery>();
+        settingsMock = new Mock<JwtSettings>();
+
         loggerMock = new Mock<ILogger>();
         userCommandMock = new Mock<IUserCommand>();
         userQueryMock = new Mock<IUserQuery>();
@@ -43,6 +64,23 @@ public class AuthenticateServiceTests
             tokenProviderMock.Object,
             emailServiceMock.Object
         );
+
+        tokenProvider = new TokenProvider(
+            sessionQueryMock.Object,
+            sessionCommandMock.Object,
+            refreshTokenCommandMock.Object,
+            refreshTokenQueryMock.Object,
+            loggerMock.Object,
+            LoginFaker.FakeSettings()
+            );
+
+        passwordService = new PasswordService(
+            LoginFaker.GetConfiguration(),
+            loginQueryMock.Object,
+            loginCommandMock.Object,
+            tokenProviderMock.Object,
+            emailServiceMock.Object
+            );
     }
 
     [Fact]
@@ -51,9 +89,13 @@ public class AuthenticateServiceTests
         // Arrange
         var dto = LoginFaker.FakeRequestDtoGenerator().Generate();
         var login = LoginFaker.FakeLoginGenerator().Generate();
+        var token = tokenProvider.GenerateAccessToken(login.Id);
+        login.Email = dto.Identifier;
+        login.Password = passwordService.HashPassword(dto.Password).Password;
+
         loginQueryMock.Setup(x => x.GetByEmail(It.IsAny<string>())).ReturnsAsync(Result<Login>.Success(login));
         passwordServiceMock.Setup(x => x.VerifyPassword(It.IsAny<Login>(), It.IsAny<string>())).Returns(true);
-        tokenProviderMock.Setup(x => x.GenerateAccessToken(It.IsAny<string>())).Returns("accessToken");
+        tokenProviderMock.Setup(x => x.GenerateAccessToken(It.IsAny<string>())).Returns(token);
 
         // Act
         var result = await authService.Authenticate(dto);
@@ -61,7 +103,7 @@ public class AuthenticateServiceTests
         // Assert
         Assert.True(result.IsSuccess);
         Assert.True(result.Value.IsLoggedIn);
-        Assert.Equal("token", result.Value.Token);
+        Assert.Equal(token, result.Value.Token);
     }
 
     [Fact]

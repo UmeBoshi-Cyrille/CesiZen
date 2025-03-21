@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
+using Microsoft.Extensions.Configuration;
 
 namespace CesiZen.Test.Fakers;
 
@@ -31,5 +32,28 @@ public static class LoginFaker
         return new Faker<AuthenticateResponseDto>()
             .RuleFor(a => a.IsLoggedIn, loggedIn)
             .RuleFor(a => a.Token, "token");
+    }
+
+    public static JwtSettings FakeSettings()
+    {
+        return new JwtSettings()
+        {
+            SecretKey = "ABCDEFGH_ABCDEFGH_ABCDEFGH_ABCDEFGH",
+            Audience = "audiance",
+            Issuer = "issuer",
+            ExpirationMinutes = 60
+        };
+    }
+
+    public static IConfiguration GetConfiguration()
+    {
+        var settings = new Dictionary<string, string>
+        {
+            {"Salt:Secret", "hgfedcba_hgfedcba_hgfedcba" }
+        };
+
+        return new ConfigurationBuilder()
+            .AddInMemoryCollection(settings)
+            .Build();
     }
 }
