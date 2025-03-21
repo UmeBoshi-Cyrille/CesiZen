@@ -195,4 +195,7 @@
   <data name="LOG_LOGIN_ATTEMPS_COUNT" xml:space="preserve">
     <value> {0} attemps has been made for user account {1}</value>
   </data>
+  <data name="CLIENT_DISCONNECTION_FAILED" xml:space="preserve">
+    <value>Votre déconnection a échoué.</value>
+  </data>
 </root>

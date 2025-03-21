@@ -7,18 +7,18 @@ using MongoDB.EntityFrameworkCore.Extensions;
 
 namespace CesiZen.Infrastructure.Configuration;
 
-public class LoginConfiguration : IEntityTypeConfiguration<Login>
+public class CategoryConfiguration : IEntityTypeConfiguration<Category>
 {
-    public void Configure(EntityTypeBuilder<Login> builder)
+    public void Configure(EntityTypeBuilder<Category> builder)
     {
-        builder.ToCollection("logins");
+        builder.ToCollection("categories");
 
         builder.HasKey(x => x.Id);
 
         builder.HasIndex(x => x.Id)
             .IsUnique();
 
-        builder.HasIndex(x => x.Email).IsUnique();
+        builder.HasIndex(x => x.Name).IsUnique();
 
         builder.Property(u => u.Id)
         .HasConversion(
@@ -29,15 +29,5 @@ public class LoginConfiguration : IEntityTypeConfiguration<Login>
         builder.Property(u => u.Id)
             .ValueGeneratedOnAdd()
             .HasValueGenerator<ObjectIdProvider>();
-
-        builder.Property(x => x.Email)
-            .HasMaxLength(255)
-            .IsRequired();
-
-        builder.Property(x => x.Password)
-            .IsRequired();
-
-        builder.Property(x => x.Salt)
-            .IsRequired();
     }
 }

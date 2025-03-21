@@ -38,6 +38,7 @@ public enum ErrorType
 {
     AuthenticationFailed,
     DeletionFailed,
+    DisconnectFailed,
     EmailVerificationFailed,
     ExpiredLink,
     InsertionFailed,

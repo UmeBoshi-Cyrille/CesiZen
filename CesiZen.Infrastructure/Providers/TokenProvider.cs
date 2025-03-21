@@ -149,7 +149,7 @@ public class TokenProvider : ITokenProvider
         return token;
     }
 
-    private string GenerateTokenId()
+    private static string GenerateTokenId()
     {
         var randomNumber = new byte[64];
 
@@ -163,7 +163,7 @@ public class TokenProvider : ITokenProvider
         return tokenId;
     }
 
-    private string GenerateSessionId()
+    private static string GenerateSessionId()
     {
         return Guid.NewGuid().ToString();
     }
@@ -185,14 +185,14 @@ public class TokenProvider : ITokenProvider
         return new JwtSecurityTokenHandler().ValidateToken(token, validation, out _);
     }
 
-    private DateTime GetAccessTokenExpirationTime(string token)
+    private static DateTime GetAccessTokenExpirationTime(string token)
     {
         var handler = new JwtSecurityTokenHandler();
         var jwtSecurityToken = handler.ReadJwtToken(token);
         return jwtSecurityToken.ValidTo;
     }
 
-    private string GetAccessTokenSessionId(string token)
+    private static string GetAccessTokenSessionId(string token)
     {
         var handler = new JwtSecurityTokenHandler();
         var jwtSecurityToken = handler.ReadJwtToken(token);
@@ -272,7 +272,7 @@ public class TokenProvider : ITokenProvider
         return string.IsNullOrEmpty(providedRefreshToken) ? "" : providedRefreshToken;
     }
 
-    private bool IsRefreshTokenValid(string currentToken, string providedToken)
+    private static bool IsRefreshTokenValid(string currentToken, string providedToken)
     {
         var currentHash = Convert.FromHexString(currentToken);
         var providedHash = Convert.FromHexString(providedToken);
@@ -280,11 +280,11 @@ public class TokenProvider : ITokenProvider
         return CryptographicOperations.FixedTimeEquals(providedHash, currentHash);
     }
 
-    private bool IsRefreshTokenTimeOut(DateTime? expirationTime)
+    private static bool IsRefreshTokenTimeOut(DateTime? expirationTime)
     {
         var remainingTime = expirationTime - DateTime.UtcNow;
 
-        return remainingTime <= TimeSpan.FromMinutes(5) ? true : false;
+        return remainingTime <= TimeSpan.FromMinutes(5);
     }
     #endregion
 }

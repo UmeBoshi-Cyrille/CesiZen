@@ -56,7 +56,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
     public async Task<IResult> VerifyEmail(string token, string email)
     {
         var login = await loginQuery.GetByEmail(email);
-        if (login == null)
+        if (login.IsFailure)
         {
             logger.Error(login!.Error.Message);
             return Result.Failure(UserErrors.ClientNotFound);
@@ -90,7 +90,17 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
 
         var userId = userQuery.GetUserId(sessionId).Result;
 
-        await tokenProvider.InvalidateTokens(userId.Value);
+        if (string.IsNullOrEmpty(sessionId) || userId.IsFailure)
+        {
+            return Result.Failure(UserErrors.ClientNotFound);
+        }
+
+        var result = await tokenProvider.InvalidateTokens(userId.Value);
+
+        if (result.IsFailure)
+        {
+            return Result.Failure(UserErrors.ClientDisconnectFailed);
+        }
 
         return Result.Success();
     }

@@ -15,7 +15,8 @@ public static class UserErrors
     public static Error ClientLockTime(string lockTime) => new(ErrorType.LockTime, string.Format(Message.GetResource("ErrorMessages", "CLIENT_LOCKTIME"), lockTime));
     public static Error ClientResetPasswordAttempsReached => new(ErrorType.ResetPasswordAttempsReached, Message.GetResource("ErrorMessages", "CLIENT_RESET_PASSWORD_ATTEMPS_REACHED"));
     public static Error ClientPasswordNotMatch => new(ErrorType.PasswordNotMatch, Message.GetResource("ErrorMessages", "CLIENT_PASSWORD_NOTMATCH"));
-    public static Error ClientNotUnique(string value) => new(ErrorType.NotUnique, string.Format(Message.GetResource("ErrorMessages", "CLIENT_ACCOUNT_ UNICITY_CONSTRAINT"), "L'email", value));
+    public static Error ClientNotUnique(string value) => new(ErrorType.NotUnique, string.Format(Message.GetResource("ErrorMessages", "CLIENT_ACCOUNT_UNICITY_CONSTRAINT"), "L'email", value));
+    public static Error ClientDisconnectFailed => new(ErrorType.DisconnectFailed, string.Format(Message.GetResource("ErrorMessages", "CLIENT_DISCONNECTION_FAILED")));
     #endregion
 
     #region Log Messages

@@ -11,9 +11,8 @@ namespace CesiZen.Infrastructure;
 
 public static class ServiceRegister
 {
-    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
     {
-        services.AddInfrastructureContext(configuration);
         services.AddInfrastructureCommandServices();
         services.AddInfrastructureQueryServices();
 
