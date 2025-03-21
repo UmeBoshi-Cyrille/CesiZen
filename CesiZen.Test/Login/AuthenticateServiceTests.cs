@@ -6,8 +6,6 @@ using CesiZen.Domain.Interfaces;
 using CesiZen.Domain.Mapper;
 using CesiZen.Infrastructure.Providers;
 using CesiZen.Test.Fakers;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Serilog;
 
@@ -15,12 +13,10 @@ namespace CesiZen.Test.LoginServices;
 
 public class AuthenticateServiceTests
 {
-    private readonly Mock<IConfiguration> configurationMock;
     private readonly Mock<ISessionQuery> sessionQueryMock;
     private readonly Mock<ISessionCommand> sessionCommandMock;
     private readonly Mock<IRefreshTokenCommand> refreshTokenCommandMock;
     private readonly Mock<IRefreshTokenQuery> refreshTokenQueryMock;
-    private readonly Mock<JwtSettings> settingsMock;
     private readonly Mock<ILogger> loggerMock;
     private readonly Mock<IUserCommand> userCommandMock;
     private readonly Mock<IUserQuery> userQueryMock;
@@ -29,22 +25,17 @@ public class AuthenticateServiceTests
     private readonly Mock<ILoginCommand> loginCommandMock;
     private readonly Mock<ITokenProvider> tokenProviderMock;
     private readonly Mock<IEmailService> emailServiceMock;
-    private readonly AuthenticationService authService;
+    private readonly AuthenticationService authenticationService;
 
     private readonly TokenProvider tokenProvider;
     private readonly PasswordService passwordService;
 
-    private readonly IServiceCollection services;
-    private readonly IServiceProvider serviceProvider;
-
     public AuthenticateServiceTests()
     {
-        configurationMock = new Mock<IConfiguration>();
         sessionQueryMock = new Mock<ISessionQuery>();
         sessionCommandMock = new Mock<ISessionCommand>();
         refreshTokenCommandMock = new Mock<IRefreshTokenCommand>();
         refreshTokenQueryMock = new Mock<IRefreshTokenQuery>();
-        settingsMock = new Mock<JwtSettings>();
 
         loggerMock = new Mock<ILogger>();
         userCommandMock = new Mock<IUserCommand>();
@@ -55,7 +46,7 @@ public class AuthenticateServiceTests
         tokenProviderMock = new Mock<ITokenProvider>();
         emailServiceMock = new Mock<IEmailService>();
 
-        authService = new AuthenticationService(
+        authenticationService = new AuthenticationService(
             loggerMock.Object,
             userCommandMock.Object,
             userQueryMock.Object,
@@ -99,7 +90,7 @@ public class AuthenticateServiceTests
         tokenProviderMock.Setup(x => x.GenerateAccessToken(It.IsAny<string>())).Returns(token);
 
         // Act
-        var result = await authService.Authenticate(dto);
+        var result = await authenticationService.Authenticate(dto);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -119,7 +110,7 @@ public class AuthenticateServiceTests
         passwordServiceMock.Setup(x => x.VerifyPassword(It.IsAny<Login>(), It.IsAny<string>())).Returns(false);
 
         // Act
-        var result = await authService.Authenticate(dto);
+        var result = await authenticationService.Authenticate(dto);
 
         // Assert
         Assert.True(result.IsFailure);
@@ -137,7 +128,7 @@ public class AuthenticateServiceTests
         loginCommandMock.Setup(x => x.UpdateEmailVerification(It.IsAny<EmailVerificationDto>())).ReturnsAsync(Result.Success());
 
         // Act
-        var result = await authService.VerifyEmail(token, login.Email);
+        var result = await authenticationService.VerifyEmail(token, login.Email);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -153,7 +144,7 @@ public class AuthenticateServiceTests
         loginQueryMock.Setup(x => x.GetByEmail(login.Email)).ReturnsAsync(Result<Login>.Success(login));
 
         // Act
-        var result = await authService.VerifyEmail(token, login.Email);
+        var result = await authenticationService.VerifyEmail(token, login.Email);
 
         // Assert
         Assert.True(result.IsFailure);
@@ -167,11 +158,11 @@ public class AuthenticateServiceTests
         var email = "fake@email.com";
         var login = LoginFaker.FakeLoginGenerator().Generate();
         var token = tokenProvider.GenerateVerificationToken();
-        loginQueryMock.Setup(x => x.GetByEmail(login.Email))
-            .ReturnsAsync(Result<Login>.Failure(UserErrors.LogNotFound(email)));
+        loginQueryMock.Setup(x => x.GetByEmail(It.IsAny<string>()))
+            .ReturnsAsync(Result<Login>.Failure(UserErrors.ClientNotFound));
 
         // Act
-        var result = await authService.VerifyEmail(token, email);
+        var result = await authenticationService.VerifyEmail(token, email);
 
         // Assert
         Assert.True(result.IsFailure);
@@ -190,7 +181,7 @@ public class AuthenticateServiceTests
             .ReturnsAsync(Result.Failure(UserErrors.ClientUpdateFailed));
 
         // Act
-        var result = await authService.VerifyEmail(token, login.Email);
+        var result = await authenticationService.VerifyEmail(token, login.Email);
 
         // Assert
         Assert.True(result.IsFailure);
@@ -209,7 +200,7 @@ public class AuthenticateServiceTests
         tokenProviderMock.Setup(x => x.InvalidateTokens(userId)).ReturnsAsync(Result.Success());
 
         // Act
-        var result = await authService.Disconnect(accessToken);
+        var result = await authenticationService.Disconnect(accessToken);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -228,7 +219,7 @@ public class AuthenticateServiceTests
         //tokenProviderMock.Setup(x => x.InvalidateTokens(userId)).ReturnsAsync(Result.Success());
 
         // Act
-        var result = await authService.Disconnect(accessToken);
+        var result = await authenticationService.Disconnect(accessToken);
 
         // Assert
         Assert.True(result.IsFailure);
@@ -248,12 +239,10 @@ public class AuthenticateServiceTests
             .ReturnsAsync(Result.Failure(UserErrors.ClientNotFound));
 
         // Act
-        var result = await authService.Disconnect(accessToken);
+        var result = await authenticationService.Disconnect(accessToken);
 
         // Assert
         Assert.True(result.IsFailure);
         Assert.Equal(UserErrors.ClientDisconnectFailed.Message, result.Error.Message);
     }
-
-    // Additional tests for edge cases and private methods can be added here
 }

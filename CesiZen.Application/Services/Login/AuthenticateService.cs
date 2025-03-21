@@ -56,7 +56,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
     public async Task<IResult> VerifyEmail(string token, string email)
     {
         var login = await loginQuery.GetByEmail(email);
-        if (login == null)
+        if (login.IsFailure)
         {
             logger.Error(login!.Error.Message);
             return Result.Failure(UserErrors.ClientNotFound);
