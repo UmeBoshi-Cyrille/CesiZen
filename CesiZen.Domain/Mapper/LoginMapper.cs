@@ -32,15 +32,15 @@ public static class LoginMapper
     //    };
     //}
 
-    //public static CategoryRequestDto MapDto(this Category model)
-    //{
-    //    return new CategoryRequestDto
-    //    {
-    //        Id = model.Id,
-    //        Name = model.Name,
-    //    };
-    //}
-    //#endregion
+    public static AuthenticateRequestDto Map(this Login model)
+    {
+        return new AuthenticateRequestDto
+        {
+            Identifier = model.Email,
+            Password = model.Password,
+        };
+    }
+    #endregion
 
     //public static List<CategoryRequestDto> Map(this List<Category> model)
     //{
@@ -80,5 +80,4 @@ public static class LoginMapper
 
     //    return model;
     //}
-    #endregion
 }
