@@ -3,6 +3,7 @@ using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
+using CesiZen.Domain.Mapper;
 using CesiZen.Infrastructure.Providers;
 using CesiZen.Test.Fakers;
 using Microsoft.Extensions.Configuration;
@@ -111,7 +112,8 @@ public class AuthenticateServiceTests
     {
         // Arrange
         var login = LoginFaker.FakeLoginGenerator().Generate();
-        var dto = LoginFaker.FakeRequestDtoGenerator().Generate("wrongPassword123");
+        var dto = login.Map();
+        dto.Password = "wrongPassword";
 
         loginQueryMock.Setup(x => x.GetByEmail(It.IsAny<string>())).ReturnsAsync(Result<Login>.Success(login));
         passwordServiceMock.Setup(x => x.VerifyPassword(It.IsAny<Login>(), It.IsAny<string>())).Returns(false);
@@ -121,46 +123,82 @@ public class AuthenticateServiceTests
 
         // Assert
         Assert.True(result.IsFailure);
-        Assert.Equal(UserErrors.ClientAuthenticationFailed, result.Error);
+        Assert.Equal(UserErrors.ClientAuthenticationFailed.Message, result.Error.Message);
     }
 
     [Fact]
-    public async Task VerifyEmail_ValidToken_ReturnsSuccessResult()
+    public async Task VerifyEmailTest_ReturnsSuccess_ValidToken()
     {
         // Arrange
-        var email = "test@example.com";
-        var token = "validtoken";
-        var login = new Login { EmailVerificationToken = token };
-        loginQueryMock.Setup(x => x.GetByEmail(email)).ReturnsAsync(Result<Login>.Success(login));
+        var login = LoginFaker.FakeLoginGenerator().Generate();
+        var token = tokenProvider.GenerateVerificationToken();
+        login.EmailVerificationToken = token;
+        loginQueryMock.Setup(x => x.GetByEmail(login.Email)).ReturnsAsync(Result<Login>.Success(login));
         loginCommandMock.Setup(x => x.UpdateEmailVerification(It.IsAny<EmailVerificationDto>())).ReturnsAsync(Result.Success());
 
         // Act
-        var result = await authService.VerifyEmail(token, email);
+        var result = await authService.VerifyEmail(token, login.Email);
 
         // Assert
         Assert.True(result.IsSuccess);
-        Assert.Equal(UserInfos.ClientEmailVerified, result.Info);
+        Assert.Equal(UserInfos.ClientEmailVerified.Message, result.Info.Message);
     }
 
     [Fact]
-    public async Task VerifyEmail_InvalidToken_ReturnsFailureResult()
+    public async Task VerifyEmailTest_InvalidToken_ReturnsFailure()
     {
         // Arrange
-        var email = "test@example.com";
-        var token = "invalidtoken";
-        var login = new Login { EmailVerificationToken = "differenttoken" };
-        loginQueryMock.Setup(x => x.GetByEmail(email)).ReturnsAsync(Result<Login>.Success(login));
+        var login = LoginFaker.FakeLoginGenerator().Generate();
+        var token = tokenProvider.GenerateVerificationToken();
+        loginQueryMock.Setup(x => x.GetByEmail(login.Email)).ReturnsAsync(Result<Login>.Success(login));
+
+        // Act
+        var result = await authService.VerifyEmail(token, login.Email);
+
+        // Assert
+        Assert.True(result.IsFailure);
+        Assert.Equal(UserErrors.ClientEmailVerificationFailed.Message, result.Error.Message);
+    }
+
+    [Fact]
+    public async Task VerifyEmailTest_LoginNotFound_ReturnsFailure()
+    {
+        // Arrange
+        var email = "fake@email.com";
+        var login = LoginFaker.FakeLoginGenerator().Generate();
+        var token = tokenProvider.GenerateVerificationToken();
+        loginQueryMock.Setup(x => x.GetByEmail(login.Email))
+            .ReturnsAsync(Result<Login>.Failure(UserErrors.LogNotFound(email)));
 
         // Act
         var result = await authService.VerifyEmail(token, email);
 
         // Assert
         Assert.True(result.IsFailure);
-        Assert.Equal(UserErrors.ClientEmailVerificationFailed, result.Error);
+        Assert.Equal(UserErrors.ClientNotFound.Message, result.Error.Message);
     }
 
     [Fact]
-    public async Task Disconnect_ValidToken_ReturnsSuccessResult()
+    public async Task VerifyEmailTest_UpdateEmailVerificationFailed_ReturnsFailure()
+    {
+        // Arrange
+        var login = LoginFaker.FakeLoginGenerator().Generate();
+        var token = tokenProvider.GenerateVerificationToken();
+        login.EmailVerificationToken = token;
+        loginQueryMock.Setup(x => x.GetByEmail(login.Email)).ReturnsAsync(Result<Login>.Success(login));
+        loginCommandMock.Setup(x => x.UpdateEmailVerification(It.IsAny<EmailVerificationDto>()))
+            .ReturnsAsync(Result.Failure(UserErrors.ClientUpdateFailed));
+
+        // Act
+        var result = await authService.VerifyEmail(token, login.Email);
+
+        // Assert
+        Assert.True(result.IsFailure);
+        Assert.Equal(UserErrors.ClientEmailVerificationFailed.Message, result.Error.Message);
+    }
+
+    [Fact]
+    public async Task DisconnectTest_ValidToken_ReturnsSuccess()
     {
         // Arrange
         var accessToken = "validtoken";
@@ -175,6 +213,46 @@ public class AuthenticateServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
+    }
+
+    [Fact]
+    public async Task DisconnectTest_InvalidToken_ReturnsFailure()
+    {
+        // Arrange
+        var accessToken = "validtoken";
+        var sessionId = "session";
+        var userId = "123";
+        tokenProviderMock.Setup(x => x.GetTokenSessionId(accessToken)).Returns(sessionId);
+        userQueryMock.Setup(x => x.GetUserId(sessionId))
+            .ReturnsAsync(Result<string>.Failure(UserErrors.ClientNotFound));
+        //tokenProviderMock.Setup(x => x.InvalidateTokens(userId)).ReturnsAsync(Result.Success());
+
+        // Act
+        var result = await authService.Disconnect(accessToken);
+
+        // Assert
+        Assert.True(result.IsFailure);
+        Assert.Equal(UserErrors.ClientNotFound.Message, result.Error.Message);
+    }
+
+    [Fact]
+    public async Task DisconnectTest_CouldNotInvalidate_ReturnsFailure()
+    {
+        // Arrange
+        var accessToken = "validtoken";
+        var sessionId = "session";
+        var userId = "123";
+        tokenProviderMock.Setup(x => x.GetTokenSessionId(accessToken)).Returns(sessionId);
+        userQueryMock.Setup(x => x.GetUserId(sessionId)).ReturnsAsync(Result<string>.Success(userId));
+        tokenProviderMock.Setup(x => x.InvalidateTokens(userId))
+            .ReturnsAsync(Result.Failure(UserErrors.ClientNotFound));
+
+        // Act
+        var result = await authService.Disconnect(accessToken);
+
+        // Assert
+        Assert.True(result.IsFailure);
+        Assert.Equal(UserErrors.ClientDisconnectFailed.Message, result.Error.Message);
     }
 
     // Additional tests for edge cases and private methods can be added here
