@@ -1,5 +1,6 @@
 ﻿using CesiZen.Domain.Interfaces;
 using CesiZen.Infrastructure.DatabaseContext;
+using CesiZen.Infrastructure.Notifiers;
 using CesiZen.Infrastructure.Providers;
 using CesiZen.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -50,6 +51,8 @@ public static class ServiceRegister
     private static IServiceCollection AddInfrastructureCommandServices(this IServiceCollection services)
     {
         services.AddScoped<ITokenProvider, TokenProvider>();
+        services.AddSingleton<INotifier, MessageNotifier>();
+        services.AddTransient<IObserver, EmailService>();
 
         services.AddScoped<ISessionCommand, SessionCommand>();
         services.AddScoped<IRefreshTokenCommand, TokenCommand>();

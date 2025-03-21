@@ -7,7 +7,7 @@ namespace CesiZen.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthenticationController : ControllerBase
+public class AuthenticationController : LoginController
 {
     private readonly IAuthenticateService authenticateService;
     private readonly ITokenProvider tokenProvider;
@@ -16,7 +16,9 @@ public class AuthenticationController : ControllerBase
     public AuthenticationController(
         IAuthenticateService authenticateService,
         ITokenProvider tokenProvider,
-        IPasswordService passwordService)
+        IPasswordService passwordService,
+        INotifier notifier,
+        IObserver observer) : base(notifier, observer)
     {
         this.authenticateService = authenticateService;
         this.tokenProvider = tokenProvider;
@@ -52,9 +54,10 @@ public class AuthenticationController : ControllerBase
     /// Remove JwtCookie to clean old accesstoken.
     /// </summary>
     /// <response code="200">cookie deleted</response>
-    /// <returns></returns>
+    /// <returns>Success message</returns>
     [HttpGet("delete-cookie")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult DeleteCookie()
     {
         Response.Cookies.Delete("JWTCookie");
@@ -93,7 +96,6 @@ public class AuthenticationController : ControllerBase
         Response.Cookies.Append("JWTCookie", response.Value.Token!, cookieOptions);
 
         return Ok(new { message = response.Info.Message });
-        //return Ok(response.Value.Token);
     }
 
     /// <summary>
@@ -108,16 +110,14 @@ public class AuthenticationController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public IActionResult InvalidateTokens(string userId)
+    public async Task<IActionResult> InvalidateTokens(string userId)
     {
-        var result = tokenProvider.InvalidateTokens(userId).Result;
+        var result = await tokenProvider.InvalidateTokens(userId);
 
         if (result.IsFailure)
         {
             return Unauthorized();
         }
-
-        var successMessage = Message.GetResource("InfoMessages", "CLIENT_SESSION_CLOSED");
 
         return Ok(new { message = result.Info.Message });
     }
@@ -136,9 +136,6 @@ public class AuthenticationController : ControllerBase
         var result = await authenticateService.Disconnect(accessToken);
 
         Response.Cookies.Delete("JWTCookie");
-
-        // Clear any other session-related data if necessary
-        //HttpContext.Session.Clear();
 
         return Ok(new { message = result.Info.Message });
     }
@@ -160,7 +157,14 @@ public class AuthenticationController : ControllerBase
         var result = await passwordService.ForgotPassword(dto);
 
         if (result.IsFailure)
+        {
             return BadRequest(new { message = result.Error.Message });
+        }
+
+        SubscribeNotifierEvent();
+        var message = BuildEmailVerificationMessage(dto.Email!);
+        notifier.NotifyObservers(message);
+        UnsubscribeNotifierEvent();
 
         return Ok(new { message = result.Info.Message });
     }
@@ -185,5 +189,15 @@ public class AuthenticationController : ControllerBase
             return BadRequest(new { message = result.Error.Message });
 
         return Ok(new { message = result.Info.Message });
+    }
+
+    private MessageEventArgs BuildEmailVerificationMessage(string email)
+    {
+        return new MessageEventArgs
+        {
+            Email = email,
+            Subject = Message.GetResource("Templates", "SUBJECT_RESET_PASSWORD"),
+            Body = Message.GetResource("Templates", "TEMPLATE_RESET_PASSWORD"),
+        };
     }
 }

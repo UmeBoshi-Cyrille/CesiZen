@@ -2,7 +2,8 @@
 
 namespace CesiZen.Domain.Interfaces;
 
-public interface IRegisterService
+public interface IObserver
 {
-    Task<IResult> Register(UserDto dto);
+    void Update(object sender, MessageEventArgs dto);
 }
+

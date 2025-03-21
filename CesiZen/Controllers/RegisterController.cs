@@ -1,4 +1,5 @@
-﻿using CesiZen.Domain.DataTransfertObject;
+﻿using CesiZen.Domain.BusinessResult;
+using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,12 +7,14 @@ namespace CesiZen.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class RegisterController : ControllerBase
+public class RegisterController : LoginController
 {
     private readonly IRegisterService registerService;
 
     public RegisterController(
-        IRegisterService registerService)
+        IRegisterService registerService,
+        INotifier notifier,
+        IObserver observer) : base(notifier, observer)
     {
         this.registerService = registerService;
     }
@@ -31,11 +34,27 @@ public class RegisterController : ControllerBase
     public async Task<IActionResult> Register([FromBody] UserDto dto)
     {
         var response = await registerService.Register(dto);
+
         if (response.IsFailure)
         {
             return BadRequest(new { message = response.Error.Message });
-        };
+        }
+
+        SubscribeNotifierEvent();
+        var message = BuildEmailVerificationMessage(dto.Email);
+        notifier.NotifyObservers(message);
+        UnsubscribeNotifierEvent();
 
         return Ok(new { message = response.Info.Message });
+    }
+
+    private MessageEventArgs BuildEmailVerificationMessage(string email)
+    {
+        return new MessageEventArgs
+        {
+            Email = email,
+            Subject = Message.GetResource("Templates", "SUBJECT_VERIFICATION_EMAIL"),
+            Body = Message.GetResource("Templates", "TEMPLATE_VERIFICATION_EMAIL"),
+        };
     }
 }
