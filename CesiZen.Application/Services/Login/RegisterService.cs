@@ -26,8 +26,8 @@ public class RegisterService : ALoginService, IRegisterService
 
     public async Task<IResult> Register(UserDto dto)
     {
-        User user = new();
-        IResult result = new Result();
+        User user;
+        IResult result;
 
         if (IsEmailUnique(dto.Email).IsFailure)
         {
