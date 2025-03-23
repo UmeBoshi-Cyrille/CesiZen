@@ -146,7 +146,7 @@ public class AuthenticationController : LoginController
     /// <summary>
     /// Allows to reset your password if lost or forgotten.
     /// </summary>
-    /// <param name="dto">data provided by the client</param>
+    /// <param name="email">email provided by the client</param>
     /// <response code="200">operation succeeded</response>
     /// <response code="400">Bad request</response>
     /// <response code="500">service unvalaible</response>
@@ -155,9 +155,9 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> ForgotPassword(PasswordResetRequestDto dto)
+    public async Task<IActionResult> ForgotPasswordRequest(string email)
     {
-        var result = await passwordService.ForgotPassword(dto);
+        var result = await passwordService.ForgotPasswordRequest(email);
 
         if (result.IsFailure)
         {
@@ -171,9 +171,37 @@ public class AuthenticationController : LoginController
         return Ok(new { message = result.Info.Message });
     }
 
+
+    /// <summary>
+    /// Allows to reset your password if lost or forgotten.
+    /// </summary>
+    /// <param name="email">email provided by the client</param>
+    /// <param name="token">token provided by the client</param>
+    /// <response code="200">operation succeeded</response>
+    /// <response code="400">Bad request</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
+    [HttpPost("forgot-password-response")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> ForgotPasswordResponse(string email, string token)
+    {
+        var result = await passwordService.ForgotPasswordResponse(email, token);
+
+        var successMessage = "If the email has been verified.";
+        var failMessage = "Couldn't send email to the provided adress";
+
+        if (result.IsSuccess)
+            return Ok(new { successMessage });
+
+        return BadRequest(new { failMessage });
+    }
+
     /// <summary>
     /// Reset password with a new one
     /// </summary>
+    /// <param name="userId">id provided by the client</param>
     /// <param name="dto">data provided by the client</param>
     /// <response code="200">operation succeeded</response>
     /// <response code="400">Bad request</response>
@@ -183,9 +211,9 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> ResetPassword(PasswordResetDto dto)
+    public async Task<IActionResult> ResetPassword(int userId, PasswordResetDto dto)
     {
-        var result = await passwordService.ResetPassword(dto);
+        var result = await passwordService.ResetPassword(userId, dto);
 
         if (result.IsFailure)
             return BadRequest(new { message = result.Error.Message });

@@ -11,4 +11,6 @@ public interface ILoginQuery
     Task<IResult<Login>> GetByResetPasswordToken(string token);
 
     Task<IResult> CheckEmail(string email);
+
+    Task<IResult<ResetPassword>> GetResetPassword(string email, string token);
 }

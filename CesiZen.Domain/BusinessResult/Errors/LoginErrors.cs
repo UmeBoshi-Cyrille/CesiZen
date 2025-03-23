@@ -16,6 +16,11 @@ public static class LoginErrors
     public static Error ResetPasswordNotFound = new(ErrorType.NotFound, Message.GetResource("ErrorMessages", "CLIENT_RESETPASSWORD_NOTFOUND"));
 
 
+    public static Error LogInsertionFailed(string title) => new(ErrorType.OperationFailed, string.Format(Message.GetResource("ErrorMessages", "LOG_INSERTION_FAILED"), "Article", title));
+    public static Error LogUpdateFailed(string id) => new(ErrorType.OperationFailed, string.Format(Message.GetResource("ErrorMessages", "LOG_UPDATE_FAILED"), "Article", id));
+    public static Error LogUpdatePropertyFailed(string property, string id) => new(ErrorType.UpdatePropertyFailed, string.Format(Message.GetResource("ErrorMessages", "LOG_UPDATE_PROPERTY_FAILED"), $"Article [Id:{id}]", property));
+    public static Error LogDeletionFailed(string id) => new(ErrorType.OperationFailed, string.Format(Message.GetResource("ErrorMessages", "LOG_DELETE_FAILED"), "Article", id));
+
     public static Error RegistrationFailed = new(ErrorType.RegistrationFailed, Message.GetResource("ErrorMessages", "LOG_REGISTER_OPERATIONFAILED"));
 
 

@@ -135,7 +135,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
                         Message.GetResource("ErrorMessages", "CLIENT_LOGINATTEMPS_LOCKTIME"), time)));
         }
 
-        var result = passwordService.VerifyPassword(login, password);
+        var result = passwordService.IsCorrectPassword(login, password);
 
         if (result)
         {
@@ -156,14 +156,14 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
 
     private async Task<bool> IsLoginUnlocked(Login login)
     {
-        if (login.IsLocked)
+        if (login.AccountIsLocked)
         {
             if (login.LockoutEndTime > DateTime.UtcNow)
             {
                 return false;
             }
 
-            login.IsLocked = false;
+            login.AccountIsLocked = false;
             login.AccessFailedCount = 0;
             login.LockoutEndTime = null;
             await loginCommand.UpdateLoginAttemps(login);
@@ -179,7 +179,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
 
         if (login.AccessFailedCount >= 5)
         {
-            login.IsLocked = true;
+            login.AccountIsLocked = true;
             login.LockoutEndTime = DateTime.UtcNow.AddMinutes(5);
             await loginCommand.UpdateLoginAttemps(login);
 
