@@ -6,5 +6,5 @@ public interface IRefreshTokenCommand
 {
     Task<IResult> UpSert(RefreshToken entity);
 
-    Task<IResult> Delete(int Id);
+    Task<IResult> Delete(int id);
 }

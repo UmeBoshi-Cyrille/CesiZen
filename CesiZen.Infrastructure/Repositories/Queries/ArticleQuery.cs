@@ -72,7 +72,7 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
         }
     }
 
-    public async Task<IResult<Article>> GetByIdAsync(int Id)
+    public async Task<IResult<Article>> GetByIdAsync(int id)
     {
         try
         {
@@ -82,7 +82,7 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
         }
         catch (Exception ex)
         {
-            return Result<Article>.Failure(ArticleErrors.LogNotFound(id), id, ex.Message);
+            return Result<Article>.Failure(ArticleErrors.LogNotFound(nameof(id)), nameof(id), ex.Message);
         }
     }
 }

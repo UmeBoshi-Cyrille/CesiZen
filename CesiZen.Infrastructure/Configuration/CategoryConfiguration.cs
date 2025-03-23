@@ -1,5 +1,4 @@
 ﻿using CesiZen.Domain.Datamodel;
-using CesiZen.Infrastructure.Providers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -15,9 +14,5 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
             .IsUnique();
 
         builder.HasIndex(x => x.Name).IsUnique();
-
-        builder.Property(u => u.Id)
-            .ValueGeneratedOnAdd()
-            .HasValueGenerator<ObjectIdProvider>();
     }
 }

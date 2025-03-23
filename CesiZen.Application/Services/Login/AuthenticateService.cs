@@ -112,7 +112,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
         return Regex.IsMatch(email, pattern, RegexOptions.IgnoreCase);
     }
 
-    private async Task<IResult<Login>> GetLogin(int Identifier)
+    private async Task<IResult<Login>> GetLogin(string identifier)
     {
         var validity = IsValidEmail(identifier);
 

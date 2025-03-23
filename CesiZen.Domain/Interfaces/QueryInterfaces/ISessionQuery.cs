@@ -1,9 +1,7 @@
-﻿using CesiZen.Domain.Interfaces;
-
-namespace CesiZen.Domain.Interfaces;
+﻿namespace CesiZen.Domain.Interfaces;
 
 public interface ISessionQuery
 {
-    Task<IResult<string>> GetId(int Id);
+    Task<IResult<int>> GetId(int userId);
 }
 

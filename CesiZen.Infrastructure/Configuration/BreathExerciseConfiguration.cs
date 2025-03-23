@@ -1,5 +1,4 @@
 ﻿using CesiZen.Domain.Datamodel;
-using CesiZen.Infrastructure.Providers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -13,9 +12,5 @@ public class BreathExerciseConfiguration : IEntityTypeConfiguration<BreathExerci
 
         builder.HasIndex(x => x.Id)
             .IsUnique();
-
-        builder.Property(u => u.Id)
-            .ValueGeneratedOnAdd()
-            .HasValueGenerator<ObjectIdProvider>();
     }
 }

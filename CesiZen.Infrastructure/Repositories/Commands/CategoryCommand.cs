@@ -39,19 +39,19 @@ public class CategoryCommand : AbstractRepository, ICategoryCommand
         {
             await context.SaveChangesAsync();
 
-            return Result.Success(CategoryInfos.LogUpdateSucceeded(entity.Id));
+            return Result.Success(CategoryInfos.LogUpdateSucceeded(nameof(entity.Id)));
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(CategoryErrors.LogUpdateFailed(entity.Id), entity.Id, ex.Message);
+            return Result.Failure(CategoryErrors.LogUpdateFailed(nameof(entity.Id)), nameof(entity.Id), ex.Message);
         }
         catch (Exception ex)
         {
-            return Result.Failure(CategoryErrors.LogUpdateFailed(entity.Id), entity.Id, ex.Message);
+            return Result.Failure(CategoryErrors.LogUpdateFailed(nameof(entity.Id)), nameof(entity.Id), ex.Message);
         }
     }
 
-    public async Task<IResult> Delete(int Id)
+    public async Task<IResult> Delete(int id)
     {
         try
         {
@@ -61,18 +61,18 @@ public class CategoryCommand : AbstractRepository, ICategoryCommand
                 context.Categories.Remove(Article);
                 await context.SaveChangesAsync();
 
-                return Result.Success(CategoryInfos.LogDeleteCompleted(id));
+                return Result.Success(CategoryInfos.LogDeleteCompleted(nameof(id)));
             }
 
-            return Result.Failure(CategoryErrors.LogDeletionFailed(id));
+            return Result.Failure(CategoryErrors.LogDeletionFailed(nameof(id)));
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(CategoryErrors.LogDeletionFailed(id), id, ex.Message);
+            return Result.Failure(CategoryErrors.LogDeletionFailed(nameof(id)), nameof(id), ex.Message);
         }
         catch (Exception ex)
         {
-            return Result.Failure(CategoryErrors.LogDeletionFailed(id), id, ex.Message);
+            return Result.Failure(CategoryErrors.LogDeletionFailed(nameof(id)), nameof(id), ex.Message);
         }
     }
 }

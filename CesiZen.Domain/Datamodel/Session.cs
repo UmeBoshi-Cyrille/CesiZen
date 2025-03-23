@@ -8,12 +8,12 @@ public class Session
 
     public string SessionId { get; set; }
 
-    public string UserId { get; set; }
+    public int UserId { get; set; }
 
     [JsonIgnore]
     public User? User { get; set; }
 
-    public Session(string sessionId, string userId)
+    public Session(string sessionId, int userId)
     {
         Id = 0;
         SessionId = sessionId;

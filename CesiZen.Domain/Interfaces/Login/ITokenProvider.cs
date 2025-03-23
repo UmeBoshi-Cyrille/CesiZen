@@ -4,11 +4,11 @@ namespace CesiZen.Domain.Interfaces;
 
 public interface ITokenProvider
 {
-    string GenerateAccessToken(string userId);
+    string GenerateAccessToken(int userId);
 
-    Task<IResult<string>> RefreshAccessTokenAsync(string userId, string accessToken);
+    Task<IResult<string>> RefreshAccessTokenAsync(int userId, string accessToken);
 
-    Task<IResult> InvalidateTokens(string userId);
+    Task<IResult> InvalidateTokens(int userId);
 
     bool CheckAccessTokenExpirationTime(string token);
 

@@ -26,7 +26,7 @@ public class LoginQuery : AbstractRepository, ILoginQuery
         return Result<Login>.Success(login);
     }
 
-    public async Task<IResult<Login>> GetByUserId(string userId)
+    public async Task<IResult<Login>> GetByUserId(int userId)
     {
         var login = await context.Logins
                            .AsNoTracking()
@@ -34,7 +34,7 @@ public class LoginQuery : AbstractRepository, ILoginQuery
 
         if (login == null)
         {
-            return Result<Login>.Failure(UserErrors.LogNotFound(userId));
+            return Result<Login>.Failure(UserErrors.LogNotFound(nameof(userId)));
         }
 
         return Result<Login>.Success(login);

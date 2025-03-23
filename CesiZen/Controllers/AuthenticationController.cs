@@ -110,7 +110,7 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> InvalidateTokens(string userId)
+    public async Task<IActionResult> InvalidateTokens(int userId)
     {
         var result = await tokenProvider.InvalidateTokens(userId);
 

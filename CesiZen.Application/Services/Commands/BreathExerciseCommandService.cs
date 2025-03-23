@@ -45,7 +45,7 @@ public class BreathExerciseCommandService : AService, IBreathExerciseCommandServ
         return Result.Success(BreathExerciseInfos.ClientUpdateSucceeded);
     }
 
-    public async Task<IResult> Delete(int Id)
+    public async Task<IResult> Delete(int id)
     {
         var result = await command.Delete(id);
 

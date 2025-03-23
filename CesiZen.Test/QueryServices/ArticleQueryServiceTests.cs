@@ -27,7 +27,7 @@ public class ArticleQueryServiceTests
     public async Task GetByIdAsyncTest_Success_ReturnsArticleDto()
     {
         // Arrange
-        string articleId = "1";
+        var articleId = 1;
         var article = ArticleFaker.FakeArticleGenerator().Generate();
         var expectedDto = article.Map();
 
@@ -47,7 +47,7 @@ public class ArticleQueryServiceTests
     public async Task GetByIdAsyncTest_Failure_ReturnsFailureResult()
     {
         // Arrange
-        string articleId = "1";
+        var articleId = 1;
         queryMock.Setup(q => q.GetByIdAsync(articleId))
             .ReturnsAsync(Result<Article>.Failure(Error.NullValue("Error message")));
 

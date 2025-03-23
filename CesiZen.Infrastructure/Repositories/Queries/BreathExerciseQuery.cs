@@ -12,7 +12,7 @@ public class BreathExerciseQuery : AbstractRepository, IBreathExerciseQuery
     {
     }
 
-    public async Task<IResult<List<BreathExercise>>> GetAllByIdAsync(string userId)
+    public async Task<IResult<List<BreathExercise>>> GetAllByIdAsync(int userId)
     {
         try
         {
@@ -33,7 +33,7 @@ public class BreathExerciseQuery : AbstractRepository, IBreathExerciseQuery
         }
     }
 
-    public async Task<IResult<BreathExercise>> GetByIdAsync(int Id)
+    public async Task<IResult<BreathExercise>> GetByIdAsync(int id)
     {
         try
         {
@@ -43,7 +43,7 @@ public class BreathExerciseQuery : AbstractRepository, IBreathExerciseQuery
         }
         catch (Exception ex)
         {
-            return Result<BreathExercise>.Failure(BreathExerciseErrors.LogNotFound(id), id, ex.Message);
+            return Result<BreathExercise>.Failure(BreathExerciseErrors.LogNotFound(nameof(id)), nameof(id), ex.Message);
         }
     }
 }

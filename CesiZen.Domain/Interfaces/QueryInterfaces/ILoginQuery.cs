@@ -4,7 +4,7 @@ namespace CesiZen.Domain.Interfaces;
 
 public interface ILoginQuery
 {
-    Task<IResult<Login>> GetByUserId(string userId);
+    Task<IResult<Login>> GetByUserId(int userId);
 
     Task<IResult<Login>> GetByEmail(string email);
 

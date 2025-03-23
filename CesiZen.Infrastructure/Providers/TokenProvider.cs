@@ -38,7 +38,7 @@ public class TokenProvider : ITokenProvider
     }
 
     #region Public Methods
-    public string GenerateAccessToken(string userId)
+    public string GenerateAccessToken(int userId)
     {
         var sessionId = GenerateSessionId();
         var tokenId = GenerateTokenId();
@@ -59,7 +59,7 @@ public class TokenProvider : ITokenProvider
         return token;
     }
 
-    public async Task<IResult<string>> RefreshAccessTokenAsync(string userId, string accessToken)
+    public async Task<IResult<string>> RefreshAccessTokenAsync(int userId, string accessToken)
     {
         if (CheckRefreshTokenValidity(userId, accessToken))
         {
@@ -73,7 +73,7 @@ public class TokenProvider : ITokenProvider
         return Result<string>.Failure(Error.AuthenticationFailed("Token has expired"));
     }
 
-    public async Task<IResult> InvalidateTokens(string userId)
+    public async Task<IResult> InvalidateTokens(int userId)
     {
         var sessionId = sessionQuery.GetId(userId).Result.Value;
         var tokenId = tokenQuery.GetId(userId).Result.Value;
@@ -84,12 +84,12 @@ public class TokenProvider : ITokenProvider
         if (sessionResult.IsFailure)
         {
             logger.Error(sessionResult.Error.Message);
-            return Result.Failure(SessionErrors.LogDeletionFailed(sessionId));
+            return Result.Failure(SessionErrors.LogDeletionFailed(nameof(sessionId)));
         }
         else if (tokenResult.IsFailure)
         {
             logger.Error(tokenResult.Error.Message);
-            return Result.Failure(RefreshTokenErrors.LogDeletionFailed(sessionId));
+            return Result.Failure(RefreshTokenErrors.LogDeletionFailed(nameof(sessionId)));
         }
 
         return Result.Success();
@@ -231,7 +231,7 @@ public class TokenProvider : ITokenProvider
         return Convert.ToHexString(hash);
     }
 
-    private void SaveRefreshToken(string userId, string refreshToken)
+    private void SaveRefreshToken(int userId, string refreshToken)
     {
         var token = new RefreshToken()
         {
@@ -243,7 +243,7 @@ public class TokenProvider : ITokenProvider
         tokenCommand.UpSert(token);
     }
 
-    private bool CheckRefreshTokenValidity(string userId, string providedAccessToken)
+    private bool CheckRefreshTokenValidity(int userId, string providedAccessToken)
     {
         var currentToken = tokenQuery.GetById(userId).Result.Value;
         var providedToken = GetProvidedRefreshToken(providedAccessToken);

@@ -6,5 +6,5 @@ public interface ISessionCommand
 {
     Task<IResult> UpSert(Session entity);
 
-    Task<IResult> Delete(int Id);
+    Task<IResult> Delete(int id);
 }

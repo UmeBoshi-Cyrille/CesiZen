@@ -45,7 +45,7 @@ public class UserQueryService : AService, IUserQueryService
         return Result<PagedResultDto<UserRequestDto>>.Success(dto);
     }
 
-    public async Task<IResult<UserRequestDto>> GetByIdAsync(int Id)
+    public async Task<IResult<UserRequestDto>> GetByIdAsync(int id)
     {
         var result = await query.GetByIdAsync(id);
 

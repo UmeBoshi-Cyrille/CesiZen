@@ -4,7 +4,7 @@ namespace CesiZen.Domain.Interfaces;
 
 public interface IRefreshTokenQuery
 {
-    Task<IResult<RefreshToken>> GetById(string userId);
+    Task<IResult<RefreshToken>> GetById(int userId);
 
-    Task<IResult<string>> GetId(string userId);
+    Task<IResult<int>> GetId(int userId);
 }

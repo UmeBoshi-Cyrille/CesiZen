@@ -38,7 +38,7 @@ public class CategoryQuery : AbstractRepository, ICategoryQuery
         }
     }
 
-    public async Task<IResult<Category>> GetByIdAsync(int Id)
+    public async Task<IResult<Category>> GetByIdAsync(int id)
     {
         try
         {
@@ -48,7 +48,7 @@ public class CategoryQuery : AbstractRepository, ICategoryQuery
         }
         catch (Exception ex)
         {
-            return Result<Category>.Failure(CategoryErrors.LogNotFound(id), id, ex.Message);
+            return Result<Category>.Failure(CategoryErrors.LogNotFound(nameof(id)), nameof(id), ex.Message);
         }
     }
 }

@@ -14,7 +14,7 @@ public class RefreshTokenQuery : AbstractRepository, IRefreshTokenQuery
     {
     }
 
-    public async Task<IResult<RefreshToken>> GetById(string userId)
+    public async Task<IResult<RefreshToken>> GetById(int userId)
     {
         var result = await context.RefreshTokens
                 .AsNoTracking()
@@ -22,13 +22,13 @@ public class RefreshTokenQuery : AbstractRepository, IRefreshTokenQuery
 
         if (result == null)
         {
-            return Result<RefreshToken>.Failure(RefreshTokenErrors.LogNotFound(userId));
+            return Result<RefreshToken>.Failure(RefreshTokenErrors.LogNotFound((nameof(userId))));
         }
 
         return Result<RefreshToken>.Success(result);
     }
 
-    public async Task<IResult<string>> GetId(string userId)
+    public async Task<IResult<int>> GetId(int userId)
     {
         var result = await context.RefreshTokens
                 .AsNoTracking()
@@ -36,12 +36,12 @@ public class RefreshTokenQuery : AbstractRepository, IRefreshTokenQuery
                 .Select(p => p.Id)
                 .FirstOrDefaultAsync();
 
-        if (string.IsNullOrEmpty(result))
+        if (result != 0)
         {
-            return Result<string>.Failure(RefreshTokenErrors.LogNotFound(userId));
+            return Result<int>.Success(result);
         }
 
-        return Result<string>.Success(result);
+        return Result<int>.Failure(RefreshTokenErrors.LogNotFound(nameof(userId)));
     }
 }
 

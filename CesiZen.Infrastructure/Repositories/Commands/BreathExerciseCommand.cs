@@ -23,11 +23,11 @@ public class BreathExerciseCommand : AbstractRepository, IBreathExerciseCommand
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(BreathExerciseErrors.LogInsertionFailed(entity.Title), entity.UserId, ex.Message);
+            return Result.Failure(BreathExerciseErrors.LogInsertionFailed(entity.Title), nameof(entity.UserId), ex.Message);
         }
         catch (Exception ex)
         {
-            return Result.Failure(BreathExerciseErrors.LogInsertionFailed(entity.Title), entity.UserId, ex.Message);
+            return Result.Failure(BreathExerciseErrors.LogInsertionFailed(entity.Title), nameof(entity.UserId), ex.Message);
         }
     }
 
@@ -38,19 +38,19 @@ public class BreathExerciseCommand : AbstractRepository, IBreathExerciseCommand
             context.Entry(entity).State = EntityState.Modified;
             await context.SaveChangesAsync();
 
-            return Result.Success(BreathExerciseInfos.LogUpdateSucceeded(entity.Id));
+            return Result.Success(BreathExerciseInfos.LogUpdateSucceeded(nameof(entity.Id)));
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(BreathExerciseErrors.LogUpdateFailed(entity.Id), entity.Id, ex.Message);
+            return Result.Failure(BreathExerciseErrors.LogUpdateFailed(nameof(entity.Id)), nameof(entity.Id), ex.Message);
         }
         catch (Exception ex)
         {
-            return Result.Failure(BreathExerciseErrors.LogUpdateFailed(entity.Id), entity.Id, ex.Message);
+            return Result.Failure(BreathExerciseErrors.LogUpdateFailed(nameof(entity.Id)), nameof(entity.Id), ex.Message);
         }
     }
 
-    public async Task<IResult> Delete(int Id)
+    public async Task<IResult> Delete(int id)
     {
         try
         {
@@ -60,18 +60,18 @@ public class BreathExerciseCommand : AbstractRepository, IBreathExerciseCommand
                 context.BreathExercises.Remove(result);
                 await context.SaveChangesAsync();
 
-                return Result.Success(BreathExerciseInfos.LogDeleteCompleted(id));
+                return Result.Success(BreathExerciseInfos.LogDeleteCompleted(nameof(id)));
             }
 
-            return Result.Failure(BreathExerciseErrors.LogDeletionFailed(id));
+            return Result.Failure(BreathExerciseErrors.LogDeletionFailed(nameof(id)));
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(BreathExerciseErrors.LogDeletionFailed(id), id, ex.Message);
+            return Result.Failure(BreathExerciseErrors.LogDeletionFailed(nameof(id)), nameof(id), ex.Message);
         }
         catch (Exception ex)
         {
-            return Result.Failure(BreathExerciseErrors.LogDeletionFailed(id), id, ex.Message);
+            return Result.Failure(BreathExerciseErrors.LogDeletionFailed(nameof(id)), nameof(id), ex.Message);
         }
     }
 }

@@ -21,10 +21,10 @@ public static class UserErrors
 
     #region Log Messages
     public static Error LogRegisterFailed(string identifier) => new(ErrorType.RegisterFailed, string.Format(Message.GetResource("ErrorMessages", "LOG_REGISTER_FAILED"), identifier));
-    public static Error LogUpdateFailed(int Id) => new(ErrorType.UpdateFailed, string.Format(Message.GetResource("ErrorMessages", "LOG_UPDATE_FAILED"), "User", id));
-    public static Error LogUpdatePropertyFailed(string property, int Id) => new(ErrorType.UpdatePropertyFailed, string.Format(Message.GetResource("ErrorMessages", "LOG_UPDATE_PROPERTY_FAILED"), $"User [Id:{id}]", property));
-    public static Error LogDeletionFailed(int Id) => new(ErrorType.DeletionFailed, string.Format(Message.GetResource("ErrorMessages", "LOG_DELETE_FAILED"), "User", id));
-    public static Error LogNotFound(int Id) => new(ErrorType.NotFound, string.Format(Message.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "User", id));
+    public static Error LogUpdateFailed(string id) => new(ErrorType.UpdateFailed, string.Format(Message.GetResource("ErrorMessages", "LOG_UPDATE_FAILED"), "User", id));
+    public static Error LogUpdatePropertyFailed(string property, string id) => new(ErrorType.UpdatePropertyFailed, string.Format(Message.GetResource("ErrorMessages", "LOG_UPDATE_PROPERTY_FAILED"), $"User [Id:{id}]", property));
+    public static Error LogDeletionFailed(string id) => new(ErrorType.DeletionFailed, string.Format(Message.GetResource("ErrorMessages", "LOG_DELETE_FAILED"), "User", id));
+    public static Error LogNotFound(string id) => new(ErrorType.NotFound, string.Format(Message.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "User", id));
     public static Error LogMultipleNotFound => new(ErrorType.NotFound, string.Format(Message.GetResource("ErrorMessages", "LOG_GET_MULTIPLE_NOTFOUND"), "Users"));
     public static Error LogLoginAttempsReached(string identifier) => new(ErrorType.LoginAttempsReached, string.Format(Message.GetResource("ErrorMessages", "LOG_LOGIN_ATTEMPS_REACHED"), identifier));
     public static Error LogResetPasswordAttempsReached(string identifier) => new(ErrorType.ResetPasswordAttempsReached, string.Format(Message.GetResource("ErrorMessages", "LOG_RESET_PASSWORD_ATTEMPS_REACHED"), identifier));

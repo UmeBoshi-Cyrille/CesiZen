@@ -75,7 +75,7 @@ public class BreathExerciseCommandController : ControllerBase
     [HttpDelete("delete/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Delete(int Id)
+    public async Task<IActionResult> Delete(int id)
     {
         var result = await exerciseCommandService.Delete(id);
 

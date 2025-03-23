@@ -51,7 +51,7 @@ public class CategoryQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<CategoryRequestDto>> GetCategory(int Id)
+    public async Task<ActionResult<CategoryRequestDto>> GetCategory(int id)
     {
         var result = await categoryService.GetByIdAsync(id);
         return result.Match<ActionResult, CategoryRequestDto>(

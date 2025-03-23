@@ -5,9 +5,9 @@ namespace CesiZen.Domain.Interfaces;
 
 public interface IArticleCommandService : ICommand<ArticleDto>
 {
-    Task<IResult> UpdateTitleAsync(int Id, string title);
+    Task<IResult> UpdateTitleAsync(int id, string title);
 
-    Task<IResult> UpdateDescriptionAsync(int Id, string description);
+    Task<IResult> UpdateDescriptionAsync(int id, string description);
 
-    Task<IResult> UpdateContentAsync(int Id, string content);
+    Task<IResult> UpdateContentAsync(int id, string content);
 }

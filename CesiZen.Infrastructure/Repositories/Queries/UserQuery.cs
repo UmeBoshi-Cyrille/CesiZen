@@ -72,13 +72,13 @@ public class UserQuery : AbstractRepository, IUserQuery
         return Result<PagedResultDto<User>>.Success(result);
     }
 
-    public async Task<IResult<User>> GetByIdAsync(int Id)
+    public async Task<IResult<User>> GetByIdAsync(int id)
     {
         var user = await context.Users.FindAsync(id);
 
         if (user == null)
         {
-            return Result<User>.Failure(UserErrors.LogNotFound(id));
+            return Result<User>.Failure(UserErrors.LogNotFound(nameof(id)));
         }
 
         return Result<User>.Success(user);
@@ -99,7 +99,7 @@ public class UserQuery : AbstractRepository, IUserQuery
         return Result<User>.Success(user);
     }
 
-    public async Task<IResult<string>> GetUserId(string sessionId)
+    public async Task<IResult<int>> GetUserId(string sessionId)
     {
         var userId = await context.Sessions
                                 .Where(p => p.SessionId == sessionId)
@@ -107,11 +107,11 @@ public class UserQuery : AbstractRepository, IUserQuery
                                 .FirstOrDefaultAsync();
 
 
-        if (string.IsNullOrEmpty(userId))
+        if (userId != 0)
         {
-            return Result<string>.Failure(UserErrors.LogNotFound(sessionId));
+            return Result<int>.Success(userId);
         }
 
-        return Result<string>.Success(userId);
+        return Result<int>.Failure(UserErrors.LogNotFound(sessionId));
     }
 }

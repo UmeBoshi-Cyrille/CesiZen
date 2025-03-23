@@ -30,7 +30,7 @@ public class ArticleQueryService : AService, IArticleQueryService
         return Result<PagedResultDto<ArticleDto>>.Success(dto);
     }
 
-    public async Task<IResult<ArticleDto>> GetByIdAsync(int Id)
+    public async Task<IResult<ArticleDto>> GetByIdAsync(int id)
     {
         var result = await query.GetByIdAsync(id);
 

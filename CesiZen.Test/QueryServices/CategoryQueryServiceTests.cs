@@ -72,7 +72,7 @@ public class CategoryQueryServiceTests
     public async Task GetByIdAsyncTest_Success_WhenQuerySucceeds()
     {
         // Arrange
-        int Id = "1";
+        int id = 1;
         var category = CategoryFaker.FakeCategoryGenerator().Generate();
 
         mockQuery.Setup(q => q.GetByIdAsync(id))
@@ -91,7 +91,7 @@ public class CategoryQueryServiceTests
     public async Task GetByIdAsyncTest_Failure_WhenQueryFails()
     {
         // Arrange
-        int Id = "1";
+        int id = 1;
         var queryResult = Result<Category>.Failure(
             Error.NullValue("Error occurred"));
 

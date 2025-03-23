@@ -10,7 +10,7 @@ public static class LoginFaker
     public static Faker<Login> FakeLoginGenerator(bool emailVerified = false, int failedCount = 0)
     {
         return new Faker<Login>()
-            .RuleFor(a => a.Id, f => f.Random.Guid().ToString())
+            .RuleFor(a => a.Id, f => f.Random.Int(1, 200))
             .RuleFor(a => a.Email, f => f.Internet.Email())
             .RuleFor(a => a.Salt, "Salt")
             .RuleFor(a => a.Password, "Password1234=***$")

@@ -4,7 +4,7 @@ namespace CesiZen.Domain.Interfaces;
 
 public interface IBreathExerciseQuery
 {
-    Task<IResult<BreathExercise>> GetByIdAsync(int Id);
+    Task<IResult<BreathExercise>> GetByIdAsync(int id);
 
-    Task<IResult<List<BreathExercise>>> GetAllByIdAsync(string userId);
+    Task<IResult<List<BreathExercise>>> GetAllByIdAsync(int userId);
 }

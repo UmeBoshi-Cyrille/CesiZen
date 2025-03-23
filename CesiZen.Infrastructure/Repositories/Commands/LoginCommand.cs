@@ -31,7 +31,7 @@ public class LoginCommand : AbstractRepository, ILoginCommand
         }
     }
 
-    public async Task<IResult> UpdateEmail(string userId, string email)
+    public async Task<IResult> UpdateEmail(int userId, string email)
     {
         try
         {
@@ -43,11 +43,11 @@ public class LoginCommand : AbstractRepository, ILoginCommand
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(UserErrors.LogUpdatePropertyFailed("email", $"{userId}"), userId, ex.Message);
+            return Result.Failure(UserErrors.LogUpdatePropertyFailed("email", nameof(userId)), nameof(userId), ex.Message);
         }
     }
 
-    public async Task<IResult> UpdatePassword(string userId, string password)
+    public async Task<IResult> UpdatePassword(int userId, string password)
     {
         try
         {
@@ -59,7 +59,7 @@ public class LoginCommand : AbstractRepository, ILoginCommand
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(UserErrors.LogUpdatePropertyFailed("password", $"{userId}"), userId, ex.Message);
+            return Result.Failure(UserErrors.LogUpdatePropertyFailed("password", nameof(userId)), nameof(userId), ex.Message);
         }
     }
 
@@ -72,7 +72,7 @@ public class LoginCommand : AbstractRepository, ILoginCommand
 
             if (login == null)
             {
-                return Result.Failure(UserErrors.LogNotFound(login!.Id));
+                return Result.Failure(UserErrors.LogNotFound(nameof(login.Id)));
             }
 
             login.Password = password;
@@ -104,11 +104,11 @@ public class LoginCommand : AbstractRepository, ILoginCommand
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(UserErrors.LogUpdatePropertyFailed("PasswordResetToken", login.Id), login.Id, ex.Message);
+            return Result.Failure(UserErrors.LogUpdatePropertyFailed("PasswordResetToken", nameof(login.Id)), nameof(login.Id), ex.Message);
         }
     }
 
-    public async Task<IResult> UpdateSalt(string userId, string salt)
+    public async Task<IResult> UpdateSalt(int userId, string salt)
     {
         try
         {
@@ -120,7 +120,7 @@ public class LoginCommand : AbstractRepository, ILoginCommand
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(UserErrors.LogUpdatePropertyFailed("Salt", userId), userId, ex.Message);
+            return Result.Failure(UserErrors.LogUpdatePropertyFailed("Salt", nameof(userId)), nameof(userId), ex.Message);
         }
     }
 

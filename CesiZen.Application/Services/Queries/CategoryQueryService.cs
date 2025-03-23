@@ -30,7 +30,7 @@ public class CategoryQueryService : AService, ICategoryQueryService
         return Result<PagedResultDto<CategoryRequestDto>>.Success(dto);
     }
 
-    public async Task<IResult<CategoryRequestDto>> GetByIdAsync(int Id)
+    public async Task<IResult<CategoryRequestDto>> GetByIdAsync(int id)
     {
         var result = await query.GetByIdAsync(id);
 

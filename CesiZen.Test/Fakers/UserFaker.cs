@@ -9,7 +9,7 @@ internal class UserFaker
     public static Faker<User> FakeUserGenerator()
     {
         return new Faker<User>()
-            .RuleFor(a => a.Id, f => f.Random.Guid().ToString())
+            .RuleFor(a => a.Id, f => f.Random.Int(1, 200))
             .RuleFor(a => a.Firstname, f => f.Name.FirstName())
             .RuleFor(a => a.Lastname, f => f.Name.LastName())
             .RuleFor(a => a.CreatedAt, f => f.Date.Past())
@@ -30,7 +30,7 @@ internal class UserFaker
     public static Faker<UserRequestDto> FakeRequestDtoGenerator()
     {
         return new Faker<UserRequestDto>()
-            .RuleFor(a => a.Id, f => f.Random.Guid().ToString())
+            .RuleFor(a => a.Id, f => f.Random.Int(1, 200))
             .RuleFor(a => a.Firstname, f => f.Name.FirstName())
             .RuleFor(a => a.Lastname, f => f.Name.LastName())
             .RuleFor(a => a.IsActive, f => f.Random.Bool());
