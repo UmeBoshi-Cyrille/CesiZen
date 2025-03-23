@@ -14,7 +14,6 @@ public static class ArticleMapper
             Description = dto.Description,
             Author = dto.Author,
             Content = dto.Content,
-            Presentation = dto.Image,
             Images = dto.Images,
         };
     }
@@ -28,7 +27,6 @@ public static class ArticleMapper
             Description = model.Description,
             Author = model.Author,
             Content = model.Content,
-            Image = model.Presentation!,
             Images = model.Images!,
         };
     }

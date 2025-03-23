@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace CesiZen.Domain.Datamodel;
-
 public class Category
 {
     public int Id { get; set; }

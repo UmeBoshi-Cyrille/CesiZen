@@ -12,7 +12,7 @@ public class Image
 
     public string Path { get; set; } = string.Empty;
 
-    public string ArticleId { get; set; } = string.Empty;
+    public int ArticleId { get; set; }
 
     [JsonIgnore]
     public Article? Article { get; set; }

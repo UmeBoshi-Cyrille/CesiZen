@@ -1,9 +1,11 @@
 ﻿using CesiZen.Domain.Enum;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CesiZen.Domain.Datamodel;
 
+[NotMapped]
 public class BreathExercise
 {
     public int Id { get; set; }
