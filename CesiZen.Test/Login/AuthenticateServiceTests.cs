@@ -87,6 +87,7 @@ public class AuthenticateServiceTests
 
         loginQueryMock.Setup(x => x.GetByEmail(It.IsAny<string>())).ReturnsAsync(Result<Login>.Success(login));
         passwordServiceMock.Setup(x => x.IsCorrectPassword(It.IsAny<Login>(), It.IsAny<string>())).Returns(true);
+        tokenProviderMock.Setup(x => x.GenerateRefreshToken(It.IsAny<int>())).Returns(Result<TokenIdDto>.Success(tokenDto.Value));
         tokenProviderMock.Setup(x => x.GenerateAccessToken(It.IsAny<TokenIdDto>())).Returns(token);
 
         // Act
@@ -195,6 +196,7 @@ public class AuthenticateServiceTests
         var accessToken = "validtoken";
         var sessionId = "session";
         var userId = 123;
+        tokenProviderMock.Setup(x => x.GetSessionId(accessToken)).Returns(sessionId);
         userQueryMock.Setup(x => x.GetUserId(sessionId)).ReturnsAsync(Result<int>.Success(userId));
         tokenProviderMock.Setup(x => x.InvalidateTokens(userId)).ReturnsAsync(Result.Success());
 
@@ -229,6 +231,7 @@ public class AuthenticateServiceTests
         var accessToken = "validtoken";
         var sessionId = "session";
         var userId = 123;
+        tokenProviderMock.Setup(x => x.GetSessionId(accessToken)).Returns(sessionId);
         userQueryMock.Setup(x => x.GetUserId(sessionId)).ReturnsAsync(Result<int>.Success(userId));
         tokenProviderMock.Setup(x => x.InvalidateTokens(userId))
             .ReturnsAsync(Result.Failure(UserErrors.ClientNotFound));
