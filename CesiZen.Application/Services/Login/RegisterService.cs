@@ -19,14 +19,14 @@ public class RegisterService : ALoginService, IRegisterService
     {
     }
 
-    public async Task<IResult<EmailSenderDto>> Register(UserDto dto)
+    public async Task<IResult<string>> Register(UserDto dto)
     {
         User user;
         IResult result;
 
         if (IsEmailUnique(dto.Email).IsFailure)
         {
-            return Result<EmailSenderDto>.Failure(UserErrors.ClientNotUnique(dto.Email));
+            return Result<string>.Failure(UserErrors.ClientNotUnique(dto.Email));
         }
 
         string verificationToken = tokenProvider.GenerateVerificationToken();
@@ -40,13 +40,11 @@ public class RegisterService : ALoginService, IRegisterService
 
         if (result.IsFailure)
         {
-            return Result<EmailSenderDto>.Failure(UserErrors.ClientRegisterFailed);
+            return Result<string>.Failure(UserErrors.ClientRegisterFailed);
         }
 
-        var emailSender = UserMapper.MapEmailSender(dto.Email, "", verificationToken, "Email de vérification");
-
         logger.Information(result.Info.Message);
-        return Result<EmailSenderDto>.Success(emailSender, UserInfos.ClientInsertionSucceeded);
+        return Result<string>.Success(verificationToken, UserInfos.ClientInsertionSucceeded);
     }
 
     private IResult IsEmailUnique(string email)
