@@ -33,7 +33,7 @@ public class BreathExerciseQuery : AbstractRepository, IBreathExerciseQuery
         }
     }
 
-    public async Task<IResult<BreathExercise>> GetByIdAsync(string id)
+    public async Task<IResult<BreathExercise>> GetByIdAsync(int Id)
     {
         try
         {

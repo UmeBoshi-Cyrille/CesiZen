@@ -38,7 +38,7 @@ public class CategoryQuery : AbstractRepository, ICategoryQuery
         }
     }
 
-    public async Task<IResult<Category>> GetByIdAsync(string id)
+    public async Task<IResult<Category>> GetByIdAsync(int Id)
     {
         try
         {

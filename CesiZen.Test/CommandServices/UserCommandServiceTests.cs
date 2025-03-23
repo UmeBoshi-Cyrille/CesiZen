@@ -85,7 +85,7 @@ public class UserCommandServiceTests
     public async Task UpdateUsernameTest_Failure_WhenOperationFails()
     {
         // Arrange
-        string id = "1";
+        int Id = "1";
         string newContent = "New Content";
         var users = UserFaker.FakeUserGenerator().Generate(10);
         users[0].Id = "2";

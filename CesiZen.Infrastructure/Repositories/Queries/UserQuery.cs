@@ -72,7 +72,7 @@ public class UserQuery : AbstractRepository, IUserQuery
         return Result<PagedResult<User>>.Success(result);
     }
 
-    public async Task<IResult<User>> GetByIdAsync(string id)
+    public async Task<IResult<User>> GetByIdAsync(int Id)
     {
         var user = await context.Users.FindAsync(id);
 

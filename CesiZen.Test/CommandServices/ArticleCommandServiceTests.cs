@@ -126,7 +126,7 @@ public class ArticleCommandServiceTests
     public async Task UpdateTitleAsyncTest_Failure_WhenOperationFails()
     {
         // Arrange
-        string id = "wrongId";
+        int Id = "wrongId";
         string newTitle = "New Title";
         var article = ArticleFaker.FakeArticleGenerator().Generate();
         mockContext.Setup(c => c.Articles.Add(article));
@@ -164,7 +164,7 @@ public class ArticleCommandServiceTests
     public async Task UpdateDescriptionAsyncTest_Failure_WhenOperationFails()
     {
         // Arrange
-        string id = "1";
+        int Id = "1";
         string newDescription = "New Description";
         var article = ArticleFaker.FakeArticleGenerator().Generate();
         article.Id = "2";
@@ -203,7 +203,7 @@ public class ArticleCommandServiceTests
     public async Task UpdateContentAsyncTest_Failure_WhenOperationFails()
     {
         // Arrange
-        string id = "1";
+        int Id = "1";
         string newContent = "New Content";
         var articles = ArticleFaker.FakeArticleGenerator().Generate(10);
         articles[0].Id = "2";
@@ -239,7 +239,7 @@ public class ArticleCommandServiceTests
     public async Task DeleteTest_Failure_WhenNotFound()
     {
         // Arrange
-        string id = "1";
+        int Id = "1";
         var article = ArticleFaker.FakeArticleGenerator().Generate();
         article.Id = "10";
         mockContext.Setup(c => c.Articles.Add(article));

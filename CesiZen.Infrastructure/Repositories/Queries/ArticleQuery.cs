@@ -72,7 +72,7 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
         }
     }
 
-    public async Task<IResult<Article>> GetByIdAsync(string id)
+    public async Task<IResult<Article>> GetByIdAsync(int Id)
     {
         try
         {

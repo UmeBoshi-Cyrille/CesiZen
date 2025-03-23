@@ -82,7 +82,7 @@ public class UserQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<UserRequestDto>> GetById(string id)
+    public async Task<ActionResult<UserRequestDto>> GetById(int Id)
     {
         var result = await queryService.GetByIdAsync(id);
         return result.Match<ActionResult, UserRequestDto>(

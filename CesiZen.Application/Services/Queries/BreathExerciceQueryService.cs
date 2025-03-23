@@ -30,7 +30,7 @@ public class BreathExerciseQueryService : AService, IBreathExerciseQueryService
         return Result<List<BreathExerciseDto>>.Success(dto);
     }
 
-    public async Task<IResult<BreathExerciseDto>> GetByIdAsync(string id)
+    public async Task<IResult<BreathExerciseDto>> GetByIdAsync(int Id)
     {
         var result = await query.GetByIdAsync(id);
 

@@ -62,7 +62,7 @@ internal class UserCommand : AbstractRepository, IUserCommand
         }
     }
 
-    public async Task<IResult> UpdateUserName(string id, string userName)
+    public async Task<IResult> UpdateUserName(int Id, string userName)
     {
         var user = new User() { Id = id, Username = userName, UpdatedAt = DateTime.Now };
         context.Attach(user);
@@ -105,7 +105,7 @@ internal class UserCommand : AbstractRepository, IUserCommand
         }
     }
 
-    public async Task<IResult> Delete(string id)
+    public async Task<IResult> Delete(int Id)
     {
         try
         {

@@ -51,7 +51,7 @@ public class CategoryCommand : AbstractRepository, ICategoryCommand
         }
     }
 
-    public async Task<IResult> Delete(string id)
+    public async Task<IResult> Delete(int Id)
     {
         try
         {

@@ -121,7 +121,7 @@ public class BreathExerciseCommandServiceTests
     public async Task Delete_Failure_ReturnsFailureResult()
     {
         // Arrange
-        string id = "1";
+        int Id = "1";
         var entity = BreathExerciseFaker.FakeBreathExerciseGenerator().Generate();
         entity.Id = "2";
         mockContext.Setup(c => c.BreathExercises.Add(entity));

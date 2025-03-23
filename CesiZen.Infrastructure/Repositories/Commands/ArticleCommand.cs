@@ -117,7 +117,7 @@ public class ArticleCommand : AbstractRepository, IArticleCommand
         }
     }
 
-    public async Task<IResult> Delete(string id)
+    public async Task<IResult> Delete(int Id)
     {
         try
         {

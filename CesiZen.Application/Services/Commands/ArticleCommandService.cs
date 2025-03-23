@@ -46,7 +46,7 @@ public class ArticleCommandService : AService, IArticleCommandService
         return Result.Success(ArticleInfos.ClientUpdateSucceeded);
     }
 
-    public async Task<IResult> UpdateTitleAsync(string id, string title)
+    public async Task<IResult> UpdateTitleAsync(int Id, string title)
     {
         var article = new Article() { Id = id, Title = title, UpdatedAt = DateTime.Now };
 
@@ -61,7 +61,7 @@ public class ArticleCommandService : AService, IArticleCommandService
         return Result.Success(ArticleInfos.ClientUpdateSucceeded);
     }
 
-    public async Task<IResult> UpdateDescriptionAsync(string id, string description)
+    public async Task<IResult> UpdateDescriptionAsync(int Id, string description)
     {
         var article = new Article() { Id = id, Description = description, UpdatedAt = DateTime.Now };
         var result = await command.UpdateDescriptionAsync(article);
@@ -75,7 +75,7 @@ public class ArticleCommandService : AService, IArticleCommandService
         return Result.Success(ArticleInfos.ClientUpdateSucceeded);
     }
 
-    public async Task<IResult> UpdateContentAsync(string id, string content)
+    public async Task<IResult> UpdateContentAsync(int Id, string content)
     {
         var article = new Article() { Id = id, Content = content, UpdatedAt = DateTime.Now };
         var result = await command.UpdateContentAsync(article);
@@ -89,7 +89,7 @@ public class ArticleCommandService : AService, IArticleCommandService
         return Result.Success(ArticleInfos.ClientUpdateSucceeded);
     }
 
-    public async Task<IResult> Delete(string id)
+    public async Task<IResult> Delete(int Id)
     {
         var result = await command.Delete(id);
 

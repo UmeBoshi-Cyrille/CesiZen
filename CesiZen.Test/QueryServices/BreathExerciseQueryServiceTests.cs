@@ -60,7 +60,7 @@ public class BreathExerciseQueryServiceTests
     public async Task GetByIdAsync_Success_ReturnsBreathExerciseDto()
     {
         // Arrange
-        string id = "1";
+        int Id = "1";
         var breathExercise = BreathExerciseFaker.FakeBreathExerciseGenerator().Generate();
         mockQuery.Setup(q => q.GetByIdAsync(id))
             .ReturnsAsync(Result<BreathExercise>.Success(breathExercise));
@@ -77,7 +77,7 @@ public class BreathExerciseQueryServiceTests
     public async Task GetByIdAsync_Failure_ReturnsFailureResult()
     {
         // Arrange
-        string id = "1";
+        int Id = "1";
         mockQuery.Setup(q => q.GetByIdAsync(id))
             .ReturnsAsync(Result<BreathExercise>.Failure(Error.NullValue("Error message")));
 

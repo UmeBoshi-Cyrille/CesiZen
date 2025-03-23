@@ -16,18 +16,18 @@ public static class UserInfos
     #endregion
 
     #region Log Messages
-    public static Info LogInsertionSucceeded(string identifier) => new(InfoType.InsertionSucceeded, string.Format(Message.GetResource("InfoMessages", "LOG_INSERT_SUCCESS"), "User", identifier));
-    public static Info LogUpdateSucceeded(string id) => new(InfoType.UpdateSucceeded, string.Format(Message.GetResource("InfoMessages", "LOG_UPDATE_SUCCESS"), "User", id));
-    public static Info LogUpdateProperty(string property, string id) => new(InfoType.UpdateSucceeded, string.Format(Message.GetResource("InfoMessages", "LOG_UPDATE_PROPERTY"), "User", property, id));
-    public static Info LogDeleteCompleted(string id) => new(InfoType.DeleteCompleted, string.Format(Message.GetResource("InfoMessages", "LOG_DELETION_SUCCESS"), "User", id));
+    public static Info LogInsertionSucceeded(int Identifier) => new(InfoType.InsertionSucceeded, string.Format(Message.GetResource("InfoMessages", "LOG_INSERT_SUCCESS"), "User", identifier));
+    public static Info LogUpdateSucceeded(int Id) => new(InfoType.UpdateSucceeded, string.Format(Message.GetResource("InfoMessages", "LOG_UPDATE_SUCCESS"), "User", id));
+    public static Info LogUpdateProperty(string property, int Id) => new(InfoType.UpdateSucceeded, string.Format(Message.GetResource("InfoMessages", "LOG_UPDATE_PROPERTY"), "User", property, id));
+    public static Info LogDeleteCompleted(int Id) => new(InfoType.DeleteCompleted, string.Format(Message.GetResource("InfoMessages", "LOG_DELETION_SUCCESS"), "User", id));
     public static Info LogCollectCompleted(string argument) => new(InfoType.CollectCompleted, string.Format(Message.GetResource("InfoMessages", "LOG_COLLECT_COMPLETED"), "User", argument));
     public static Info LogFormatCompleted(string property) => new(InfoType.FormatCompleted, string.Format(Message.GetResource("InfoMessages", "LOG_FORMAT_COMPLETED"), "User", property));
-    public static Info LogSessionClosed(string identifier) => new(InfoType.SessionClosed, string.Format(Message.GetResource("InfoMessages", "LOG_SESSION_CLOSED"), identifier));
+    public static Info LogSessionClosed(int Identifier) => new(InfoType.SessionClosed, string.Format(Message.GetResource("InfoMessages", "LOG_SESSION_CLOSED"), identifier));
     public static Info LogEmailVerified(string email) => new(InfoType.EmailVerified, string.Format(Message.GetResource("InfoMessages", "LOG_EMAIL_VERIFIED"), email));
     public static Info LogVerificationEmailSent(string email) => new(InfoType.EmailVerified, string.Format(Message.GetResource("InfoMessages", "LOG_EMAIL_VERIFICATION"), email));
-    public static Info LogAuthentified(string identifier) => new(InfoType.Authentified, string.Format(Message.GetResource("InfoMessages", "LOG_AUTHENTIFIED"), identifier));
-    public static Info LogPasswordModified(string identifier) => new(InfoType.PasswordModified, string.Format(Message.GetResource("InfoMessages", "LOG_PASSWORD_MODIFICATION"), identifier));
-    public static Info LogAccountEnabled(string identifier) => new(InfoType.AccountEnabled, string.Format(Message.GetResource("InfoMessages", "LOG_ACCOUNT_ACTIVATED"), identifier));
-    public static Info LogAccountDisabled(string identifier) => new(InfoType.AccountDisabled, string.Format(Message.GetResource("InfoMessages", "LOG_ACCOUNT_DISACTIVATED"), identifier));
+    public static Info LogAuthentified(int Identifier) => new(InfoType.Authentified, string.Format(Message.GetResource("InfoMessages", "LOG_AUTHENTIFIED"), identifier));
+    public static Info LogPasswordModified(int Identifier) => new(InfoType.PasswordModified, string.Format(Message.GetResource("InfoMessages", "LOG_PASSWORD_MODIFICATION"), identifier));
+    public static Info LogAccountEnabled(int Identifier) => new(InfoType.AccountEnabled, string.Format(Message.GetResource("InfoMessages", "LOG_ACCOUNT_ACTIVATED"), identifier));
+    public static Info LogAccountDisabled(int Identifier) => new(InfoType.AccountDisabled, string.Format(Message.GetResource("InfoMessages", "LOG_ACCOUNT_DISACTIVATED"), identifier));
     #endregion
 }

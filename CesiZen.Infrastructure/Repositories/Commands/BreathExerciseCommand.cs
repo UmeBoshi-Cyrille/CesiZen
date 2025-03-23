@@ -50,7 +50,7 @@ public class BreathExerciseCommand : AbstractRepository, IBreathExerciseCommand
         }
     }
 
-    public async Task<IResult> Delete(string id)
+    public async Task<IResult> Delete(int Id)
     {
         try
         {

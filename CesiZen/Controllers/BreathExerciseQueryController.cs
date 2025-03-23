@@ -50,7 +50,7 @@ public class BreathExerciseQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<BreathExerciseDto>> GetExercise(string id)
+    public async Task<ActionResult<BreathExerciseDto>> GetExercise(int Id)
     {
         var result = await exerciseService.GetByIdAsync(id);
 

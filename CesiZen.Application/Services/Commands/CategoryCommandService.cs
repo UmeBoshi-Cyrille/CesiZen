@@ -44,7 +44,7 @@ public class CategoryCommandService : AService, ICategoryCommandService
         return Result.Success(CategoryInfos.ClientUpdateSucceeded);
     }
 
-    public async Task<IResult> Delete(string id)
+    public async Task<IResult> Delete(int Id)
     {
         var result = await command.Delete(id);
 

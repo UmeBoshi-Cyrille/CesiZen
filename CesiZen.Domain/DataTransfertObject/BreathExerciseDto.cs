@@ -5,7 +5,7 @@ namespace CesiZen.Domain.DataTransfertObject;
 
 public class BreathExerciseDto
 {
-    public string Id { get; set; } = string.Empty;
+    public int Id { get; set; } = string.Empty;
 
     [MaxLength(100)]
     public string Title { get; set; } = string.Empty;

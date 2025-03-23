@@ -30,7 +30,7 @@ public class UserCommandService : AService, IUserCommandService
         return Result.Failure(UserErrors.ClientUpdateFailed);
     }
 
-    public async Task<IResult> Delete(string id)
+    public async Task<IResult> Delete(int Id)
     {
         var result = await command.Delete(id);
 
@@ -44,7 +44,7 @@ public class UserCommandService : AService, IUserCommandService
         return Result.Failure(UserErrors.ClientDeletionFailed);
     }
 
-    public async Task<IResult> UpdateUserName(string id, string userName)
+    public async Task<IResult> UpdateUserName(int Id, string userName)
     {
         var result = await command.UpdateUserName(id, userName);
 

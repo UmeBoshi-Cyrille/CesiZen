@@ -121,7 +121,7 @@ public class CategoryCommandServiceTests
     public async Task DeleteTest_Failure_WhenOperationFails()
     {
         // Arrange
-        string id = "1";
+        int Id = "1";
         var category = CategoryFaker.FakeCategoryGenerator(id).Generate();
         category.Id = "10";
 

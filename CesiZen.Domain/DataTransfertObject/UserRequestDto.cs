@@ -2,7 +2,7 @@
 
 public record UserRequestDto
 {
-    public string Id { get; set; } = string.Empty;
+    public int Id { get; set; } = string.Empty;
 
     public DateTime CreatedAt { get; set; }
 
