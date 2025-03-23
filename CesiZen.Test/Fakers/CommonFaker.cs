@@ -9,9 +9,9 @@ namespace CesiZen.Test.Fakers;
 
 internal class CommonFaker
 {
-    public static Faker<PageParameters> FakePageParametersGenerator()
+    public static Faker<PageParametersDto> FakePageParametersGenerator()
     {
-        return new Faker<PageParameters>()
+        return new Faker<PageParametersDto>()
             .RuleFor(a => a.PageNumber, f => f.Random.Int(1, 200))
             .RuleFor(a => a.PageSize, f => f.Random.Int(1, 200));
     }

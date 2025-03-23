@@ -58,11 +58,11 @@ internal class UserCommand : AbstractRepository, IUserCommand
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(UserErrors.LogUpdateFailed(entity.Id), entity.Id, ex.Message);
+            return Result.Failure(UserErrors.LogUpdateFailed(entity.Id), nameof(entity.Id), ex.Message);
         }
     }
 
-    public async Task<IResult> UpdateUserName(int Id, string userName)
+    public async Task<IResult> UpdateUserName(int id, string userName)
     {
         var user = new User() { Id = id, Username = userName, UpdatedAt = DateTime.Now };
         context.Attach(user);
@@ -77,7 +77,7 @@ internal class UserCommand : AbstractRepository, IUserCommand
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(UserErrors.LogUpdatePropertyFailed("Username", id), id, ex.Message);
+            return Result.Failure(UserErrors.LogUpdatePropertyFailed("Username", id), nameof(id), ex.Message);
         }
     }
 
@@ -93,19 +93,19 @@ internal class UserCommand : AbstractRepository, IUserCommand
 
             Info info;
             if (entity.IsActive)
-                info = UserInfos.LogAccountEnabled(entity.Id);
+                info = UserInfos.LogAccountEnabled(nameof(entity.Id));
             else
-                info = UserInfos.LogAccountDisabled(entity.Id);
+                info = UserInfos.LogAccountDisabled(nameof(entity.Id));
 
             return Result.Success(info);
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(UserErrors.LogUpdatePropertyFailed("IsActive", entity.Id), entity.Id, ex.Message);
+            return Result.Failure(UserErrors.LogUpdatePropertyFailed("IsActive", entity.Id), nameof(entity.Id), ex.Message);
         }
     }
 
-    public async Task<IResult> Delete(int Id)
+    public async Task<IResult> Delete(int id)
     {
         try
         {
@@ -117,7 +117,7 @@ internal class UserCommand : AbstractRepository, IUserCommand
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(UserErrors.LogDeletionFailed(id), id, ex.Message);
+            return Result.Failure(UserErrors.LogDeletionFailed(id), nameof(id), ex.Message);
         }
     }
 }

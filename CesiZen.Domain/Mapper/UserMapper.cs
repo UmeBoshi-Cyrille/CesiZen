@@ -129,11 +129,11 @@ public static class UserMapper
     #endregion
 
     #region Paginated Mapper Methods
-    public static PagedResult<UserRequestDto> Map(this PagedResult<User> model)
+    public static PagedResultDto<UserRequestDto> Map(this PagedResultDto<User> model)
     {
         List<UserRequestDto> dto = model.Data.Map();
 
-        return new PagedResult<UserRequestDto>
+        return new PagedResultDto<UserRequestDto>
         {
             Data = dto,
             TotalCount = model.TotalCount,

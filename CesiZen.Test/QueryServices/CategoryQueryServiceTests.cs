@@ -28,7 +28,7 @@ public class CategoryQueryServiceTests
         // Arrange
         int pageNumber = 1, pageSize = 10;
         var categories = CategoryFaker.FakeCategoryGenerator().Generate(34);
-        var pagedResult = new PagedResult<Category>
+        var pagedResult = new PagedResultDto<Category>
         {
             Data = categories,
             TotalCount = categories.Count,
@@ -37,7 +37,7 @@ public class CategoryQueryServiceTests
         };
 
         mockQuery.Setup(q => q.GetAllAsync(pageNumber, pageSize))
-                  .ReturnsAsync(Result<PagedResult<Category>>.Success(pagedResult));
+                  .ReturnsAsync(Result<PagedResultDto<Category>>.Success(pagedResult));
 
         // Act
         var result = await service.GetAllAsync(pageNumber, pageSize);
@@ -56,7 +56,7 @@ public class CategoryQueryServiceTests
         int pageNumber = 1, pageSize = 10;
 
         mockQuery.Setup(q => q.GetAllAsync(pageNumber, pageSize))
-                  .ReturnsAsync(Result<PagedResult<Category>>.Failure(
+                  .ReturnsAsync(Result<PagedResultDto<Category>>.Failure(
                         Error.NullValue("Error occurred")));
 
         // Act

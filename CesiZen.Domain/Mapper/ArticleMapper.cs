@@ -62,11 +62,11 @@ public static class ArticleMapper
     #endregion
 
     #region Paginated Mapper Methods
-    public static PagedResult<ArticleDto> Map(this PagedResult<Article> model)
+    public static PagedResultDto<ArticleDto> Map(this PagedResultDto<Article> model)
     {
         List<ArticleDto> dto = model.Data.Map();
 
-        return new PagedResult<ArticleDto>
+        return new PagedResultDto<ArticleDto>
         {
             Data = dto,
             TotalCount = model.TotalCount,

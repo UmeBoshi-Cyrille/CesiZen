@@ -1,6 +1,6 @@
 ﻿namespace CesiZen.Domain.DataTransfertObject;
 
-public class PagedResult<T>
+public class PagedResultDto<T>
 {
     public List<T> Data { get; set; } = new List<T>();
     public int TotalCount { get; set; }

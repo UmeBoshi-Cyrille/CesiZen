@@ -2,7 +2,7 @@
 
 namespace CesiZen.Domain.Interfaces;
 
-public interface IUserCommandService : ICommandServiceInterface<UserDto>
+public interface IUserCommandService : ICommandService<UserDto>
 {
     Task<IResult> UpdateUserName(int Id, string userName);
 

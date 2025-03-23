@@ -30,9 +30,9 @@ public class ArticleQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<PagedResult<ArticleDto>>> SearchArticles(int pageNumber = 1, int pageSize = 10, [FromQuery] string searchTerm = "")
+    public async Task<ActionResult<PagedResultDto<ArticleDto>>> SearchArticles(int pageNumber = 1, int pageSize = 10, [FromQuery] string searchTerm = "")
     {
-        var parameters = new PageParameters()
+        var parameters = new PageParametersDto()
         {
             PageNumber = pageNumber,
             PageSize = pageSize,
@@ -40,7 +40,7 @@ public class ArticleQueryController : ControllerBase
 
         var result = await articleService.SearchArticles(parameters, searchTerm);
 
-        return result.Match<ActionResult, PagedResult<ArticleDto>>(
+        return result.Match<ActionResult, PagedResultDto<ArticleDto>>(
              success: value => Ok(new { value }),
              failure: error => NotFound(new { message = error.Message })
         );
@@ -59,11 +59,11 @@ public class ArticleQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<PagedResult<ArticleDto>>> GetArticles(int pageNumber = 1, int pageSize = 10)
+    public async Task<ActionResult<PagedResultDto<ArticleDto>>> GetArticles(int pageNumber = 1, int pageSize = 10)
     {
         var result = await articleService.GetAllAsync(pageNumber, pageSize);
 
-        return result.Match<ActionResult, PagedResult<ArticleDto>>(
+        return result.Match<ActionResult, PagedResultDto<ArticleDto>>(
              success: value => Ok(new { value }),
              failure: error => NotFound(new { message = error.Message })
         );

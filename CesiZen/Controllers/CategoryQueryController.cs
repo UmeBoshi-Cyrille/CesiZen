@@ -29,11 +29,11 @@ public class CategoryQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<PagedResult<CategoryRequestDto>>> GetCategories([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    public async Task<ActionResult<PagedResultDto<CategoryRequestDto>>> GetCategories([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var result = await categoryService.GetAllAsync(pageNumber, pageSize);
 
-        return result.Match<ActionResult, PagedResult<CategoryRequestDto>>(
+        return result.Match<ActionResult, PagedResultDto<CategoryRequestDto>>(
              success: value => Ok(new { value }),
              failure: error => NotFound(new { message = error.Message })
         );

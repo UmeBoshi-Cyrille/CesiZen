@@ -1,6 +1,6 @@
 namespace CesiZen.Domain.Interfaces;
 
-public interface ICommandServiceInterface<T>
+public interface ICommandService<T>
 {
     Task<IResult> Update(T entity);
 

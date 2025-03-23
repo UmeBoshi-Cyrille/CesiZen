@@ -13,7 +13,7 @@ public class UserQuery : AbstractRepository, IUserQuery
     {
     }
 
-    public async Task<IResult<PagedResult<User>>> SearchUsers(PageParameters parameters, string searchTerm)
+    public async Task<IResult<PagedResultDto<User>>> SearchUsers(PageParametersDto parameters, string searchTerm)
     {
         try
         {
@@ -31,7 +31,7 @@ public class UserQuery : AbstractRepository, IUserQuery
                 .Take(parameters.PageSize)
                 .ToListAsync();
 
-            var result = new PagedResult<User>
+            var result = new PagedResultDto<User>
             {
                 Data = Users,
                 TotalCount = totalCount,
@@ -39,15 +39,15 @@ public class UserQuery : AbstractRepository, IUserQuery
                 PageSize = parameters.PageSize
             };
 
-            return Result<PagedResult<User>>.Success(result);
+            return Result<PagedResultDto<User>>.Success(result);
         }
         catch (Exception ex)
         {
-            return Result<PagedResult<User>>.Failure(UserErrors.LogMultipleNotFound, ex.Message);
+            return Result<PagedResultDto<User>>.Failure(UserErrors.LogMultipleNotFound, ex.Message);
         }
     }
 
-    public async Task<IResult<PagedResult<User>>> GetAllAsync(int pageNumber, int pageSize)
+    public async Task<IResult<PagedResultDto<User>>> GetAllAsync(int pageNumber, int pageSize)
     {
         var users = await context.Users
                 .AsNoTracking()
@@ -58,10 +58,10 @@ public class UserQuery : AbstractRepository, IUserQuery
 
         if (!users.Any())
         {
-            return Result<PagedResult<User>>.Failure(UserErrors.LogMultipleNotFound);
+            return Result<PagedResultDto<User>>.Failure(UserErrors.LogMultipleNotFound);
         }
 
-        var result = new PagedResult<User>
+        var result = new PagedResultDto<User>
         {
             Data = users,
             TotalCount = users.Count,
@@ -69,7 +69,7 @@ public class UserQuery : AbstractRepository, IUserQuery
             PageSize = pageSize
         };
 
-        return Result<PagedResult<User>>.Success(result);
+        return Result<PagedResultDto<User>>.Success(result);
     }
 
     public async Task<IResult<User>> GetByIdAsync(int Id)

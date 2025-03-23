@@ -13,7 +13,7 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
     {
     }
 
-    public async Task<IResult<PagedResult<Article>>> GetAllAsync(int pageNumber, int pageSize)
+    public async Task<IResult<PagedResultDto<Article>>> GetAllAsync(int pageNumber, int pageSize)
     {
         var articles = await context.Articles
                .AsNoTracking()
@@ -24,10 +24,10 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
 
         if (!articles.Any())
         {
-            return Result<PagedResult<Article>>.Failure(ArticleErrors.LogMultipleNotFound);
+            return Result<PagedResultDto<Article>>.Failure(ArticleErrors.LogMultipleNotFound);
         }
 
-        var result = new PagedResult<Article>
+        var result = new PagedResultDto<Article>
         {
             Data = articles,
             TotalCount = articles.Count,
@@ -35,10 +35,10 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
             PageSize = pageSize
         };
 
-        return Result<PagedResult<Article>>.Success(result);
+        return Result<PagedResultDto<Article>>.Success(result);
     }
 
-    public async Task<IResult<PagedResult<Article>>> SearchArticles(PageParameters parameters, string searchTerm = "")
+    public async Task<IResult<PagedResultDto<Article>>> SearchArticles(PageParametersDto parameters, string searchTerm = "")
     {
         try
         {
@@ -56,7 +56,7 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
                 .Take(parameters.PageSize)
                 .ToListAsync();
 
-            var result = new PagedResult<Article>
+            var result = new PagedResultDto<Article>
             {
                 Data = Articles,
                 TotalCount = totalCount,
@@ -64,11 +64,11 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
                 PageSize = parameters.PageSize
             };
 
-            return Result<PagedResult<Article>>.Success(result);
+            return Result<PagedResultDto<Article>>.Success(result);
         }
         catch (Exception ex)
         {
-            return Result<PagedResult<Article>>.Failure(ArticleErrors.LogMultipleNotFound, ex.Message);
+            return Result<PagedResultDto<Article>>.Failure(ArticleErrors.LogMultipleNotFound, ex.Message);
         }
     }
 

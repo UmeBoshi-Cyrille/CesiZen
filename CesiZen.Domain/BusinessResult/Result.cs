@@ -8,7 +8,7 @@ public class Result : IResult
     protected Error error;
     protected Info info;
     protected string exceptionMessage;
-    protected int Identifier;
+    protected string identifier;
 
     public Error Error => error != Error.None ? error : Error.None;
     public Info Info => info != Info.None ? info : Info.None;
@@ -52,7 +52,7 @@ public class Result : IResult
         identifier = string.Empty;
     }
 
-    public Result(Error error, int Identifier, string exception)
+    public Result(Error error, string identifier, string exception)
     {
         IsSuccess = false;
         this.error = error;
@@ -93,7 +93,7 @@ public class Result : IResult
     /// </summary>
     /// <param name="error">The first value</param>
     /// <returns>a new Failure Result with an Error</returns>
-    public static Result Failure(Error error, int Identifier, string exception) => new(error, identifier, exception);
+    public static Result Failure(Error error, string identifier, string exception) => new(error, identifier, exception);
 }
 
 public class Result<TValue> : Result, IResult<TValue>
@@ -122,7 +122,7 @@ public class Result<TValue> : Result, IResult<TValue>
         this.value = default!;
     }
 
-    private Result(Error error, int Identifier, string exception) : base(error, identifier, exception)
+    private Result(Error error, string identifier, string exception) : base(error, identifier, exception)
     {
         this.value = default!;
     }
@@ -161,5 +161,5 @@ public class Result<TValue> : Result, IResult<TValue>
     /// </summary>
     /// <param name="error">The first value</param>
     /// <returns>a new Failure Result with an Error</returns>
-    public static new Result<TValue> Failure(Error error, int Identifier, string exception) => new(error, identifier, exception);
+    public static new Result<TValue> Failure(Error error, string identifier, string exception) => new(error, identifier, exception);
 }

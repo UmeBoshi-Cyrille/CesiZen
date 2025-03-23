@@ -9,7 +9,7 @@ public static class CategoryInfos
     #endregion
 
     #region Log Messages
-    public static Info LogInsertionSucceeded(int Identifier) => new(InfoType.InsertionSucceeded, string.Format(Message.GetResource("InfoMessages", "LOG_INSERT_SUCCESS"), "Category", identifier));
+    public static Info LogInsertionSucceeded(string identifier) => new(InfoType.InsertionSucceeded, string.Format(Message.GetResource("InfoMessages", "LOG_INSERT_SUCCESS"), "Category", identifier));
     public static Info LogUpdateSucceeded(int Id) => new(InfoType.UpdateSucceeded, string.Format(Message.GetResource("InfoMessages", "LOG_UPDATE_SUCCESS"), "Category", id));
     public static Info LogUpdateProperty(string property) => new(InfoType.UpdateSucceeded, string.Format(Message.GetResource("InfoMessages", "LOG_UPDATE_PROPERTY"), "Category", property));
     public static Info LogDeleteCompleted(int Id) => new(InfoType.DeleteCompleted, string.Format(Message.GetResource("InfoMessages", "LOG_DELETION_SUCCESS"), "Category", id));
