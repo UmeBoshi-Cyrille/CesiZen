@@ -36,7 +36,9 @@ public sealed class Error
 
 public enum ErrorType
 {
+    AttempsReached,
     AuthenticationFailed,
+    AuthenticationMismatch,
     DeletionFailed,
     DisconnectFailed,
     EmailVerificationFailed,
@@ -55,6 +57,7 @@ public enum ErrorType
     OperationFailed,
     PasswordNotMatch,
     RegisterFailed,
+    RegistrationFailed,
     ResetPasswordAttempsReached,
     TimeOut,
     UpdateFailed,
