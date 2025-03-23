@@ -53,7 +53,7 @@ public class UserCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> UpdateUsername([FromBody] string id, string username)
+    public async Task<IActionResult> UpdateUsername([FromBody] int id, string username)
     {
         var result = await userCommandService.UpdateUserName(id, username);
 
@@ -98,7 +98,7 @@ public class UserCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Delete(string id)
+    public async Task<IActionResult> Delete(int id)
     {
         var result = await userCommandService.Delete(id);
 

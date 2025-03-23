@@ -31,9 +31,9 @@ public class UserQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<PagedResult<UserRequestDto>>> SearchUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string searchTerm = "")
+    public async Task<ActionResult<PagedResultDto<UserRequestDto>>> SearchUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string searchTerm = "")
     {
-        var parameters = new PageParameters()
+        var parameters = new PageParametersDto()
         {
             PageNumber = pageNumber,
             PageSize = pageSize,
@@ -41,7 +41,7 @@ public class UserQueryController : ControllerBase
 
         var result = await queryService.SearchUsers(parameters, searchTerm);
 
-        return result.Match<ActionResult, PagedResult<UserRequestDto>>(
+        return result.Match<ActionResult, PagedResultDto<UserRequestDto>>(
              success: value => Ok(new { value }),
              failure: error => NotFound(new { message = error.Message })
         );
@@ -60,11 +60,11 @@ public class UserQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<PagedResult<UserRequestDto>>> GetAllAsync([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    public async Task<ActionResult<PagedResultDto<UserRequestDto>>> GetAllAsync([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var result = await queryService.GetAllAsync(pageNumber, pageSize);
 
-        return result.Match<ActionResult, PagedResult<UserRequestDto>>(
+        return result.Match<ActionResult, PagedResultDto<UserRequestDto>>(
              success: value => Ok(new { value }),
              failure: error => NotFound(new { message = error.Message })
         );
@@ -82,7 +82,7 @@ public class UserQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<UserRequestDto>> GetById(string id)
+    public async Task<ActionResult<UserRequestDto>> GetById(int id)
     {
         var result = await queryService.GetByIdAsync(id);
         return result.Match<ActionResult, UserRequestDto>(

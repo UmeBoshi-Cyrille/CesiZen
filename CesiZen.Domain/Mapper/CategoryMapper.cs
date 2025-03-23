@@ -81,11 +81,11 @@ public static class CategoryMapper
         return model;
     }
 
-    public static PagedResult<CategoryRequestDto> Map(this PagedResult<Category> model)
+    public static PagedResultDto<CategoryRequestDto> Map(this PagedResultDto<Category> model)
     {
         List<CategoryRequestDto> dto = model.Data.Map();
 
-        return new PagedResult<CategoryRequestDto>
+        return new PagedResultDto<CategoryRequestDto>
         {
             Data = dto,
             TotalCount = model.TotalCount,

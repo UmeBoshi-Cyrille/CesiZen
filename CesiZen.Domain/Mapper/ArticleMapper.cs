@@ -14,7 +14,6 @@ public static class ArticleMapper
             Description = dto.Description,
             Author = dto.Author,
             Content = dto.Content,
-            Image = dto.Image,
             Images = dto.Images,
         };
     }
@@ -28,7 +27,6 @@ public static class ArticleMapper
             Description = model.Description,
             Author = model.Author,
             Content = model.Content,
-            Image = model.Image!,
             Images = model.Images!,
         };
     }
@@ -62,11 +60,11 @@ public static class ArticleMapper
     #endregion
 
     #region Paginated Mapper Methods
-    public static PagedResult<ArticleDto> Map(this PagedResult<Article> model)
+    public static PagedResultDto<ArticleDto> Map(this PagedResultDto<Article> model)
     {
         List<ArticleDto> dto = model.Data.Map();
 
-        return new PagedResult<ArticleDto>
+        return new PagedResultDto<ArticleDto>
         {
             Data = dto,
             TotalCount = model.TotalCount,

@@ -17,14 +17,14 @@ public class UserCommandServiceTests
     private readonly Mock<ILogger> mockLogger;
     private readonly Mock<IUserCommand> mockCommand;
     private readonly UserCommandService service;
-    private Mock<MongoDbContext> mockContext;
+    private Mock<CesizenDbContext> mockContext;
     private Mock<DbSet<User>> mockSet;
 
     public UserCommandServiceTests()
     {
         mockLogger = new Mock<ILogger>();
         mockCommand = new Mock<IUserCommand>();
-        mockContext = new Mock<MongoDbContext>(Tools.SetContext());
+        mockContext = new Mock<CesizenDbContext>(Tools.SetContext());
         service = new UserCommandService(mockCommand.Object, mockLogger.Object);
         mockSet = null!;
     }
@@ -77,7 +77,7 @@ public class UserCommandServiceTests
         // Assert
         Assert.True(result.IsSuccess);
         mockCommand.Verify(c => c.UpdateUserName(
-            It.Is<string>(a => a == users[0].Id), It.Is<string>(a => a == newUsername)), Times.Once);
+            It.Is<int>(a => a == users[0].Id), It.Is<string>(a => a == newUsername)), Times.Once);
         Assert.True(mockContext.Object.Users.Any(c => c.Username == newUsername));
     }
 
@@ -85,11 +85,11 @@ public class UserCommandServiceTests
     public async Task UpdateUsernameTest_Failure_WhenOperationFails()
     {
         // Arrange
-        string id = "1";
+        int id = 1;
         string newContent = "New Content";
         var users = UserFaker.FakeUserGenerator().Generate(10);
-        users[0].Id = "2";
-        mockCommand.Setup(c => c.UpdateUserName(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(
+        users[0].Id = 2;
+        mockCommand.Setup(c => c.UpdateUserName(It.IsAny<int>(), It.IsAny<string>())).ReturnsAsync(
             Result.Failure(Error.NullValue("Error message")));
 
         // Act
@@ -97,7 +97,7 @@ public class UserCommandServiceTests
 
         // Assert
         Assert.True(result.IsFailure);
-        mockCommand.Verify(c => c.UpdateUserName(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+        mockCommand.Verify(c => c.UpdateUserName(It.IsAny<int>(), It.IsAny<string>()), Times.Once);
         mockLogger.Verify(l => l.Error(It.IsAny<string>()), Times.Once);
     }
 
@@ -113,16 +113,16 @@ public class UserCommandServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        mockCommand.Verify(c => c.Delete(It.IsAny<string>()), Times.Once);
+        mockCommand.Verify(c => c.Delete(It.IsAny<int>()), Times.Once);
     }
 
     [Fact]
     public async Task Delete_Failure_WhenOperationFails()
     {
         // Arrange
-        string userId = "1";
+        int userId = 1;
         var user = UserFaker.FakeUserGenerator().Generate();
-        user.Id = "10";
+        user.Id = 10;
         mockContext.Setup(c => c.Users.Add(user));
         mockCommand.Setup(c => c.Delete(userId))
             .ReturnsAsync(Result.Failure(Error.NullValue("Error message")));
@@ -159,7 +159,7 @@ public class UserCommandServiceTests
                 ).ReturnsAsync(Result.Success(UserInfos.LogUpdateSucceeded(It.IsAny<string>())));
                 break;
             case CommandSelector.C2:
-                mockCommand.Setup(c => c.Delete(It.IsAny<string>())).Callback<string>(
+                mockCommand.Setup(c => c.Delete(It.IsAny<int>())).Callback<int>(
                     id =>
                     {
                         var entity = entities.FirstOrDefault(a => a.Id == id);
@@ -171,8 +171,8 @@ public class UserCommandServiceTests
                 ).ReturnsAsync(Result.Success(UserInfos.LogDeleteCompleted(It.IsAny<string>())));
                 break;
             case CommandSelector.C3:
-                mockCommand.Setup(c => c.UpdateUserName(It.IsAny<string>(), It.IsAny<string>()))
-                    .Callback<string, string>((id, name) =>
+                mockCommand.Setup(c => c.UpdateUserName(It.IsAny<int>(), It.IsAny<string>()))
+                    .Callback<int, string>((id, name) =>
                     {
                         var entity = entities.FirstOrDefault(a => a.Id == id);
                         if (entity != null)
@@ -180,7 +180,7 @@ public class UserCommandServiceTests
                             entity.Username = name;
                         }
                     }
-                ).ReturnsAsync(Result.Success(UserInfos.LogUpdateProperty("Username", It.IsAny<string>())));
+                ).ReturnsAsync(Result.Success(UserInfos.LogUpdateProperty("Username", It.IsAny<int>())));
                 break;
         }
     }

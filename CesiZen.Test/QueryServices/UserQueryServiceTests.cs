@@ -27,7 +27,7 @@ public class UserQueryServiceTests
     public async Task GetByIdAsyncTest_Success_ReturnsUserDto()
     {
         // Arrange
-        string userId = "1";
+        int userId = 1;
         var user = UserFaker.FakeUserGenerator().Generate();
         var expectedDto = user.Map();
 
@@ -48,7 +48,7 @@ public class UserQueryServiceTests
     public async Task GetByIdAsyncTest_Failure_ReturnsFailureResult()
     {
         // Arrange
-        string userId = "1";
+        int userId = 1;
         mockUserQuery.Setup(q => q.GetByIdAsync(userId))
             .ReturnsAsync(Result<User>.Failure(Error.NullValue("Error Message")));
 
@@ -64,11 +64,11 @@ public class UserQueryServiceTests
     public async Task SearchUsersTest_Success_ReturnsPagedResultOfUserDto()
     {
         // Arrange
-        var parameters = new PageParameters { PageNumber = 1, PageSize = 10 };
+        var parameters = new PageParametersDto { PageNumber = 1, PageSize = 10 };
         var searchTerm = "John";
         var users = UserFaker.FakeUserGenerator().Generate(10);
         users[0].Firstname = searchTerm;
-        var pagedResult = new PagedResult<User>()
+        var pagedResult = new PagedResultDto<User>()
         {
             Data = users,
             TotalCount = 1,
@@ -77,7 +77,7 @@ public class UserQueryServiceTests
         };
 
         mockUserQuery.Setup(q => q.SearchUsers(parameters, searchTerm))
-            .ReturnsAsync(Result<PagedResult<User>>.Success(pagedResult));
+            .ReturnsAsync(Result<PagedResultDto<User>>.Success(pagedResult));
 
         // Act
         var result = await service.SearchUsers(parameters, searchTerm);
@@ -95,11 +95,11 @@ public class UserQueryServiceTests
     public async Task SearchUsersTest_Failure_ReturnsFailureResult()
     {
         // Arrange
-        var parameters = new PageParameters { PageNumber = 1, PageSize = 10 };
+        var parameters = new PageParametersDto { PageNumber = 1, PageSize = 10 };
         var searchTerm = "John";
 
         mockUserQuery.Setup(q => q.SearchUsers(parameters, searchTerm))
-            .ReturnsAsync(Result<PagedResult<User>>.Failure(Error.NullValue("Error Message")));
+            .ReturnsAsync(Result<PagedResultDto<User>>.Failure(Error.NullValue("Error Message")));
 
         // Act
         var result = await service.SearchUsers(parameters, searchTerm);
@@ -113,11 +113,11 @@ public class UserQueryServiceTests
     public async Task GetAllAsyncTest_Success_ReturnsPagedResultOfUserDto()
     {
         // Arrange
-        var parameters = new PageParameters { PageNumber = 1, PageSize = 10 };
+        var parameters = new PageParametersDto { PageNumber = 1, PageSize = 10 };
         var searchTerm = "John";
         var users = UserFaker.FakeUserGenerator().Generate(10);
         users[0].Firstname = searchTerm;
-        var pagedResult = new PagedResult<User>()
+        var pagedResult = new PagedResultDto<User>()
         {
             Data = users,
             TotalCount = 1,
@@ -126,7 +126,7 @@ public class UserQueryServiceTests
         };
 
         mockUserQuery.Setup(q => q.GetAllAsync(parameters.PageNumber, parameters.PageSize))
-            .ReturnsAsync(Result<PagedResult<User>>.Success(pagedResult));
+            .ReturnsAsync(Result<PagedResultDto<User>>.Success(pagedResult));
 
         // Act
         var result = await service.GetAllAsync(parameters.PageNumber, parameters.PageSize);
@@ -144,10 +144,10 @@ public class UserQueryServiceTests
     public async Task GetAllAsyncTest_Failure_ReturnsFailureResult()
     {
         // Arrange
-        var parameters = new PageParameters { PageNumber = 1, PageSize = 10 };
+        var parameters = new PageParametersDto { PageNumber = 1, PageSize = 10 };
 
         mockUserQuery.Setup(q => q.GetAllAsync(parameters.PageNumber, parameters.PageSize))
-            .ReturnsAsync(Result<PagedResult<User>>.Failure(Error.NullValue("Error Message")));
+            .ReturnsAsync(Result<PagedResultDto<User>>.Failure(Error.NullValue("Error Message")));
 
         // Act
         var result = await service.GetAllAsync(parameters.PageNumber, parameters.PageSize);

@@ -8,7 +8,7 @@ namespace CesiZen.Infrastructure.Repositories;
 
 public class ArticleCommand : AbstractRepository, IArticleCommand
 {
-    public ArticleCommand(MongoDbContext context) : base(context)
+    public ArticleCommand(CesizenDbContext context) : base(context)
     {
     }
 
@@ -39,15 +39,15 @@ public class ArticleCommand : AbstractRepository, IArticleCommand
         {
             await context.SaveChangesAsync();
 
-            return Result.Success(ArticleInfos.LogUpdateSucceeded(article.Id));
+            return Result.Success(ArticleInfos.LogUpdateSucceeded(nameof(article.Id)));
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(ArticleErrors.LogUpdateFailed(article.Id), article.Id, ex.Message);
+            return Result.Failure(ArticleErrors.LogUpdateFailed(nameof(article.Id)), nameof(article.Id), ex.Message);
         }
         catch (Exception ex)
         {
-            return Result.Failure(ArticleErrors.LogUpdateFailed(article.Id), article.Id, ex.Message);
+            return Result.Failure(ArticleErrors.LogUpdateFailed(nameof(article.Id)), nameof(article.Id), ex.Message);
         }
     }
 
@@ -65,11 +65,11 @@ public class ArticleCommand : AbstractRepository, IArticleCommand
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(ArticleErrors.LogUpdatePropertyFailed("title", article.Id), article.Id, ex.Message);
+            return Result.Failure(ArticleErrors.LogUpdatePropertyFailed("title", nameof(article.Id)), nameof(article.Id), ex.Message);
         }
         catch (Exception ex)
         {
-            return Result.Failure(ArticleErrors.LogUpdatePropertyFailed("title", article.Id), article.Id, ex.Message);
+            return Result.Failure(ArticleErrors.LogUpdatePropertyFailed("title", nameof(article.Id)), nameof(article.Id), ex.Message);
         }
     }
 
@@ -87,11 +87,11 @@ public class ArticleCommand : AbstractRepository, IArticleCommand
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(ArticleErrors.LogUpdatePropertyFailed("description", article.Id), article.Id, ex.Message);
+            return Result.Failure(ArticleErrors.LogUpdatePropertyFailed("description", nameof(article.Id)), nameof(article.Id), ex.Message);
         }
         catch (Exception ex)
         {
-            return Result.Failure(ArticleErrors.LogUpdatePropertyFailed("description", article.Id), article.Id, ex.Message);
+            return Result.Failure(ArticleErrors.LogUpdatePropertyFailed("description", nameof(article.Id)), nameof(article.Id), ex.Message);
         }
     }
 
@@ -109,15 +109,15 @@ public class ArticleCommand : AbstractRepository, IArticleCommand
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(ArticleErrors.LogUpdatePropertyFailed("content", article.Id), article.Id, ex.Message);
+            return Result.Failure(ArticleErrors.LogUpdatePropertyFailed("content", nameof(article.Id)), nameof(article.Id), ex.Message);
         }
         catch (Exception ex)
         {
-            return Result.Failure(ArticleErrors.LogUpdatePropertyFailed("content", article.Id), article.Id, ex.Message);
+            return Result.Failure(ArticleErrors.LogUpdatePropertyFailed("content", nameof(article.Id)), nameof(article.Id), ex.Message);
         }
     }
 
-    public async Task<IResult> Delete(string id)
+    public async Task<IResult> Delete(int id)
     {
         try
         {
@@ -127,18 +127,18 @@ public class ArticleCommand : AbstractRepository, IArticleCommand
                 context.Articles.Remove(article);
                 await context.SaveChangesAsync();
 
-                return Result.Success(ArticleInfos.LogDeleteCompleted(id));
+                return Result.Success(ArticleInfos.LogDeleteCompleted(nameof(id)));
             }
 
-            return Result.Failure(ArticleErrors.LogDeletionFailed(id));
+            return Result.Failure(ArticleErrors.LogDeletionFailed(nameof(id)));
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(ArticleErrors.LogDeletionFailed(id), id, ex.Message);
+            return Result.Failure(ArticleErrors.LogDeletionFailed(nameof(id)), nameof(id), ex.Message);
         }
         catch (Exception ex)
         {
-            return Result.Failure(ArticleErrors.LogDeletionFailed(id), id, ex.Message);
+            return Result.Failure(ArticleErrors.LogDeletionFailed(nameof(id)), nameof(id), ex.Message);
         }
     }
 }

@@ -5,9 +5,9 @@ namespace CesiZen.Domain.Interfaces;
 
 public interface IUserQuery : IQueryInterface<User>
 {
-    Task<IResult<PagedResult<User>>> SearchUsers(PageParameters parameters, string searchTerm);
+    Task<IResult<PagedResultDto<User>>> SearchUsers(PageParametersDto parameters, string searchTerm);
 
     Task<IResult<User>> GetByUsername(string username);
 
-    Task<IResult<string>> GetUserId(string sessionId);
+    Task<IResult<int>> GetUserId(string sessionId);
 }

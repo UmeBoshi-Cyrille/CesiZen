@@ -17,14 +17,14 @@ public class BreathExerciseCommandServiceTests
     private readonly Mock<ILogger> loggerMock;
     private readonly Mock<IBreathExerciseCommand> mockCommand;
     private readonly BreathExerciseCommandService service;
-    private Mock<MongoDbContext> mockContext;
+    private Mock<CesizenDbContext> mockContext;
     private Mock<DbSet<BreathExercise>> mockSet;
 
     public BreathExerciseCommandServiceTests()
     {
         loggerMock = new Mock<ILogger>();
         mockCommand = new Mock<IBreathExerciseCommand>();
-        mockContext = new Mock<MongoDbContext>(Tools.SetContext());
+        mockContext = new Mock<CesizenDbContext>(Tools.SetContext());
         service = new BreathExerciseCommandService(loggerMock.Object, mockCommand.Object);
         mockSet = null!;
     }
@@ -114,16 +114,16 @@ public class BreathExerciseCommandServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        mockCommand.Verify(c => c.Delete(It.IsAny<string>()), Times.Once);
+        mockCommand.Verify(c => c.Delete(It.IsAny<int>()), Times.Once);
     }
 
     [Fact]
     public async Task Delete_Failure_ReturnsFailureResult()
     {
         // Arrange
-        string id = "1";
+        int id = 1;
         var entity = BreathExerciseFaker.FakeBreathExerciseGenerator().Generate();
-        entity.Id = "2";
+        entity.Id = 2;
         mockContext.Setup(c => c.BreathExercises.Add(entity));
         mockCommand.Setup(c => c.Delete(id))
             .ReturnsAsync(Result.Failure(Error.NullValue("Error message")));
@@ -160,7 +160,7 @@ public class BreathExerciseCommandServiceTests
                 ).ReturnsAsync(Result.Success());
                 break;
             case CommandSelector.C2:
-                mockCommand.Setup(c => c.Delete(It.IsAny<string>())).Callback<string>(
+                mockCommand.Setup(c => c.Delete(It.IsAny<int>())).Callback<int>(
                     id =>
                     {
                         var entity = entities.FirstOrDefault(a => a.Id == id);

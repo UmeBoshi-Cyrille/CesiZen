@@ -5,6 +5,8 @@ namespace CesiZen.Domain.DataTransfertObject;
 
 public class UserDto
 {
+    public int Id { get; set; }
+
     [MaxLength(54)]
     [MinLength(2)]
     [RegularExpression(@"^[a-zA-Z]+$",

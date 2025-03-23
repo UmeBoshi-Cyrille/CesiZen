@@ -8,11 +8,11 @@ namespace CesiZen.Infrastructure.Repositories;
 
 public class BreathExerciseQuery : AbstractRepository, IBreathExerciseQuery
 {
-    public BreathExerciseQuery(MongoDbContext context) : base(context)
+    public BreathExerciseQuery(CesizenDbContext context) : base(context)
     {
     }
 
-    public async Task<IResult<List<BreathExercise>>> GetAllByIdAsync(string userId)
+    public async Task<IResult<List<BreathExercise>>> GetAllByIdAsync(int userId)
     {
         try
         {
@@ -33,7 +33,7 @@ public class BreathExerciseQuery : AbstractRepository, IBreathExerciseQuery
         }
     }
 
-    public async Task<IResult<BreathExercise>> GetByIdAsync(string id)
+    public async Task<IResult<BreathExercise>> GetByIdAsync(int id)
     {
         try
         {
@@ -43,7 +43,7 @@ public class BreathExerciseQuery : AbstractRepository, IBreathExerciseQuery
         }
         catch (Exception ex)
         {
-            return Result<BreathExercise>.Failure(BreathExerciseErrors.LogNotFound(id), id, ex.Message);
+            return Result<BreathExercise>.Failure(BreathExerciseErrors.LogNotFound(nameof(id)), nameof(id), ex.Message);
         }
     }
 }

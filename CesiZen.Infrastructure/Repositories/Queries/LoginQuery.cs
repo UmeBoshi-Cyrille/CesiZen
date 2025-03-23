@@ -8,7 +8,7 @@ namespace CesiZen.Infrastructure.Repositories;
 
 public class LoginQuery : AbstractRepository, ILoginQuery
 {
-    public LoginQuery(MongoDbContext context) : base(context)
+    public LoginQuery(CesizenDbContext context) : base(context)
     {
     }
 
@@ -26,7 +26,7 @@ public class LoginQuery : AbstractRepository, ILoginQuery
         return Result<Login>.Success(login);
     }
 
-    public async Task<IResult<Login>> GetByUserId(string userId)
+    public async Task<IResult<Login>> GetByUserId(int userId)
     {
         var login = await context.Logins
                            .AsNoTracking()
@@ -34,7 +34,7 @@ public class LoginQuery : AbstractRepository, ILoginQuery
 
         if (login == null)
         {
-            return Result<Login>.Failure(UserErrors.LogNotFound(userId));
+            return Result<Login>.Failure(UserErrors.LogNotFound(nameof(userId)));
         }
 
         return Result<Login>.Success(login);
@@ -66,5 +66,24 @@ public class LoginQuery : AbstractRepository, ILoginQuery
         }
 
         return Result.Success();
+    }
+
+    public async Task<IResult<ResetPassword>> GetResetPassword(string email, string token)
+    {
+        var resetPasswords = await context.Logins
+                           .AsNoTracking()
+                           .Select(x => x.ResetPasswords!.Where(t => t.ResetToken == token))
+                           .FirstOrDefaultAsync();
+
+        var resetPassword = resetPasswords!.FirstOrDefault(t => t.ResetToken == token);
+
+        if (resetPassword == null)
+        {
+            return Result<ResetPassword>.Failure(
+                Error.NotFound(string.Format(
+                    Message.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "Login", email)));
+        }
+
+        return Result<ResetPassword>.Success(resetPassword);
     }
 }

@@ -7,7 +7,6 @@ using CesiZen.Infrastructure.DatabaseContext;
 using CesiZen.Test.Fakers;
 using CesiZen.Test.Utils;
 using Microsoft.EntityFrameworkCore;
-using MongoDB.Driver;
 using Moq;
 using Serilog;
 
@@ -18,14 +17,14 @@ public class ArticleCommandServiceTests
     private readonly Mock<ILogger> mockLogger;
     private readonly Mock<IArticleCommand> mockCommand;
     private readonly ArticleCommandService service;
-    private readonly Mock<MongoDbContext> mockContext;
+    private readonly Mock<CesizenDbContext> mockContext;
     private Mock<DbSet<Article>> mockSet;
 
     public ArticleCommandServiceTests()
     {
         mockLogger = new Mock<ILogger>();
         mockCommand = new Mock<IArticleCommand>();
-        mockContext = new Mock<MongoDbContext>(Tools.SetContext());
+        mockContext = new Mock<CesizenDbContext>(Tools.SetContext());
         service = new ArticleCommandService(mockLogger.Object, mockCommand.Object);
         mockSet = null!;
     }
@@ -90,7 +89,7 @@ public class ArticleCommandServiceTests
         // Arrange
         var dto = ArticleFaker.FakeArticleDtoGenerator().Generate();
         var article = dto.Map();
-        article.Id = "2";
+        article.Id = 2;
         mockContext.Setup(c => c.Articles.Add(article));
         mockCommand.Setup(c => c.Update(It.IsAny<Article>())).ReturnsAsync(
             Result.Failure(Error.NullValue("Error message")));
@@ -126,7 +125,7 @@ public class ArticleCommandServiceTests
     public async Task UpdateTitleAsyncTest_Failure_WhenOperationFails()
     {
         // Arrange
-        string id = "wrongId";
+        int id = 0;
         string newTitle = "New Title";
         var article = ArticleFaker.FakeArticleGenerator().Generate();
         mockContext.Setup(c => c.Articles.Add(article));
@@ -164,10 +163,10 @@ public class ArticleCommandServiceTests
     public async Task UpdateDescriptionAsyncTest_Failure_WhenOperationFails()
     {
         // Arrange
-        string id = "1";
+        int id = 1;
         string newDescription = "New Description";
         var article = ArticleFaker.FakeArticleGenerator().Generate();
-        article.Id = "2";
+        article.Id = 2;
         mockContext.Setup(c => c.Articles.Add(article));
         mockCommand.Setup(c => c.UpdateDescriptionAsync(It.IsAny<Article>())).ReturnsAsync(
             Result.Failure(Error.NullValue("Error message")));
@@ -203,10 +202,10 @@ public class ArticleCommandServiceTests
     public async Task UpdateContentAsyncTest_Failure_WhenOperationFails()
     {
         // Arrange
-        string id = "1";
+        int id = 1;
         string newContent = "New Content";
         var articles = ArticleFaker.FakeArticleGenerator().Generate(10);
-        articles[0].Id = "2";
+        articles[0].Id = 2;
         mockCommand.Setup(c => c.UpdateContentAsync(It.IsAny<Article>())).ReturnsAsync(
             Result.Failure(Error.NullValue("Error message")));
 
@@ -231,7 +230,7 @@ public class ArticleCommandServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        mockCommand.Verify(c => c.Delete(It.IsAny<string>()), Times.Once);
+        mockCommand.Verify(c => c.Delete(It.IsAny<int>()), Times.Once);
         //Assert.False(mockContext.Object.Articles.Any(c => c.Id == articles[0].Id));
     }
 
@@ -239,9 +238,9 @@ public class ArticleCommandServiceTests
     public async Task DeleteTest_Failure_WhenNotFound()
     {
         // Arrange
-        string id = "1";
+        int id = 1;
         var article = ArticleFaker.FakeArticleGenerator().Generate();
-        article.Id = "10";
+        article.Id = 10;
         mockContext.Setup(c => c.Articles.Add(article));
         mockCommand.Setup(c => c.Delete(id)).ReturnsAsync(
             Result.Failure(Error.NullValue("Error message")));
@@ -314,7 +313,7 @@ public class ArticleCommandServiceTests
                 ).ReturnsAsync(Result.Success());
                 break;
             case CommandSelector.C5:
-                mockCommand.Setup(c => c.Delete(It.IsAny<string>())).Callback<string>(
+                mockCommand.Setup(c => c.Delete(It.IsAny<int>())).Callback<int>(
                     id =>
                     {
                         var article = articles.FirstOrDefault(a => a.Id == id);

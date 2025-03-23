@@ -21,7 +21,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
         ILoginCommand loginCommand,
         ITokenProvider tokenProvider,
         IEmailService emailService
-        ) : base(logger, userCommand, passwordService, loginQuery, emailService, tokenProvider)
+        ) : base(logger, userCommand, passwordService, loginQuery, tokenProvider)
     {
         this.loginCommand = loginCommand;
         this.userQuery = userQuery;
@@ -47,7 +47,8 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
             return Result<AuthenticateResponseDto>.Failure(UserErrors.ClientAuthenticationFailed);
         }
 
-        var token = tokenProvider.GenerateAccessToken(login.Value.UserId);
+        var tokenDto = tokenProvider.GenerateRefreshToken(login.Value.UserId);
+        var token = tokenProvider.GenerateAccessToken(tokenDto.Value);
         response.Token = token;
 
         return Result<AuthenticateResponseDto>.Success(response, UserInfos.ClientAuthentified);
@@ -86,9 +87,9 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
 
     public async Task<IResult> Disconnect(string accessToken)
     {
-        var sessionId = tokenProvider.GetTokenSessionId(accessToken);
+        var sessionId = tokenProvider.GetSessionId(accessToken);
 
-        var userId = userQuery.GetUserId(sessionId).Result;
+        var userId = userQuery.GetUserId(sessionId!).Result;
 
         if (string.IsNullOrEmpty(sessionId) || userId.IsFailure)
         {
@@ -134,7 +135,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
                         Message.GetResource("ErrorMessages", "CLIENT_LOGINATTEMPS_LOCKTIME"), time)));
         }
 
-        var result = passwordService.VerifyPassword(login, password);
+        var result = passwordService.IsCorrectPassword(login, password);
 
         if (result)
         {
@@ -155,14 +156,14 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
 
     private async Task<bool> IsLoginUnlocked(Login login)
     {
-        if (login.IsLocked)
+        if (login.AccountIsLocked)
         {
             if (login.LockoutEndTime > DateTime.UtcNow)
             {
                 return false;
             }
 
-            login.IsLocked = false;
+            login.AccountIsLocked = false;
             login.AccessFailedCount = 0;
             login.LockoutEndTime = null;
             await loginCommand.UpdateLoginAttemps(login);
@@ -178,7 +179,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
 
         if (login.AccessFailedCount >= 5)
         {
-            login.IsLocked = true;
+            login.AccountIsLocked = true;
             login.LockoutEndTime = DateTime.UtcNow.AddMinutes(5);
             await loginCommand.UpdateLoginAttemps(login);
 

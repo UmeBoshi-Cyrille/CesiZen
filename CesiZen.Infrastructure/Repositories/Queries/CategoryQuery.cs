@@ -9,11 +9,11 @@ namespace CesiZen.Infrastructure.Repositories;
 
 public class CategoryQuery : AbstractRepository, ICategoryQuery
 {
-    public CategoryQuery(MongoDbContext context) : base(context)
+    public CategoryQuery(CesizenDbContext context) : base(context)
     {
     }
 
-    public async Task<IResult<PagedResult<Category>>> GetAllAsync(int pageNumber, int pageSize)
+    public async Task<IResult<PagedResultDto<Category>>> GetAllAsync(int pageNumber, int pageSize)
     {
         try
         {
@@ -22,7 +22,7 @@ public class CategoryQuery : AbstractRepository, ICategoryQuery
                 .Take(pageSize)
                 .ToListAsync();
 
-            var result = new PagedResult<Category>
+            var result = new PagedResultDto<Category>
             {
                 Data = data,
                 TotalCount = data.Count,
@@ -30,15 +30,15 @@ public class CategoryQuery : AbstractRepository, ICategoryQuery
                 PageSize = pageSize
             };
 
-            return Result<PagedResult<Category>>.Success(result);
+            return Result<PagedResultDto<Category>>.Success(result);
         }
         catch (Exception ex)
         {
-            return Result<PagedResult<Category>>.Failure(CategoryErrors.LogMultipleNotFound, ex.Message);
+            return Result<PagedResultDto<Category>>.Failure(CategoryErrors.LogMultipleNotFound, ex.Message);
         }
     }
 
-    public async Task<IResult<Category>> GetByIdAsync(string id)
+    public async Task<IResult<Category>> GetByIdAsync(int id)
     {
         try
         {
@@ -48,7 +48,7 @@ public class CategoryQuery : AbstractRepository, ICategoryQuery
         }
         catch (Exception ex)
         {
-            return Result<Category>.Failure(CategoryErrors.LogNotFound(id), id, ex.Message);
+            return Result<Category>.Failure(CategoryErrors.LogNotFound(nameof(id)), nameof(id), ex.Message);
         }
     }
 }

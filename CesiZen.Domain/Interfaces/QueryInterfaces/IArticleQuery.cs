@@ -5,5 +5,5 @@ namespace CesiZen.Domain.Interfaces;
 
 public interface IArticleQuery : IQuery<Article>
 {
-    Task<IResult<PagedResult<Article>>> SearchArticles(PageParameters parameters, string searchTerm = "");
+    Task<IResult<PagedResultDto<Article>>> SearchArticles(PageParametersDto parameters, string searchTerm = "");
 }

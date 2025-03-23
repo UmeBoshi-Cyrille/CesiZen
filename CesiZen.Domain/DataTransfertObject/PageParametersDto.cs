@@ -1,6 +1,6 @@
 ﻿namespace CesiZen.Domain.DataTransfertObject;
 
-public class PageParameters
+public class PageParametersDto
 {
     const int maxPageSize = 50;
     public int PageNumber { get; set; } = 1;

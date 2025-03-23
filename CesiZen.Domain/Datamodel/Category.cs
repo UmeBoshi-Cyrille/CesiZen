@@ -1,16 +1,12 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CesiZen.Domain.Datamodel;
-
 public class Category
 {
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; } = string.Empty;
+    public int Id { get; set; }
 
     [MaxLength(100)]
-    [BsonElement("title")]
     public string Name { get; set; } = string.Empty;
+
+    public ICollection<Article>? Articles { get; set; }
 }

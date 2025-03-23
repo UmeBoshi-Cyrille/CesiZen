@@ -6,8 +6,6 @@ namespace CesiZen.Domain.Mapper;
 public static class UserMapper
 {
     #region Simple Mapper Methods
-
-
     public static User Map(this UserDto dto, Authentifier authentifier, string emailVerificationToken)
     {
         User user = new();
@@ -85,6 +83,17 @@ public static class UserMapper
 
         return user;
     }
+
+    public static EmailSenderDto MapEmailSender(string email, string template, string token, string subject)
+    {
+        return new EmailSenderDto()
+        {
+            Email = email,
+            Template = template,
+            Token = token,
+            Subject = subject
+        };
+    }
     #endregion
 
     #region Collection Mapper Nethods
@@ -129,11 +138,11 @@ public static class UserMapper
     #endregion
 
     #region Paginated Mapper Methods
-    public static PagedResult<UserRequestDto> Map(this PagedResult<User> model)
+    public static PagedResultDto<UserRequestDto> Map(this PagedResultDto<User> model)
     {
         List<UserRequestDto> dto = model.Data.Map();
 
-        return new PagedResult<UserRequestDto>
+        return new PagedResultDto<UserRequestDto>
         {
             Data = dto,
             TotalCount = model.TotalCount,

@@ -38,7 +38,20 @@ public class TokenProvider : ITokenProvider
     }
 
     #region Public Methods
-    public string GenerateAccessToken(string userId)
+    public string GenerateAccessToken(TokenIdDto dto)
+    {
+        var builder = new TokenBuilderDto()
+        {
+            SessionId = dto.SessionId!,
+            TokenId = dto.TokenId!,
+            ExpirationTime = jwtSettings.ExpirationMinutes
+        };
+        var token = GenerateAccessToken(builder, jwtSettings);
+
+        return token;
+    }
+
+    public IResult<TokenIdDto> GenerateRefreshToken(int userId)
     {
         var sessionId = GenerateSessionId();
         var tokenId = GenerateTokenId();
@@ -48,64 +61,59 @@ public class TokenProvider : ITokenProvider
         sessionCommand.UpSert(session);
         SaveRefreshToken(userId, refreshToken);
 
-        var builder = new TokenBuilderDto()
+        var dto = new TokenIdDto()
         {
             SessionId = sessionId,
             TokenId = tokenId,
-            ExpirationTime = jwtSettings.ExpirationMinutes
         };
-        var token = GenerateAccessToken(builder, jwtSettings);
 
-        return token;
+        return Result<TokenIdDto>.Success(dto);
     }
 
-    public async Task<IResult<string>> RefreshAccessTokenAsync(string userId, string accessToken)
+    public async Task<IResult<string>> RefreshAccessTokenAsync(string accessToken)
     {
-        if (CheckRefreshTokenValidity(userId, accessToken))
+        if (CheckAccessTokenExpirationTime(accessToken))
         {
-            var token = GenerateAccessToken(userId);
+            return Result<string>.Success(accessToken, Info.Success("Token is still valid"));
+        };
+
+        var check = await CheckRefreshTokenValidity(accessToken);
+
+        if (check)
+        {
+            var token = RefreshAccessToken(accessToken);
 
             return Result<string>.Success(token);
         }
 
-        await InvalidateTokens(userId);
+        var sessionId = GetSessionId(accessToken);
+        var session = await sessionQuery.GetBySessionId(sessionId!);
+
+        await InvalidateTokens(session.Value.UserId);
 
         return Result<string>.Failure(Error.AuthenticationFailed("Token has expired"));
     }
 
-    public async Task<IResult> InvalidateTokens(string userId)
+    public async Task<IResult> InvalidateTokens(int userId)
     {
-        var sessionId = sessionQuery.GetId(userId).Result.Value;
-        var tokenId = tokenQuery.GetId(userId).Result.Value;
+        var session = await sessionQuery.GetId(userId);
+        var tokenId = await tokenQuery.GetId(userId);
 
-        var sessionResult = await sessionCommand.Delete(sessionId);
-        var tokenResult = await tokenCommand.Delete(tokenId);
+        var sessionResult = await sessionCommand.Delete(session.Value);
+        var tokenResult = await tokenCommand.Delete(tokenId.Value);
 
         if (sessionResult.IsFailure)
         {
             logger.Error(sessionResult.Error.Message);
-            return Result.Failure(SessionErrors.LogDeletionFailed(sessionId));
+            return Result.Failure(UserErrors.ClientDisconnectFailed);
         }
         else if (tokenResult.IsFailure)
         {
             logger.Error(tokenResult.Error.Message);
-            return Result.Failure(RefreshTokenErrors.LogDeletionFailed(sessionId));
+            return Result.Failure(UserErrors.ClientDisconnectFailed);
         }
 
         return Result.Success();
-    }
-
-    public bool CheckAccessTokenExpirationTime(string token)
-    {
-        var expirationTime = GetAccessTokenExpirationTime(token);
-        var remainingTime = expirationTime - DateTime.UtcNow;
-
-        if (remainingTime <= TimeSpan.FromMinutes(1))
-        {
-            return true;
-        }
-
-        return false;
     }
 
     public string GenerateVerificationToken()
@@ -113,9 +121,12 @@ public class TokenProvider : ITokenProvider
         return Convert.ToBase64String(Guid.NewGuid().ToByteArray());
     }
 
-    public string GetTokenSessionId(string token)
+    public string? GetSessionId(string token)
     {
-        return GetAccessTokenSessionId(token);
+        var principal = GetAccessTokenPrincipal(token!);
+        var sessionId = principal?.FindFirstValue("session_id");
+
+        return sessionId;
     }
     #endregion
 
@@ -149,7 +160,7 @@ public class TokenProvider : ITokenProvider
         return token;
     }
 
-    private static string GenerateTokenId()
+    private string GenerateTokenId()
     {
         var randomNumber = new byte[64];
 
@@ -163,9 +174,20 @@ public class TokenProvider : ITokenProvider
         return tokenId;
     }
 
-    private static string GenerateSessionId()
+    private string GenerateSessionId()
     {
         return Guid.NewGuid().ToString();
+    }
+
+    private string RefreshAccessToken(string accessToken)
+    {
+        TokenIdDto dto = new();
+
+        var principal = GetAccessTokenPrincipal(accessToken!);
+        dto.TokenId = principal?.FindFirstValue("token_id")!;
+        dto.SessionId = principal?.FindFirstValue("session_id")!;
+
+        return GenerateAccessToken(dto);
     }
 
     private ClaimsPrincipal GetAccessTokenPrincipal(string token)
@@ -185,20 +207,19 @@ public class TokenProvider : ITokenProvider
         return new JwtSecurityTokenHandler().ValidateToken(token, validation, out _);
     }
 
-    private static DateTime GetAccessTokenExpirationTime(string token)
+    private bool CheckAccessTokenExpirationTime(string token)
+    {
+        var expirationTime = GetAccessTokenExpirationTime(token);
+        var remainingTime = expirationTime - DateTime.UtcNow;
+
+        return remainingTime < TimeSpan.FromMinutes(5) ? true : false;
+    }
+
+    private DateTime GetAccessTokenExpirationTime(string token)
     {
         var handler = new JwtSecurityTokenHandler();
         var jwtSecurityToken = handler.ReadJwtToken(token);
         return jwtSecurityToken.ValidTo;
-    }
-
-    private static string GetAccessTokenSessionId(string token)
-    {
-        var handler = new JwtSecurityTokenHandler();
-        var jwtSecurityToken = handler.ReadJwtToken(token);
-        var session = jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == "session_id")?.Value;
-
-        return session!;
     }
     #endregion
 
@@ -231,7 +252,7 @@ public class TokenProvider : ITokenProvider
         return Convert.ToHexString(hash);
     }
 
-    private void SaveRefreshToken(string userId, string refreshToken)
+    private void SaveRefreshToken(int userId, string refreshToken)
     {
         var token = new RefreshToken()
         {
@@ -243,13 +264,15 @@ public class TokenProvider : ITokenProvider
         tokenCommand.UpSert(token);
     }
 
-    private bool CheckRefreshTokenValidity(string userId, string providedAccessToken)
+    private async Task<bool> CheckRefreshTokenValidity(string providedAccessToken)
     {
-        var currentToken = tokenQuery.GetById(userId).Result.Value;
+        var sessionId = GetSessionId(providedAccessToken);
+        var session = await sessionQuery.GetBySessionId(sessionId!);
+        var currentToken = await tokenQuery.GetById(session.Value.UserId);
         var providedToken = GetProvidedRefreshToken(providedAccessToken);
 
-        if (IsRefreshTokenValid(currentToken.Token, providedToken) &&
-            !IsRefreshTokenTimeOut(currentToken.ExpirationTime))
+        if (IsRefreshTokenValid(currentToken.Value.Token, providedToken) &&
+            !IsTokenTimeOut(currentToken.Value.ExpirationTime))
         {
             return true;
         }
@@ -272,7 +295,7 @@ public class TokenProvider : ITokenProvider
         return string.IsNullOrEmpty(providedRefreshToken) ? "" : providedRefreshToken;
     }
 
-    private static bool IsRefreshTokenValid(string currentToken, string providedToken)
+    private bool IsRefreshTokenValid(string currentToken, string providedToken)
     {
         var currentHash = Convert.FromHexString(currentToken);
         var providedHash = Convert.FromHexString(providedToken);
@@ -280,11 +303,11 @@ public class TokenProvider : ITokenProvider
         return CryptographicOperations.FixedTimeEquals(providedHash, currentHash);
     }
 
-    private static bool IsRefreshTokenTimeOut(DateTime? expirationTime)
+    private bool IsTokenTimeOut(DateTime? expirationTime)
     {
         var remainingTime = expirationTime - DateTime.UtcNow;
 
-        return remainingTime <= TimeSpan.FromMinutes(5);
+        return remainingTime <= TimeSpan.FromMinutes(5) ? true : false;
     }
     #endregion
 }

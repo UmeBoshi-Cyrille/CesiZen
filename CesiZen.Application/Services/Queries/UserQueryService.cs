@@ -15,37 +15,37 @@ public class UserQueryService : AService, IUserQueryService
         this.query = query;
     }
 
-    public async Task<IResult<PagedResult<UserRequestDto>>> SearchUsers(PageParameters parameters, string searchTerm)
+    public async Task<IResult<PagedResultDto<UserRequestDto>>> SearchUsers(PageParametersDto parameters, string searchTerm)
     {
         var result = await query.SearchUsers(parameters, searchTerm);
 
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result<PagedResult<UserRequestDto>>.Failure(UserErrors.ClientMultipleNotFound);
+            return Result<PagedResultDto<UserRequestDto>>.Failure(UserErrors.ClientMultipleNotFound);
         }
 
         var dtos = result.Value.Map();
 
-        return Result<PagedResult<UserRequestDto>>.Success(dtos);
+        return Result<PagedResultDto<UserRequestDto>>.Success(dtos);
     }
 
-    public async Task<IResult<PagedResult<UserRequestDto>>> GetAllAsync(int pageNumber, int pageSize)
+    public async Task<IResult<PagedResultDto<UserRequestDto>>> GetAllAsync(int pageNumber, int pageSize)
     {
         var result = await query.GetAllAsync(pageNumber, pageSize);
 
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result<PagedResult<UserRequestDto>>.Failure(UserErrors.ClientMultipleNotFound);
+            return Result<PagedResultDto<UserRequestDto>>.Failure(UserErrors.ClientMultipleNotFound);
         }
 
         var dto = result.Value.Map();
 
-        return Result<PagedResult<UserRequestDto>>.Success(dto);
+        return Result<PagedResultDto<UserRequestDto>>.Success(dto);
     }
 
-    public async Task<IResult<UserRequestDto>> GetByIdAsync(string id)
+    public async Task<IResult<UserRequestDto>> GetByIdAsync(int id)
     {
         var result = await query.GetByIdAsync(id);
 

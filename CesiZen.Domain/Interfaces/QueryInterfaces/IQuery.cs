@@ -4,7 +4,7 @@ namespace CesiZen.Domain.Interfaces;
 
 public interface IQuery<T>
 {
-    Task<IResult<T>> GetByIdAsync(string id);
+    Task<IResult<T>> GetByIdAsync(int id);
 
-    Task<IResult<PagedResult<T>>> GetAllAsync(int pageNumber, int pageSize);
+    Task<IResult<PagedResultDto<T>>> GetAllAsync(int pageNumber, int pageSize);
 }

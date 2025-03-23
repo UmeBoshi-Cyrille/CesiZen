@@ -9,7 +9,7 @@ namespace CesiZen.Infrastructure.Repositories;
 
 public class SessionCommand : AbstractRepository, ISessionCommand
 {
-    public SessionCommand(MongoDbContext context) : base(context)
+    public SessionCommand(CesizenDbContext context) : base(context)
     {
     }
 
@@ -43,37 +43,29 @@ public class SessionCommand : AbstractRepository, ISessionCommand
         }
     }
 
-    public async Task<IResult> Delete(string sessionId)
+    public async Task<IResult> Delete(int id)
     {
         try
         {
             var result = await context.Sessions
-                 .Where(s => s.SessionId == sessionId)
+                 .Where(s => s.Id == id)
                  .ExecuteDeleteAsync();
 
             if (result <= 0)
             {
-                return Result.Failure(SessionErrors.LogDeletionFailed(sessionId));
+                return Result.Failure(SessionErrors.LogDeletionFailed(nameof(id)));
             }
 
             return Result.Success();
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(SessionErrors.LogDeletionFailed(sessionId), sessionId, ex.Message);
+            return Result.Failure(SessionErrors.LogDeletionFailed(nameof(id)), nameof(id), ex.Message);
         }
     }
 
     private void Insert(Session entity)
     {
         context.Sessions.Add(entity);
-    }
-
-    private async Task Update(string sessionId, Session entity)
-    {
-        await context.Sessions
-                .Where(p => p.SessionId == sessionId)
-                .ExecuteUpdateAsync(p => p
-                    .SetProperty(p => p.SessionId, entity.SessionId));
     }
 }

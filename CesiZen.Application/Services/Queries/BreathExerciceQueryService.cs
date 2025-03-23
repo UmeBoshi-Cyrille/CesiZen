@@ -15,7 +15,7 @@ public class BreathExerciseQueryService : AService, IBreathExerciseQueryService
         this.query = query;
     }
 
-    public async Task<IResult<List<BreathExerciseDto>>> GetAllByIdAsync(string userId)
+    public async Task<IResult<List<BreathExerciseDto>>> GetAllByIdAsync(int userId)
     {
         var result = await query.GetAllByIdAsync(userId);
 
@@ -30,7 +30,7 @@ public class BreathExerciseQueryService : AService, IBreathExerciseQueryService
         return Result<List<BreathExerciseDto>>.Success(dto);
     }
 
-    public async Task<IResult<BreathExerciseDto>> GetByIdAsync(string id)
+    public async Task<IResult<BreathExerciseDto>> GetByIdAsync(int id)
     {
         var result = await query.GetByIdAsync(id);
 

@@ -27,7 +27,7 @@ public class ArticleQueryServiceTests
     public async Task GetByIdAsyncTest_Success_ReturnsArticleDto()
     {
         // Arrange
-        string articleId = "1";
+        var articleId = 1;
         var article = ArticleFaker.FakeArticleGenerator().Generate();
         var expectedDto = article.Map();
 
@@ -47,7 +47,7 @@ public class ArticleQueryServiceTests
     public async Task GetByIdAsyncTest_Failure_ReturnsFailureResult()
     {
         // Arrange
-        string articleId = "1";
+        var articleId = 1;
         queryMock.Setup(q => q.GetByIdAsync(articleId))
             .ReturnsAsync(Result<Article>.Failure(Error.NullValue("Error message")));
 
@@ -65,7 +65,7 @@ public class ArticleQueryServiceTests
         // Arrange
         var parameters = CommonFaker.FakePageParametersGenerator().Generate();
         var articles = ArticleFaker.FakeArticleGenerator().Generate(50);
-        var pagedResult = new PagedResult<Article>()
+        var pagedResult = new PagedResultDto<Article>()
         {
             Data = articles,
             TotalCount = articles.Count,
@@ -74,7 +74,7 @@ public class ArticleQueryServiceTests
         };
 
         queryMock.Setup(q => q.SearchArticles(parameters, ""))
-            .ReturnsAsync(Result<PagedResult<Article>>.Success(pagedResult));
+            .ReturnsAsync(Result<PagedResultDto<Article>>.Success(pagedResult));
 
         // Act
         var result = await service.SearchArticles(parameters);
@@ -92,7 +92,7 @@ public class ArticleQueryServiceTests
         // Arrange
         var parameters = CommonFaker.FakePageParametersGenerator().Generate();
         queryMock.Setup(q => q.SearchArticles(parameters, ""))
-            .ReturnsAsync(Result<PagedResult<Article>>.Failure(Error.NullValue("Error message")));
+            .ReturnsAsync(Result<PagedResultDto<Article>>.Failure(Error.NullValue("Error message")));
 
         // Act
         var result = await service.SearchArticles(parameters);
@@ -108,7 +108,7 @@ public class ArticleQueryServiceTests
         // Arrange
         var parameters = CommonFaker.FakePageParametersGenerator().Generate();
         var articles = ArticleFaker.FakeArticleGenerator().Generate(50);
-        var pagedResult = new PagedResult<Article>()
+        var pagedResult = new PagedResultDto<Article>()
         {
             Data = articles,
             TotalCount = articles.Count,
@@ -117,7 +117,7 @@ public class ArticleQueryServiceTests
         };
 
         queryMock.Setup(q => q.GetAllAsync(parameters.PageNumber, parameters.PageSize))
-            .ReturnsAsync(Result<PagedResult<Article>>.Success(pagedResult));
+            .ReturnsAsync(Result<PagedResultDto<Article>>.Success(pagedResult));
 
         // Act
         var result = await service.GetAllAsync(parameters.PageNumber, parameters.PageSize);
@@ -135,7 +135,7 @@ public class ArticleQueryServiceTests
         // Arrange
         var parameters = CommonFaker.FakePageParametersGenerator().Generate();
         queryMock.Setup(q => q.GetAllAsync(parameters.PageNumber, parameters.PageSize))
-            .ReturnsAsync(Result<PagedResult<Article>>.Failure(Error.NullValue("Error message")));
+            .ReturnsAsync(Result<PagedResultDto<Article>>.Failure(Error.NullValue("Error message")));
 
         // Act
         var result = await service.GetAllAsync(parameters.PageNumber, parameters.PageSize);

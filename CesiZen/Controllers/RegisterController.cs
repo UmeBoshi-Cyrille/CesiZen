@@ -1,5 +1,4 @@
-﻿using CesiZen.Domain.BusinessResult;
-using CesiZen.Domain.DataTransfertObject;
+﻿using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +8,7 @@ namespace CesiZen.Api.Controllers;
 [Route("api/[controller]")]
 public class RegisterController : LoginController
 {
+
     private readonly IRegisterService registerService;
 
     public RegisterController(
@@ -41,20 +41,9 @@ public class RegisterController : LoginController
         }
 
         SubscribeNotifierEvent();
-        var message = BuildEmailVerificationMessage(dto.Email);
-        notifier.NotifyObservers(message);
+        notifier.NotifyObservers(response.Value);
         UnsubscribeNotifierEvent();
 
         return Ok(new { message = response.Info.Message });
-    }
-
-    private MessageEventArgs BuildEmailVerificationMessage(string email)
-    {
-        return new MessageEventArgs
-        {
-            Email = email,
-            Subject = Message.GetResource("Templates", "SUBJECT_VERIFICATION_EMAIL"),
-            Body = Message.GetResource("Templates", "TEMPLATE_VERIFICATION_EMAIL"),
-        };
     }
 }

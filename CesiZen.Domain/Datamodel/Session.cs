@@ -1,27 +1,21 @@
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 
 namespace CesiZen.Domain.Datamodel;
 
 public class Session
 {
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; }
+    public int Id { get; set; }
 
-    [BsonElement("sessionId")]
     public string SessionId { get; set; }
 
-    [JsonIgnore]
-    public string UserId { get; set; }
+    public int UserId { get; set; }
 
     [JsonIgnore]
     public User? User { get; set; }
 
-    public Session(string sessionId, string userId)
+    public Session(string sessionId, int userId)
     {
-        Id = string.Empty;
+        Id = 0;
         SessionId = sessionId;
         UserId = userId;
     }

@@ -9,8 +9,23 @@ namespace CesiZen.Infrastructure.Repositories;
 
 public class LoginCommand : AbstractRepository, ILoginCommand
 {
-    public LoginCommand(MongoDbContext context) : base(context)
+    public LoginCommand(CesizenDbContext context) : base(context)
     {
+    }
+
+    public async Task<IResult> UpdateLogin(Login login)
+    {
+        try
+        {
+            context.Logins.Update(login);
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+        {
+            Result.Failure(LoginErrors.LogUpdateFailed(nameof(login.Id)), nameof(login.Id), ex.Message);
+        }
+
+        return Result.Success();
     }
 
     public async Task<IResult> UpdateEmailVerification(EmailVerificationDto dto)
@@ -31,7 +46,7 @@ public class LoginCommand : AbstractRepository, ILoginCommand
         }
     }
 
-    public async Task<IResult> UpdateEmail(string userId, string email)
+    public async Task<IResult> UpdateEmail(int userId, string email)
     {
         try
         {
@@ -43,11 +58,11 @@ public class LoginCommand : AbstractRepository, ILoginCommand
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(UserErrors.LogUpdatePropertyFailed("email", $"{userId}"), userId, ex.Message);
+            return Result.Failure(UserErrors.LogUpdatePropertyFailed("email", nameof(userId)), nameof(userId), ex.Message);
         }
     }
 
-    public async Task<IResult> UpdatePassword(string userId, string password)
+    public async Task<IResult> UpdatePassword(int userId, string password)
     {
         try
         {
@@ -59,7 +74,7 @@ public class LoginCommand : AbstractRepository, ILoginCommand
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(UserErrors.LogUpdatePropertyFailed("password", $"{userId}"), userId, ex.Message);
+            return Result.Failure(UserErrors.LogUpdatePropertyFailed("password", nameof(userId)), nameof(userId), ex.Message);
         }
     }
 
@@ -72,7 +87,7 @@ public class LoginCommand : AbstractRepository, ILoginCommand
 
             if (login == null)
             {
-                return Result.Failure(UserErrors.LogNotFound(login!.Id));
+                return Result.Failure(UserErrors.LogNotFound(nameof(login.Id)));
             }
 
             login.Password = password;
@@ -104,11 +119,11 @@ public class LoginCommand : AbstractRepository, ILoginCommand
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(UserErrors.LogUpdatePropertyFailed("PasswordResetToken", login.Id), login.Id, ex.Message);
+            return Result.Failure(UserErrors.LogUpdatePropertyFailed("PasswordResetToken", nameof(login.Id)), nameof(login.Id), ex.Message);
         }
     }
 
-    public async Task<IResult> UpdateSalt(string userId, string salt)
+    public async Task<IResult> UpdateSalt(int userId, string salt)
     {
         try
         {
@@ -120,7 +135,7 @@ public class LoginCommand : AbstractRepository, ILoginCommand
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(UserErrors.LogUpdatePropertyFailed("Salt", userId), userId, ex.Message);
+            return Result.Failure(UserErrors.LogUpdatePropertyFailed("Salt", nameof(userId)), nameof(userId), ex.Message);
         }
     }
 
@@ -148,7 +163,7 @@ public class LoginCommand : AbstractRepository, ILoginCommand
                 .Where(x => x.Id == login.Id)
                 .ExecuteUpdateAsync(o => o
                 .SetProperty(x => x.AccessFailedCount, login.AccessFailedCount)
-                .SetProperty(x => x.IsLocked, login.IsLocked)
+                .SetProperty(x => x.AccountIsLocked, login.AccountIsLocked)
                 .SetProperty(x => x.LockoutEndTime, login.LockoutEndTime));
 
             return Result.Success();
@@ -157,5 +172,68 @@ public class LoginCommand : AbstractRepository, ILoginCommand
         {
             return Result.Failure(UserErrors.LogLoginAttempsReached(login.Email), login.Email, ex.Message);
         }
+    }
+
+    public async Task<IResult> UpdateResetPasswordAttempsCount(int loginId, int? FailedCount)
+    {
+        try
+        {
+            await context.Logins
+                .Where(x => x.Id == loginId)
+                .ExecuteUpdateAsync(o => o
+                    .SetProperty(x => x.ResetFailedCount, FailedCount));
+        }
+        catch (DbUpdateException ex)
+        {
+            Result.Failure(LoginErrors.LogUpdatePropertyFailed("ResetPasswordAttemps", nameof(loginId)), ex.Message);
+        }
+
+        return Result.Success();
+    }
+
+    public async Task<IResult> UpdateResetPasswordAttemps(Login login)
+    {
+        try
+        {
+            await context.Logins
+                .Where(x => x.Id == login.Id)
+                .ExecuteUpdateAsync(o => o
+                    .SetProperty(x => x.ResetFailedCount, login.ResetFailedCount)
+                    .SetProperty(x => x.ResetIsLocked, login.ResetIsLocked)
+                    .SetProperty(x => x.ResetLockoutEndTime, login.ResetLockoutEndTime));
+        }
+        catch (DbUpdateException ex)
+        {
+            Result.Failure(LoginErrors.LogUpdateFailed(nameof(login.Id)), nameof(login.Id), ex.Message);
+        }
+
+        return Result.Success();
+    }
+
+    public async Task<IResult> AddResetPasswordToken(Login login)
+    {
+        try
+        {
+            var resetPassword = new ResetPassword()
+            {
+                ExpirationTime = login.ResetPassword!.ExpirationTime,
+                ResetToken = login.ResetPassword.ResetToken,
+                CreateAt = login.ResetPassword.CreateAt,
+                LoginId = login.Id
+            };
+
+            login.ResetPasswords!.Add(resetPassword);
+
+            await context.Logins
+               .Where(x => x.UserId == login.UserId)
+               .ExecuteUpdateAsync(o => o
+                    .SetProperty(x => x.ResetPasswords, login.ResetPasswords));
+        }
+        catch (DbUpdateException ex)
+        {
+            Result.Failure(LoginErrors.LogInsertionFailed(nameof(login.Id)), nameof(login.Id), ex.Message);
+        }
+
+        return Result.Success();
     }
 }

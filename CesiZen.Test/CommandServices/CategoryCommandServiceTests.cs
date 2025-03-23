@@ -17,14 +17,14 @@ public class CategoryCommandServiceTests
     private readonly Mock<ILogger> mockLogger;
     private readonly Mock<ICategoryCommand> mockCommand;
     private readonly CategoryCommandService service;
-    private Mock<MongoDbContext> mockContext;
+    private Mock<CesizenDbContext> mockContext;
     private Mock<DbSet<Category>> mockSet;
 
     public CategoryCommandServiceTests()
     {
         mockLogger = new Mock<ILogger>();
         mockCommand = new Mock<ICategoryCommand>();
-        mockContext = new Mock<MongoDbContext>(Tools.SetContext());
+        mockContext = new Mock<CesizenDbContext>(Tools.SetContext());
         service = new CategoryCommandService(mockLogger.Object, mockCommand.Object);
         mockSet = null!;
     }
@@ -114,19 +114,19 @@ public class CategoryCommandServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        mockCommand.Verify(l => l.Delete(It.IsAny<string>()), Times.Once);
+        mockCommand.Verify(l => l.Delete(It.IsAny<int>()), Times.Once);
     }
 
     [Fact]
     public async Task DeleteTest_Failure_WhenOperationFails()
     {
         // Arrange
-        string id = "1";
+        int id = 1;
         var category = CategoryFaker.FakeCategoryGenerator(id).Generate();
-        category.Id = "10";
+        category.Id = 10;
 
         mockContext.Setup(c => c.Categories.Add(category));
-        mockCommand.Setup(c => c.Delete(It.IsAny<string>()))
+        mockCommand.Setup(c => c.Delete(It.IsAny<int>()))
                     .ReturnsAsync(Result.Failure(Error.NullValue("Error message")));
 
         // Act
@@ -161,7 +161,7 @@ public class CategoryCommandServiceTests
                 ).ReturnsAsync(Result.Success(CategoryInfos.LogUpdateSucceeded(It.IsAny<string>())));
                 break;
             case CommandSelector.C2:
-                mockCommand.Setup(c => c.Delete(It.IsAny<string>())).Callback<string>(
+                mockCommand.Setup(c => c.Delete(It.IsAny<int>())).Callback<int>(
                     id =>
                     {
                         var entity = entities.FirstOrDefault(a => a.Id == id);

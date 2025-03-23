@@ -5,10 +5,10 @@ namespace CesiZen.Test.Utils;
 
 public static class Tools
 {
-    internal static DbContextOptions<MongoDbContext> SetContext()
+    internal static DbContextOptions<CesizenDbContext> SetContext()
     {
-        return new DbContextOptionsBuilder<MongoDbContext>()
-            .UseMongoDB("mongodb://localhost:27017", "TestDB")
+        return new DbContextOptionsBuilder<CesizenDbContext>()
+            .UseNpgsql("mongodb://localhost:27017")
             .Options;
     }
 }

@@ -77,7 +77,7 @@ public class ArticleCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> UpdateTitle(string id, [FromBody] string title)
+    public async Task<IActionResult> UpdateTitle(int id, [FromBody] string title)
     {
         var result = await articleCommandService.UpdateTitleAsync(id, title);
 
@@ -100,7 +100,7 @@ public class ArticleCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> UpdateDescription(string id, [FromBody] string description)
+    public async Task<IActionResult> UpdateDescription(int id, [FromBody] string description)
     {
         var result = await articleCommandService.UpdateDescriptionAsync(id, description);
 
@@ -123,7 +123,7 @@ public class ArticleCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> UpdateContent(string id, [FromBody] string content)
+    public async Task<IActionResult> UpdateContent(int id, [FromBody] string content)
     {
         var result = await articleCommandService.UpdateContentAsync(id, content);
 
@@ -145,7 +145,7 @@ public class ArticleCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Delete(string id)
+    public async Task<IActionResult> Delete(int id)
     {
         var result = await articleCommandService.Delete(id);
 

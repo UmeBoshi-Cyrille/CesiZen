@@ -8,7 +8,7 @@ namespace CesiZen.Infrastructure.Repositories;
 
 internal class UserCommand : AbstractRepository, IUserCommand
 {
-    public UserCommand(MongoDbContext context) : base(context)
+    public UserCommand(CesizenDbContext context) : base(context)
     {
     }
 
@@ -45,7 +45,7 @@ internal class UserCommand : AbstractRepository, IUserCommand
 
         if (user == null)
         {
-            return Result.Failure(UserErrors.LogUpdateFailed(entity.Id));
+            return Result.Failure(UserErrors.LogUpdateFailed(nameof(entity.Id)));
         }
 
         context.Users.Update(entity);
@@ -54,15 +54,15 @@ internal class UserCommand : AbstractRepository, IUserCommand
         {
             await context.SaveChangesAsync();
 
-            return Result.Success(UserInfos.LogUpdateSucceeded(entity.Id));
+            return Result.Success(UserInfos.LogUpdateSucceeded(nameof(entity.Id)));
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(UserErrors.LogUpdateFailed(entity.Id), entity.Id, ex.Message);
+            return Result.Failure(UserErrors.LogUpdateFailed(nameof(entity.Id)), nameof(entity.Id), ex.Message);
         }
     }
 
-    public async Task<IResult> UpdateUserName(string id, string userName)
+    public async Task<IResult> UpdateUserName(int id, string userName)
     {
         var user = new User() { Id = id, Username = userName, UpdatedAt = DateTime.Now };
         context.Attach(user);
@@ -77,7 +77,7 @@ internal class UserCommand : AbstractRepository, IUserCommand
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(UserErrors.LogUpdatePropertyFailed("Username", id), id, ex.Message);
+            return Result.Failure(UserErrors.LogUpdatePropertyFailed("Username", nameof(id)), nameof(id), ex.Message);
         }
     }
 
@@ -93,19 +93,19 @@ internal class UserCommand : AbstractRepository, IUserCommand
 
             Info info;
             if (entity.IsActive)
-                info = UserInfos.LogAccountEnabled(entity.Id);
+                info = UserInfos.LogAccountEnabled(nameof(entity.Id));
             else
-                info = UserInfos.LogAccountDisabled(entity.Id);
+                info = UserInfos.LogAccountDisabled(nameof(entity.Id));
 
             return Result.Success(info);
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(UserErrors.LogUpdatePropertyFailed("IsActive", entity.Id), entity.Id, ex.Message);
+            return Result.Failure(UserErrors.LogUpdatePropertyFailed("IsActive", nameof(entity.Id)), nameof(entity.Id), ex.Message);
         }
     }
 
-    public async Task<IResult> Delete(string id)
+    public async Task<IResult> Delete(int id)
     {
         try
         {
@@ -113,11 +113,11 @@ internal class UserCommand : AbstractRepository, IUserCommand
                 .Where(x => x.Id == id)
                 .ExecuteDeleteAsync();
 
-            return Result.Success(UserInfos.LogDeleteCompleted(id));
+            return Result.Success(UserInfos.LogDeleteCompleted(nameof(id)));
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(UserErrors.LogDeletionFailed(id), id, ex.Message);
+            return Result.Failure(UserErrors.LogDeletionFailed(nameof(id)), nameof(id), ex.Message);
         }
     }
 }
