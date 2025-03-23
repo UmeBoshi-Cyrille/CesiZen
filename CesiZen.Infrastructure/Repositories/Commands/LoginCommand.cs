@@ -9,7 +9,7 @@ namespace CesiZen.Infrastructure.Repositories;
 
 public class LoginCommand : AbstractRepository, ILoginCommand
 {
-    public LoginCommand(MongoDbContext context) : base(context)
+    public LoginCommand(CesizenDbContext context) : base(context)
     {
     }
 

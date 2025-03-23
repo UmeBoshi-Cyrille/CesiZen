@@ -17,14 +17,14 @@ public class UserCommandServiceTests
     private readonly Mock<ILogger> mockLogger;
     private readonly Mock<IUserCommand> mockCommand;
     private readonly UserCommandService service;
-    private Mock<MongoDbContext> mockContext;
+    private Mock<CesizenDbContext> mockContext;
     private Mock<DbSet<User>> mockSet;
 
     public UserCommandServiceTests()
     {
         mockLogger = new Mock<ILogger>();
         mockCommand = new Mock<IUserCommand>();
-        mockContext = new Mock<MongoDbContext>(Tools.SetContext());
+        mockContext = new Mock<CesizenDbContext>(Tools.SetContext());
         service = new UserCommandService(mockCommand.Object, mockLogger.Object);
         mockSet = null!;
     }

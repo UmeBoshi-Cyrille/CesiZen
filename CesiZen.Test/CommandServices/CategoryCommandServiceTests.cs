@@ -17,14 +17,14 @@ public class CategoryCommandServiceTests
     private readonly Mock<ILogger> mockLogger;
     private readonly Mock<ICategoryCommand> mockCommand;
     private readonly CategoryCommandService service;
-    private Mock<MongoDbContext> mockContext;
+    private Mock<CesizenDbContext> mockContext;
     private Mock<DbSet<Category>> mockSet;
 
     public CategoryCommandServiceTests()
     {
         mockLogger = new Mock<ILogger>();
         mockCommand = new Mock<ICategoryCommand>();
-        mockContext = new Mock<MongoDbContext>(Tools.SetContext());
+        mockContext = new Mock<CesizenDbContext>(Tools.SetContext());
         service = new CategoryCommandService(mockLogger.Object, mockCommand.Object);
         mockSet = null!;
     }

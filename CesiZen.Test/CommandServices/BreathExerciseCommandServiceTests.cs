@@ -17,14 +17,14 @@ public class BreathExerciseCommandServiceTests
     private readonly Mock<ILogger> loggerMock;
     private readonly Mock<IBreathExerciseCommand> mockCommand;
     private readonly BreathExerciseCommandService service;
-    private Mock<MongoDbContext> mockContext;
+    private Mock<CesizenDbContext> mockContext;
     private Mock<DbSet<BreathExercise>> mockSet;
 
     public BreathExerciseCommandServiceTests()
     {
         loggerMock = new Mock<ILogger>();
         mockCommand = new Mock<IBreathExerciseCommand>();
-        mockContext = new Mock<MongoDbContext>(Tools.SetContext());
+        mockContext = new Mock<CesizenDbContext>(Tools.SetContext());
         service = new BreathExerciseCommandService(loggerMock.Object, mockCommand.Object);
         mockSet = null!;
     }

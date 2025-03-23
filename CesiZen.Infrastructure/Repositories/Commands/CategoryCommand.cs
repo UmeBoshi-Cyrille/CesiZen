@@ -8,7 +8,7 @@ namespace CesiZen.Infrastructure.Repositories;
 
 public class CategoryCommand : AbstractRepository, ICategoryCommand
 {
-    public CategoryCommand(MongoDbContext context) : base(context)
+    public CategoryCommand(CesizenDbContext context) : base(context)
     {
     }
 

@@ -9,7 +9,7 @@ namespace CesiZen.Infrastructure.Repositories;
 
 public class ArticleQuery : AbstractRepository, IArticleQuery
 {
-    public ArticleQuery(MongoDbContext context) : base(context)
+    public ArticleQuery(CesizenDbContext context) : base(context)
     {
     }
 

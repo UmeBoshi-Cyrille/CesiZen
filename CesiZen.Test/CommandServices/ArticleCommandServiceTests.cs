@@ -18,14 +18,14 @@ public class ArticleCommandServiceTests
     private readonly Mock<ILogger> mockLogger;
     private readonly Mock<IArticleCommand> mockCommand;
     private readonly ArticleCommandService service;
-    private readonly Mock<MongoDbContext> mockContext;
+    private readonly Mock<CesizenDbContext> mockContext;
     private Mock<DbSet<Article>> mockSet;
 
     public ArticleCommandServiceTests()
     {
         mockLogger = new Mock<ILogger>();
         mockCommand = new Mock<IArticleCommand>();
-        mockContext = new Mock<MongoDbContext>(Tools.SetContext());
+        mockContext = new Mock<CesizenDbContext>(Tools.SetContext());
         service = new ArticleCommandService(mockLogger.Object, mockCommand.Object);
         mockSet = null!;
     }

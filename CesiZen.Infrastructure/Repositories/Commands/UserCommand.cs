@@ -8,7 +8,7 @@ namespace CesiZen.Infrastructure.Repositories;
 
 internal class UserCommand : AbstractRepository, IUserCommand
 {
-    public UserCommand(MongoDbContext context) : base(context)
+    public UserCommand(CesizenDbContext context) : base(context)
     {
     }
 

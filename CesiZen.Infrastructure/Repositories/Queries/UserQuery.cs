@@ -9,7 +9,7 @@ namespace CesiZen.Infrastructure.Repositories;
 
 public class UserQuery : AbstractRepository, IUserQuery
 {
-    public UserQuery(MongoDbContext context) : base(context)
+    public UserQuery(CesizenDbContext context) : base(context)
     {
     }
 

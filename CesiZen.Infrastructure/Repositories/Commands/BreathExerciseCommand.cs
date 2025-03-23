@@ -8,7 +8,7 @@ namespace CesiZen.Infrastructure.Repositories;
 
 public class BreathExerciseCommand : AbstractRepository, IBreathExerciseCommand
 {
-    public BreathExerciseCommand(MongoDbContext context) : base(context)
+    public BreathExerciseCommand(CesizenDbContext context) : base(context)
     {
     }
 

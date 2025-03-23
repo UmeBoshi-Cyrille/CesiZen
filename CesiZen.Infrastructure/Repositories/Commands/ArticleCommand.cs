@@ -8,7 +8,7 @@ namespace CesiZen.Infrastructure.Repositories;
 
 public class ArticleCommand : AbstractRepository, IArticleCommand
 {
-    public ArticleCommand(MongoDbContext context) : base(context)
+    public ArticleCommand(CesizenDbContext context) : base(context)
     {
     }
 

@@ -16,9 +16,9 @@ internal class CommonFaker
             .RuleFor(a => a.PageSize, f => f.Random.Int(1, 200));
     }
 
-    public static Mock<MongoDbContext> GenerateContext()
+    public static Mock<CesizenDbContext> GenerateContext()
     {
-        return new Mock<MongoDbContext>();
+        return new Mock<CesizenDbContext>();
     }
 
     public static Mock<DbSet<T>> CreateMockDbSet<T>(List<T> data) where T : class

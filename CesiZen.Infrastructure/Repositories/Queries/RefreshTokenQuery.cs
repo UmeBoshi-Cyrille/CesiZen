@@ -9,7 +9,7 @@ namespace CesiZen.Infrastructure.Repositories;
 public class RefreshTokenQuery : AbstractRepository, IRefreshTokenQuery
 {
     public RefreshTokenQuery(
-        MongoDbContext context) :
+        CesizenDbContext context) :
         base(context)
     {
     }

@@ -8,7 +8,7 @@ namespace CesiZen.Infrastructure.Repositories;
 
 public class LoginQuery : AbstractRepository, ILoginQuery
 {
-    public LoginQuery(MongoDbContext context) : base(context)
+    public LoginQuery(CesizenDbContext context) : base(context)
     {
     }
 

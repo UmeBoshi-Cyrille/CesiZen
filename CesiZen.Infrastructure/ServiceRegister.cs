@@ -3,6 +3,7 @@ using CesiZen.Infrastructure.DatabaseContext;
 using CesiZen.Infrastructure.Notifiers;
 using CesiZen.Infrastructure.Providers;
 using CesiZen.Infrastructure.Repositories;
+using EntityFramework.Exceptions.PostgreSQL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,12 +22,12 @@ public static class ServiceRegister
 
     public static IServiceCollection AddInfrastructureContext(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("MongoDb")
-            ?? throw new InvalidOperationException("Connection string : 'MongoDb' not found.");
-        var dbName = configuration.GetValue<string>("ConnectionStrings:MongoDbName");
+        var connectionString = configuration.GetConnectionString("Postgres")
+            ?? throw new InvalidOperationException("Connection string : 'Postgres' not found.");
 
-        services.AddDbContext<MongoDbContext>(options =>
-            options.UseMongoDB(connectionString, dbName!));
+        services.AddDbContext<CesizenDbContext>(options =>
+            options.UseNpgsql(connectionString)
+            .UseExceptionProcessor());
 
 
         return services;

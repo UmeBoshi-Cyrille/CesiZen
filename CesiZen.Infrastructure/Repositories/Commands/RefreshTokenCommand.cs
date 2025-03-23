@@ -9,7 +9,7 @@ namespace CesiZen.Infrastructure.Repositories;
 
 public class TokenCommand : AbstractRepository, IRefreshTokenCommand
 {
-    public TokenCommand(MongoDbContext context) : base(context)
+    public TokenCommand(CesizenDbContext context) : base(context)
     {
     }
 

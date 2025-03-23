@@ -9,7 +9,7 @@ namespace CesiZen.Infrastructure.Repositories;
 
 public class SessionCommand : AbstractRepository, ISessionCommand
 {
-    public SessionCommand(MongoDbContext context) : base(context)
+    public SessionCommand(CesizenDbContext context) : base(context)
     {
     }
 

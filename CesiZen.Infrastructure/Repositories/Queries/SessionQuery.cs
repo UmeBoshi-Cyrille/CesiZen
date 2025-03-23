@@ -8,7 +8,7 @@ namespace CesiZen.Infrastructure.Repositories;
 public class SessionQuery : AbstractRepository, ISessionQuery
 {
     public SessionQuery(
-        MongoDbContext context)
+        CesizenDbContext context)
         : base(context)
     {
     }

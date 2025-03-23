@@ -9,7 +9,7 @@ namespace CesiZen.Infrastructure.Repositories;
 
 public class CategoryQuery : AbstractRepository, ICategoryQuery
 {
-    public CategoryQuery(MongoDbContext context) : base(context)
+    public CategoryQuery(CesizenDbContext context) : base(context)
     {
     }
 
