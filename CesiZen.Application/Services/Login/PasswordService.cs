@@ -78,21 +78,23 @@ public class PasswordService : IPasswordService
         return Result.Success(UserInfos.ClientPasswordModified);
     }
 
-    public async Task<IResult> ForgotPassword(PasswordResetRequestDto request)
+    public async Task<IResult<MessageEventArgs>> ForgotPassword(PasswordResetRequestDto request)
     {
         var login = await loginQuery.GetByEmail(request.Email!);
 
         if (login == null)
         {
-            return Result.Failure(UserErrors.ClientNotFound);
+            return Result<MessageEventArgs>.Failure(UserErrors.ClientNotFound);
         }
 
         var token = tokenProvider.GenerateVerificationToken();
 
         await SavePasswordResetToken(login.Value, token);
-        await SendForgotPasswordEmail(login.Value.Email, token);
+        //await SendForgotPasswordEmail(login.Value.Email, token);
 
-        return Result.Success(UserInfos.ClientVerificationEmailSent);
+        var message = BuildEmailVerificationMessage(login.Value.Email, token);
+
+        return Result<MessageEventArgs>.Success(message, UserInfos.ClientVerificationEmailSent);
     }
     #endregion
 
@@ -158,14 +160,18 @@ public class PasswordService : IPasswordService
         await loginCommand.UpdateResetPasswordToken(login);
     }
 
-    private async Task SendForgotPasswordEmail(string email, string token)
+    private MessageEventArgs BuildEmailVerificationMessage(string email, string token)
     {
-        var resetLink = $"https://yourapp.com/reset-password?token={token}";
-        var resetPasswordTemplate = Message.GetResource("Templates", "RESET_PASSWORD");
-        var templateContent = EmailService.ReplaceLinkContent(resetPasswordTemplate, resetLink, "resetLink");
-        var subject = configuration["Email:ResetPwdSubject"];
+        var template = Message.GetResource("Templates", "TEMPLATE_RESET_PASSWORD");
+        var verificationLink = $"{configuration["App:Url"]}/reset-password?token={token}";
+        var htmlTemplate = template.Replace("{{url}}", verificationLink);
 
-        await emailService.SendEmailAsync(email, templateContent, subject!);
+        return new MessageEventArgs
+        {
+            Email = email,
+            Subject = Message.GetResource("Templates", "SUBJECT_RESET_PASSWORD"),
+            Body = htmlTemplate,
+        };
     }
     #endregion
 }

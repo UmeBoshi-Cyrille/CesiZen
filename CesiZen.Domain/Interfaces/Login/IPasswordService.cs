@@ -1,6 +1,5 @@
 ﻿using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
-using CesiZen.Domain.Interfaces;
 
 namespace CesiZen.Domain.Interfaces;
 
@@ -12,5 +11,5 @@ public interface IPasswordService
 
     Task<IResult> ResetPassword(PasswordResetDto dto);
 
-    Task<IResult> ForgotPassword(PasswordResetRequestDto request);
+    Task<IResult<MessageEventArgs>> ForgotPassword(PasswordResetRequestDto request);
 }

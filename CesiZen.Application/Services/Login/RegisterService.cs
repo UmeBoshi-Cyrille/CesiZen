@@ -3,13 +3,16 @@ using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using CesiZen.Domain.Mapper;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 
 namespace CesiZen.Application.Services;
 
 public class RegisterService : ALoginService, IRegisterService
 {
+    private readonly IConfiguration configuration;
     public RegisterService(
+        IConfiguration configuration,
         ILogger logger,
         IUserCommand command,
         IPasswordService passwordService,
@@ -17,16 +20,17 @@ public class RegisterService : ALoginService, IRegisterService
         ITokenProvider tokenProvider
         ) : base(logger, command, passwordService, loginQuery, tokenProvider)
     {
+        this.configuration = configuration;
     }
 
-    public async Task<IResult<string>> Register(UserDto dto)
+    public async Task<IResult<MessageEventArgs>> Register(UserDto dto)
     {
         User user;
         IResult result;
 
         if (IsEmailUnique(dto.Email).IsFailure)
         {
-            return Result<string>.Failure(UserErrors.ClientNotUnique(dto.Email));
+            return Result<MessageEventArgs>.Failure(UserErrors.ClientNotUnique(dto.Email));
         }
 
         string verificationToken = tokenProvider.GenerateVerificationToken();
@@ -40,11 +44,13 @@ public class RegisterService : ALoginService, IRegisterService
 
         if (result.IsFailure)
         {
-            return Result<string>.Failure(UserErrors.ClientRegisterFailed);
+            return Result<MessageEventArgs>.Failure(UserErrors.ClientRegisterFailed);
         }
 
+        var message = BuildEmailVerificationMessage(dto.Email, verificationToken);
+
         logger.Information(result.Info.Message);
-        return Result<string>.Success(verificationToken, UserInfos.ClientInsertionSucceeded);
+        return Result<MessageEventArgs>.Success(message, UserInfos.ClientInsertionSucceeded);
     }
 
     private IResult IsEmailUnique(string email)
@@ -57,5 +63,19 @@ public class RegisterService : ALoginService, IRegisterService
         }
 
         return result;
+    }
+
+    private MessageEventArgs BuildEmailVerificationMessage(string email, string token)
+    {
+        var template = Message.GetResource("Templates", "TEMPLATE_VERIFICATION_EMAIL");
+        var verificationLink = $"{configuration["App:Url"]}/verify?token={token}";
+        var htmlTemplate = template.Replace("{{url}}", verificationLink);
+
+        return new MessageEventArgs
+        {
+            Email = email,
+            Subject = Message.GetResource("Templates", "SUBJECT_VERIFICATION_EMAIL"),
+            Body = htmlTemplate,
+        };
     }
 }

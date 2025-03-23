@@ -9,11 +9,13 @@ namespace CesiZen.Api.Controllers;
 [Route("api/[controller]")]
 public class AuthenticationController : LoginController
 {
+    private readonly IConfiguration configuration;
     private readonly IAuthenticateService authenticateService;
     private readonly ITokenProvider tokenProvider;
     private readonly IPasswordService passwordService;
 
     public AuthenticationController(
+        IConfiguration configuration,
         IAuthenticateService authenticateService,
         ITokenProvider tokenProvider,
         IPasswordService passwordService,
@@ -23,6 +25,7 @@ public class AuthenticationController : LoginController
         this.authenticateService = authenticateService;
         this.tokenProvider = tokenProvider;
         this.passwordService = passwordService;
+        this.configuration = configuration;
     }
 
     /// <summary>
@@ -162,8 +165,7 @@ public class AuthenticationController : LoginController
         }
 
         SubscribeNotifierEvent();
-        var message = BuildEmailVerificationMessage(dto.Email!);
-        notifier.NotifyObservers(message);
+        notifier.NotifyObservers(result.Value);
         UnsubscribeNotifierEvent();
 
         return Ok(new { message = result.Info.Message });
@@ -189,15 +191,5 @@ public class AuthenticationController : LoginController
             return BadRequest(new { message = result.Error.Message });
 
         return Ok(new { message = result.Info.Message });
-    }
-
-    private MessageEventArgs BuildEmailVerificationMessage(string email)
-    {
-        return new MessageEventArgs
-        {
-            Email = email,
-            Subject = Message.GetResource("Templates", "SUBJECT_RESET_PASSWORD"),
-            Body = Message.GetResource("Templates", "TEMPLATE_RESET_PASSWORD"),
-        };
     }
 }
