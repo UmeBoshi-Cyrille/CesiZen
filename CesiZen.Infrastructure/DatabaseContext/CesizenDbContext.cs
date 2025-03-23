@@ -13,6 +13,7 @@ public class CesizenDbContext : DbContext
     public virtual DbSet<Article> Articles { get; set; }
     public virtual DbSet<BreathExercise> BreathExercises { get; set; }
     public virtual DbSet<Category> Categories { get; set; }
+    public virtual DbSet<Image> Images { get; set; }
 
     public CesizenDbContext(DbContextOptions options)
         : base(options)
