@@ -8,7 +8,6 @@ public class Session
 
     public string SessionId { get; set; }
 
-    [JsonIgnore]
     public string UserId { get; set; }
 
     [JsonIgnore]

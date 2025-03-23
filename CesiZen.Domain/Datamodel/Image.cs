@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace CesiZen.Domain.Datamodel;
 
@@ -12,5 +13,7 @@ public class Image
     public string Path { get; set; } = string.Empty;
 
     public string ArticleId { get; set; } = string.Empty;
+
+    [JsonIgnore]
     public Article? Article { get; set; }
 }

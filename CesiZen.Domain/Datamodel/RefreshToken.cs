@@ -10,7 +10,6 @@ public class RefreshToken
 
     public DateTime ExpirationTime { get; set; }
 
-    [JsonIgnore]
     public string UserId { get; set; } = string.Empty;
 
     [JsonIgnore]

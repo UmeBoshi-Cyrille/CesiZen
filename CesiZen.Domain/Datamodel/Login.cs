@@ -38,7 +38,6 @@ public class Login
     [DataType(DataType.DateTime)]
     public DateTime? LockoutEndTime { get; set; }
 
-    [JsonIgnore]
     public string UserId { get; set; } = string.Empty;
 
     [JsonIgnore]
