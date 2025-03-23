@@ -47,7 +47,8 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
             return Result<AuthenticateResponseDto>.Failure(UserErrors.ClientAuthenticationFailed);
         }
 
-        var token = tokenProvider.GenerateAccessToken(login.Value.UserId);
+        var tokenDto = tokenProvider.GenerateRefreshToken(login.Value.UserId);
+        var token = tokenProvider.GenerateAccessToken(tokenDto.Value);
         response.Token = token;
 
         return Result<AuthenticateResponseDto>.Success(response, UserInfos.ClientAuthentified);
@@ -86,9 +87,9 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
 
     public async Task<IResult> Disconnect(string accessToken)
     {
-        var sessionId = tokenProvider.GetTokenSessionId(accessToken);
+        var sessionId = tokenProvider.GetSessionId(accessToken);
 
-        var userId = userQuery.GetUserId(sessionId).Result;
+        var userId = userQuery.GetUserId(sessionId!).Result;
 
         if (string.IsNullOrEmpty(sessionId) || userId.IsFailure)
         {

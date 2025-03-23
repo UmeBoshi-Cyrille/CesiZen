@@ -81,13 +81,14 @@ public class AuthenticateServiceTests
         // Arrange
         var dto = LoginFaker.FakeRequestDtoGenerator().Generate();
         var login = LoginFaker.FakeLoginGenerator().Generate();
-        var token = tokenProvider.GenerateAccessToken(login.Id);
+        var tokenDto = tokenProvider.GenerateRefreshToken(login.UserId);
+        var token = tokenProvider.GenerateAccessToken(tokenDto.Value);
         login.Email = dto.Identifier;
         login.Password = passwordService.HashPassword(dto.Password).Password;
 
         loginQueryMock.Setup(x => x.GetByEmail(It.IsAny<string>())).ReturnsAsync(Result<Login>.Success(login));
         passwordServiceMock.Setup(x => x.VerifyPassword(It.IsAny<Login>(), It.IsAny<string>())).Returns(true);
-        tokenProviderMock.Setup(x => x.GenerateAccessToken(It.IsAny<int>())).Returns(token);
+        tokenProviderMock.Setup(x => x.GenerateAccessToken(It.IsAny<TokenIdDto>())).Returns(token);
 
         // Act
         var result = await authenticationService.Authenticate(dto);
@@ -195,7 +196,6 @@ public class AuthenticateServiceTests
         var accessToken = "validtoken";
         var sessionId = "session";
         var userId = 123;
-        tokenProviderMock.Setup(x => x.GetTokenSessionId(accessToken)).Returns(sessionId);
         userQueryMock.Setup(x => x.GetUserId(sessionId)).ReturnsAsync(Result<int>.Success(userId));
         tokenProviderMock.Setup(x => x.InvalidateTokens(userId)).ReturnsAsync(Result.Success());
 
@@ -212,7 +212,6 @@ public class AuthenticateServiceTests
         // Arrange
         var accessToken = "validtoken";
         var sessionId = "session";
-        tokenProviderMock.Setup(x => x.GetTokenSessionId(accessToken)).Returns(sessionId);
         userQueryMock.Setup(x => x.GetUserId(sessionId))
             .ReturnsAsync(Result<int>.Failure(UserErrors.ClientNotFound));
 
@@ -231,7 +230,6 @@ public class AuthenticateServiceTests
         var accessToken = "validtoken";
         var sessionId = "session";
         var userId = 123;
-        tokenProviderMock.Setup(x => x.GetTokenSessionId(accessToken)).Returns(sessionId);
         userQueryMock.Setup(x => x.GetUserId(sessionId)).ReturnsAsync(Result<int>.Success(userId));
         tokenProviderMock.Setup(x => x.InvalidateTokens(userId))
             .ReturnsAsync(Result.Failure(UserErrors.ClientNotFound));

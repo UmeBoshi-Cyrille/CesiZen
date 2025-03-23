@@ -53,7 +53,7 @@ public static class LoginFaker
         };
 
         return new ConfigurationBuilder()
-            .AddInMemoryCollection(settings)
+            .AddInMemoryCollection(settings!)
             .Build();
     }
 }

@@ -1,18 +1,18 @@
-﻿using CesiZen.Domain.Interfaces;
+﻿using CesiZen.Domain.DataTransfertObject;
 
 namespace CesiZen.Domain.Interfaces;
 
 public interface ITokenProvider
 {
-    string GenerateAccessToken(int userId);
+    string GenerateAccessToken(TokenIdDto dto);
 
-    Task<IResult<string>> RefreshAccessTokenAsync(int userId, string accessToken);
+    IResult<TokenIdDto> GenerateRefreshToken(int userId);
+
+    Task<IResult<string>> RefreshAccessTokenAsync(string accessToken);
 
     Task<IResult> InvalidateTokens(int userId);
 
-    bool CheckAccessTokenExpirationTime(string token);
-
-    string GetTokenSessionId(string token);
-
     string GenerateVerificationToken();
+
+    string? GetSessionId(string token);
 }

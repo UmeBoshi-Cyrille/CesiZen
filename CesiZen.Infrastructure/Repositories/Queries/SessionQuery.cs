@@ -1,4 +1,5 @@
 ﻿using CesiZen.Domain.BusinessResult;
+using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.Interfaces;
 using CesiZen.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
@@ -27,5 +28,19 @@ public class SessionQuery : AbstractRepository, ISessionQuery
         }
 
         return Result<int>.Failure(SessionErrors.LogNotFound(nameof(id)));
+    }
+
+    public async Task<IResult<Session>> GetBySessionId(string sessionId)
+    {
+        var result = await context.Sessions
+                            .AsNoTracking()
+                            .FirstOrDefaultAsync(c => c.SessionId == sessionId);
+
+        if (result == null)
+        {
+            return Result<Session>.Failure(SessionErrors.LogNotFound(sessionId));
+        }
+
+        return Result<Session>.Success(result);
     }
 }
