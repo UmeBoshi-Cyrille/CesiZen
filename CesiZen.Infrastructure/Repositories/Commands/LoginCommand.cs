@@ -13,6 +13,21 @@ public class LoginCommand : AbstractRepository, ILoginCommand
     {
     }
 
+    public async Task<IResult> UpdateLogin(Login login)
+    {
+        try
+        {
+            context.Logins.Update(login);
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+        {
+            Result.Failure(LoginErrors.LogUpdateFailed(nameof(login.Id)), nameof(login.Id), ex.Message);
+        }
+
+        return Result.Success();
+    }
+
     public async Task<IResult> UpdateEmailVerification(EmailVerificationDto dto)
     {
         try
@@ -148,7 +163,7 @@ public class LoginCommand : AbstractRepository, ILoginCommand
                 .Where(x => x.Id == login.Id)
                 .ExecuteUpdateAsync(o => o
                 .SetProperty(x => x.AccessFailedCount, login.AccessFailedCount)
-                .SetProperty(x => x.IsLocked, login.IsLocked)
+                .SetProperty(x => x.AccountIsLocked, login.AccountIsLocked)
                 .SetProperty(x => x.LockoutEndTime, login.LockoutEndTime));
 
             return Result.Success();
@@ -157,5 +172,68 @@ public class LoginCommand : AbstractRepository, ILoginCommand
         {
             return Result.Failure(UserErrors.LogLoginAttempsReached(login.Email), login.Email, ex.Message);
         }
+    }
+
+    public async Task<IResult> UpdateResetPasswordAttempsCount(int loginId, int? FailedCount)
+    {
+        try
+        {
+            await context.Logins
+                .Where(x => x.Id == loginId)
+                .ExecuteUpdateAsync(o => o
+                    .SetProperty(x => x.ResetFailedCount, FailedCount));
+        }
+        catch (DbUpdateException ex)
+        {
+            Result.Failure(LoginErrors.LogUpdatePropertyFailed("ResetPasswordAttemps", nameof(loginId)), ex.Message);
+        }
+
+        return Result.Success();
+    }
+
+    public async Task<IResult> UpdateResetPasswordAttemps(Login login)
+    {
+        try
+        {
+            await context.Logins
+                .Where(x => x.Id == login.Id)
+                .ExecuteUpdateAsync(o => o
+                    .SetProperty(x => x.ResetFailedCount, login.ResetFailedCount)
+                    .SetProperty(x => x.ResetIsLocked, login.ResetIsLocked)
+                    .SetProperty(x => x.ResetLockoutEndTime, login.ResetLockoutEndTime));
+        }
+        catch (DbUpdateException ex)
+        {
+            Result.Failure(LoginErrors.LogUpdateFailed(nameof(login.Id)), nameof(login.Id), ex.Message);
+        }
+
+        return Result.Success();
+    }
+
+    public async Task<IResult> AddResetPasswordToken(Login login)
+    {
+        try
+        {
+            var resetPassword = new ResetPassword()
+            {
+                ExpirationTime = login.ResetPassword!.ExpirationTime,
+                ResetToken = login.ResetPassword.ResetToken,
+                CreateAt = login.ResetPassword.CreateAt,
+                LoginId = login.Id
+            };
+
+            login.ResetPasswords!.Add(resetPassword);
+
+            await context.Logins
+               .Where(x => x.UserId == login.UserId)
+               .ExecuteUpdateAsync(o => o
+                    .SetProperty(x => x.ResetPasswords, login.ResetPasswords));
+        }
+        catch (DbUpdateException ex)
+        {
+            Result.Failure(LoginErrors.LogInsertionFailed(nameof(login.Id)), nameof(login.Id), ex.Message);
+        }
+
+        return Result.Success();
     }
 }

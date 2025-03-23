@@ -70,8 +70,7 @@ public class AuthenticateServiceTests
             LoginFaker.GetConfiguration(),
             loginQueryMock.Object,
             loginCommandMock.Object,
-            tokenProviderMock.Object,
-            emailServiceMock.Object
+            tokenProviderMock.Object
             );
     }
 
@@ -87,7 +86,7 @@ public class AuthenticateServiceTests
         login.Password = passwordService.HashPassword(dto.Password).Password;
 
         loginQueryMock.Setup(x => x.GetByEmail(It.IsAny<string>())).ReturnsAsync(Result<Login>.Success(login));
-        passwordServiceMock.Setup(x => x.VerifyPassword(It.IsAny<Login>(), It.IsAny<string>())).Returns(true);
+        passwordServiceMock.Setup(x => x.IsCorrectPassword(It.IsAny<Login>(), It.IsAny<string>())).Returns(true);
         tokenProviderMock.Setup(x => x.GenerateAccessToken(It.IsAny<TokenIdDto>())).Returns(token);
 
         // Act
@@ -108,7 +107,7 @@ public class AuthenticateServiceTests
         dto.Password = "wrongPassword";
 
         loginQueryMock.Setup(x => x.GetByEmail(It.IsAny<string>())).ReturnsAsync(Result<Login>.Success(login));
-        passwordServiceMock.Setup(x => x.VerifyPassword(It.IsAny<Login>(), It.IsAny<string>())).Returns(false);
+        passwordServiceMock.Setup(x => x.IsCorrectPassword(It.IsAny<Login>(), It.IsAny<string>())).Returns(false);
 
         // Act
         var result = await authenticationService.Authenticate(dto);

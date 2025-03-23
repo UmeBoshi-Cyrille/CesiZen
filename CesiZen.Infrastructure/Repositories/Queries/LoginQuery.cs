@@ -67,4 +67,23 @@ public class LoginQuery : AbstractRepository, ILoginQuery
 
         return Result.Success();
     }
+
+    public async Task<IResult<ResetPassword>> GetResetPassword(string email, string token)
+    {
+        var resetPasswords = await context.Logins
+                           .AsNoTracking()
+                           .Select(x => x.ResetPasswords!.Where(t => t.ResetToken == token))
+                           .FirstOrDefaultAsync();
+
+        var resetPassword = resetPasswords!.FirstOrDefault(t => t.ResetToken == token);
+
+        if (resetPassword == null)
+        {
+            return Result<ResetPassword>.Failure(
+                Error.NotFound(string.Format(
+                    Message.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "Login", email)));
+        }
+
+        return Result<ResetPassword>.Success(resetPassword);
+    }
 }
