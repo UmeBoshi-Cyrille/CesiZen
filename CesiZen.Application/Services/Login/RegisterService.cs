@@ -9,29 +9,24 @@ namespace CesiZen.Application.Services;
 
 public class RegisterService : ALoginService, IRegisterService
 {
-    private readonly ILoginCommand loginCommand;
-
     public RegisterService(
         ILogger logger,
         IUserCommand command,
         IPasswordService passwordService,
-        ILoginQuery query,
-        ILoginCommand loginCommand,
-        IEmailService emailService,
+        ILoginQuery loginQuery,
         ITokenProvider tokenProvider
-        ) : base(logger, command, passwordService, query, emailService, tokenProvider)
+        ) : base(logger, command, passwordService, loginQuery, tokenProvider)
     {
-        this.loginCommand = loginCommand;
     }
 
-    public async Task<IResult> Register(UserDto dto)
+    public async Task<IResult<EmailSenderDto>> Register(UserDto dto)
     {
         User user;
         IResult result;
 
         if (IsEmailUnique(dto.Email).IsFailure)
         {
-            return Result.Failure(UserErrors.ClientNotUnique(dto.Email));
+            return Result<EmailSenderDto>.Failure(UserErrors.ClientNotUnique(dto.Email));
         }
 
         string verificationToken = tokenProvider.GenerateVerificationToken();
@@ -40,12 +35,18 @@ public class RegisterService : ALoginService, IRegisterService
 
         user = dto.Map(authentifier, verificationToken);
 
+        user.CreatedAt = DateTime.UtcNow;
         result = await userCommand.Insert(user);
 
-        await emailService.SendVerificationEmailAsync(dto.Email, verificationToken);
+        if (result.IsFailure)
+        {
+            return Result<EmailSenderDto>.Failure(UserErrors.ClientRegisterFailed);
+        }
+
+        var emailSender = UserMapper.MapEmailSender(dto.Email, "", verificationToken, "Email de vérification");
 
         logger.Information(result.Info.Message);
-        return Result.Success(UserInfos.ClientInsertionSucceeded);
+        return Result<EmailSenderDto>.Success(emailSender, UserInfos.ClientInsertionSucceeded);
     }
 
     private IResult IsEmailUnique(string email)

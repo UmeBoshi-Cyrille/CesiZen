@@ -6,8 +6,6 @@ namespace CesiZen.Domain.Mapper;
 public static class UserMapper
 {
     #region Simple Mapper Methods
-
-
     public static User Map(this UserDto dto, Authentifier authentifier, string emailVerificationToken)
     {
         User user = new();
@@ -84,6 +82,17 @@ public static class UserMapper
         user.IsActive = true;
 
         return user;
+    }
+
+    public static EmailSenderDto MapEmailSender(string email, string template, string token, string subject)
+    {
+        return new EmailSenderDto()
+        {
+            Email = email,
+            Template = template,
+            Token = token,
+            Subject = subject
+        };
     }
     #endregion
 

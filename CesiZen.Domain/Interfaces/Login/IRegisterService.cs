@@ -4,5 +4,5 @@ namespace CesiZen.Domain.Interfaces;
 
 public interface IRegisterService
 {
-    Task<IResult> Register(UserDto dto);
+    Task<IResult<EmailSenderDto>> Register(UserDto dto);
 }

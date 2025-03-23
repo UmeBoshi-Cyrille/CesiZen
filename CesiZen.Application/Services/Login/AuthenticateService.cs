@@ -21,7 +21,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
         ILoginCommand loginCommand,
         ITokenProvider tokenProvider,
         IEmailService emailService
-        ) : base(logger, userCommand, passwordService, loginQuery, emailService, tokenProvider)
+        ) : base(logger, userCommand, passwordService, loginQuery, tokenProvider)
     {
         this.loginCommand = loginCommand;
         this.userQuery = userQuery;
