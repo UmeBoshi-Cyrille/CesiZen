@@ -1,5 +1,6 @@
 ﻿using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Datamodel;
+using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using CesiZen.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
@@ -80,8 +81,10 @@ internal class UserCommand : AbstractRepository, IUserCommand
         }
     }
 
-    public async Task<IResult> ActivationAsync(User entity)
+    public async Task<IResult> ActivationAsync(AccountActivationDto dto)
     {
+        var entity = new User() { Id = dto.Id, IsActive = dto.IsActive, UpdatedAt = DateTime.UtcNow };
+
         context.Attach(entity);
         context.Entry(entity).Property(p => p.IsActive).IsModified = true;
         context.Entry(entity).Property(p => p.UpdatedAt).IsModified = true;
