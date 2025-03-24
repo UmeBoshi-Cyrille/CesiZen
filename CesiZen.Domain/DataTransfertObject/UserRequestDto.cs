@@ -12,5 +12,7 @@ public record UserRequestDto
 
     public string Lastname { get; set; } = string.Empty;
 
+    public string Username { get; set; } = string.Empty;
+
     public bool IsActive { get; set; }
 }

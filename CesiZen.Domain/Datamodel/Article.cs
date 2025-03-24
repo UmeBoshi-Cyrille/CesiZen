@@ -21,6 +21,8 @@ public class Article
 
     public string Content { get; set; } = string.Empty;
 
+    public string PresentationImagePath { get; set; } = string.Empty;
+
     public ICollection<Image>? Images { get; set; }
 
     public ICollection<Category>? Categories { get; set; }

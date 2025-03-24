@@ -16,6 +16,15 @@ internal class ArticleFaker
             .RuleFor(a => a.Content, f => f.Lorem.Paragraph(3));
     }
 
+    public static Faker<NewArticleDto> FakeNewArticleDtoGenerator()
+    {
+        return new Faker<NewArticleDto>()
+            .RuleFor(a => a.Title, f => f.Name.JobTitle())
+            .RuleFor(a => a.Author, f => f.Name.FullName())
+            .RuleFor(a => a.Description, f => f.Lorem.Paragraph(1))
+            .RuleFor(a => a.Content, f => f.Lorem.Paragraph(3));
+    }
+
     public static Faker<Article> FakeArticleGenerator()
     {
         return new Faker<Article>()

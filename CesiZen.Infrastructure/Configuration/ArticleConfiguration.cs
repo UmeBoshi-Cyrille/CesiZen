@@ -19,5 +19,9 @@ public class ArticleConfiguration : IEntityTypeConfiguration<Article>
         builder.HasMany(x => x.Images)
             .WithOne(x => x.Article)
             .HasForeignKey(x => x.ArticleId);
+
+        builder.Property(x => x.CreatedAt)
+            .HasDefaultValueSql("CURRENT_TIMESTAMP")
+            .ValueGeneratedOnAdd();
     }
 }

@@ -18,6 +18,7 @@ public class BreathExerciseQuery : AbstractRepository, IBreathExerciseQuery
         {
             var result = await context.BreathExercises
                                 .Where(p => p.UserId == userId)
+                                .OrderBy(p => p.EditedAt)
                                 .ToListAsync();
 
             if (result is null)

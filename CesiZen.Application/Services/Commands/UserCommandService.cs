@@ -60,8 +60,7 @@ public class UserCommandService : AService, IUserCommandService
 
     public async Task<IResult> ActivationAsync(AccountActivationDto dto)
     {
-        var user = dto.Map();
-        var result = await command.ActivationAsync(user);
+        var result = await command.ActivationAsync(dto);
 
         if (result.IsSuccess)
         {

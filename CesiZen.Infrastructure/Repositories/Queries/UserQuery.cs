@@ -99,6 +99,33 @@ public class UserQuery : AbstractRepository, IUserQuery
         return Result<User>.Success(user);
     }
 
+    public async Task<IResult<User>> GetByIdentifier(string identifier, bool isEmail = false)
+    {
+        User user;
+
+        if (isEmail)
+        {
+            user = await context.Users
+                        .AsNoTracking()
+                        .Include(x => x.Login)
+                        .FirstOrDefaultAsync(x => x.Login.Email == identifier)!;
+        }
+        else
+        {
+            user = await context.Users
+                    .AsNoTracking()
+                    .Include(x => x.Login)
+                    .FirstOrDefaultAsync(x => x.Username == identifier)!;
+        }
+
+        if (user == null)
+        {
+            return Result<User>.Failure(UserErrors.LogNotFound(identifier));
+        }
+
+        return Result<User>.Success(user);
+    }
+
     public async Task<IResult<int>> GetUserId(string sessionId)
     {
         var userId = await context.Sessions

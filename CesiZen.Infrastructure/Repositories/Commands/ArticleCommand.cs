@@ -33,10 +33,35 @@ public class ArticleCommand : AbstractRepository, IArticleCommand
 
     public async Task<IResult> Update(Article article)
     {
-        context.Entry(article).State = EntityState.Modified;
+        var fetchArticle = await context.Articles
+            .Include(x => x.Images)
+            .FirstOrDefaultAsync(x => x.Id == article.Id);
+
+        if (fetchArticle == null)
+        {
+            return Result.Failure(ArticleErrors.LogNotFound(nameof(article.Id)));
+        }
 
         try
         {
+            fetchArticle!.Title = article.Title;
+            fetchArticle.Author = article.Author;
+            fetchArticle.Description = article.Description;
+            fetchArticle.Content = article.Content;
+            fetchArticle.UpdatedAt = DateTime.UtcNow;
+
+            if (article.Images!.Any())
+            {
+                var img = article.Images!.ToList();
+
+                for (int i = 0; i < article.Images!.ToList().Count; i++)
+                {
+                    fetchArticle.Images!.ToList().Add(img[i]);
+                }
+            }
+
+            context.Entry(fetchArticle).State = EntityState.Modified;
+
             await context.SaveChangesAsync();
 
             return Result.Success(ArticleInfos.LogUpdateSucceeded(nameof(article.Id)));

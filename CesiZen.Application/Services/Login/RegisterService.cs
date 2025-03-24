@@ -23,7 +23,7 @@ public class RegisterService : ALoginService, IRegisterService
         this.configuration = configuration;
     }
 
-    public async Task<IResult<MessageEventArgs>> Register(UserDto dto)
+    public async Task<IResult<MessageEventArgs>> Register(NewUserDto dto)
     {
         User user;
         IResult result;
@@ -37,9 +37,8 @@ public class RegisterService : ALoginService, IRegisterService
 
         var authentifier = passwordService.HashPassword(dto.Password);
 
-        user = dto.Map(authentifier, verificationToken);
+        user = dto.Map(authentifier, verificationToken, configuration);
 
-        user.CreatedAt = DateTime.UtcNow;
         result = await userCommand.Insert(user);
 
         if (result.IsFailure)

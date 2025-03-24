@@ -1,4 +1,5 @@
-﻿using CesiZen.Domain.BusinessResult;
+﻿using CesiZen.Application.Authorization;
+using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,7 @@ public class CategoryCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> Create([FromBody] CategoryDto dto)
     {
         var result = await categoryService.Insert(dto);
@@ -54,6 +56,7 @@ public class CategoryCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> Update([FromBody] CategoryDto dto)
     {
         var result = await categoryService.Update(dto);
@@ -76,6 +79,7 @@ public class CategoryCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id)
     {
         var result = await categoryService.Delete(id);

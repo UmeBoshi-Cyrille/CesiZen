@@ -24,13 +24,15 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasMaxLength(255)
             .IsRequired();
 
-        builder.Property(u => u.CreatedAt)
-            .IsRequired();
+        builder.Property(x => x.CreatedAt)
+            .HasDefaultValueSql("CURRENT_TIMESTAMP")
+            .ValueGeneratedOnAdd();
 
         builder.Property(u => u.IsActive)
             .IsRequired();
 
-        builder.Property(u => u.Role);
+        builder.Property(u => u.Role)
+            .HasColumnType("varchar");
 
         builder.HasOne(x => x.Login)
            .WithOne(x => x.User)
@@ -46,5 +48,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .WithOne(x => x.User)
             .HasForeignKey<RefreshToken>(x => x.UserId)
             .IsRequired();
+
+        builder.HasMany(x => x.BreathExercises)
+            .WithOne(x => x.User)
+            .HasForeignKey(x => x.UserId);
     }
 }

@@ -1,4 +1,3 @@
-using CesiZen.Domain.Enum;
 using System.ComponentModel.DataAnnotations;
 
 namespace CesiZen.Domain.Datamodel;
@@ -20,7 +19,7 @@ public class User
     [MaxLength(50)]
     [MinLength(2)]
     [RegularExpression(@"^[a-zA-Z]+$")]
-    public string? Username { get; set; } = string.Empty;
+    public string Username { get; set; } = string.Empty;
 
     public DateTime CreatedAt { get; set; }
 
@@ -30,7 +29,7 @@ public class User
 
     public bool IsActive { get; set; }
 
-    public RoleType Role { get; set; }
+    public string Role { get; set; } = string.Empty;
 
     public DateTime? RefreshTokenExpiryTime { get; set; }
 
@@ -39,4 +38,6 @@ public class User
     public RefreshToken? RefreshToken { get; set; }
 
     public Session? Session { get; set; }
+
+    public ICollection<BreathExercise>? BreathExercises { get; set; }
 }

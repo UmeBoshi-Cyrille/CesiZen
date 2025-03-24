@@ -14,7 +14,23 @@ public static class ArticleMapper
             Description = dto.Description,
             Author = dto.Author,
             Content = dto.Content,
-            Images = dto.Images,
+            PresentationImagePath = dto.PresentationImagePath,
+            Images = dto.Images is not null ? dto.Images : new List<Image>(),
+            UpdatedAt = DateTime.UtcNow
+        };
+    }
+
+    public static Article MapNew(this NewArticleDto dto)
+    {
+        return new Article
+        {
+            Title = dto.Title,
+            Description = dto.Description,
+            Author = dto.Author,
+            Content = dto.Content,
+            PresentationImagePath = dto.PresentationImagePath,
+            Images = dto.Images is not null ? dto.Images : new List<Image>(),
+            UpdatedAt = DateTime.UtcNow
         };
     }
 
@@ -27,6 +43,7 @@ public static class ArticleMapper
             Description = model.Description,
             Author = model.Author,
             Content = model.Content,
+            PresentationImagePath = model.PresentationImagePath,
             Images = model.Images!,
         };
     }
@@ -43,6 +60,19 @@ public static class ArticleMapper
         }
 
         return dto;
+    }
+
+    public static List<Article> Map(this List<NewArticleDto> dto)
+    {
+        List<Article> model = new();
+
+        for (var i = 0; i < dto.Count; i++)
+        {
+            var item = dto[i].MapNew();
+            model.Add(item);
+        }
+
+        return model;
     }
 
     public static List<Article> Map(this List<ArticleDto> dto)

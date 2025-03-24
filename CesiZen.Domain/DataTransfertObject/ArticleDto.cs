@@ -9,6 +9,6 @@ public record ArticleDto
     public string Description { get; set; } = string.Empty;
     public string Author { get; set; } = string.Empty;
     public string Content { get; set; } = string.Empty;
-    public Image? Image { get; set; }
+    public string PresentationImagePath { get; set; } = string.Empty;
     public ICollection<Image>? Images { get; set; }
 }

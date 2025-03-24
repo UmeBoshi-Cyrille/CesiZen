@@ -38,20 +38,14 @@ public class TokenProvider : ITokenProvider
     }
 
     #region Public Methods
-    public string GenerateAccessToken(TokenIdDto dto)
+    public string GenerateAccessToken(TokenBuilderDto dto)
     {
-        var builder = new TokenBuilderDto()
-        {
-            SessionId = dto.SessionId!,
-            TokenId = dto.TokenId!,
-            ExpirationTime = jwtSettings.ExpirationMinutes
-        };
-        var token = GenerateAccessToken(builder, jwtSettings);
+        var token = GenerateAccessToken(dto, jwtSettings);
 
         return token;
     }
 
-    public IResult<TokenIdDto> GenerateRefreshToken(int userId)
+    public IResult<TokenBuilderDto> GenerateRefreshToken(int userId)
     {
         var sessionId = GenerateSessionId();
         var tokenId = GenerateTokenId();
@@ -61,13 +55,14 @@ public class TokenProvider : ITokenProvider
         sessionCommand.UpSert(session);
         SaveRefreshToken(userId, refreshToken);
 
-        var dto = new TokenIdDto()
+        var dto = new TokenBuilderDto()
         {
             SessionId = sessionId,
             TokenId = tokenId,
+            ExpirationTime = jwtSettings.ExpirationMinutes,
         };
 
-        return Result<TokenIdDto>.Success(dto);
+        return Result<TokenBuilderDto>.Success(dto);
     }
 
     public async Task<IResult<string>> RefreshAccessTokenAsync(string accessToken)
@@ -144,6 +139,8 @@ public class TokenProvider : ITokenProvider
         {
             Subject = new ClaimsIdentity(
             [
+                new Claim(ClaimTypes.NameIdentifier, builder.Username),
+                new Claim(ClaimTypes.Role, builder.Role),
                 new Claim("token_id", builder.TokenId),
                 new Claim("session_id", builder.SessionId),
             ]),
@@ -181,7 +178,7 @@ public class TokenProvider : ITokenProvider
 
     private string RefreshAccessToken(string accessToken)
     {
-        TokenIdDto dto = new();
+        TokenBuilderDto dto = new();
 
         var principal = GetAccessTokenPrincipal(accessToken!);
         dto.TokenId = principal?.FindFirstValue("token_id")!;

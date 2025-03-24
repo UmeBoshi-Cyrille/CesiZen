@@ -16,10 +16,9 @@ public class ArticleCommandService : AService, IArticleCommandService
         this.command = command;
     }
 
-    public async Task<IResult> Insert(ArticleDto dto)
+    public async Task<IResult> Insert(NewArticleDto dto)
     {
-        var article = dto.Map();
-        article.CreatedAt = DateTime.Now;
+        var article = dto.MapNew();
         var result = await command.Insert(article);
 
         if (result.IsFailure)
@@ -34,7 +33,6 @@ public class ArticleCommandService : AService, IArticleCommandService
     public async Task<IResult> Update(ArticleDto dto)
     {
         var article = dto.Map();
-        article.UpdatedAt = DateTime.Now;
         var result = await command.Update(article);
 
         if (result.IsFailure)
@@ -48,7 +46,7 @@ public class ArticleCommandService : AService, IArticleCommandService
 
     public async Task<IResult> UpdateTitleAsync(int id, string title)
     {
-        var article = new Article() { Id = id, Title = title, UpdatedAt = DateTime.Now };
+        var article = new Article() { Id = id, Title = title, UpdatedAt = DateTime.UtcNow };
 
         var result = await command.UpdateTitleAsync(article);
 
@@ -63,7 +61,7 @@ public class ArticleCommandService : AService, IArticleCommandService
 
     public async Task<IResult> UpdateDescriptionAsync(int id, string description)
     {
-        var article = new Article() { Id = id, Description = description, UpdatedAt = DateTime.Now };
+        var article = new Article() { Id = id, Description = description, UpdatedAt = DateTime.UtcNow };
         var result = await command.UpdateDescriptionAsync(article);
 
         if (result.IsFailure)
@@ -77,7 +75,7 @@ public class ArticleCommandService : AService, IArticleCommandService
 
     public async Task<IResult> UpdateContentAsync(int id, string content)
     {
-        var article = new Article() { Id = id, Content = content, UpdatedAt = DateTime.Now };
+        var article = new Article() { Id = id, Content = content, UpdatedAt = DateTime.UtcNow };
         var result = await command.UpdateContentAsync(article);
 
         if (result.IsFailure)

@@ -55,12 +55,18 @@ namespace CesiZen.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(3000)
                         .HasColumnType("character varying(3000)");
+
+                    b.Property<string>("PresentationImagePath")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -86,10 +92,15 @@ namespace CesiZen.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("EditedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
                     b.Property<int>("ExerciseType")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("Time")
+                    b.Property<int>("Time")
                         .HasColumnType("integer");
 
                     b.Property<string>("Title")
@@ -328,7 +339,9 @@ namespace CesiZen.Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("Firstname")
                         .IsRequired()
@@ -349,8 +362,9 @@ namespace CesiZen.Infrastructure.Migrations
                     b.Property<DateTime?>("RefreshTokenExpiryTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("integer");
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("varchar");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -385,7 +399,7 @@ namespace CesiZen.Infrastructure.Migrations
             modelBuilder.Entity("CesiZen.Domain.Datamodel.BreathExercise", b =>
                 {
                     b.HasOne("CesiZen.Domain.Datamodel.User", "User")
-                        .WithMany()
+                        .WithMany("BreathExercises")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -460,6 +474,8 @@ namespace CesiZen.Infrastructure.Migrations
 
             modelBuilder.Entity("CesiZen.Domain.Datamodel.User", b =>
                 {
+                    b.Navigation("BreathExercises");
+
                     b.Navigation("Login");
 
                     b.Navigation("RefreshToken");

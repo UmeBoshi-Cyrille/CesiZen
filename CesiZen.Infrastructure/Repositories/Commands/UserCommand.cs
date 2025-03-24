@@ -1,5 +1,6 @@
 ﻿using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Datamodel;
+using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using CesiZen.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,6 @@ internal class UserCommand : AbstractRepository, IUserCommand
         try
         {
             context.Users.Add(entity);
-            context.Logins.Add(entity.Login!);
             await context.SaveChangesAsync();
 
             return Result.Success(UserInfos.LogInsertionSucceeded(entity.Username!));
@@ -64,7 +64,7 @@ internal class UserCommand : AbstractRepository, IUserCommand
 
     public async Task<IResult> UpdateUserName(int id, string userName)
     {
-        var user = new User() { Id = id, Username = userName, UpdatedAt = DateTime.Now };
+        var user = new User() { Id = id, Username = userName, UpdatedAt = DateTime.UtcNow };
         context.Attach(user);
         context.Entry(user).Property(p => p.Username).IsModified = true;
         context.Entry(user).Property(p => p.UpdatedAt).IsModified = true;
@@ -81,8 +81,10 @@ internal class UserCommand : AbstractRepository, IUserCommand
         }
     }
 
-    public async Task<IResult> ActivationAsync(User entity)
+    public async Task<IResult> ActivationAsync(AccountActivationDto dto)
     {
+        var entity = new User() { Id = dto.Id, IsActive = dto.IsActive, UpdatedAt = DateTime.UtcNow };
+
         context.Attach(entity);
         context.Entry(entity).Property(p => p.IsActive).IsModified = true;
         context.Entry(entity).Property(p => p.UpdatedAt).IsModified = true;

@@ -1,4 +1,5 @@
-﻿using CesiZen.Domain.BusinessResult;
+﻿using CesiZen.Application.Authorization;
+using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,8 @@ public class ArticleCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Create([FromBody] ArticleDto dto)
+    [RoleAuthorization(Roles = "Admin")]
+    public async Task<IActionResult> Create([FromBody] NewArticleDto dto)
     {
         var result = await articleCommandService.Insert(dto);
 
@@ -37,7 +39,7 @@ public class ArticleCommandController : ControllerBase
             success: () => CreatedAtAction(
                 nameof(ArticleQueryController.GetArticle),
                 nameof(ArticleQueryController),
-                new { id = dto.Id, article = dto, message = result.Info.Message }),
+                new { article = dto, message = result.Info.Message }),
             failure: error => BadRequest(new { message = error.Message })
         );
     }
@@ -45,6 +47,7 @@ public class ArticleCommandController : ControllerBase
     /// <summary>
     /// Update article data
     /// </summary>
+    /// <param name="id">id provided by the client</param>
     /// <param name="dto">data provided by the client</param>
     /// <response code="200">operation succeeded</response>
     /// <response code="400">Bad request</response>
@@ -54,8 +57,10 @@ public class ArticleCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Update([FromBody] ArticleDto dto)
+    [RoleAuthorization(Roles = "Admin")]
+    public async Task<IActionResult> Update(int id, [FromBody] ArticleDto dto)
     {
+        dto.Id = id;
         var result = await articleCommandService.Update(dto);
 
         return result.Match<IActionResult>(
@@ -77,6 +82,7 @@ public class ArticleCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> UpdateTitle(int id, [FromBody] string title)
     {
         var result = await articleCommandService.UpdateTitleAsync(id, title);
@@ -100,6 +106,7 @@ public class ArticleCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> UpdateDescription(int id, [FromBody] string description)
     {
         var result = await articleCommandService.UpdateDescriptionAsync(id, description);
@@ -123,6 +130,7 @@ public class ArticleCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> UpdateContent(int id, [FromBody] string content)
     {
         var result = await articleCommandService.UpdateContentAsync(id, content);
@@ -145,6 +153,7 @@ public class ArticleCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id)
     {
         var result = await articleCommandService.Delete(id);

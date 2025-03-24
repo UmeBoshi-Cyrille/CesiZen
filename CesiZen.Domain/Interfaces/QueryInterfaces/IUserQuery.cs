@@ -9,5 +9,7 @@ public interface IUserQuery : IQueryInterface<User>
 
     Task<IResult<User>> GetByUsername(string username);
 
+    Task<IResult<User>> GetByIdentifier(string identifier, bool isEmail = false);
+
     Task<IResult<int>> GetUserId(string sessionId);
 }

@@ -171,9 +171,9 @@ namespace CesiZen.Domain.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Author : {0}, created new article entitled : {1}.
         /// </summary>
-        internal static string LOG_ARTICLE__INSERTION {
+        internal static string LOG_ARTICLE_INSERTION {
             get {
-                return ResourceManager.GetString("LOG_ARTICLE_ INSERTION", resourceCulture);
+                return ResourceManager.GetString("LOG_ARTICLE_INSERTION", resourceCulture);
             }
         }
         

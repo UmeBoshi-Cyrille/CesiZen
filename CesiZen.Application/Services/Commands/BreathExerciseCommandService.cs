@@ -17,7 +17,7 @@ public class BreathExerciseCommandService : AService, IBreathExerciseCommandServ
         this.command = command;
     }
 
-    public async Task<IResult> Insert(BreathExerciseDto dto)
+    public async Task<IResult> Insert(NewBreathExerciseDto dto)
     {
         var entity = dto.Map();
         var result = await command.Insert(entity);

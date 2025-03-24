@@ -33,7 +33,7 @@ public class BreathExerciseCommandServiceTests
     public async Task Insert_Success_ReturnsSuccessResult()
     {
         // Arrange
-        var dtos = BreathExerciseFaker.FakeBreathExerciseDtoGenerator().Generate(10);
+        var dtos = BreathExerciseFaker.FakeNewBreathExerciseDtoGenerator().Generate(10);
         var entities = dtos.Map();
         mockSet = CommonFaker.CreateMockDbSet(entities);
         mockContext.Setup(c => c.BreathExercises).Returns(mockSet.Object);
@@ -54,7 +54,7 @@ public class BreathExerciseCommandServiceTests
     public async Task Insert_Failure_ReturnsFailureResult()
     {
         // Arrange
-        var dto = BreathExerciseFaker.FakeBreathExerciseDtoGenerator().Generate();
+        var dto = BreathExerciseFaker.FakeNewBreathExerciseDtoGenerator().Generate();
         mockCommand.Setup(c => c.Insert(It.IsAny<BreathExercise>()))
             .ReturnsAsync(Result.Failure(Error.NullValue("Error message")));
 

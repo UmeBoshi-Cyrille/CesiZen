@@ -1,12 +1,13 @@
 ﻿using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
+using Microsoft.Extensions.Configuration;
 
 namespace CesiZen.Domain.Mapper;
 
 public static class UserMapper
 {
     #region Simple Mapper Methods
-    public static User Map(this UserDto dto, Authentifier authentifier, string emailVerificationToken)
+    public static User Map(this NewUserDto dto, Authentifier authentifier, string emailVerificationToken, IConfiguration configuration)
     {
         User user = new();
 
@@ -24,6 +25,8 @@ public static class UserMapper
         user.Username = dto.Username;
         user.IsActive = true;
         user.Login = login;
+        user.UpdatedAt = DateTime.UtcNow;
+        user.Role = configuration["Roles:User"]!;
 
         return user;
     }
@@ -44,6 +47,7 @@ public static class UserMapper
         user.Username = dto.Username;
         user.IsActive = true;
         user.Login = login;
+        user.UpdatedAt = DateTime.UtcNow;
 
         return user;
     }
@@ -55,6 +59,7 @@ public static class UserMapper
             Id = dto.Id,
             Firstname = dto.Firstname,
             Lastname = dto.Lastname,
+            Username = dto.Username,
             CreatedAt = dto.CreatedAt,
             UpdatedAt = dto.UpdatedAt,
             IsActive = dto.IsActive,
@@ -68,6 +73,7 @@ public static class UserMapper
             Id = model.Id,
             Firstname = model.Firstname,
             Lastname = model.Lastname,
+            Username = model.Username,
             CreatedAt = model.CreatedAt,
             UpdatedAt = model.UpdatedAt,
             IsActive = model.IsActive,
@@ -79,7 +85,7 @@ public static class UserMapper
         User user = new();
 
         user.Id = dto.Id;
-        user.IsActive = true;
+        user.IsActive = dto.IsActive;
 
         return user;
     }
