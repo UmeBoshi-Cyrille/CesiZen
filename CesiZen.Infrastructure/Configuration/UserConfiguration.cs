@@ -47,5 +47,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .WithOne(x => x.User)
             .HasForeignKey<RefreshToken>(x => x.UserId)
             .IsRequired();
+
+        builder.HasMany(x => x.BreathExercises)
+            .WithOne(x => x.User)
+            .HasForeignKey(x => x.UserId);
     }
 }

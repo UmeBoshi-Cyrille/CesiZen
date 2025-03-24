@@ -63,7 +63,7 @@ internal class UserCommand : AbstractRepository, IUserCommand
 
     public async Task<IResult> UpdateUserName(int id, string userName)
     {
-        var user = new User() { Id = id, Username = userName, UpdatedAt = DateTime.Now };
+        var user = new User() { Id = id, Username = userName, UpdatedAt = DateTime.UtcNow };
         context.Attach(user);
         context.Entry(user).Property(p => p.Username).IsModified = true;
         context.Entry(user).Property(p => p.UpdatedAt).IsModified = true;

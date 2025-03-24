@@ -12,7 +12,9 @@ public static class BreathExerciseMapper
             Id = dto.Id,
             Title = dto.Title,
             Time = dto.Time,
-            ExerciseType = dto.ExerciseType
+            ExerciseType = dto.ExerciseType,
+            UserId = dto.userId,
+            EditedAt = DateTime.UtcNow,
         };
     }
 

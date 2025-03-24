@@ -39,4 +39,6 @@ public class User
     public RefreshToken? RefreshToken { get; set; }
 
     public Session? Session { get; set; }
+
+    public ICollection<BreathExercise>? BreathExercises { get; set; }
 }

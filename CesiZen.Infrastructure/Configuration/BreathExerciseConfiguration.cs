@@ -12,5 +12,9 @@ public class BreathExerciseConfiguration : IEntityTypeConfiguration<BreathExerci
 
         builder.HasIndex(x => x.Id)
             .IsUnique();
+
+        builder.Property(x => x.EditedAt)
+            .HasDefaultValueSql("CURRENT_TIMESTAMP")
+            .ValueGeneratedOnAdd();
     }
 }
