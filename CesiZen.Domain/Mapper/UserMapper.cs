@@ -81,7 +81,7 @@ public static class UserMapper
         User user = new();
 
         user.Id = dto.Id;
-        user.IsActive = true;
+        user.IsActive = dto.IsActive;
 
         return user;
     }
