@@ -174,7 +174,7 @@
   <data name="LOG_UPDATE_PROPERTY" xml:space="preserve">
     <value>{0} {1} has been updated.</value>
   </data>
-  <data name="LOG_ARTICLE_ INSERTION" xml:space="preserve">
+  <data name="LOG_ARTICLE_INSERTION" xml:space="preserve">
     <value>Author : {0}, created new article entitled : {1}</value>
   </data>
   <data name="LOG_ACCOUNT_ACTIVATED" xml:space="preserve">

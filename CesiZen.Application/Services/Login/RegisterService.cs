@@ -39,7 +39,6 @@ public class RegisterService : ALoginService, IRegisterService
 
         user = dto.Map(authentifier, verificationToken);
 
-        user.CreatedAt = DateTime.UtcNow;
         result = await userCommand.Insert(user);
 
         if (result.IsFailure)

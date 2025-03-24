@@ -24,6 +24,7 @@ public static class UserMapper
         user.Username = dto.Username;
         user.IsActive = true;
         user.Login = login;
+        user.UpdatedAt = DateTime.UtcNow;
 
         return user;
     }
@@ -44,6 +45,7 @@ public static class UserMapper
         user.Username = dto.Username;
         user.IsActive = true;
         user.Login = login;
+        user.UpdatedAt = DateTime.UtcNow;
 
         return user;
     }

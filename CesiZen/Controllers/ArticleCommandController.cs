@@ -54,8 +54,9 @@ public class ArticleCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Update([FromBody] ArticleDto dto)
+    public async Task<IActionResult> Update(int id, [FromBody] ArticleDto dto)
     {
+        dto.Id = id;
         var result = await articleCommandService.Update(dto);
 
         return result.Match<IActionResult>(

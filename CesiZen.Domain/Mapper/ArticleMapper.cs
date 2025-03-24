@@ -14,7 +14,22 @@ public static class ArticleMapper
             Description = dto.Description,
             Author = dto.Author,
             Content = dto.Content,
+            Images = dto.Images is not null ? dto.Images : new List<Image>(),
+            UpdatedAt = DateTime.UtcNow
+        };
+    }
+
+    public static Article MapNew(this ArticleDto dto)
+    {
+        return new Article
+        {
+            Id = dto.Id,
+            Title = dto.Title,
+            Description = dto.Description,
+            Author = dto.Author,
+            Content = dto.Content,
             Images = dto.Images,
+            UpdatedAt = DateTime.UtcNow
         };
     }
 
