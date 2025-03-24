@@ -17,7 +17,6 @@ internal class UserCommand : AbstractRepository, IUserCommand
         try
         {
             context.Users.Add(entity);
-            context.Logins.Add(entity.Login!);
             await context.SaveChangesAsync();
 
             return Result.Success(UserInfos.LogInsertionSucceeded(entity.Username!));
