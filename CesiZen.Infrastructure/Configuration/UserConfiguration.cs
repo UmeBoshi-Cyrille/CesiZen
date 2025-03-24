@@ -31,7 +31,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.IsActive)
             .IsRequired();
 
-        builder.Property(u => u.Role);
+        builder.Property(u => u.Role)
+            .HasColumnType("varchar");
 
         builder.HasOne(x => x.Login)
            .WithOne(x => x.User)

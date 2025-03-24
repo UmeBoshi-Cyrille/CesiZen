@@ -1,12 +1,13 @@
 ﻿using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
+using Microsoft.Extensions.Configuration;
 
 namespace CesiZen.Domain.Mapper;
 
 public static class UserMapper
 {
     #region Simple Mapper Methods
-    public static User Map(this NewUserDto dto, Authentifier authentifier, string emailVerificationToken)
+    public static User Map(this NewUserDto dto, Authentifier authentifier, string emailVerificationToken, IConfiguration configuration)
     {
         User user = new();
 
@@ -25,6 +26,7 @@ public static class UserMapper
         user.IsActive = true;
         user.Login = login;
         user.UpdatedAt = DateTime.UtcNow;
+        user.Role = configuration["Roles:User"]!;
 
         return user;
     }
