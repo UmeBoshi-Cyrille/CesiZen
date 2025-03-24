@@ -26,11 +26,11 @@ public class ArticleCommandController : ControllerBase
     /// <response code="400">Bad request</response>
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
-    [RoleAuthorization(Roles = "Admin")]
     [HttpPost("create")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> Create([FromBody] NewArticleDto dto)
     {
         var result = await articleCommandService.Insert(dto);
@@ -57,6 +57,7 @@ public class ArticleCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> Update(int id, [FromBody] ArticleDto dto)
     {
         dto.Id = id;
@@ -81,6 +82,7 @@ public class ArticleCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> UpdateTitle(int id, [FromBody] string title)
     {
         var result = await articleCommandService.UpdateTitleAsync(id, title);
@@ -104,6 +106,7 @@ public class ArticleCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> UpdateDescription(int id, [FromBody] string description)
     {
         var result = await articleCommandService.UpdateDescriptionAsync(id, description);
@@ -127,6 +130,7 @@ public class ArticleCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> UpdateContent(int id, [FromBody] string content)
     {
         var result = await articleCommandService.UpdateContentAsync(id, content);
@@ -149,6 +153,7 @@ public class ArticleCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id)
     {
         var result = await articleCommandService.Delete(id);

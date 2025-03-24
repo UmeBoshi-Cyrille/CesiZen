@@ -1,4 +1,5 @@
-﻿using CesiZen.Domain.BusinessResult;
+﻿using CesiZen.Application.Authorization;
+using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +32,7 @@ public class UserQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "Admin")]
     public async Task<ActionResult<PagedResultDto<UserRequestDto>>> SearchUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string searchTerm = "")
     {
         var parameters = new PageParametersDto()
@@ -60,6 +62,7 @@ public class UserQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "Admin")]
     public async Task<ActionResult<PagedResultDto<UserRequestDto>>> GetAllAsync([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var result = await queryService.GetAllAsync(pageNumber, pageSize);
@@ -82,6 +85,7 @@ public class UserQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "User")]
     public async Task<ActionResult<UserRequestDto>> GetById(int id)
     {
         var result = await queryService.GetByIdAsync(id);
@@ -103,6 +107,7 @@ public class UserQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "Admin")]
     public async Task<ActionResult<UserRequestDto>> GetByName([FromQuery] string username)
     {
         var result = await queryService.GetByUsername(username);

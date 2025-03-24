@@ -111,12 +111,11 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
     #region Private Methods
     private async Task<IResult<User>> GetLogin(string identifier)
     {
-        var validity = identifier.IsValidEmail();
-
-        if (!validity)
+        if (string.IsNullOrEmpty(identifier))
             return Result<User>.Failure(UserErrors.LogNotFound(identifier));
 
-        var user = await userQuery.GetByIdentifier(identifier);
+        var validity = identifier.IsValidEmail();
+        var user = await userQuery.GetByIdentifier(identifier, validity);
 
         return Result<User>.Success(user.Value);
     }

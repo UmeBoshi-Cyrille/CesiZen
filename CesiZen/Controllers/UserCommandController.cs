@@ -1,4 +1,5 @@
-﻿using CesiZen.Domain.BusinessResult;
+﻿using CesiZen.Application.Authorization;
+using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -30,6 +31,7 @@ public class UserCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> Update([FromBody] UserDto dto)
     {
         var result = await userCommandService.Update(dto);
@@ -53,6 +55,7 @@ public class UserCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "User")]
     public async Task<IActionResult> UpdateUsername([FromBody] int id, string username)
     {
         var result = await userCommandService.UpdateUserName(id, username);
@@ -76,6 +79,7 @@ public class UserCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> AccountActivation([FromBody] AccountActivationDto dto)
     {
         var result = await userCommandService.ActivationAsync(dto);
@@ -98,6 +102,7 @@ public class UserCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "User")]
     public async Task<IActionResult> Delete(int id)
     {
         var result = await userCommandService.Delete(id);

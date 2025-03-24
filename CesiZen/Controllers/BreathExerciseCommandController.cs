@@ -1,4 +1,5 @@
-﻿using CesiZen.Domain.BusinessResult;
+﻿using CesiZen.Application.Authorization;
+using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,7 @@ public class BreathExerciseCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "User")]
     public async Task<IActionResult> Create([FromBody] NewBreathExerciseDto dto)
     {
         var result = await exerciseCommandService.Insert(dto);
@@ -55,6 +57,7 @@ public class BreathExerciseCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "User")]
     public async Task<IActionResult> Update(int id, [FromBody] BreathExerciseDto dto)
     {
         var result = await exerciseCommandService.Update(dto);
@@ -76,6 +79,7 @@ public class BreathExerciseCommandController : ControllerBase
     [HttpDelete("delete/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [RoleAuthorization(Roles = "User")]
     public async Task<IActionResult> Delete(int id)
     {
         var result = await exerciseCommandService.Delete(id);

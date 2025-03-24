@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using CesiZen.Application.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CesiZen.Api.Controllers;
@@ -14,7 +14,7 @@ public class TestController : ControllerBase
     }
 
     [HttpGet("AuthorizedTest")]
-    [Authorize]
+    [RoleAuthorization(Roles = "User")]
     public IActionResult AuthorizedTest()
     {
         return Ok("Got it");

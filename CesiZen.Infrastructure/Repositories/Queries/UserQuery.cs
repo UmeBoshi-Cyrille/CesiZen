@@ -109,8 +109,6 @@ public class UserQuery : AbstractRepository, IUserQuery
                         .AsNoTracking()
                         .Include(x => x.Login)
                         .FirstOrDefaultAsync(x => x.Login.Email == identifier)!;
-
-
         }
         else
         {

@@ -1,4 +1,5 @@
-﻿using CesiZen.Domain.BusinessResult;
+﻿using CesiZen.Application.Authorization;
+using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,7 @@ public class BreathExerciseQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "User")]
     public async Task<ActionResult<List<BreathExerciseDto>>> GetExercises([FromQuery] int userId)
     {
         var result = await exerciseService.GetAllByIdAsync(userId);
@@ -50,6 +52,7 @@ public class BreathExerciseQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "User")]
     public async Task<ActionResult<BreathExerciseDto>> GetExercise(int id)
     {
         var result = await exerciseService.GetByIdAsync(id);
