@@ -5,6 +5,18 @@ namespace CesiZen.Domain.Mapper;
 
 public static class BreathExerciseMapper
 {
+    public static BreathExercise Map(this NewBreathExerciseDto dto)
+    {
+        return new BreathExercise
+        {
+            Title = dto.Title,
+            Time = dto.Time,
+            ExerciseType = dto.ExerciseType,
+            UserId = dto.userId,
+            EditedAt = DateTime.UtcNow,
+        };
+    }
+
     public static BreathExercise Map(this BreathExerciseDto dto)
     {
         return new BreathExercise
@@ -41,6 +53,19 @@ public static class BreathExerciseMapper
         }
 
         return dto;
+    }
+
+    public static List<BreathExercise> Map(this List<NewBreathExerciseDto> dto)
+    {
+        List<BreathExercise> model = new();
+
+        for (var i = 0; i < dto.Count; i++)
+        {
+            var item = dto[i].Map();
+            model.Add(item);
+        }
+
+        return model;
     }
 
     public static List<BreathExercise> Map(this List<BreathExerciseDto> dto)
