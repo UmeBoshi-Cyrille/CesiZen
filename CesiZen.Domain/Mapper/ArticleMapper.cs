@@ -14,6 +14,7 @@ public static class ArticleMapper
             Description = dto.Description,
             Author = dto.Author,
             Content = dto.Content,
+            PresentationImagePath = dto.PresentationImagePath,
             Images = dto.Images is not null ? dto.Images : new List<Image>(),
             UpdatedAt = DateTime.UtcNow
         };
@@ -28,6 +29,7 @@ public static class ArticleMapper
             Description = dto.Description,
             Author = dto.Author,
             Content = dto.Content,
+            PresentationImagePath = dto.PresentationImagePath,
             Images = dto.Images,
             UpdatedAt = DateTime.UtcNow
         };
@@ -42,6 +44,7 @@ public static class ArticleMapper
             Description = model.Description,
             Author = model.Author,
             Content = model.Content,
+            PresentationImagePath = model.PresentationImagePath,
             Images = model.Images!,
         };
     }

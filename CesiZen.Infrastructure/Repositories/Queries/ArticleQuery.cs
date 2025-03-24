@@ -17,9 +17,9 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
     {
         var articles = await context.Articles
                .AsNoTracking()
-               .OrderBy(x => x.Title)
                .Skip((pageNumber - 1) * pageSize)
                .Take(pageSize)
+               .OrderBy(x => x.Title)
                .ToListAsync();
 
         if (!articles.Any())
@@ -76,7 +76,10 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
     {
         try
         {
-            var result = await context.Articles.FindAsync(id);
+            var result = await context.Articles
+                    .AsNoTracking()
+                    .Include(x => x.Images)
+                    .FirstOrDefaultAsync(x => x.Id == id);
 
             return Result<Article>.Success(result!);
         }
