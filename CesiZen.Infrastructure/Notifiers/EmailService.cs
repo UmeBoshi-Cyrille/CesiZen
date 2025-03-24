@@ -24,7 +24,7 @@ public class EmailService : IObserver
     private async Task SendEmailAsync(string email, string subject, string body)
     {
         var message = new MimeMessage();
-        message.From.Add(new MailboxAddress("Your App Name", configuration["Email:Sender"]));
+        message.From.Add(new MailboxAddress("CesiZen", configuration["Email:Sender"]));
         message.To.Add(new MailboxAddress("", email));
         message.Subject = subject;
 
