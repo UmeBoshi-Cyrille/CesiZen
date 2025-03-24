@@ -20,7 +20,7 @@ public class User
     [MaxLength(50)]
     [MinLength(2)]
     [RegularExpression(@"^[a-zA-Z]+$")]
-    public string? Username { get; set; } = string.Empty;
+    public string Username { get; set; } = string.Empty;
 
     public DateTime CreatedAt { get; set; }
 
