@@ -22,9 +22,11 @@ public static class BreathExerciseMapper
     {
         return new BreathExerciseDto
         {
+            Id = model.Id,
             Title = model.Title,
             Time = model.Time,
-            ExerciseType = model.ExerciseType
+            ExerciseType = model.ExerciseType,
+            EditedAt = model.EditedAt,
         };
     }
 
