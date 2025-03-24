@@ -45,6 +45,7 @@ public class BreathExerciseCommandController : ControllerBase
     /// <summary>
     /// Update breath exercise data
     /// </summary>
+    /// <param name="id">id provided by the client</param>
     /// <param name="dto">data provided by the client</param>
     /// <response code="200">operation succeeded</response>
     /// <response code="400">Bad request</response>

@@ -1,4 +1,3 @@
-using CesiZen.Domain.Enum;
 using System.ComponentModel.DataAnnotations;
 
 namespace CesiZen.Domain.Datamodel;
@@ -30,7 +29,7 @@ public class User
 
     public bool IsActive { get; set; }
 
-    public RoleType Role { get; set; }
+    public string Role { get; set; } = string.Empty;
 
     public DateTime? RefreshTokenExpiryTime { get; set; }
 

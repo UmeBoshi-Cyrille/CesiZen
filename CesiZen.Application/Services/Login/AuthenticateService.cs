@@ -3,7 +3,6 @@ using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using Serilog;
-using System.Text.RegularExpressions;
 
 namespace CesiZen.Application.Services;
 
@@ -30,15 +29,15 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
     public async Task<IResult<AuthenticateResponseDto>> Authenticate(AuthenticateRequestDto dto)
     {
         var response = new AuthenticateResponseDto();
-        var login = await GetLogin(dto.Identifier);
+        var user = await GetLogin(dto.Identifier);
 
-        if (login.Value == null)
+        if (user.Value == null)
         {
-            logger.Error(login.Error.Message);
+            logger.Error(user.Error.Message);
             return Result<AuthenticateResponseDto>.Failure(UserErrors.ClientAuthenticationFailed);
         }
 
-        var result = LoginAttemps(login.Value, dto.Password);
+        var result = LoginAttemps(user.Value.Login!, dto.Password);
 
         response.IsLoggedIn = result.IsSuccess;
 
@@ -47,7 +46,10 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
             return Result<AuthenticateResponseDto>.Failure(UserErrors.ClientAuthenticationFailed);
         }
 
-        var tokenDto = tokenProvider.GenerateRefreshToken(login.Value.UserId);
+        var tokenDto = tokenProvider.GenerateRefreshToken(user.Value.Id);
+        tokenDto.Value.Username = dto.Identifier;
+        tokenDto.Value.Role = user.Value.Role;
+
         var token = tokenProvider.GenerateAccessToken(tokenDto.Value);
         response.Token = token;
 
@@ -107,22 +109,16 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
     }
 
     #region Private Methods
-    private static bool IsValidEmail(string email)
+    private async Task<IResult<User>> GetLogin(string identifier)
     {
-        string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]{2,3}$";
-        return Regex.IsMatch(email, pattern, RegexOptions.IgnoreCase);
-    }
-
-    private async Task<IResult<Login>> GetLogin(string identifier)
-    {
-        var validity = IsValidEmail(identifier);
+        var validity = identifier.IsValidEmail();
 
         if (!validity)
-            return Result<Login>.Failure(UserErrors.LogNotFound(identifier));
+            return Result<User>.Failure(UserErrors.LogNotFound(identifier));
 
-        var login = await loginQuery.GetByEmail(identifier);
+        var user = await userQuery.GetByIdentifier(identifier);
 
-        return Result<Login>.Success(login.Value);
+        return Result<User>.Success(user.Value);
     }
 
     private IResult LoginAttemps(Login login, string password)

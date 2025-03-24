@@ -4,9 +4,9 @@ namespace CesiZen.Domain.Interfaces;
 
 public interface ITokenProvider
 {
-    string GenerateAccessToken(TokenIdDto dto);
+    string GenerateAccessToken(TokenBuilderDto dto);
 
-    IResult<TokenIdDto> GenerateRefreshToken(int userId);
+    IResult<TokenBuilderDto> GenerateRefreshToken(int userId);
 
     Task<IResult<string>> RefreshAccessTokenAsync(string accessToken);
 

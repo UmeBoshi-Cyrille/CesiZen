@@ -1,4 +1,5 @@
-﻿using CesiZen.Domain.BusinessResult;
+﻿using CesiZen.Application.Authorization;
+using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +26,7 @@ public class ArticleCommandController : ControllerBase
     /// <response code="400">Bad request</response>
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
+    [RoleAuthorization(Roles = "Admin")]
     [HttpPost("create")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

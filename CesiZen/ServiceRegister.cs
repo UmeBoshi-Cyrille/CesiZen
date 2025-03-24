@@ -1,5 +1,7 @@
-﻿using CesiZen.Domain.DataTransfertObject;
+﻿using CesiZen.Application.Authorization;
+using CesiZen.Domain.DataTransfertObject;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -99,6 +101,8 @@ internal static class ServiceRegister
                 }
             };
         });
+
+        services.AddSingleton<IAuthorizationHandler, RoleManager>();
 
         services.AddAuthorization();
 

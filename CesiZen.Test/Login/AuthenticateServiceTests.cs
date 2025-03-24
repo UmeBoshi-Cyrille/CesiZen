@@ -87,8 +87,8 @@ public class AuthenticateServiceTests
 
         loginQueryMock.Setup(x => x.GetByEmail(It.IsAny<string>())).ReturnsAsync(Result<Login>.Success(login));
         passwordServiceMock.Setup(x => x.IsCorrectPassword(It.IsAny<Login>(), It.IsAny<string>())).Returns(true);
-        tokenProviderMock.Setup(x => x.GenerateRefreshToken(It.IsAny<int>())).Returns(Result<TokenIdDto>.Success(tokenDto.Value));
-        tokenProviderMock.Setup(x => x.GenerateAccessToken(It.IsAny<TokenIdDto>())).Returns(token);
+        tokenProviderMock.Setup(x => x.GenerateRefreshToken(It.IsAny<int>())).Returns(Result<TokenBuilderDto>.Success(tokenDto.Value));
+        tokenProviderMock.Setup(x => x.GenerateAccessToken(It.IsAny<TokenBuilderDto>())).Returns(token);
 
         // Act
         var result = await authenticationService.Authenticate(dto);
