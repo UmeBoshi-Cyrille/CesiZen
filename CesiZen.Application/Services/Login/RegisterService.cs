@@ -23,7 +23,7 @@ public class RegisterService : ALoginService, IRegisterService
         this.configuration = configuration;
     }
 
-    public async Task<IResult<MessageEventArgs>> Register(UserDto dto)
+    public async Task<IResult<MessageEventArgs>> Register(NewUserDto dto)
     {
         User user;
         IResult result;

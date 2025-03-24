@@ -29,7 +29,7 @@ public class ArticleCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Create([FromBody] ArticleDto dto)
+    public async Task<IActionResult> Create([FromBody] NewArticleDto dto)
     {
         var result = await articleCommandService.Insert(dto);
 
@@ -37,7 +37,7 @@ public class ArticleCommandController : ControllerBase
             success: () => CreatedAtAction(
                 nameof(ArticleQueryController.GetArticle),
                 nameof(ArticleQueryController),
-                new { id = dto.Id, article = dto, message = result.Info.Message }),
+                new { article = dto, message = result.Info.Message }),
             failure: error => BadRequest(new { message = error.Message })
         );
     }
@@ -45,6 +45,7 @@ public class ArticleCommandController : ControllerBase
     /// <summary>
     /// Update article data
     /// </summary>
+    /// <param name="id">id provided by the client</param>
     /// <param name="dto">data provided by the client</param>
     /// <response code="200">operation succeeded</response>
     /// <response code="400">Bad request</response>

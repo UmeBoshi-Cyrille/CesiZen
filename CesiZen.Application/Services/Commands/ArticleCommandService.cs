@@ -16,9 +16,9 @@ public class ArticleCommandService : AService, IArticleCommandService
         this.command = command;
     }
 
-    public async Task<IResult> Insert(ArticleDto dto)
+    public async Task<IResult> Insert(NewArticleDto dto)
     {
-        var article = dto.Map();
+        var article = dto.MapNew();
         var result = await command.Insert(article);
 
         if (result.IsFailure)

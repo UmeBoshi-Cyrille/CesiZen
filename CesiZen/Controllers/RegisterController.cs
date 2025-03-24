@@ -31,7 +31,7 @@ public class RegisterController : LoginController
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Register([FromBody] UserDto dto)
+    public async Task<IActionResult> Register([FromBody] NewUserDto dto)
     {
         var response = await registerService.Register(dto);
 

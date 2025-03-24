@@ -20,17 +20,16 @@ public static class ArticleMapper
         };
     }
 
-    public static Article MapNew(this ArticleDto dto)
+    public static Article MapNew(this NewArticleDto dto)
     {
         return new Article
         {
-            Id = dto.Id,
             Title = dto.Title,
             Description = dto.Description,
             Author = dto.Author,
             Content = dto.Content,
             PresentationImagePath = dto.PresentationImagePath,
-            Images = dto.Images,
+            Images = dto.Images is not null ? dto.Images : new List<Image>(),
             UpdatedAt = DateTime.UtcNow
         };
     }
@@ -61,6 +60,19 @@ public static class ArticleMapper
         }
 
         return dto;
+    }
+
+    public static List<Article> Map(this List<NewArticleDto> dto)
+    {
+        List<Article> model = new();
+
+        for (var i = 0; i < dto.Count; i++)
+        {
+            var item = dto[i].MapNew();
+            model.Add(item);
+        }
+
+        return model;
     }
 
     public static List<Article> Map(this List<ArticleDto> dto)

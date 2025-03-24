@@ -30,10 +30,10 @@ public class ArticleCommandServiceTests
     }
 
     [Fact]
-    public async Task AddAsyncTest_Success_WhenDataSaved()
+    public async Task InsertTest_Success_WhenDataSaved()
     {
         // Arrange
-        var dtos = ArticleFaker.FakeArticleDtoGenerator().Generate(10);
+        var dtos = ArticleFaker.FakeNewArticleDtoGenerator().Generate(10);
         var articles = dtos.Map();
         mockSet = CommonFaker.CreateMockDbSet(articles);
         mockContext.Setup(c => c.Articles).Returns(mockSet.Object);
@@ -49,10 +49,10 @@ public class ArticleCommandServiceTests
     }
 
     [Fact]
-    public async Task AddAsyncTest_Failure_WhenOperationFails()
+    public async Task InsertTest_Failure_WhenOperationFails()
     {
         // Arrange
-        var dto = ArticleFaker.FakeArticleDtoGenerator().Generate();
+        var dto = ArticleFaker.FakeNewArticleDtoGenerator().Generate();
         mockCommand.Setup(c => c.Insert(It.IsAny<Article>()))
             .ReturnsAsync(Result.Failure(Error.NullValue("Error message")));
 
