@@ -2,7 +2,7 @@
 
 namespace CesiZen.Domain.DataTransfertObject;
 
-public record BreathExerciseMinimumDto
+public class BreathExerciseMinimumDto
 {
     public int Id { get; set; }
 

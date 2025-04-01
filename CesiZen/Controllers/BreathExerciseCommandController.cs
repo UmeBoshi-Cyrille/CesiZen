@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CesiZen.Api.Controllers;
 
 [ApiController]
-[Route("/api/[controller]")]
+[Route("/api/breath-exercises/command")]
 public class BreathExerciseCommandController : ControllerBase
 {
     private readonly IBreathExerciseCommandService exerciseCommandService;
@@ -35,11 +35,12 @@ public class BreathExerciseCommandController : ControllerBase
     {
         var result = await exerciseCommandService.Insert(dto);
 
-        return result.Match<ActionResult>(
-            success: () => CreatedAtAction(
+        return result.Match<BreathExerciseMinimumDto, ActionResult>(
+            success: createdExercise => CreatedAtAction(
                 nameof(BreathExerciseQueryController.GetExercise),
-                nameof(BreathExerciseQueryController),
-                new { title = dto.Title, exercise = dto, message = result.Info.Message }),
+                "BreathExerciseQueryController",
+                new { id = createdExercise.Id },
+                new { message = result.Info.Message, exercise = createdExercise }),
             failure: error => BadRequest(new { message = error.Message })
         );
     }

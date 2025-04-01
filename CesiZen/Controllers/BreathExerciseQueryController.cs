@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CesiZen.Api.Controllers;
 
 [ApiController]
-[Route("/api/[controller]")]
+[Route("/api/breath-exercise/query")]
 public class BreathExerciseQueryController : ControllerBase
 {
     private readonly IBreathExerciseQueryService exerciseService;

@@ -4,7 +4,7 @@ namespace CesiZen.Domain.Interfaces;
 
 public interface IBreathExerciseCommandService
 {
-    Task<IResult> Insert(NewBreathExerciseDto entity);
+    Task<IResult<BreathExerciseMinimumDto>> Insert(NewBreathExerciseDto entity);
 
     Task<IResult> Update(BreathExerciseDto entity);
 

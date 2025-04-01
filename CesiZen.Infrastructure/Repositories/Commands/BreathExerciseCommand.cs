@@ -1,6 +1,8 @@
 ﻿using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Datamodel;
+using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
+using CesiZen.Domain.Mapper;
 using CesiZen.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,22 +14,24 @@ public class BreathExerciseCommand : AbstractRepository, IBreathExerciseCommand
     {
     }
 
-    public async Task<IResult> Insert(BreathExercise entity)
+    public async Task<IResult<BreathExerciseMinimumDto>> Insert(BreathExercise entity)
     {
         try
         {
             context.BreathExercises.Add(entity);
             await context.SaveChangesAsync();
 
-            return Result.Success(BreathExerciseInfos.LogInsertionSucceeded(entity.Title));
+            var result = entity.MapMinimumDto();
+
+            return Result<BreathExerciseMinimumDto>.Success(result, BreathExerciseInfos.LogInsertionSucceeded(entity.Title));
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(BreathExerciseErrors.LogInsertionFailed(entity.Title), nameof(entity.UserId), ex.Message);
+            return Result<BreathExerciseMinimumDto>.Failure(BreathExerciseErrors.LogInsertionFailed(entity.Title), nameof(entity.UserId), ex.Message);
         }
         catch (Exception ex)
         {
-            return Result.Failure(BreathExerciseErrors.LogInsertionFailed(entity.Title), nameof(entity.UserId), ex.Message);
+            return Result<BreathExerciseMinimumDto>.Failure(BreathExerciseErrors.LogInsertionFailed(entity.Title), nameof(entity.UserId), ex.Message);
         }
     }
 
