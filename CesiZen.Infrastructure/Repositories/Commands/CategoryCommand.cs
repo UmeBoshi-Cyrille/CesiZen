@@ -1,6 +1,8 @@
 ﻿using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Datamodel;
+using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
+using CesiZen.Domain.Mapper;
 using CesiZen.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,22 +14,24 @@ public class CategoryCommand : AbstractRepository, ICategoryCommand
     {
     }
 
-    public async Task<IResult> Insert(Category entity)
+    public async Task<IResult<CategoryDto>> Insert(Category entity)
     {
         try
         {
             context.Categories.Add(entity);
             await context.SaveChangesAsync();
 
-            return Result.Success(CategoryInfos.LogInsertionSucceeded(entity.Name));
+            var result = entity.Map();
+
+            return Result<CategoryDto>.Success(result, CategoryInfos.LogInsertionSucceeded(entity.Name));
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(CategoryErrors.LogInsertionFailed(entity.Name), entity.Name, ex.Message);
+            return Result<CategoryDto>.Failure(CategoryErrors.LogInsertionFailed(entity.Name), entity.Name, ex.Message);
         }
         catch (Exception ex)
         {
-            return Result.Failure(CategoryErrors.LogInsertionFailed(entity.Name), entity.Name, ex.Message);
+            return Result<CategoryDto>.Failure(CategoryErrors.LogInsertionFailed(entity.Name), entity.Name, ex.Message);
         }
     }
 

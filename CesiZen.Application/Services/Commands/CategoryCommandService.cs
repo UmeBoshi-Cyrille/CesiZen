@@ -14,7 +14,7 @@ public class CategoryCommandService : AService, ICategoryCommandService
         this.command = command;
     }
 
-    public async Task<IResult> Insert(CategoryDto dto)
+    public async Task<IResult<CategoryDto>> Insert(CategoryDto dto)
     {
         var entity = dto.Map();
         var result = await command.Insert(entity);
@@ -22,11 +22,11 @@ public class CategoryCommandService : AService, ICategoryCommandService
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result.Failure(CategoryErrors.ClientInsertionFailed);
+            return Result<CategoryDto>.Failure(CategoryErrors.ClientInsertionFailed);
         }
 
         logger.Information(result.Info.Message);
-        return Result.Success(CategoryInfos.ClientInsertionSucceeded);
+        return Result<CategoryDto>.Success(result.Value, CategoryInfos.ClientInsertionSucceeded);
     }
 
     public async Task<IResult> Update(CategoryDto dto)

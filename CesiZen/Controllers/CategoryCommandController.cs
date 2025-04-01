@@ -35,11 +35,12 @@ public class CategoryCommandController : ControllerBase
     {
         var result = await categoryService.Insert(dto);
 
-        return result.Match<ActionResult>(
-            success: () => CreatedAtAction(
+        return result.Match<CategoryDto, ActionResult>(
+            success: createdCategory => CreatedAtAction(
                 nameof(CategoryQueryController.GetCategory),
-                nameof(CategoryQueryController),
-                new { name = dto.Name, message = result.Info.Message }, dto),
+                "CategoryQueryController",
+                new { id = createdCategory.Id },
+                new { message = result.Info.Message, category = createdCategory }),
             failure: error => BadRequest(new { message = error.Message })
         );
     }
