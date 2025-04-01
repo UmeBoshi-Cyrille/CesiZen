@@ -28,7 +28,7 @@ public class UserCommandController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpPut("update")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "Admin")]
@@ -52,7 +52,7 @@ public class UserCommandController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpPut("update-username")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "User")]
@@ -76,7 +76,7 @@ public class UserCommandController : ControllerBase
     /// <returns></returns>
     [Authorize]
     [HttpPut("account-activation")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "Admin")]
@@ -99,7 +99,7 @@ public class UserCommandController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpDelete("delete/{id}")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "User")]

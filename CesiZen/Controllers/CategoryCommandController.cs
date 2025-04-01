@@ -22,7 +22,7 @@ public class CategoryCommandController : ControllerBase
     /// Create new category
     /// </summary>
     /// <param name="dto">data provided by the client</param>
-    /// <response code="200">operation succeeded</response>
+    /// <response code="201">operation succeeded</response>
     /// <response code="400">Bad request</response>
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
@@ -53,7 +53,7 @@ public class CategoryCommandController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpPut("update/{id}")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "Admin")]
@@ -76,7 +76,7 @@ public class CategoryCommandController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpDelete("delete/{id}")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "Admin")]

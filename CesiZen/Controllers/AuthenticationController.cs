@@ -152,7 +152,7 @@ public class AuthenticationController : LoginController
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpPost("forgot-password")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> ForgotPasswordRequest(string email)
@@ -208,7 +208,7 @@ public class AuthenticationController : LoginController
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpPost("reset-password")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> ResetPassword(int userId, PasswordResetDto dto)

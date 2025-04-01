@@ -29,7 +29,7 @@ public class UserQueryController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpGet("search-users")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "Admin")]
@@ -59,7 +59,7 @@ public class UserQueryController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpGet("users")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "Admin")]
@@ -82,7 +82,7 @@ public class UserQueryController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpGet("user/{id}")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "User")]
@@ -104,7 +104,7 @@ public class UserQueryController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpGet("user")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "Admin")]
