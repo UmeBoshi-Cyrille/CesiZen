@@ -47,7 +47,8 @@ public static class BreathExerciseMapper
         return new BreathExerciseMinimumDto
         {
             Id = model.Id,
-            Title = model.Title
+            Title = model.Title,
+            EditedAt = model.EditedAt
         };
     }
 
