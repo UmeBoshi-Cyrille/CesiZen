@@ -48,7 +48,7 @@ public class ArticleCommandServiceTests
         // Assert
         Assert.True(result.IsSuccess);
         mockCommand.Verify(c => c.Insert(It.Is<Article>(a => a.Title == dtos[0].Title)), Times.Once);
-        Assert.True(mockContext.Object.Articles.Any(c => c.Title == dtos[0].Title));
+        Assert.True(await mockContext.Object.Articles.AnyAsync(c => c.Title == dtos[0].Title));
     }
 
     [Fact]
@@ -84,7 +84,7 @@ public class ArticleCommandServiceTests
         Assert.True(result.IsSuccess);
         mockCommand.Verify(c => c.Update(
             It.Is<Article>(a => a.Id == dtos[0].Id && a.Title == dtos[0].Title)), Times.Once);
-        Assert.True(mockContext.Object.Articles.Any(a => a.Title == dtos[0].Title));
+        Assert.True(await mockContext.Object.Articles.AnyAsync(a => a.Title == dtos[0].Title));
     }
 
     [Fact]
@@ -122,7 +122,7 @@ public class ArticleCommandServiceTests
         // Assert
         Assert.True(result.IsSuccess);
         mockCommand.Verify(c => c.UpdateTitleAsync(It.Is<Article>(a => a.Id == articles[0].Id && a.Title == newTitle)), Times.Once);
-        Assert.True(mockContext.Object.Articles.Any(a => a.Title == newTitle));
+        Assert.True(await mockContext.Object.Articles.AnyAsync(a => a.Title == newTitle));
     }
 
     [Fact]
@@ -160,7 +160,7 @@ public class ArticleCommandServiceTests
         Assert.True(result.IsSuccess);
         mockCommand.Verify(c => c.UpdateDescriptionAsync(
             It.Is<Article>(a => a.Id == articles[0].Id && a.Description == newDescription)), Times.Once);
-        Assert.True(mockContext.Object.Articles.Any(c => c.Description == newDescription));
+        Assert.True(await mockContext.Object.Articles.AnyAsync(c => c.Description == newDescription));
     }
 
     [Fact]
@@ -199,7 +199,7 @@ public class ArticleCommandServiceTests
         Assert.True(result.IsSuccess);
         mockCommand.Verify(c => c.UpdateContentAsync(
             It.Is<Article>(a => a.Id == articles[0].Id && a.Content == newContent)), Times.Once);
-        Assert.True(mockContext.Object.Articles.Any(c => c.Content == newContent));
+        Assert.True(await mockContext.Object.Articles.AnyAsync(c => c.Content == newContent));
     }
 
     [Fact]
@@ -235,7 +235,6 @@ public class ArticleCommandServiceTests
         // Assert
         Assert.True(result.IsSuccess);
         mockCommand.Verify(c => c.Delete(It.IsAny<int>()), Times.Once);
-        //Assert.False(mockContext.Object.Articles.Any(c => c.Id == articles[0].Id));
     }
 
     [Fact]
