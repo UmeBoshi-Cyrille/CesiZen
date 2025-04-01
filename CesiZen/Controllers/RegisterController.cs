@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CesiZen.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/registration")]
 public class RegisterController : LoginController
 {
 

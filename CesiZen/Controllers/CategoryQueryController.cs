@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CesiZen.Api.Controllers;
 
 [ApiController]
-[Route("/api/[controller]")]
+[Route("/api/categories/query")]
 public class CategoryQueryController : ControllerBase
 {
     private readonly ICategoryQueryService categoryService;

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CesiZen.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/users/command")]
 public class UserCommandController : ControllerBase
 {
     private readonly IUserCommandService userCommandService;

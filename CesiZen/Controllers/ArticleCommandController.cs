@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CesiZen.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/articles/command")]
 public class ArticleCommandController : ControllerBase
 {
     private readonly IArticleCommandService articleCommandService;
@@ -40,7 +40,7 @@ public class ArticleCommandController : ControllerBase
                 nameof(ArticleQueryController.GetArticle),
                 "ArticleQueryController",
                 new { id = createdArticle.Id },
-                new { message = "result.Info.Message", article = createdArticle }),
+                new { message = result.Info.Message, article = createdArticle }),
             failure: error => BadRequest(new { message = error.Message })
         );
     }

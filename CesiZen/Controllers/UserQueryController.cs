@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CesiZen.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/users/query")]
 public class UserQueryController : ControllerBase
 {
     private readonly IUserQueryService queryService;

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CesiZen.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/authentication")]
 public class AuthenticationController : LoginController
 {
     private readonly IConfiguration configuration;
