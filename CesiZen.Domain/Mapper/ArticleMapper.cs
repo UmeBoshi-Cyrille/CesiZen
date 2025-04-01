@@ -57,7 +57,9 @@ public static class ArticleMapper
             Id = model.Id,
             Title = model.Title,
             Description = model.Description,
-            Author = model.Author
+            Author = model.Author,
+            UpdatedAt = model.UpdatedAt,
+            CreatedAt = model.CreatedAt
         };
     }
 
