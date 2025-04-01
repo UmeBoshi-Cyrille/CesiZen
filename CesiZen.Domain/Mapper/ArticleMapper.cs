@@ -45,6 +45,8 @@ public static class ArticleMapper
             Content = model.Content,
             PresentationImagePath = model.PresentationImagePath,
             Images = model.Images!,
+            UpdatedAt = model.UpdatedAt,
+            CreatedAt = model.CreatedAt
         };
     }
 
