@@ -30,12 +30,14 @@ public class ArticleCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [RoleAuthorization(Roles = "Admin")]
+    //[RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> Create([FromBody] NewArticleDto dto)
     {
-        var result = await articleCommandService.Insert(dto);
+        try
+        {
+            var result = await articleCommandService.Insert(dto);
 
-        return result.Match<ArticleMinimumDto, ActionResult>(
+            return result.Match<ArticleMinimumDto, ActionResult>(
             success: createdArticle => CreatedAtAction(
                 nameof(ArticleQueryController.GetArticle),
                 "ArticleQueryController",
@@ -43,6 +45,13 @@ public class ArticleCommandController : ControllerBase
                 new { message = result.Info.Message, article = createdArticle }),
             failure: error => BadRequest(new { message = error.Message })
         );
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+        }
+
+        return BadRequest();
     }
 
     /// <summary>
