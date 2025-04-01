@@ -1,6 +1,7 @@
 ﻿using CesiZen.Application.Services;
 using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Datamodel;
+using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using CesiZen.Domain.Mapper;
 using CesiZen.Infrastructure.DatabaseContext;
@@ -37,7 +38,9 @@ public class ArticleCommandServiceTests
         var articles = dtos.Map();
         mockSet = CommonFaker.CreateMockDbSet(articles);
         mockContext.Setup(c => c.Articles).Returns(mockSet.Object);
-        mockCommand.Setup(c => c.Insert(It.IsAny<Article>())).ReturnsAsync(Result.Success());
+        mockCommand.Setup(c => c.Insert(It.IsAny<Article>()))
+            .ReturnsAsync(Result<ArticleMinimumDto>
+            .Success(It.IsAny<ArticleMinimumDto>(), ArticleInfos.ClientInsertionSucceeded));
 
         // Act
         var result = await service.Insert(dtos[0]);
@@ -54,7 +57,8 @@ public class ArticleCommandServiceTests
         // Arrange
         var dto = ArticleFaker.FakeNewArticleDtoGenerator().Generate();
         mockCommand.Setup(c => c.Insert(It.IsAny<Article>()))
-            .ReturnsAsync(Result.Failure(Error.NullValue("Error message")));
+            .ReturnsAsync(Result<ArticleMinimumDto>
+            .Failure(Error.NullValue("Error message")));
 
         // Act
         var result = await service.Insert(dto);

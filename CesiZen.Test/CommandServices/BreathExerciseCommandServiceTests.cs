@@ -1,6 +1,7 @@
 ﻿using CesiZen.Application.Services;
 using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Datamodel;
+using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using CesiZen.Domain.Mapper;
 using CesiZen.Infrastructure.DatabaseContext;
@@ -38,7 +39,8 @@ public class BreathExerciseCommandServiceTests
         mockSet = CommonFaker.CreateMockDbSet(entities);
         mockContext.Setup(c => c.BreathExercises).Returns(mockSet.Object);
         mockCommand.Setup(c => c.Insert(It.IsAny<BreathExercise>()))
-            .ReturnsAsync(Result.Success());
+            .ReturnsAsync(Result<BreathExerciseMinimumDto>
+            .Success(It.IsAny<BreathExerciseMinimumDto>()));
 
         // Act
         var result = await service.Insert(dtos[0]);
@@ -56,7 +58,8 @@ public class BreathExerciseCommandServiceTests
         // Arrange
         var dto = BreathExerciseFaker.FakeNewBreathExerciseDtoGenerator().Generate();
         mockCommand.Setup(c => c.Insert(It.IsAny<BreathExercise>()))
-            .ReturnsAsync(Result.Failure(Error.NullValue("Error message")));
+            .ReturnsAsync(Result<BreathExerciseMinimumDto>
+            .Failure(Error.NullValue("Error message")));
 
         // Act
         var result = await service.Insert(dto);
