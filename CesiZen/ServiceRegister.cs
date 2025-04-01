@@ -118,4 +118,16 @@ internal static class ServiceRegister
 
         return services;
     }
+
+    internal static IServiceCollection AddControllerServices(this IServiceCollection services)
+    {
+        services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+                    options.JsonSerializerOptions.WriteIndented = true; // Optional: Makes JSON output more readable
+                });
+
+        return services;
+    }
 }
