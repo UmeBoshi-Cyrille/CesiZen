@@ -14,7 +14,7 @@ public static class ArticleMapper
             Description = dto.Description,
             Author = dto.Author,
             Content = dto.Content,
-            PresentationImagePath = dto.PresentationImagePath,
+            ImagePath = dto.PresentationImagePath,
             Images = dto.Images is not null ? dto.Images : new List<Image>(),
             UpdatedAt = DateTime.UtcNow
         };
@@ -28,7 +28,7 @@ public static class ArticleMapper
             Description = dto.Description,
             Author = dto.Author,
             Content = dto.Content,
-            PresentationImagePath = dto.PresentationImagePath,
+            ImagePath = dto.PresentationImagePath,
             Images = dto.Images is not null ? dto.Images : new List<Image>(),
             UpdatedAt = DateTime.UtcNow
         };
@@ -43,7 +43,7 @@ public static class ArticleMapper
             Description = model.Description,
             Author = model.Author,
             Content = model.Content,
-            PresentationImagePath = model.PresentationImagePath,
+            PresentationImagePath = model.ImagePath,
             Images = model.Images!,
             UpdatedAt = model.UpdatedAt,
             CreatedAt = model.CreatedAt
@@ -58,8 +58,9 @@ public static class ArticleMapper
             Title = model.Title,
             Description = model.Description,
             Author = model.Author,
-            UpdatedAt = model.UpdatedAt,
-            CreatedAt = model.CreatedAt
+            CreatedAt = model.CreatedAt,
+            ImagePath = model.ImagePath,
+            Categories = model.Categories
         };
     }
 
