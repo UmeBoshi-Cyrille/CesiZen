@@ -10,7 +10,7 @@ public interface IArticleCommandService
 
     Task<IResult> UpdateContentAsync(int id, string content);
 
-    Task<IResult> Insert(NewArticleDto entity);
+    Task<IResult<ArticleMinimumDto>> Insert(NewArticleDto entity);
 
     Task<IResult> Update(ArticleDto entity);
 

@@ -16,7 +16,7 @@ public class ArticleCommandService : AService, IArticleCommandService
         this.command = command;
     }
 
-    public async Task<IResult> Insert(NewArticleDto dto)
+    public async Task<IResult<ArticleMinimumDto>> Insert(NewArticleDto dto)
     {
         var article = dto.MapNew();
         var result = await command.Insert(article);
@@ -24,10 +24,10 @@ public class ArticleCommandService : AService, IArticleCommandService
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result.Failure(ArticleErrors.ClientInsertionFailed);
+            return Result<ArticleMinimumDto>.Failure(ArticleErrors.ClientInsertionFailed);
         }
 
-        return Result.Success(ArticleInfos.ClientInsertionSucceeded);
+        return Result<ArticleMinimumDto>.Success(result.Value, ArticleInfos.ClientInsertionSucceeded);
     }
 
     public async Task<IResult> Update(ArticleDto dto)

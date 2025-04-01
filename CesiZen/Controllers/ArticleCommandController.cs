@@ -22,7 +22,7 @@ public class ArticleCommandController : ControllerBase
     /// Create new article
     /// </summary>
     /// <param name="dto">data provided by the client</param>
-    /// <response code="200">operation succeeded</response>
+    /// <response code="201">ObjectCreated</response>
     /// <response code="400">Bad request</response>
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
@@ -35,11 +35,12 @@ public class ArticleCommandController : ControllerBase
     {
         var result = await articleCommandService.Insert(dto);
 
-        return result.Match<ActionResult>(
-            success: () => CreatedAtAction(
+        return result.Match<ArticleMinimumDto, ActionResult>(
+            success: createdArticle => CreatedAtAction(
                 nameof(ArticleQueryController.GetArticle),
-                nameof(ArticleQueryController),
-                new { article = dto, message = result.Info.Message }),
+                "ArticleQueryController",
+                new { id = createdArticle.Id },
+                new { message = "result.Info.Message", article = createdArticle }),
             failure: error => BadRequest(new { message = error.Message })
         );
     }

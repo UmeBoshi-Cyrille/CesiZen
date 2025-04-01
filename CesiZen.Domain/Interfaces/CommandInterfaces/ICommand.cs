@@ -1,8 +1,8 @@
 ﻿namespace CesiZen.Domain.Interfaces;
 
-public interface ICommand<T>
+public interface ICommand<E, T>
 {
-    Task<IResult> Insert(T entity);
+    Task<IResult<E>> Insert(T entity);
 
     Task<IResult> Update(T entity);
 

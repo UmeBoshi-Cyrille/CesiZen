@@ -20,19 +20,11 @@ public static class ResultExtension
         return result.IsSuccess ? success(result.Value) : failure(result.Error!);
     }
 
-    public static T Match<T, TValue>(
-        this IResult<TValue> result,
-        Func<TValue, T> success,
-        Func<string, T> failure)
+    public static TValue Match<TSuccess, TValue>(
+        this IResult<TSuccess> result,
+        Func<TSuccess, TValue> success,
+        Func<Error, TValue> failure)
     {
-        return result.IsSuccess ? success(result.Value) : failure(result.Error.Message!);
-    }
-
-    public static T Match<T, TValue>(
-        this IResult<TValue> result,
-        Func<TValue, string, T> success,
-        Func<string, T> failure)
-    {
-        return result.IsSuccess ? success(result.Value, result.Info.Message) : failure(result.Error.Message!);
+        return result.IsSuccess ? success(result.Value) : failure(result.Error);
     }
 }
