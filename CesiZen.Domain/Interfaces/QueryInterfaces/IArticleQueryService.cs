@@ -2,7 +2,11 @@
 
 namespace CesiZen.Domain.Interfaces;
 
-public interface IArticleQueryService : IQueryServiceInterface<ArticleDto>
+public interface IArticleQueryService
 {
-    Task<IResult<PagedResultDto<ArticleDto>>> SearchArticles(PageParametersDto parameters, string searchTerm = "");
+    Task<IResult<ArticleDto>> GetByIdAsync(int id);
+
+    Task<IResult<PagedResultDto<ArticleMinimumDto>>> GetAllAsync(int pageNumber, int pageSize);
+
+    Task<IResult<PagedResultDto<ArticleMinimumDto>>> SearchArticles(PageParametersDto parameters, string searchTerm = "");
 }
