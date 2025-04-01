@@ -42,13 +42,22 @@ public static class BreathExerciseMapper
         };
     }
 
-    public static List<BreathExerciseDto> Map(this List<BreathExercise> model)
+    public static BreathExerciseMinimumDto MapMinimumDto(this BreathExercise model)
     {
-        List<BreathExerciseDto> dto = new();
+        return new BreathExerciseMinimumDto
+        {
+            Id = model.Id,
+            Title = model.Title
+        };
+    }
+
+    public static List<BreathExerciseMinimumDto> Map(this List<BreathExercise> model)
+    {
+        List<BreathExerciseMinimumDto> dto = new();
 
         for (var i = 0; i < model.Count; i++)
         {
-            var item = model[i].Map();
+            var item = model[i].MapMinimumDto();
             dto.Add(item);
         }
 
