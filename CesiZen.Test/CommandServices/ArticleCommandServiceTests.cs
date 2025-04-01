@@ -1,6 +1,7 @@
 ﻿using CesiZen.Application.Services;
 using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Datamodel;
+using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using CesiZen.Domain.Mapper;
 using CesiZen.Infrastructure.DatabaseContext;
@@ -37,7 +38,9 @@ public class ArticleCommandServiceTests
         var articles = dtos.Map();
         mockSet = CommonFaker.CreateMockDbSet(articles);
         mockContext.Setup(c => c.Articles).Returns(mockSet.Object);
-        mockCommand.Setup(c => c.Insert(It.IsAny<Article>())).ReturnsAsync(Result.Success());
+        mockCommand.Setup(c => c.Insert(It.IsAny<Article>()))
+            .ReturnsAsync(Result<ArticleMinimumDto>
+            .Success(It.IsAny<ArticleMinimumDto>(), ArticleInfos.ClientInsertionSucceeded));
 
         // Act
         var result = await service.Insert(dtos[0]);
@@ -45,7 +48,7 @@ public class ArticleCommandServiceTests
         // Assert
         Assert.True(result.IsSuccess);
         mockCommand.Verify(c => c.Insert(It.Is<Article>(a => a.Title == dtos[0].Title)), Times.Once);
-        Assert.True(mockContext.Object.Articles.Any(c => c.Title == dtos[0].Title));
+        Assert.True(await mockContext.Object.Articles.AnyAsync(c => c.Title == dtos[0].Title));
     }
 
     [Fact]
@@ -54,7 +57,8 @@ public class ArticleCommandServiceTests
         // Arrange
         var dto = ArticleFaker.FakeNewArticleDtoGenerator().Generate();
         mockCommand.Setup(c => c.Insert(It.IsAny<Article>()))
-            .ReturnsAsync(Result.Failure(Error.NullValue("Error message")));
+            .ReturnsAsync(Result<ArticleMinimumDto>
+            .Failure(Error.NullValue("Error message")));
 
         // Act
         var result = await service.Insert(dto);
@@ -80,7 +84,7 @@ public class ArticleCommandServiceTests
         Assert.True(result.IsSuccess);
         mockCommand.Verify(c => c.Update(
             It.Is<Article>(a => a.Id == dtos[0].Id && a.Title == dtos[0].Title)), Times.Once);
-        Assert.True(mockContext.Object.Articles.Any(a => a.Title == dtos[0].Title));
+        Assert.True(await mockContext.Object.Articles.AnyAsync(a => a.Title == dtos[0].Title));
     }
 
     [Fact]
@@ -118,7 +122,7 @@ public class ArticleCommandServiceTests
         // Assert
         Assert.True(result.IsSuccess);
         mockCommand.Verify(c => c.UpdateTitleAsync(It.Is<Article>(a => a.Id == articles[0].Id && a.Title == newTitle)), Times.Once);
-        Assert.True(mockContext.Object.Articles.Any(a => a.Title == newTitle));
+        Assert.True(await mockContext.Object.Articles.AnyAsync(a => a.Title == newTitle));
     }
 
     [Fact]
@@ -156,7 +160,7 @@ public class ArticleCommandServiceTests
         Assert.True(result.IsSuccess);
         mockCommand.Verify(c => c.UpdateDescriptionAsync(
             It.Is<Article>(a => a.Id == articles[0].Id && a.Description == newDescription)), Times.Once);
-        Assert.True(mockContext.Object.Articles.Any(c => c.Description == newDescription));
+        Assert.True(await mockContext.Object.Articles.AnyAsync(c => c.Description == newDescription));
     }
 
     [Fact]
@@ -195,7 +199,7 @@ public class ArticleCommandServiceTests
         Assert.True(result.IsSuccess);
         mockCommand.Verify(c => c.UpdateContentAsync(
             It.Is<Article>(a => a.Id == articles[0].Id && a.Content == newContent)), Times.Once);
-        Assert.True(mockContext.Object.Articles.Any(c => c.Content == newContent));
+        Assert.True(await mockContext.Object.Articles.AnyAsync(c => c.Content == newContent));
     }
 
     [Fact]
@@ -231,7 +235,6 @@ public class ArticleCommandServiceTests
         // Assert
         Assert.True(result.IsSuccess);
         mockCommand.Verify(c => c.Delete(It.IsAny<int>()), Times.Once);
-        //Assert.False(mockContext.Object.Articles.Any(c => c.Id == articles[0].Id));
     }
 
     [Fact]

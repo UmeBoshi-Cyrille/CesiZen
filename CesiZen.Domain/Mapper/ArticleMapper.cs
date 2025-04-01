@@ -45,17 +45,32 @@ public static class ArticleMapper
             Content = model.Content,
             PresentationImagePath = model.PresentationImagePath,
             Images = model.Images!,
+            UpdatedAt = model.UpdatedAt,
+            CreatedAt = model.CreatedAt
+        };
+    }
+
+    public static ArticleMinimumDto MapMinimumDto(this Article model)
+    {
+        return new ArticleMinimumDto
+        {
+            Id = model.Id,
+            Title = model.Title,
+            Description = model.Description,
+            Author = model.Author,
+            UpdatedAt = model.UpdatedAt,
+            CreatedAt = model.CreatedAt
         };
     }
 
     #region Collection Mapper Nethods
-    public static List<ArticleDto> Map(this List<Article> model)
+    public static List<ArticleMinimumDto> Map(this List<Article> model)
     {
-        List<ArticleDto> dto = new();
+        List<ArticleMinimumDto> dto = new();
 
         for (var i = 0; i < model.Count; i++)
         {
-            var item = model[i].Map();
+            var item = model[i].MapMinimumDto();
             dto.Add(item);
         }
 
@@ -90,11 +105,11 @@ public static class ArticleMapper
     #endregion
 
     #region Paginated Mapper Methods
-    public static PagedResultDto<ArticleDto> Map(this PagedResultDto<Article> model)
+    public static PagedResultDto<ArticleMinimumDto> Map(this PagedResultDto<Article> model)
     {
-        List<ArticleDto> dto = model.Data.Map();
+        List<ArticleMinimumDto> dto = model.Data.Map();
 
-        return new PagedResultDto<ArticleDto>
+        return new PagedResultDto<ArticleMinimumDto>
         {
             Data = dto,
             TotalCount = model.TotalCount,

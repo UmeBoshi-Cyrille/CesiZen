@@ -1,6 +1,8 @@
 ﻿using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Datamodel;
+using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
+using CesiZen.Domain.Mapper;
 using CesiZen.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,22 +14,24 @@ public class ArticleCommand : AbstractRepository, IArticleCommand
     {
     }
 
-    public async Task<IResult> Insert(Article article)
+    public async Task<IResult<ArticleMinimumDto>> Insert(Article article)
     {
         try
         {
             context.Articles.Add(article);
             await context.SaveChangesAsync();
 
-            return Result.Success(ArticleInfos.LogInsertionSucceeded(article.Author, article.Title));
+            var result = article.MapMinimumDto();
+
+            return Result<ArticleMinimumDto>.Success(result, ArticleInfos.LogInsertionSucceeded(article.Author, article.Title));
         }
         catch (DbUpdateException ex)
         {
-            return Result.Failure(ArticleErrors.LogInsertionFailed(article.Title), article.Author, ex.Message);
+            return Result<ArticleMinimumDto>.Failure(ArticleErrors.LogInsertionFailed(article.Title), article.Author, ex.Message);
         }
         catch (Exception ex)
         {
-            return Result.Failure(ArticleErrors.LogInsertionFailed(article.Title), article.Author, ex.Message);
+            return Result<ArticleMinimumDto>.Failure(ArticleErrors.LogInsertionFailed(article.Title), article.Author, ex.Message);
         }
     }
 

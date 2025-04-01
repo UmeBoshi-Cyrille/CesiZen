@@ -43,6 +43,7 @@ app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+app.UseCors("AllowAngularClient");
 app.UseAuthorization();
 
 app.MapControllers();
@@ -50,7 +51,7 @@ app.MapControllers();
 try
 {
     Log.Information("Application Started");
-    app.Run();
+    await app.RunAsync();
 }
 catch (Exception ex)
 {
@@ -58,5 +59,5 @@ catch (Exception ex)
 }
 finally
 {
-    Log.CloseAndFlush();
+    await Log.CloseAndFlushAsync();
 }

@@ -15,19 +15,34 @@ public class ArticleQueryService : AService, IArticleQueryService
         this.query = query;
     }
 
-    public async Task<IResult<PagedResultDto<ArticleDto>>> GetAllAsync(int pageNumber, int pageSize)
+    public async Task<IResult<PagedResultDto<ArticleMinimumDto>>> GetAllAsync(int pageNumber, int pageSize)
     {
         var result = await query.GetAllAsync(pageNumber, pageSize);
 
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result<PagedResultDto<ArticleDto>>.Failure(ArticleErrors.ClientMultipleNotFound);
+            return Result<PagedResultDto<ArticleMinimumDto>>.Failure(ArticleErrors.ClientMultipleNotFound);
         }
 
         var dto = result.Value.Map();
 
-        return Result<PagedResultDto<ArticleDto>>.Success(dto);
+        return Result<PagedResultDto<ArticleMinimumDto>>.Success(dto);
+    }
+
+    public async Task<IResult<PagedResultDto<ArticleMinimumDto>>> SearchArticles(PageParametersDto parameters, string searchTerm = "")
+    {
+        var result = await query.SearchArticles(parameters, searchTerm);
+
+        if (result.IsFailure)
+        {
+            logger.Error(result.Error.Message);
+            return Result<PagedResultDto<ArticleMinimumDto>>.Failure(ArticleErrors.ClientMultipleNotFound);
+        }
+
+        var dto = result.Value.Map();
+
+        return Result<PagedResultDto<ArticleMinimumDto>>.Success(dto);
     }
 
     public async Task<IResult<ArticleDto>> GetByIdAsync(int id)
@@ -43,20 +58,5 @@ public class ArticleQueryService : AService, IArticleQueryService
         var dto = result.Value.Map();
 
         return Result<ArticleDto>.Success(dto);
-    }
-
-    public async Task<IResult<PagedResultDto<ArticleDto>>> SearchArticles(PageParametersDto parameters, string searchTerm = "")
-    {
-        var result = await query.SearchArticles(parameters, searchTerm);
-
-        if (result.IsFailure)
-        {
-            logger.Error(result.Error.Message);
-            return Result<PagedResultDto<ArticleDto>>.Failure(ArticleErrors.ClientMultipleNotFound);
-        }
-
-        var dto = result.Value.Map();
-
-        return Result<PagedResultDto<ArticleDto>>.Success(dto);
     }
 }

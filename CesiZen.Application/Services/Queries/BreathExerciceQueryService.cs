@@ -15,19 +15,19 @@ public class BreathExerciseQueryService : AService, IBreathExerciseQueryService
         this.query = query;
     }
 
-    public async Task<IResult<List<BreathExerciseDto>>> GetAllByIdAsync(int userId)
+    public async Task<IResult<List<BreathExerciseMinimumDto>>> GetAllByIdAsync(int userId)
     {
         var result = await query.GetAllByIdAsync(userId);
 
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result<List<BreathExerciseDto>>.Failure(BreathExerciseErrors.ClientMultipleNotFound);
+            return Result<List<BreathExerciseMinimumDto>>.Failure(BreathExerciseErrors.ClientMultipleNotFound);
         }
 
         var dto = result.Value.Map();
 
-        return Result<List<BreathExerciseDto>>.Success(dto);
+        return Result<List<BreathExerciseMinimumDto>>.Success(dto);
     }
 
     public async Task<IResult<BreathExerciseDto>> GetByIdAsync(int id)

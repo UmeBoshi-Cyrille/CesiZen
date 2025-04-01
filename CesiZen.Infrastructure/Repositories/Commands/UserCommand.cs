@@ -2,6 +2,7 @@
 using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
+using CesiZen.Domain.Mapper;
 using CesiZen.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,14 +14,16 @@ internal class UserCommand : AbstractRepository, IUserCommand
     {
     }
 
-    public async Task<IResult> Insert(User entity)
+    public async Task<IResult<UserMinimumDto>> Insert(User entity)
     {
         try
         {
             context.Users.Add(entity);
             await context.SaveChangesAsync();
 
-            return Result.Success(UserInfos.LogInsertionSucceeded(entity.Username!));
+            var result = entity.Map();
+
+            return Result<UserMinimumDto>.Success(result, UserInfos.LogInsertionSucceeded(entity.Username!));
         }
         catch (DbUpdateException ex)
         {
@@ -31,11 +34,11 @@ internal class UserCommand : AbstractRepository, IUserCommand
                 error = UserErrors.LogNotUnique(entity.Login!.Email);
             }
 
-            return Result.Failure(error, entity.Login!.Email, ex.Message);
+            return Result<UserMinimumDto>.Failure(error, entity.Login!.Email, ex.Message);
         }
         catch (Exception ex)
         {
-            return Result.Failure(UserErrors.LogRegisterFailed(entity.Login!.Email), entity.Login.Email, ex.Message);
+            return Result<UserMinimumDto>.Failure(UserErrors.LogRegisterFailed(entity.Login!.Email), entity.Login.Email, ex.Message);
         }
     }
 

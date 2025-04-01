@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CesiZen.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/articles/query")]
 public class ArticleQueryController : ControllerBase
 {
     private readonly IArticleQueryService articleService;
@@ -27,10 +27,10 @@ public class ArticleQueryController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpGet("search-articles")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<PagedResultDto<ArticleDto>>> SearchArticles(int pageNumber = 1, int pageSize = 10, [FromQuery] string searchTerm = "")
+    public async Task<ActionResult<PagedResultDto<ArticleMinimumDto>>> SearchArticles(int pageNumber = 1, int pageSize = 10, [FromQuery] string searchTerm = "")
     {
         var parameters = new PageParametersDto()
         {
@@ -40,7 +40,7 @@ public class ArticleQueryController : ControllerBase
 
         var result = await articleService.SearchArticles(parameters, searchTerm);
 
-        return result.Match<ActionResult, PagedResultDto<ArticleDto>>(
+        return result.Match<ActionResult, PagedResultDto<ArticleMinimumDto>>(
              success: value => Ok(new { value }),
              failure: error => NotFound(new { message = error.Message })
         );
@@ -56,14 +56,14 @@ public class ArticleQueryController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpGet("articles")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<PagedResultDto<ArticleDto>>> GetArticles(int pageNumber = 1, int pageSize = 10)
+    public async Task<ActionResult<PagedResultDto<ArticleMinimumDto>>> GetArticles(int pageNumber = 1, int pageSize = 10)
     {
         var result = await articleService.GetAllAsync(pageNumber, pageSize);
 
-        return result.Match<ActionResult, PagedResultDto<ArticleDto>>(
+        return result.Match<ActionResult, PagedResultDto<ArticleMinimumDto>>(
              success: value => Ok(new { value }),
              failure: error => NotFound(new { message = error.Message })
         );
@@ -78,7 +78,7 @@ public class ArticleQueryController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpGet("article/{id}")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ArticleDto>> GetArticle(int id)

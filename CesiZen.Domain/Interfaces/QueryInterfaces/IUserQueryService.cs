@@ -2,8 +2,8 @@
 
 namespace CesiZen.Domain.Interfaces;
 
-public interface IUserQueryService : IQueryServiceInterface<UserRequestDto>
+public interface IUserQueryService : IQueryServiceInterface<UserMinimumDto>
 {
-    Task<IResult<PagedResultDto<UserRequestDto>>> SearchUsers(PageParametersDto parameters, string searchTerm);
-    Task<IResult<UserRequestDto>> GetByUsername(string username);
+    Task<IResult<PagedResultDto<UserMinimumDto>>> SearchUsers(PageParametersDto parameters, string searchTerm);
+    Task<IResult<UserMinimumDto>> GetByUsername(string username);
 }

@@ -1,9 +1,9 @@
 ﻿using CesiZen.Domain.Datamodel;
-using CesiZen.Domain.Interfaces;
+using CesiZen.Domain.DataTransfertObject;
 
 namespace CesiZen.Domain.Interfaces;
 
-public interface IArticleCommand : ICommand<Article>
+public interface IArticleCommand : ICommand<ArticleMinimumDto, Article>
 {
     Task<IResult> UpdateTitleAsync(Article article);
 

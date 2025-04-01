@@ -1,6 +1,7 @@
 ﻿using CesiZen.Application.Services;
 using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Datamodel;
+using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using CesiZen.Domain.Mapper;
 using CesiZen.Infrastructure.DatabaseContext;
@@ -38,7 +39,8 @@ public class CategoryCommandServiceTests
         mockSet = CommonFaker.CreateMockDbSet(entities);
         mockContext.Setup(c => c.Categories).Returns(mockSet.Object);
         mockCommand.Setup(c => c.Insert(It.IsAny<Category>()))
-                    .ReturnsAsync(Result.Success(CategoryInfos.LogInsertionSucceeded(entities[0].Name)));
+                    .ReturnsAsync(Result<CategoryDto>
+                    .Success(It.IsAny<CategoryDto>(), CategoryInfos.LogInsertionSucceeded(entities[0].Name)));
 
         // Act
         var result = await service.Insert(dtos[0]);
@@ -56,7 +58,8 @@ public class CategoryCommandServiceTests
         // Arrange
         var dto = CategoryFaker.FakeCategoryDtoGenerator().Generate();
         mockCommand.Setup(c => c.Insert(It.IsAny<Category>()))
-                    .ReturnsAsync(Result.Failure(Error.NullValue("Error message")));
+                    .ReturnsAsync(Result<CategoryDto>
+                    .Failure(Error.NullValue("Error message")));
 
         // Act
         var result = await service.Insert(dto);

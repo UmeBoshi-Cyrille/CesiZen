@@ -104,6 +104,16 @@ internal static class ServiceRegister
 
         services.AddSingleton<IAuthorizationHandler, RoleManager>();
 
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAngularClient", policy =>
+            {
+                policy.WithOrigins("http://localhost:4200")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+            });
+        });
+
         services.AddAuthorization();
 
         return services;

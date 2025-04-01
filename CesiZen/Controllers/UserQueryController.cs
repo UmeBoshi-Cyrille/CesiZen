@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CesiZen.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/users/query")]
 public class UserQueryController : ControllerBase
 {
     private readonly IUserQueryService queryService;
@@ -29,11 +29,11 @@ public class UserQueryController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpGet("search-users")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "Admin")]
-    public async Task<ActionResult<PagedResultDto<UserRequestDto>>> SearchUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string searchTerm = "")
+    public async Task<ActionResult<PagedResultDto<UserMinimumDto>>> SearchUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string searchTerm = "")
     {
         var parameters = new PageParametersDto()
         {
@@ -43,7 +43,7 @@ public class UserQueryController : ControllerBase
 
         var result = await queryService.SearchUsers(parameters, searchTerm);
 
-        return result.Match<ActionResult, PagedResultDto<UserRequestDto>>(
+        return result.Match<ActionResult, PagedResultDto<UserMinimumDto>>(
              success: value => Ok(new { value }),
              failure: error => NotFound(new { message = error.Message })
         );
@@ -59,15 +59,15 @@ public class UserQueryController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpGet("users")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "Admin")]
-    public async Task<ActionResult<PagedResultDto<UserRequestDto>>> GetAllAsync([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    public async Task<ActionResult<PagedResultDto<UserMinimumDto>>> GetAllAsync([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var result = await queryService.GetAllAsync(pageNumber, pageSize);
 
-        return result.Match<ActionResult, PagedResultDto<UserRequestDto>>(
+        return result.Match<ActionResult, PagedResultDto<UserMinimumDto>>(
              success: value => Ok(new { value }),
              failure: error => NotFound(new { message = error.Message })
         );
@@ -82,14 +82,14 @@ public class UserQueryController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpGet("user/{id}")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "User")]
-    public async Task<ActionResult<UserRequestDto>> GetById(int id)
+    public async Task<ActionResult<UserMinimumDto>> GetById(int id)
     {
         var result = await queryService.GetByIdAsync(id);
-        return result.Match<ActionResult, UserRequestDto>(
+        return result.Match<ActionResult, UserMinimumDto>(
             success: value => Ok(new { value }),
             failure: error => BadRequest(new { message = error.Message })
         );
@@ -104,15 +104,15 @@ public class UserQueryController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpGet("user")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "Admin")]
-    public async Task<ActionResult<UserRequestDto>> GetByName([FromQuery] string username)
+    public async Task<ActionResult<UserMinimumDto>> GetByName([FromQuery] string username)
     {
         var result = await queryService.GetByUsername(username);
 
-        return result.Match<ActionResult, UserRequestDto>(
+        return result.Match<ActionResult, UserMinimumDto>(
             success: value => Ok(new { value }),
             failure: error => NotFound(new { message = error.Message })
         );

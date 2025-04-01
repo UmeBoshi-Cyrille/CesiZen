@@ -36,7 +36,7 @@ public class BreathExerciseQueryServiceTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        Assert.IsType<List<BreathExerciseDto>>(result.Value);
+        Assert.IsType<List<BreathExerciseMinimumDto>>(result.Value);
         Assert.Equal(breathExercises.Count, result.Value.Count);
     }
 

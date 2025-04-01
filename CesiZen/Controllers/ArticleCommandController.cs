@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CesiZen.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/articles/command")]
 public class ArticleCommandController : ControllerBase
 {
     private readonly IArticleCommandService articleCommandService;
@@ -22,7 +22,7 @@ public class ArticleCommandController : ControllerBase
     /// Create new article
     /// </summary>
     /// <param name="dto">data provided by the client</param>
-    /// <response code="200">operation succeeded</response>
+    /// <response code="201">ObjectCreated</response>
     /// <response code="400">Bad request</response>
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
@@ -35,11 +35,12 @@ public class ArticleCommandController : ControllerBase
     {
         var result = await articleCommandService.Insert(dto);
 
-        return result.Match<ActionResult>(
-            success: () => CreatedAtAction(
+        return result.Match<ArticleMinimumDto, ActionResult>(
+            success: createdArticle => CreatedAtAction(
                 nameof(ArticleQueryController.GetArticle),
-                nameof(ArticleQueryController),
-                new { article = dto, message = result.Info.Message }),
+                "ArticleQueryController",
+                new { id = createdArticle.Id },
+                new { message = result.Info.Message, article = createdArticle }),
             failure: error => BadRequest(new { message = error.Message })
         );
     }
@@ -54,7 +55,7 @@ public class ArticleCommandController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpPut("update/{id}")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "Admin")]
@@ -79,7 +80,7 @@ public class ArticleCommandController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpPut("update-title/{id}")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "Admin")]
@@ -103,7 +104,7 @@ public class ArticleCommandController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpPut("update-description/{id}")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "Admin")]
@@ -127,7 +128,7 @@ public class ArticleCommandController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpPut("update-content/{id}")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "Admin")]
@@ -150,7 +151,7 @@ public class ArticleCommandController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpDelete("delete/{id}")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "Admin")]

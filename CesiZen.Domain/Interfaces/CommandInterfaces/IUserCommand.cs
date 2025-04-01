@@ -3,7 +3,7 @@ using CesiZen.Domain.DataTransfertObject;
 
 namespace CesiZen.Domain.Interfaces;
 
-public interface IUserCommand : ICommand<User>
+public interface IUserCommand : ICommand<UserMinimumDto, User>
 {
     Task<IResult> UpdateUserName(int id, string userName);
 

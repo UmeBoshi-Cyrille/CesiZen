@@ -52,7 +52,7 @@ public static class UserMapper
         return user;
     }
 
-    public static User Map(this UserRequestDto dto)
+    public static User Map(this UserMinimumDto dto)
     {
         return new User
         {
@@ -66,9 +66,9 @@ public static class UserMapper
         };
     }
 
-    public static UserRequestDto Map(this User model)
+    public static UserMinimumDto Map(this User model)
     {
-        return new UserRequestDto
+        return new UserMinimumDto
         {
             Id = model.Id,
             Firstname = model.Firstname,
@@ -103,9 +103,9 @@ public static class UserMapper
     #endregion
 
     #region Collection Mapper Nethods
-    public static List<UserRequestDto> Map(this List<User> model)
+    public static List<UserMinimumDto> Map(this List<User> model)
     {
-        List<UserRequestDto> dto = new();
+        List<UserMinimumDto> dto = new();
 
         for (var i = 0; i < model.Count; i++)
         {
@@ -116,7 +116,7 @@ public static class UserMapper
         return dto;
     }
 
-    public static List<User> Map(this List<UserRequestDto> dto)
+    public static List<User> Map(this List<UserMinimumDto> dto)
     {
         List<User> model = new();
 
@@ -144,11 +144,11 @@ public static class UserMapper
     #endregion
 
     #region Paginated Mapper Methods
-    public static PagedResultDto<UserRequestDto> Map(this PagedResultDto<User> model)
+    public static PagedResultDto<UserMinimumDto> Map(this PagedResultDto<User> model)
     {
-        List<UserRequestDto> dto = model.Data.Map();
+        List<UserMinimumDto> dto = model.Data.Map();
 
-        return new PagedResultDto<UserRequestDto>
+        return new PagedResultDto<UserMinimumDto>
         {
             Data = dto,
             TotalCount = model.TotalCount,

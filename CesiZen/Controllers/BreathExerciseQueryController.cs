@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CesiZen.Api.Controllers;
 
 [ApiController]
-[Route("/api/[controller]")]
+[Route("/api/breath-exercise/query")]
 public class BreathExerciseQueryController : ControllerBase
 {
     private readonly IBreathExerciseQueryService exerciseService;
@@ -26,15 +26,15 @@ public class BreathExerciseQueryController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpGet("exercises")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "User")]
-    public async Task<ActionResult<List<BreathExerciseDto>>> GetExercises([FromQuery] int userId)
+    public async Task<ActionResult<List<BreathExerciseMinimumDto>>> GetExercises([FromQuery] int userId)
     {
         var result = await exerciseService.GetAllByIdAsync(userId);
 
-        return result.Match<ActionResult, List<BreathExerciseDto>>(
+        return result.Match<ActionResult, List<BreathExerciseMinimumDto>>(
              success: value => Ok(new { value }),
              failure: error => NotFound(new { message = error.Message })
         );
@@ -49,7 +49,7 @@ public class BreathExerciseQueryController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpGet("exercise/{id}")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "User")]

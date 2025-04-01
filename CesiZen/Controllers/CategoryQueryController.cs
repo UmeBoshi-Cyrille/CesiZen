@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CesiZen.Api.Controllers;
 
 [ApiController]
-[Route("/api/[controller]")]
+[Route("/api/categories/query")]
 public class CategoryQueryController : ControllerBase
 {
     private readonly ICategoryQueryService categoryService;
@@ -26,7 +26,7 @@ public class CategoryQueryController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpGet("categories")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<PagedResultDto<CategoryRequestDto>>> GetCategories([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
@@ -48,7 +48,7 @@ public class CategoryQueryController : ControllerBase
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
     [HttpGet("category/{id}")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<CategoryRequestDto>> GetCategory(int id)

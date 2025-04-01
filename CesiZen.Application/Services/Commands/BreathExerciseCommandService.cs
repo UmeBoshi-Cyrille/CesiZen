@@ -17,7 +17,7 @@ public class BreathExerciseCommandService : AService, IBreathExerciseCommandServ
         this.command = command;
     }
 
-    public async Task<IResult> Insert(NewBreathExerciseDto dto)
+    public async Task<IResult<BreathExerciseMinimumDto>> Insert(NewBreathExerciseDto dto)
     {
         var entity = dto.Map();
         var result = await command.Insert(entity);
@@ -25,10 +25,10 @@ public class BreathExerciseCommandService : AService, IBreathExerciseCommandServ
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result.Failure(BreathExerciseErrors.ClientInsertionFailed);
+            return Result<BreathExerciseMinimumDto>.Failure(BreathExerciseErrors.ClientInsertionFailed);
         }
 
-        return Result.Success(BreathExerciseInfos.ClientInsertionSucceeded);
+        return Result<BreathExerciseMinimumDto>.Success(result.Value, BreathExerciseInfos.ClientInsertionSucceeded);
     }
 
     public async Task<IResult> Update(BreathExerciseDto dto)

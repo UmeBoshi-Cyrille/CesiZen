@@ -2,6 +2,6 @@
 
 namespace CesiZen.Domain.Interfaces;
 
-public interface ICategoryCommandService : ICommand<CategoryDto>
+public interface ICategoryCommandService : ICommand<CategoryDto, CategoryDto>
 {
 }
