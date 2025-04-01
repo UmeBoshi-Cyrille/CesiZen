@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace CesiZen.Domain.DataTransfertObject;
 
@@ -8,6 +9,7 @@ public class NewArticleDto
     [MinLength(2)]
     [RegularExpression(@"^[a-zA-Z]+$",
         ErrorMessage = "Unauthorised characters")]
+    [DefaultValue("title")]
     public string Title { get; set; } = string.Empty;
 
     [MaxLength(3000)]
@@ -17,6 +19,7 @@ public class NewArticleDto
     [MinLength(2)]
     [RegularExpression(@"^[a-zA-Z]+$",
         ErrorMessage = "Unauthorised characters")]
+    [DefaultValue("author")]
     public string Author { get; set; } = string.Empty;
     public string Content { get; set; } = string.Empty;
 
