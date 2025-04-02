@@ -81,6 +81,7 @@ public class ArticleQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ActionName("GetArticle")]
     public async Task<ActionResult<ArticleDto>> GetArticle(int id)
     {
         var result = await articleService.GetByIdAsync(id);

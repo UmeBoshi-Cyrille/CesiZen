@@ -38,9 +38,9 @@ public class BreathExerciseCommandController : ControllerBase
         return result.Match<BreathExerciseMinimumDto, ActionResult>(
             success: createdExercise => CreatedAtAction(
                 nameof(BreathExerciseQueryController.GetExercise),
-                "BreathExerciseQueryController",
+                "BreathExerciseQuery",
                 new { id = createdExercise.Id },
-                new { message = result.Info.Message, exercise = createdExercise }),
+                new { data = createdExercise, message = result.Info.Message }),
             failure: error => BadRequest(new { message = error.Message })
         );
     }

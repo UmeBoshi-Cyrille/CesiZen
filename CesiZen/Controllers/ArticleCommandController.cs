@@ -40,9 +40,9 @@ public class ArticleCommandController : ControllerBase
             return result.Match<ArticleMinimumDto, ActionResult>(
             success: createdArticle => CreatedAtAction(
                 nameof(ArticleQueryController.GetArticle),
-                "ArticleQueryController",
+                "ArticleQuery",
                 new { id = createdArticle.Id },
-                new { data = createdArticle }),
+                new { data = createdArticle, message = result.Info.Message }),
             failure: error => BadRequest(new { message = error.Message })
         );
         }

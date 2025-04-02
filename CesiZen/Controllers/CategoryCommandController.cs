@@ -38,9 +38,9 @@ public class CategoryCommandController : ControllerBase
         return result.Match<CategoryDto, ActionResult>(
             success: createdCategory => CreatedAtAction(
                 nameof(CategoryQueryController.GetCategory),
-                "CategoryQueryController",
+                "CategoryQuery",
                 new { id = createdCategory.Id },
-                new { message = result.Info.Message, category = createdCategory }),
+                new { data = createdCategory, message = result.Info.Message }),
             failure: error => BadRequest(new { message = error.Message })
         );
     }
