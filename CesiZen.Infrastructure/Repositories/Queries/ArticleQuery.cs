@@ -17,6 +17,7 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
     {
         var articles = await context.Articles
                .AsNoTracking()
+               .Include(c => c.Categories)
                .Skip((pageNumber - 1) * pageSize)
                .Take(pageSize)
                .OrderBy(x => x.Title)
@@ -46,7 +47,8 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                query = query.Where(a => a.Title.Contains(searchTerm) || a.Content.Contains(searchTerm));
+                query = query.Where(a => a.Title.Contains(searchTerm) || a.Content.Contains(searchTerm))
+                    .Include(c => c.Categories);
             }
 
             var totalCount = await query.CountAsync();

@@ -25,7 +25,7 @@ public class CategoryQueryController : ControllerBase
     /// <response code="404">Not Found</response>
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
-    [HttpGet("categories")]
+    [HttpGet("get")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -47,7 +47,7 @@ public class CategoryQueryController : ControllerBase
     /// <response code="404">Not Found</response>
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
-    [HttpGet("category/{id}")]
+    [HttpGet("{id:int}/details")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]

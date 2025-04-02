@@ -19,10 +19,10 @@ builder.Services.AddConfigurationServices(builder.Configuration);
 builder.Services.AddInfrastructureContext(builder.Configuration);
 builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
-builder.Services.AddControllers();
+builder.Services.AddControllerServices();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGenWithAuth();
 
 builder.Services.AddAuthorization();
 
@@ -35,7 +35,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "CesiZen V1");
+    });
 }
 
 app.UseSerilogRequestLogging();

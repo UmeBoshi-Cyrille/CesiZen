@@ -26,7 +26,7 @@ public class ArticleQueryController : ControllerBase
     /// <response code="404">Not Found</response>
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
-    [HttpGet("search-articles")]
+    [HttpGet("search")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -55,7 +55,7 @@ public class ArticleQueryController : ControllerBase
     /// <response code="404">Not Found</response>
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
-    [HttpGet("articles")]
+    [HttpGet("get")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -77,10 +77,11 @@ public class ArticleQueryController : ControllerBase
     /// <response code="404">Not Found</response>
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
-    [HttpGet("article/{id}")]
+    [HttpGet("{id:int}/details")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ActionName("GetArticle")]
     public async Task<ActionResult<ArticleDto>> GetArticle(int id)
     {
         var result = await articleService.GetByIdAsync(id);

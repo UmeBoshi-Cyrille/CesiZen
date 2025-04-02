@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using System.Text;
 
 namespace CesiZen.Api;
@@ -21,10 +22,19 @@ internal static class ServiceRegister
             {
                 Version = "v1",
                 Title = "CesiZen API",
-                Description = ".NET 8 Web API",
+                Description = ".NET 8 Web API for crud operations",
+                Contact = new OpenApiContact
+                {
+                    Name = "Cyrille Umehara",
+                    Email = string.Empty,
+                    Url = new Uri("https://learn.microsoft.com/training")
+                }
             });
 
-            options.IncludeXmlComments(Path.Combine(System.AppContext.BaseDirectory, "CesiZenAnnotation.xml"));
+            // Set the comments path for the Swagger Json and UI
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            options.IncludeXmlComments(xmlPath);
 
             var securityScheme = new OpenApiSecurityScheme
             {
@@ -115,6 +125,18 @@ internal static class ServiceRegister
         });
 
         services.AddAuthorization();
+
+        return services;
+    }
+
+    internal static IServiceCollection AddControllerServices(this IServiceCollection services)
+    {
+        services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+                    options.JsonSerializerOptions.WriteIndented = true; // Optional: Makes JSON output more readable
+                });
 
         return services;
     }
