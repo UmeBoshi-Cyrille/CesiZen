@@ -51,7 +51,7 @@ public class UserCommandController : ControllerBase
     /// <response code="400">Bad request</response>
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
-    [HttpPut("update-username")]
+    [HttpPut("{id:int}/update-username")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -98,7 +98,7 @@ public class UserCommandController : ControllerBase
     /// <response code="400">Bad request</response>
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
-    [HttpDelete("delete/{id}")]
+    [HttpDelete("{id:int}/delete")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]

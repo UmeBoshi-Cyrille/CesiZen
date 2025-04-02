@@ -37,7 +37,7 @@ public class AuthenticationController : LoginController
     /// <response code="404">email not found</response>
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
-    [HttpGet("Verify")]
+    [HttpGet("verify")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]

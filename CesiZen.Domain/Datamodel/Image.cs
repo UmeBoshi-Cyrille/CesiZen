@@ -9,9 +9,8 @@ public class Image
 
     [MaxLength(100)]
     public string Title { get; set; } = string.Empty;
-
+    public string Alternative { get; set; } = string.Empty;
     public string Path { get; set; } = string.Empty;
-
     public int ArticleId { get; set; }
 
     [JsonIgnore]
