@@ -42,7 +42,7 @@ public class ArticleCommandController : ControllerBase
                 nameof(ArticleQueryController.GetArticle),
                 "ArticleQueryController",
                 new { id = createdArticle.Id },
-                new { message = result.Info.Message, article = createdArticle }),
+                new { data = createdArticle }),
             failure: error => BadRequest(new { message = error.Message })
         );
         }
