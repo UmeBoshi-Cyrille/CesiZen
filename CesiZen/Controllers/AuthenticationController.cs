@@ -144,7 +144,7 @@ public class AuthenticationController : LoginController
     }
 
     /// <summary>
-    /// Allows to reset your password if lost or forgotten.
+    /// Send a request to reset password if lost or forgotten.
     /// </summary>
     /// <param name="email">email provided by the client</param>
     /// <response code="200">operation succeeded</response>
@@ -173,7 +173,7 @@ public class AuthenticationController : LoginController
 
 
     /// <summary>
-    /// Allows to reset your password if lost or forgotten.
+    /// Allows to reset your password if lost or forgotten by checking received token and redirecting to a Reset password page.
     /// </summary>
     /// <param name="email">email provided by the client</param>
     /// <param name="token">token provided by the client</param>
