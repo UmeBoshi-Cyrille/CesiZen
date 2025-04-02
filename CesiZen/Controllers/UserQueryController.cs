@@ -28,7 +28,7 @@ public class UserQueryController : ControllerBase
     /// <response code="404">Not Found</response>
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
-    [HttpGet("search-users")]
+    [HttpGet("search")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -58,7 +58,7 @@ public class UserQueryController : ControllerBase
     /// <response code="404">Not Found</response>
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
-    [HttpGet("users")]
+    [HttpGet("get")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -81,7 +81,7 @@ public class UserQueryController : ControllerBase
     /// <response code="404">Not Found</response>
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
-    [HttpGet("user/{id}")]
+    [HttpGet("{id:int}/details")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]

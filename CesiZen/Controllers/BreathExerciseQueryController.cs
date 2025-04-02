@@ -25,7 +25,7 @@ public class BreathExerciseQueryController : ControllerBase
     /// <response code="404">Not Found</response>
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
-    [HttpGet("exercises")]
+    [HttpGet("get")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -48,7 +48,7 @@ public class BreathExerciseQueryController : ControllerBase
     /// <response code="404">Not Found</response>
     /// <response code="500">service unvalaible</response>
     /// <returns></returns>
-    [HttpGet("exercise/{id}")]
+    [HttpGet("{id:int}/details")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
