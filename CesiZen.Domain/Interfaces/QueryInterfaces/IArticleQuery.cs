@@ -2,8 +2,12 @@
 
 namespace CesiZen.Domain.Interfaces;
 
-public interface IArticleQuery : IQuery<ArticleDto, ArticleMinimumDto>
+public interface IArticleQuery
 {
+    Task<IResult<ArticleDto>> GetByIdAsync(int id);
+
+    Task<IResult<PagedResultDto<ArticleMinimumDto>>> GetAllAsync(int pageNumber, int pageSize);
+
     Task<IResult<PagedResultDto<ArticleMinimumDto>>> SearchArticles(PageParametersDto parameters, string searchTerm = "");
 
     Task<IResult<List<ArticleMinimumDto>>> GetLast(int amount);
