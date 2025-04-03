@@ -115,8 +115,8 @@ public static class UserMapper
             IsActive = model.IsActive,
             Role = model.Role,
             Login = model.Login!.MapAuthenticationLoginDto(),
-            RefreshToken = model.RefreshToken!.MapDto(),
-            SessionId = model.Session!.SessionId
+            RefreshToken = model.RefreshToken is null ? null : model.RefreshToken!.MapDto(),
+            SessionId = model.Session is null ? string.Empty : model.Session!.SessionId
         };
     }
 

@@ -8,5 +8,5 @@ public class ArticleMinimumDto
     public string Author { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
     public string ImagePath { get; set; } = string.Empty;
-    public string CategoryName { get; set; } = string.Empty;
+    public ICollection<CategoryDto>? Categories { get; set; }
 }
