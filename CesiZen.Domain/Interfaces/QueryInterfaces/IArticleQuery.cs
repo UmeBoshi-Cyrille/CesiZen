@@ -1,11 +1,12 @@
-﻿using CesiZen.Domain.Datamodel;
-using CesiZen.Domain.DataTransfertObject;
+﻿using CesiZen.Domain.DataTransfertObject;
 
 namespace CesiZen.Domain.Interfaces;
 
-public interface IArticleQuery : IQuery<Article>
+public interface IArticleQuery : IQuery<ArticleDto, ArticleMinimumDto>
 {
-    Task<IResult<PagedResultDto<Article>>> SearchArticles(PageParametersDto parameters, string searchTerm = "");
+    Task<IResult<PagedResultDto<ArticleMinimumDto>>> SearchArticles(PageParametersDto parameters, string searchTerm = "");
 
-    Task<IResult<List<Article>>> GetLast(int amount);
+    Task<IResult<List<ArticleMinimumDto>>> GetLast(int amount);
+
+    Task<IResult<PagedResultDto<ArticleMinimumDto>>> GetByCategory(int categoryId, int pageNumber, int pageSize);
 }

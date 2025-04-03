@@ -1,7 +1,7 @@
 ﻿using CesiZen.Domain.BusinessResult;
-using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
+using CesiZen.Domain.Mapper;
 using CesiZen.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,22 +13,22 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
     {
     }
 
-    public async Task<IResult<PagedResultDto<Article>>> GetAllAsync(int pageNumber, int pageSize)
+    public async Task<IResult<PagedResultDto<ArticleMinimumDto>>> GetAllAsync(int pageNumber, int pageSize)
     {
         var articles = await context.Articles
                .AsNoTracking()
-               .Include(c => c.Categories)
+               .OrderBy(x => x.Title)
                .Skip((pageNumber - 1) * pageSize)
                .Take(pageSize)
-               .OrderBy(x => x.Title)
+               .Select(x => x.MapMinimumDto())
                .ToListAsync();
 
         if (!articles.Any())
         {
-            return Result<PagedResultDto<Article>>.Failure(ArticleErrors.LogMultipleNotFound);
+            return Result<PagedResultDto<ArticleMinimumDto>>.Failure(ArticleErrors.LogMultipleNotFound);
         }
 
-        var result = new PagedResultDto<Article>
+        var result = new PagedResultDto<ArticleMinimumDto>
         {
             Data = articles,
             TotalCount = articles.Count,
@@ -36,10 +36,10 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
             PageSize = pageSize
         };
 
-        return Result<PagedResultDto<Article>>.Success(result);
+        return Result<PagedResultDto<ArticleMinimumDto>>.Success(result);
     }
 
-    public async Task<IResult<PagedResultDto<Article>>> SearchArticles(PageParametersDto parameters, string searchTerm = "")
+    public async Task<IResult<PagedResultDto<ArticleMinimumDto>>> SearchArticles(PageParametersDto parameters, string searchTerm = "")
     {
         try
         {
@@ -56,9 +56,10 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
                 .OrderByDescending(a => a.CreatedAt)
                 .Skip((parameters.PageNumber - 1) * parameters.PageSize)
                 .Take(parameters.PageSize)
+                .Select(x => x.MapMinimumDto())
                 .ToListAsync();
 
-            var result = new PagedResultDto<Article>
+            var result = new PagedResultDto<ArticleMinimumDto>
             {
                 Data = Articles,
                 TotalCount = totalCount,
@@ -66,15 +67,15 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
                 PageSize = parameters.PageSize
             };
 
-            return Result<PagedResultDto<Article>>.Success(result);
+            return Result<PagedResultDto<ArticleMinimumDto>>.Success(result);
         }
         catch (Exception ex)
         {
-            return Result<PagedResultDto<Article>>.Failure(ArticleErrors.LogMultipleNotFound, ex.Message);
+            return Result<PagedResultDto<ArticleMinimumDto>>.Failure(ArticleErrors.LogMultipleNotFound, ex.Message);
         }
     }
 
-    public async Task<IResult<List<Article>>> GetLast(int amount)
+    public async Task<IResult<List<ArticleMinimumDto>>> GetLast(int amount)
     {
         try
         {
@@ -82,30 +83,58 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
                    .AsNoTracking()
                    .OrderByDescending(c => c.CreatedAt)
                    .Take(amount)
+                   .Select(x => x.MapMinimumDto())
                    .ToListAsync();
 
-            return Result<List<Article>>.Success(result);
+            return Result<List<ArticleMinimumDto>>.Success(result);
         }
         catch (Exception ex)
         {
-            return Result<List<Article>>.Failure(ArticleErrors.LogMultipleNotFound, ex.Message);
+            return Result<List<ArticleMinimumDto>>.Failure(ArticleErrors.LogMultipleNotFound, ex.Message);
         }
     }
 
-    public async Task<IResult<Article>> GetByIdAsync(int id)
+    public async Task<IResult<ArticleDto>> GetByIdAsync(int id)
     {
         try
         {
             var result = await context.Articles
                     .AsNoTracking()
                     .Include(x => x.Images)
+                    .Select(x => x.Map())
                     .FirstOrDefaultAsync(x => x.Id == id);
 
-            return Result<Article>.Success(result!);
+            return Result<ArticleDto>.Success(result!);
         }
         catch (Exception ex)
         {
-            return Result<Article>.Failure(ArticleErrors.LogNotFound(nameof(id)), nameof(id), ex.Message);
+            return Result<ArticleDto>.Failure(ArticleErrors.LogNotFound(nameof(id)), nameof(id), ex.Message);
+        }
+    }
+
+    public async Task<IResult<PagedResultDto<ArticleMinimumDto>>> GetByCategory(int categoryId, int pageNumber, int pageSize)
+    {
+        try
+        {
+            var articles = await context.Articles
+                    .AsNoTracking()
+                    .Where(c => c.Categories!.Any(c => c.Id == categoryId))
+                    .Select(x => x.MapMinimumDto())
+                    .ToListAsync();
+
+            var result = new PagedResultDto<ArticleMinimumDto>
+            {
+                Data = articles,
+                TotalCount = articles.Count,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
+
+            return Result<PagedResultDto<ArticleMinimumDto>>.Success(result!);
+        }
+        catch (Exception ex)
+        {
+            return Result<PagedResultDto<ArticleMinimumDto>>.Failure(ArticleErrors.LogMultipleNotFound, ex.Message);
         }
     }
 }
