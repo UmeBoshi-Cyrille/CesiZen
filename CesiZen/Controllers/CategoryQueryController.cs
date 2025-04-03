@@ -17,14 +17,19 @@ public class CategoryQueryController : ControllerBase
     }
 
     /// <summary>
-    /// Get paginated categories
+    /// Retrieves a paginated list of categories.
     /// </summary>
-    /// <param name="pageNumber">last record</param>
-    /// <param name="pageSize">number of element by page</param>
-    /// <response code="200">data retrieved</response>
-    /// <response code="404">Not Found</response>
-    /// <response code="500">service unvalaible</response>
-    /// <returns></returns>
+    /// <param name="pageNumber">The page number to retrieve, starting from 1.</param>
+    /// <param name="pageSize">The number of categories to include per page.</param>
+    /// <response code="200">The paginated list of categories was successfully retrieved.</response>
+    /// <response code="404">No categories were found for the specified page.</response>
+    /// <response code="500">An internal server error occurred while processing the request.</response>
+    /// <returns>
+    /// An <see cref="ActionResult"/> containing:
+    /// - A 200 status code with the paginated list of categories if successful.
+    /// - A 404 status code if no categories are found for the specified page.
+    /// - A 500 status code if there is a server error.
+    /// </returns>
     [HttpGet("get")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -40,13 +45,17 @@ public class CategoryQueryController : ControllerBase
     }
 
     /// <summary>
-    /// Get category by id
+    /// Retrieves a category by its unique identifier.
     /// </summary>
-    /// <param name="id">id provided by the client</param>
-    /// <response code="200">data retrieved</response>
-    /// <response code="404">Not Found</response>
-    /// <response code="500">service unvalaible</response>
-    /// <returns></returns>
+    /// <param name="id">The unique identifier of the category to provide.</param>
+    /// <response code="200">The category was successfully retrieved.</response>
+    /// <response code="404">No category was found for the specified ID.</response>
+    /// <response code="500">An internal server error occurred while processing the request.</response>
+    /// the category corresponding to the unique identifier.
+    /// - A 200 status code with the category data if found.
+    /// - A 404 status code if the category is not found.
+    /// - A 500 status code if there is a server error.
+    /// </returns>
     [HttpGet("{id:int}/details")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

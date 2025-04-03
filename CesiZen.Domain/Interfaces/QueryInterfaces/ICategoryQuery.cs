@@ -1,7 +1,7 @@
-﻿using CesiZen.Domain.Datamodel;
+﻿using CesiZen.Domain.DataTransfertObject;
 
 namespace CesiZen.Domain.Interfaces;
 
-public interface ICategoryQuery : IQuery<Category>
+public interface ICategoryQuery : IQuery<CategoryDto>
 {
 }

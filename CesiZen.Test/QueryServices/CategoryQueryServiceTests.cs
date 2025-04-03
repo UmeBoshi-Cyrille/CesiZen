@@ -1,6 +1,5 @@
 ﻿using CesiZen.Application.Services;
 using CesiZen.Domain.BusinessResult;
-using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using CesiZen.Test.Fakers;
@@ -27,8 +26,8 @@ public class CategoryQueryServiceTests
     {
         // Arrange
         int pageNumber = 1, pageSize = 10;
-        var categories = CategoryFaker.FakeCategoryGenerator().Generate(34);
-        var pagedResult = new PagedResultDto<Category>
+        var categories = CategoryFaker.FakeCategoryDtoGenerator().Generate(34);
+        var pagedResult = new PagedResultDto<CategoryDto>
         {
             Data = categories,
             TotalCount = categories.Count,
@@ -37,7 +36,7 @@ public class CategoryQueryServiceTests
         };
 
         mockQuery.Setup(q => q.GetAllAsync(pageNumber, pageSize))
-                  .ReturnsAsync(Result<PagedResultDto<Category>>.Success(pagedResult));
+                  .ReturnsAsync(Result<PagedResultDto<CategoryDto>>.Success(pagedResult));
 
         // Act
         var result = await service.GetAllAsync(pageNumber, pageSize);
@@ -56,7 +55,7 @@ public class CategoryQueryServiceTests
         int pageNumber = 1, pageSize = 10;
 
         mockQuery.Setup(q => q.GetAllAsync(pageNumber, pageSize))
-                  .ReturnsAsync(Result<PagedResultDto<Category>>.Failure(
+                  .ReturnsAsync(Result<PagedResultDto<CategoryDto>>.Failure(
                         Error.NullValue("Error occurred")));
 
         // Act
@@ -73,10 +72,10 @@ public class CategoryQueryServiceTests
     {
         // Arrange
         int id = 1;
-        var category = CategoryFaker.FakeCategoryGenerator().Generate();
+        var category = CategoryFaker.FakeCategoryDtoGenerator().Generate();
 
         mockQuery.Setup(q => q.GetByIdAsync(id))
-                  .ReturnsAsync(Result<Category>.Success(category));
+                  .ReturnsAsync(Result<CategoryDto>.Success(category));
 
         // Act
         var result = await service.GetByIdAsync(id);
@@ -92,7 +91,7 @@ public class CategoryQueryServiceTests
     {
         // Arrange
         int id = 1;
-        var queryResult = Result<Category>.Failure(
+        var queryResult = Result<CategoryDto>.Failure(
             Error.NullValue("Error occurred"));
 
         mockQuery.Setup(q => q.GetByIdAsync(id))

@@ -1,7 +1,6 @@
 ﻿using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
-using CesiZen.Domain.Mapper;
 using Serilog;
 
 namespace CesiZen.Application.Services;
@@ -25,9 +24,7 @@ public class CategoryQueryService : AService, ICategoryQueryService
             return Result<PagedResultDto<CategoryDto>>.Failure(CategoryErrors.ClientMultipleNotFound);
         }
 
-        var dto = result.Value.Map();
-
-        return Result<PagedResultDto<CategoryDto>>.Success(dto);
+        return Result<PagedResultDto<CategoryDto>>.Success(result.Value);
     }
 
     public async Task<IResult<CategoryDto>> GetByIdAsync(int id)
@@ -40,8 +37,6 @@ public class CategoryQueryService : AService, ICategoryQueryService
             return Result<CategoryDto>.Failure(CategoryErrors.ClientNotFound);
         }
 
-        var dto = result.Value.MapDto();
-
-        return Result<CategoryDto>.Success(dto);
+        return Result<CategoryDto>.Success(result.Value);
     }
 }
