@@ -6,7 +6,7 @@ public static class LoginErrors
     public static Error AuthenticationMismatch => new(ErrorType.AuthenticationMismatch, Message.GetResource("ErrorMessages", "CLIENT_AUTHENTICATION_MISMATCH"));
     public static Error EmailVerificationFailed => new(ErrorType.EmailVerificationFailed, Message.GetResource("ErrorMessages", "CLIENT_EMAIL_VERIFICATION_FAILED"));
     public static Error ExpiredLink => new(ErrorType.ExpiredLink, Message.GetResource("ErrorMessages", "CLIENT_EXPIRED_LINK"));
-    public static Error ForgotPasswordAttemps => new(ErrorType.AttempsReached, Message.GetResource("ErrorMessages", "CLIENT_LOGINATTEMPS"));
+    public static Error ForgotPasswordAttempsReached => new(ErrorType.AttempsReached, Message.GetResource("ErrorMessages", "CLIENT_LOGINATTEMPS"));
     public static Error LoginLockTime => new(ErrorType.LockTime, Message.GetResource("ErrorMessages", "CLIENT_LOGINATTEMPS_LOCKTIME"));
     public static Error PasswordNotMatch => new(ErrorType.NotMatch, Message.GetResource("ErrorMessages", "CLIENT_PASSWORD_NOTMATCH"));
     public static Error EmailNotUnique => new(ErrorType.NotUnique, Message.GetResource("ErrorMessages", "CLIENT_EMAIL_NOTUNIQUE"));

@@ -29,7 +29,7 @@ public class PasswordService : IPasswordService
     }
 
     #region Public Methods
-    public Authentifier HashPassword(string password, string hashSalt)
+    public Authentifier HashPassword(string password, string hashSalt = "")
     {
         byte[]? salt = null;
 

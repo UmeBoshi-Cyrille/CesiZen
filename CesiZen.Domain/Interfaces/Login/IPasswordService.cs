@@ -4,7 +4,7 @@ namespace CesiZen.Domain.Interfaces;
 
 public interface IPasswordService
 {
-    Authentifier HashPassword(string password, string hashSalt);
+    Authentifier HashPassword(string password, string hashSalt = "");
 
     bool IsCorrectPassword(string hashSalt, string currentPassword, string providedPassword);
 
