@@ -18,13 +18,18 @@ public class BreathExerciseQueryController : ControllerBase
     }
 
     /// <summary>
-    /// Get breath exercices by user id
+    /// Retrieves a list of breath exercises associated with a specific user.
     /// </summary>
-    /// <param name="userId">id provided by the client</param>
-    /// <response code="200">data retrieved</response>
-    /// <response code="404">Not Found</response>
-    /// <response code="500">service unvalaible</response>
-    /// <returns></returns>
+    /// <param name="userId">The unique identifier of the user to provide.</param>
+    /// <response code="200">The breath exercises were successfully retrieved.</response>
+    /// <response code="404">No breath exercises were found for the specified user.</response>
+    /// <response code="500">An internal server error occurred while processing the request.</response>
+    /// <returns>
+    /// A list of breath exercises associated with a specific user.
+    /// - A 200 status code with the list of breath exercises if found.
+    /// - A 404 status code if no breath exercises are found for the specified user.
+    /// - A 500 status code if there is a server error.
+    /// </returns>
     [HttpGet("get")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -41,13 +46,18 @@ public class BreathExerciseQueryController : ControllerBase
     }
 
     /// <summary>
-    /// Get breath exercice by id
+    /// Retrieves a specific breath exercise by its unique identifier.
     /// </summary>
-    /// <param name="id">id provided by the client</param>
-    /// <response code="200">data retrieved</response>
-    /// <response code="404">Not Found</response>
-    /// <response code="500">service unvalaible</response>
-    /// <returns></returns>
+    /// <param name="id">The unique identifier of the breath exercise to provide.</param>
+    /// <response code="200">The breath exercise was successfully retrieved.</response>
+    /// <response code="404">No breath exercise was found for the specified ID.</response>
+    /// <response code="500">An internal server error occurred while processing the request.</response>
+    /// <returns>
+    /// The desired Breath exercise by its unique identifier.
+    /// - A 200 status code with the breath exercise data if found.
+    /// - A 404 status code if the breath exercise is not found.
+    /// - A 500 status code if there is a server error.
+    /// </returns>
     [HttpGet("{id:int}/details")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

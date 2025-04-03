@@ -16,6 +16,14 @@ internal class BreathExerciseFaker
             .RuleFor(a => a.ExerciseType, f => f.PickRandom<ExerciceType>());
     }
 
+    public static Faker<BreathExerciseMinimumDto> FakeBreathExerciseMinimumDtoGenerator()
+    {
+        return new Faker<BreathExerciseMinimumDto>()
+            .RuleFor(a => a.Id, f => f.Random.Int(1, 200))
+            .RuleFor(a => a.Title, f => f.Name.JobTitle())
+            .RuleFor(a => a.ExerciseType, f => f.PickRandom<ExerciceType>());
+    }
+
     public static Faker<NewBreathExerciseDto> FakeNewBreathExerciseDtoGenerator()
     {
         return new Faker<NewBreathExerciseDto>()
