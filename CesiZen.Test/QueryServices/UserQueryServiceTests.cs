@@ -58,6 +58,42 @@ public class UserQueryServiceTests
     }
 
     [Fact]
+    public async Task GetByUsernameTest_Success_ReturnsUserDto()
+    {
+        // Arrange
+        string name = "name";
+        var user = UserFaker.FakeUserDtoGenerator().Generate();
+
+        mockUserQuery.Setup(q => q.GetByUsername(It.IsAny<string>()))
+            .ReturnsAsync(Result<UserDto>.Success(user));
+
+        // Act
+        var result = await service.GetByUsername(name);
+
+        // Assert
+        Assert.True(result.IsSuccess);
+        Assert.Equal(user.Id, result.Value.Id);
+        Assert.Equal(user.Firstname, result.Value.Firstname);
+        Assert.Equal(user.Lastname, result.Value.Lastname);
+    }
+
+    [Fact]
+    public async Task GetByUsernameTest_Failure_ReturnsFailureResult()
+    {
+        // Arrange
+        string name = "name";
+        mockUserQuery.Setup(q => q.GetByUsername(It.IsAny<string>()))
+            .ReturnsAsync(Result<UserDto>.Failure(Error.NullValue("Error Message")));
+
+        // Act
+        var result = await service.GetByUsername(name);
+
+        // Assert
+        Assert.True(result.IsFailure);
+        mockLogger.Verify(l => l.Error(It.IsAny<string>()), Times.Once);
+    }
+
+    [Fact]
     public async Task SearchUsersTest_Success_ReturnsPagedResultOfUserDto()
     {
         // Arrange
