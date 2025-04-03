@@ -1,6 +1,4 @@
-﻿using CesiZen.Domain.Datamodel;
-
-namespace CesiZen.Domain.DataTransfertObject;
+﻿namespace CesiZen.Domain.DataTransfertObject;
 
 public class ArticleMinimumDto
 {
@@ -10,5 +8,5 @@ public class ArticleMinimumDto
     public string Author { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
     public string ImagePath { get; set; } = string.Empty;
-    public ICollection<Category>? Categories { get; set; }
+    public ICollection<CategoryDto>? Categories { get; set; }
 }
