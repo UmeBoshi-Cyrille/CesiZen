@@ -72,6 +72,16 @@ public class ArticleQueryService : AService, IArticleQueryService
 
         var dto = result.Value.Map();
 
-        return Result<List<ArticleMinimumDto>>.Success(dto);
+    public async Task<IResult<PagedResultDto<ArticleMinimumDto>>> GetByCategory(int categoryId, int pageNumber, int pageSize)
+    {
+        var result = await query.GetByCategory(categoryId, pageNumber, pageSize);
+
+        if (result.IsFailure)
+        {
+            logger.Error(result.Error.Message);
+            return Result<PagedResultDto<ArticleMinimumDto>>.Failure(ArticleErrors.ClientNotFound);
+        }
+
+        return Result<PagedResultDto<ArticleMinimumDto>>.Success(result.Value);
     }
 }
