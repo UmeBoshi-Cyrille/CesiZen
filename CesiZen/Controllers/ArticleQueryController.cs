@@ -17,15 +17,20 @@ public class ArticleQueryController : ControllerBase
     }
 
     /// <summary>
-    /// Get paginated articles by term.
+    /// Retrieves a paginated list of articles based on a search term.
     /// </summary>
-    /// <param name="pageNumber">last record</param>
-    /// <param name="pageSize">number of element by page</param>
-    /// <param name="searchTerm">term provided by the client for the research</param>
-    /// <response code="200">data retrieved</response>
-    /// <response code="404">Not Found</response>
-    /// <response code="500">service unvalaible</response>
-    /// <returns></returns>
+    /// <param name="pageNumber">The page number to retrieve, starting from 1.</param>
+    /// <param name="pageSize">The number of articles to include per page.</param>
+    /// <param name="searchTerm">The keyword or term provided by the client to filter articles.</param>
+    /// <response code="200">The paginated list of articles was successfully retrieved.</response>
+    /// <response code="404">No articles were found for the specified page.</response>
+    /// <response code="500">An internal server error occurred while processing the request.</response>
+    /// <returns>
+    /// A paginated result containing articles belonging to the specified term.
+    /// - A 200 status code with the paginated list of articles matching the search term.
+    /// - A 404 status code if no articles are found for the given search term.
+    /// - A 500 status code if there is a server error.
+    /// </returns>
     [HttpGet("search")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -47,14 +52,19 @@ public class ArticleQueryController : ControllerBase
     }
 
     /// <summary>
-    /// Get paginated articles
+    /// Retrieves a paginated list of articles.
     /// </summary>
-    /// <param name="pageNumber">last record</param>
-    /// <param name="pageSize">number of element by page</param>
-    /// <response code="200">data retrieved</response>
-    /// <response code="404">Not Found</response>
-    /// <response code="500">service unvalaible</response>
-    /// <returns></returns>
+    /// <param name="pageNumber">The page number to retrieve, starting from 1.</param>
+    /// <param name="pageSize">The number of articles to include per page.</param>
+    /// <response code="200">The paginated list of articles was successfully retrieved.</response>
+    /// <response code="404">No articles were found for the specified page.</response>
+    /// <response code="500">An internal server error occurred while processing the request.</response>
+    /// <returns>
+    /// A paginated result containing articles.
+    /// - A 200 status code with the paginated list of articles if successful.
+    /// - A 404 status code if no articles are found.
+    /// - A 500 status code if there is a server error.
+    /// </returns>
     [HttpGet("get")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -70,13 +80,18 @@ public class ArticleQueryController : ControllerBase
     }
 
     /// <summary>
-    /// Get article by id
+    /// Retrieves an article by its unique identifier.
     /// </summary>
-    /// <param name="id">id provided by the client</param>
-    /// <response code="200">data retrieved</response>
-    /// <response code="404">Not Found</response>
-    /// <response code="500">service unvalaible</response>
-    /// <returns></returns>
+    /// <param name="id">The unique identifier of the desired article.</param>
+    /// <response code="200">The article was successfully retrieved.</response>
+    /// <response code="404">The requested article does not exist.</response>
+    /// <response code="500">An internal server error occurred while processing the request.</response>
+    /// <returns>
+    /// The article by the provided id.
+    /// - A 200 status code with the article data if found.
+    /// - A 404 status code if the article is not found.
+    /// - A 500 status code if there is a server error.
+    /// </returns>
     [HttpGet("{id:int}/details")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -92,13 +107,20 @@ public class ArticleQueryController : ControllerBase
     }
 
     /// <summary>
-    /// Get last articles published
+    /// Retrieves the most recently published articles up to the specified amount.
     /// </summary>
-    /// <param name="amount">last articles amount desired</param>
-    /// <response code="200">data retrieved</response>
-    /// <response code="404">Not Found</response>
-    /// <response code="500">service unvalaible</response>
-    /// <returns>Last articles published</returns>
+    /// <param name="amount">
+    /// The number of recent articles to retrieve. Must be a positive integer.
+    /// </param>
+    /// <response code="200">The requested data was successfully retrieved.</response>
+    /// <response code="404">No articles were found matching the criteria.</response>
+    /// <response code="500">An internal server error occurred while processing the request.</response>
+    /// <returns>
+    /// A list of the most recently published articles in descending order of publication date.
+    /// Returns a 200 status code if articles are successfully retrieved.
+    /// Returns a 404 status code if no articles are found.
+    /// Returns a 500 status code if an unexpected error occurs.
+    /// </returns>
     [HttpGet("get-last")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

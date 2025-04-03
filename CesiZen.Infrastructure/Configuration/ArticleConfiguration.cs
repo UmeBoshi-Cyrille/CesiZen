@@ -13,6 +13,10 @@ public class ArticleConfiguration : IEntityTypeConfiguration<Article>
         builder.HasIndex(x => x.Id)
             .IsUnique();
 
+        builder.HasIndex(x => x.Title);
+
+        builder.HasIndex(x => x.CreatedAt);
+
         builder.HasMany(x => x.Categories)
             .WithMany(x => x.Articles);
 
