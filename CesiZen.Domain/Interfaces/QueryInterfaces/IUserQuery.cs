@@ -3,11 +3,15 @@ using CesiZen.Domain.DataTransfertObject;
 
 namespace CesiZen.Domain.Interfaces;
 
-public interface IUserQuery : IQueryInterface<User>
+public interface IUserQuery
 {
-    Task<IResult<PagedResultDto<User>>> SearchUsers(PageParametersDto parameters, string searchTerm);
+    Task<IResult<UserDto>> GetByIdAsync(int id);
 
-    Task<IResult<User>> GetByUsername(string username);
+    Task<IResult<PagedResultDto<UserMinimumDto>>> GetAllAsync(int pageNumber, int pageSize);
+
+    Task<IResult<PagedResultDto<UserMinimumDto>>> SearchUsers(PageParametersDto parameters, string searchTerm);
+
+    Task<IResult<UserDto>> GetByUsername(string username);
 
     Task<IResult<User>> GetByIdentifier(string identifier, bool isEmail = false);
 

@@ -2,6 +2,7 @@ using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
+using CesiZen.Domain.Mapper;
 using CesiZen.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +14,7 @@ public class UserQuery : AbstractRepository, IUserQuery
     {
     }
 
-    public async Task<IResult<PagedResultDto<User>>> SearchUsers(PageParametersDto parameters, string searchTerm)
+    public async Task<IResult<PagedResultDto<UserMinimumDto>>> SearchUsers(PageParametersDto parameters, string searchTerm)
     {
         try
         {
@@ -29,9 +30,10 @@ public class UserQuery : AbstractRepository, IUserQuery
                 .OrderByDescending(a => a.CreatedAt)
                 .Skip((parameters.PageNumber - 1) * parameters.PageSize)
                 .Take(parameters.PageSize)
+                .Select(x => x.MapMinimumDto())
                 .ToListAsync();
 
-            var result = new PagedResultDto<User>
+            var result = new PagedResultDto<UserMinimumDto>
             {
                 Data = Users,
                 TotalCount = totalCount,
@@ -39,29 +41,30 @@ public class UserQuery : AbstractRepository, IUserQuery
                 PageSize = parameters.PageSize
             };
 
-            return Result<PagedResultDto<User>>.Success(result);
+            return Result<PagedResultDto<UserMinimumDto>>.Success(result);
         }
         catch (Exception ex)
         {
-            return Result<PagedResultDto<User>>.Failure(UserErrors.LogMultipleNotFound, ex.Message);
+            return Result<PagedResultDto<UserMinimumDto>>.Failure(UserErrors.LogMultipleNotFound, ex.Message);
         }
     }
 
-    public async Task<IResult<PagedResultDto<User>>> GetAllAsync(int pageNumber, int pageSize)
+    public async Task<IResult<PagedResultDto<UserMinimumDto>>> GetAllAsync(int pageNumber, int pageSize)
     {
         var users = await context.Users
                 .AsNoTracking()
                 .OrderBy(x => x.Username)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
+                .Select(x => x.MapMinimumDto())
                 .ToListAsync();
 
         if (!users.Any())
         {
-            return Result<PagedResultDto<User>>.Failure(UserErrors.LogMultipleNotFound);
+            return Result<PagedResultDto<UserMinimumDto>>.Failure(UserErrors.LogMultipleNotFound);
         }
 
-        var result = new PagedResultDto<User>
+        var result = new PagedResultDto<UserMinimumDto>
         {
             Data = users,
             TotalCount = users.Count,
@@ -69,34 +72,41 @@ public class UserQuery : AbstractRepository, IUserQuery
             PageSize = pageSize
         };
 
-        return Result<PagedResultDto<User>>.Success(result);
+        return Result<PagedResultDto<UserMinimumDto>>.Success(result);
     }
 
-    public async Task<IResult<User>> GetByIdAsync(int id)
+    public async Task<IResult<UserDto>> GetByIdAsync(int id)
     {
-        var user = await context.Users.FindAsync(id);
+        var user = await context.Users
+            .AsNoTracking()
+            .Where(x => x.Id == id)
+            .Include(x => x.Login)
+            .Select(x => x.MapDto())
+            .FirstOrDefaultAsync();
 
         if (user == null)
         {
-            return Result<User>.Failure(UserErrors.LogNotFound(nameof(id)));
+            return Result<UserDto>.Failure(UserErrors.LogNotFound(nameof(id)));
         }
 
-        return Result<User>.Success(user);
+        return Result<UserDto>.Success(user);
     }
 
-    public async Task<IResult<User>> GetByUsername(string username)
+    public async Task<IResult<UserDto>> GetByUsername(string username)
     {
-        User? user = await context.Users
+        var user = await context.Users
                     .AsNoTracking()
+                    .Where(x => x.Username == username)
                     .Include(x => x.Login)
-                    .FirstOrDefaultAsync(x => x.Username == username);
+                    .Select(x => x.MapDto())
+                    .FirstOrDefaultAsync();
 
         if (user == null)
         {
-            return Result<User>.Failure(UserErrors.LogNotFound(username));
+            return Result<UserDto>.Failure(UserErrors.LogNotFound(username));
         }
 
-        return Result<User>.Success(user);
+        return Result<UserDto>.Success(user);
     }
 
     public async Task<IResult<User>> GetByIdentifier(string identifier, bool isEmail = false)

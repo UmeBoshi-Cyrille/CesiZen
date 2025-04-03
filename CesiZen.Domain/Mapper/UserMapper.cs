@@ -31,7 +31,7 @@ public static class UserMapper
         return user;
     }
 
-    public static User Map(this UserDto dto)
+    public static User MapAccountDto(this UserAccountDto dto)
     {
         User user = new();
 
@@ -66,7 +66,7 @@ public static class UserMapper
         };
     }
 
-    public static UserMinimumDto Map(this User model)
+    public static UserMinimumDto MapMinimumDto(this User model)
     {
         return new UserMinimumDto
         {
@@ -77,6 +77,21 @@ public static class UserMapper
             CreatedAt = model.CreatedAt,
             UpdatedAt = model.UpdatedAt,
             IsActive = model.IsActive,
+        };
+    }
+
+    public static UserDto MapDto(this User model)
+    {
+        return new UserDto
+        {
+            Id = model.Id,
+            Firstname = model.Firstname,
+            Lastname = model.Lastname,
+            Username = model.Username,
+            CreatedAt = model.CreatedAt,
+            UpdatedAt = model.UpdatedAt,
+            IsActive = model.IsActive,
+            Login = model.Login!.MapDto()
         };
     }
 
@@ -109,7 +124,7 @@ public static class UserMapper
 
         for (var i = 0; i < model.Count; i++)
         {
-            var item = model[i].Map();
+            var item = model[i].MapMinimumDto();
             dto.Add(item);
         }
 
@@ -129,13 +144,13 @@ public static class UserMapper
         return model;
     }
 
-    public static List<User> Map(this List<UserDto> dto)
+    public static List<User> Map(this List<UserAccountDto> dto)
     {
         List<User> model = new();
 
         for (var i = 0; i < dto.Count; i++)
         {
-            var item = dto[i].Map();
+            var item = dto[i].MapAccountDto();
             model.Add(item);
         }
 

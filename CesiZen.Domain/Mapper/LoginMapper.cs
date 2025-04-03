@@ -15,6 +15,16 @@ public static class LoginMapper
         };
     }
 
+    public static LoginDto MapDto(this Login model)
+    {
+        return new LoginDto
+        {
+            Id = model.Id,
+            Email = model.Email,
+            EmailVerified = model.EmailVerified,
+        };
+    }
+
     //public static AuthenticateResponseDto Map(this CategoryDto dto)
     //{
     //    return new Category
