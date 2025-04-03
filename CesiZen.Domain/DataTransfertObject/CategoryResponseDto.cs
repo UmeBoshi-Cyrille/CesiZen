@@ -1,11 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace CesiZen.Domain.DataTransfertObject;
 
-public class CategoryDto
+public class CategoryResponseDto
 {
-    [JsonIgnore]
     public int Id { get; set; }
 
     [MaxLength(54)]

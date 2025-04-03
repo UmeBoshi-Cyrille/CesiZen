@@ -23,6 +23,15 @@ public static class CategoryMapper
         };
     }
 
+    public static CategoryResponseDto MapResponseDto(this Category model)
+    {
+        return new CategoryResponseDto
+        {
+            Id = model.Id,
+            Name = model.Name,
+        };
+    }
+
     public static CategoryDto MapDto(this Category model)
     {
         return new CategoryDto
@@ -40,6 +49,19 @@ public static class CategoryMapper
         for (var i = 0; i < model.Count; i++)
         {
             var item = model[i].MapDto();
+            dto.Add(item);
+        }
+
+        return dto;
+    }
+
+    public static List<CategoryResponseDto> MapResponseDto(this List<Category> model)
+    {
+        List<CategoryResponseDto> dto = new();
+
+        for (var i = 0; i < model.Count; i++)
+        {
+            var item = model[i].MapResponseDto();
             dto.Add(item);
         }
 

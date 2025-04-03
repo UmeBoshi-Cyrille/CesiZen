@@ -14,29 +14,29 @@ public class CategoryQueryService : AService, ICategoryQueryService
         this.query = query;
     }
 
-    public async Task<IResult<PagedResultDto<CategoryDto>>> GetAllAsync(int pageNumber, int pageSize)
+    public async Task<IResult<PagedResultDto<CategoryResponseDto>>> GetAllAsync(int pageNumber, int pageSize)
     {
         var result = await query.GetAllAsync(pageNumber, pageSize);
 
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result<PagedResultDto<CategoryDto>>.Failure(CategoryErrors.ClientMultipleNotFound);
+            return Result<PagedResultDto<CategoryResponseDto>>.Failure(CategoryErrors.ClientMultipleNotFound);
         }
 
-        return Result<PagedResultDto<CategoryDto>>.Success(result.Value);
+        return Result<PagedResultDto<CategoryResponseDto>>.Success(result.Value);
     }
 
-    public async Task<IResult<CategoryDto>> GetByIdAsync(int id)
+    public async Task<IResult<CategoryResponseDto>> GetByIdAsync(int id)
     {
         var result = await query.GetByIdAsync(id);
 
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result<CategoryDto>.Failure(CategoryErrors.ClientNotFound);
+            return Result<CategoryResponseDto>.Failure(CategoryErrors.ClientNotFound);
         }
 
-        return Result<CategoryDto>.Success(result.Value);
+        return Result<CategoryResponseDto>.Success(result.Value);
     }
 }

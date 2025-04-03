@@ -14,7 +14,7 @@ public class CategoryQuery : AbstractRepository, ICategoryQuery
     {
     }
 
-    public async Task<IResult<PagedResultDto<CategoryDto>>> GetAllAsync(int pageNumber, int pageSize)
+    public async Task<IResult<PagedResultDto<CategoryResponseDto>>> GetAllAsync(int pageNumber, int pageSize)
     {
         try
         {
@@ -22,10 +22,10 @@ public class CategoryQuery : AbstractRepository, ICategoryQuery
                 .OrderBy(x => x.Name)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .Select(x => x.Map())
+                .Select(x => x.MapResponseDto())
                 .ToListAsync();
 
-            var result = new PagedResultDto<CategoryDto>
+            var result = new PagedResultDto<CategoryResponseDto>
             {
                 Data = data,
                 TotalCount = data.Count,
@@ -33,28 +33,28 @@ public class CategoryQuery : AbstractRepository, ICategoryQuery
                 PageSize = pageSize
             };
 
-            return Result<PagedResultDto<CategoryDto>>.Success(result);
+            return Result<PagedResultDto<CategoryResponseDto>>.Success(result);
         }
         catch (Exception ex)
         {
-            return Result<PagedResultDto<CategoryDto>>.Failure(CategoryErrors.LogMultipleNotFound, ex.Message);
+            return Result<PagedResultDto<CategoryResponseDto>>.Failure(CategoryErrors.LogMultipleNotFound, ex.Message);
         }
     }
 
-    public async Task<IResult<CategoryDto>> GetByIdAsync(int id)
+    public async Task<IResult<CategoryResponseDto>> GetByIdAsync(int id)
     {
         try
         {
             var result = await context.Categories
                 .Where(x => x.Id == id)
-                .Select(x => x.Map())
+                .Select(x => x.MapResponseDto())
                 .FirstOrDefaultAsync();
 
-            return Result<CategoryDto>.Success(result!);
+            return Result<CategoryResponseDto>.Success(result!);
         }
         catch (Exception ex)
         {
-            return Result<CategoryDto>.Failure(CategoryErrors.LogNotFound(nameof(id)), nameof(id), ex.Message);
+            return Result<CategoryResponseDto>.Failure(CategoryErrors.LogNotFound(nameof(id)), nameof(id), ex.Message);
         }
     }
 }

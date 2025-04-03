@@ -21,7 +21,7 @@ public class CategoryCommandController : ControllerBase
     /// <summary>
     /// Creates a new category resource.
     /// </summary>
-    /// <param name="dto">An object to provide, containing the data required to create the category.</param>
+    /// <param name="name">The name of the new category to create.</param>
     /// <response code="201">The category was successfully created.</response>
     /// <response code="400">The request was invalid or contained errors (e.g., validation failure).</response>
     /// <response code="500">An unexpected server error occurred while processing the request.</response>
@@ -36,8 +36,9 @@ public class CategoryCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "Admin")]
-    public async Task<IActionResult> Create([FromBody] CategoryDto dto)
+    public async Task<IActionResult> Create([FromBody] string name)
     {
+        var dto = new CategoryDto { Name = name };
         var result = await categoryService.Insert(dto);
 
         return result.Match<CategoryDto, ActionResult>(
@@ -68,8 +69,9 @@ public class CategoryCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "Admin")]
-    public async Task<IActionResult> Update([FromBody] CategoryDto dto)
+    public async Task<IActionResult> Update(int id, [FromBody] CategoryDto dto)
     {
+        dto.Id = id;
         var result = await categoryService.Update(dto);
 
         return result.Match<IActionResult>(

@@ -34,11 +34,11 @@ public class CategoryQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<PagedResultDto<CategoryDto>>> GetCategories([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    public async Task<ActionResult<PagedResultDto<CategoryResponseDto>>> GetCategories([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var result = await categoryService.GetAllAsync(pageNumber, pageSize);
 
-        return result.Match<ActionResult, PagedResultDto<CategoryDto>>(
+        return result.Match<ActionResult, PagedResultDto<CategoryResponseDto>>(
              success: value => Ok(new { value }),
              failure: error => NotFound(new { message = error.Message })
         );
@@ -61,10 +61,10 @@ public class CategoryQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<CategoryDto>> GetCategory(int id)
+    public async Task<ActionResult<CategoryResponseDto>> GetCategory(int id)
     {
         var result = await categoryService.GetByIdAsync(id);
-        return result.Match<ActionResult, CategoryDto>(
+        return result.Match<ActionResult, CategoryResponseDto>(
             success: value => Ok(new { value }),
             failure: error => NotFound(new { message = error.Message })
         );

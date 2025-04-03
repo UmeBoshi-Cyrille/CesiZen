@@ -2,6 +2,6 @@
 
 namespace CesiZen.Domain.Interfaces;
 
-public interface ICategoryQueryService : IQuery<CategoryDto>
+public interface ICategoryQueryService : IQuery<CategoryResponseDto>
 {
 }
