@@ -90,4 +90,26 @@ public class ArticleQueryController : ControllerBase
             failure: error => NotFound(new { message = error.Message })
         );
     }
+
+    /// <summary>
+    /// Get last articles by id
+    /// </summary>
+    /// <param name="amount">id provided by the client</param>
+    /// <response code="200">data retrieved</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="500">service unvalaible</response>
+    /// <returns></returns>
+    [HttpGet("get-last")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ActionName("GetLast")]
+    public async Task<ActionResult<List<ArticleMinimumDto>>> GetLast(int amount)
+    {
+        var result = await articleService.GetLast(amount);
+        return result.Match<ActionResult, List<ArticleMinimumDto>>(
+            success: value => Ok(new { value }),
+            failure: error => NotFound(new { message = error.Message })
+        );
+    }
 }

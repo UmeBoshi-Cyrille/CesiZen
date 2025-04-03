@@ -59,4 +59,19 @@ public class ArticleQueryService : AService, IArticleQueryService
 
         return Result<ArticleDto>.Success(dto);
     }
+
+    public async Task<IResult<List<ArticleMinimumDto>>> GetLast(int amount)
+    {
+        var result = await query.GetLast(amount);
+
+        if (result.IsFailure)
+        {
+            logger.Error(result.Error.Message);
+            return Result<List<ArticleMinimumDto>>.Failure(ArticleErrors.ClientNotFound);
+        }
+
+        var dto = result.Value.Map();
+
+        return Result<List<ArticleMinimumDto>>.Success(dto);
+    }
 }
