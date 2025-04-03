@@ -74,6 +74,24 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
         }
     }
 
+    public async Task<IResult<List<Article>>> GetLast(int amount)
+    {
+        try
+        {
+            var result = await context.Articles
+                   .AsNoTracking()
+                   .OrderByDescending(c => c.CreatedAt)
+                   .Take(amount)
+                   .ToListAsync();
+
+            return Result<List<Article>>.Success(result);
+        }
+        catch (Exception ex)
+        {
+            return Result<List<Article>>.Failure(ArticleErrors.LogMultipleNotFound, ex.Message);
+        }
+    }
+
     public async Task<IResult<Article>> GetByIdAsync(int id)
     {
         try
