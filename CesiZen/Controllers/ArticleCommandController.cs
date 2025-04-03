@@ -1,5 +1,4 @@
-﻿using CesiZen.Application.Authorization;
-using CesiZen.Domain.BusinessResult;
+﻿using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -77,7 +76,7 @@ public class ArticleCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [RoleAuthorization(Roles = "Admin")]
+    //[RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> Update(int id, [FromBody] ArticleDto dto)
     {
         dto.Id = id;
@@ -107,7 +106,7 @@ public class ArticleCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [RoleAuthorization(Roles = "Admin")]
+    //[RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> UpdateTitle(int id, [FromBody] string title)
     {
         var result = await articleCommandService.UpdateTitleAsync(id, title);
@@ -136,7 +135,7 @@ public class ArticleCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [RoleAuthorization(Roles = "Admin")]
+    //[RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> UpdateDescription(int id, [FromBody] string description)
     {
         var result = await articleCommandService.UpdateDescriptionAsync(id, description);
@@ -165,7 +164,7 @@ public class ArticleCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [RoleAuthorization(Roles = "Admin")]
+    //[RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> UpdateContent(int id, [FromBody] string content)
     {
         var result = await articleCommandService.UpdateContentAsync(id, content);
@@ -193,7 +192,7 @@ public class ArticleCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [RoleAuthorization(Roles = "Admin")]
+    //[RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id)
     {
         var result = await articleCommandService.Delete(id);

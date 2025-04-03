@@ -62,7 +62,7 @@ public static class ArticleMapper
             Author = model.Author,
             CreatedAt = model.CreatedAt,
             ImagePath = model.ImagePath,
-            CategoryName = model.Categories is null ? string.Empty : model.Categories.FirstOrDefault()!.Name
+            Categories = model.Categories!.ToList().MapDto()
         };
     }
 
