@@ -4,7 +4,7 @@ using CesiZen.Domain.DataTransfertObject;
 
 namespace CesiZen.Test.Fakers;
 
-internal class UserFaker
+internal static class UserFaker
 {
     public static Faker<User> FakeUserGenerator()
     {
@@ -14,6 +14,15 @@ internal class UserFaker
             .RuleFor(a => a.Lastname, f => f.Name.LastName())
             .RuleFor(a => a.CreatedAt, f => f.Date.Past())
             .RuleFor(a => a.UpdatedAt, f => f.Date.Recent())
+            .RuleFor(a => a.IsActive, f => f.Random.Bool());
+    }
+
+    public static Faker<AuthenticationUserDto> FakeAuthenticationUserDtoGenerator()
+    {
+        return new Faker<AuthenticationUserDto>()
+            .RuleFor(a => a.Id, f => f.Random.Int(1, 200))
+            .RuleFor(a => a.Username, f => f.Name.LastName())
+            .RuleFor(a => a.CreatedAt, f => f.Date.Past())
             .RuleFor(a => a.IsActive, f => f.Random.Bool());
     }
 
