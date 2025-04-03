@@ -1,6 +1,5 @@
 ﻿using CesiZen.Application.Services;
 using CesiZen.Domain.BusinessResult;
-using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using CesiZen.Domain.Mapper;
@@ -139,6 +138,83 @@ public class ArticleQueryServiceTests
 
         // Act
         var result = await service.GetAllAsync(parameters.PageNumber, parameters.PageSize);
+
+        // Assert
+        Assert.True(result.IsFailure);
+        loggerMock.Verify(l => l.Error(It.IsAny<string>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task GetLastTest_Success_ReturnsListOfLastArticles()
+    {
+        // Arrange
+        var articles = ArticleFaker.FakeArticleMinimumDtoGenerator().Generate(50);
+
+        queryMock.Setup(q => q.GetLast(10))
+            .ReturnsAsync(Result<List<ArticleMinimumDto>>.Success(articles));
+
+        // Act
+        var result = await service.GetLast(10);
+
+        // Assert
+        Assert.True(result.IsSuccess);
+        Assert.True(result.Value.Any());
+        Assert.Equal(articles.FirstOrDefault()!.Id, result.Value.FirstOrDefault()!.Id);
+        Assert.Equal(articles.FirstOrDefault()!.Title, result.Value.FirstOrDefault()!.Title);
+    }
+
+    [Fact]
+    public async Task GetLastTest_Failure_DataNotFound()
+    {
+        // Arrange
+        queryMock.Setup(q => q.GetLast(5))
+            .ReturnsAsync(Result<List<ArticleMinimumDto>>.Failure(Error.NullValue("Error message")));
+
+        // Act
+        var result = await service.GetLast(5);
+
+        // Assert
+        Assert.True(result.IsFailure);
+        loggerMock.Verify(l => l.Error(It.IsAny<string>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task GetByCategoryTest_Success_ReturnsPagedResultOfArticleDto()
+    {
+        // Arrange
+        var parameters = CommonFaker.FakePageParametersGenerator().Generate();
+        var articles = ArticleFaker.FakeArticleMinimumDtoGenerator().Generate(50);
+        var pagedResult = new PagedResultDto<ArticleMinimumDto>()
+        {
+            Data = articles,
+            TotalCount = articles.Count,
+            PageNumber = parameters.PageNumber,
+            PageSize = parameters.PageSize,
+        };
+
+        queryMock.Setup(q => q.GetByCategory(1, parameters.PageNumber, parameters.PageSize))
+            .ReturnsAsync(Result<PagedResultDto<ArticleMinimumDto>>.Success(pagedResult));
+
+        // Act
+        var result = await service.GetByCategory(1, parameters.PageNumber, parameters.PageSize);
+
+        // Assert
+        Assert.True(result.IsSuccess);
+        Assert.True(result.Value.Data.Any());
+        Assert.Equal(pagedResult.Data.FirstOrDefault()!.Id, result.Value.Data.FirstOrDefault()!.Id);
+        Assert.Equal(pagedResult.Data.FirstOrDefault()!.Title, result.Value.Data.FirstOrDefault()!.Title);
+    }
+
+    [Fact]
+    public async Task GetByCategoryTest_ReturnFailure_DataNotFound()
+    {
+        // Arrange
+        var parameters = CommonFaker.FakePageParametersGenerator().Generate();
+        queryMock.Setup(q => q.GetByCategory(1, parameters.PageNumber, parameters.PageSize))
+            .ReturnsAsync(Result<PagedResultDto<ArticleMinimumDto>>.Failure(Error.NullValue("Error message")));
+
+        // Act
+        var result = await service.GetByCategory(1, parameters.PageNumber, parameters.PageSize);
 
         // Assert
         Assert.True(result.IsFailure);
