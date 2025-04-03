@@ -1,6 +1,4 @@
-﻿using CesiZen.Domain.Datamodel;
-
-namespace CesiZen.Domain.DataTransfertObject;
+﻿namespace CesiZen.Domain.DataTransfertObject;
 
 public record ArticleDto
 {
@@ -12,6 +10,6 @@ public record ArticleDto
     public string Author { get; set; } = string.Empty;
     public string Content { get; set; } = string.Empty;
     public string ImagePath { get; set; } = string.Empty;
-    public ICollection<Image>? Images { get; set; }
-    public ICollection<Category>? Categories { get; set; }
+    public ICollection<ImageDto>? Images { get; set; }
+    public ICollection<CategoryDto>? Categories { get; set; }
 }
