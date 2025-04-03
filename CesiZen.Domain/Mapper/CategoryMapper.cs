@@ -15,15 +15,6 @@ public static class CategoryMapper
         };
     }
 
-    public static Category Map(this CategoryRequestDto dto)
-    {
-        return new Category
-        {
-            Id = dto.Id,
-            Name = dto.Name,
-        };
-    }
-
     public static CategoryDto Map(this Category model)
     {
         return new CategoryDto
@@ -32,9 +23,9 @@ public static class CategoryMapper
         };
     }
 
-    public static CategoryRequestDto MapDto(this Category model)
+    public static CategoryDto MapDto(this Category model)
     {
-        return new CategoryRequestDto
+        return new CategoryDto
         {
             Id = model.Id,
             Name = model.Name,
@@ -42,9 +33,9 @@ public static class CategoryMapper
     }
     #endregion
 
-    public static List<CategoryRequestDto> Map(this List<Category> model)
+    public static List<CategoryDto> Map(this List<Category> model)
     {
-        List<CategoryRequestDto> dto = new();
+        List<CategoryDto> dto = new();
 
         for (var i = 0; i < model.Count; i++)
         {
@@ -53,19 +44,6 @@ public static class CategoryMapper
         }
 
         return dto;
-    }
-
-    public static List<Category> Map(this List<CategoryRequestDto> dto)
-    {
-        List<Category> model = new();
-
-        for (var i = 0; i < dto.Count; i++)
-        {
-            var item = dto[i].Map();
-            model.Add(item);
-        }
-
-        return model;
     }
 
     public static List<Category> Map(this List<CategoryDto> dto)
@@ -94,11 +72,11 @@ public static class CategoryMapper
         return dto;
     }
 
-    public static PagedResultDto<CategoryRequestDto> Map(this PagedResultDto<Category> model)
+    public static PagedResultDto<CategoryDto> Map(this PagedResultDto<Category> model)
     {
-        List<CategoryRequestDto> dto = model.Data.Map();
+        List<CategoryDto> dto = model.Data.Map();
 
-        return new PagedResultDto<CategoryRequestDto>
+        return new PagedResultDto<CategoryDto>
         {
             Data = dto,
             TotalCount = model.TotalCount,

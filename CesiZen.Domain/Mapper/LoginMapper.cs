@@ -15,7 +15,7 @@ public static class LoginMapper
         };
     }
 
-    //public static AuthenticateResponseDto Map(this CategoryRequestDto dto)
+    //public static AuthenticateResponseDto Map(this CategoryDto dto)
     //{
     //    return new Category
     //    {
@@ -42,9 +42,9 @@ public static class LoginMapper
     }
     #endregion
 
-    //public static List<CategoryRequestDto> Map(this List<Category> model)
+    //public static List<CategoryDto> Map(this List<Category> model)
     //{
-    //    List<CategoryRequestDto> dto = new();
+    //    List<CategoryDto> dto = new();
 
     //    for (var i = 0; i < model.Count; i++)
     //    {
@@ -55,7 +55,7 @@ public static class LoginMapper
     //    return dto;
     //}
 
-    //public static List<Category> Map(this List<CategoryRequestDto> dto)
+    //public static List<Category> Map(this List<CategoryDto> dto)
     //{
     //    List<Category> model = new();
 
