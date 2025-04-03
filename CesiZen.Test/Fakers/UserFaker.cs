@@ -27,12 +27,22 @@ internal class UserFaker
             .RuleFor(a => a.Password, "Password1234=***$");
     }
 
-    public static Faker<UserMinimumDto> FakeRequestDtoGenerator()
+    public static Faker<UserMinimumDto> FakeUserMinimumDtoGenerator()
     {
         return new Faker<UserMinimumDto>()
             .RuleFor(a => a.Id, f => f.Random.Int(1, 200))
             .RuleFor(a => a.Firstname, f => f.Name.FirstName())
             .RuleFor(a => a.Lastname, f => f.Name.LastName())
             .RuleFor(a => a.IsActive, f => f.Random.Bool());
+    }
+
+    public static Faker<UserDto> FakeUserDtoGenerator()
+    {
+        return new Faker<UserDto>()
+            .RuleFor(a => a.Id, f => f.Random.Int(1, 200))
+            .RuleFor(a => a.Firstname, f => f.Name.FirstName())
+            .RuleFor(a => a.Lastname, f => f.Name.LastName())
+            .RuleFor(a => a.IsActive, f => f.Random.Bool())
+            .RuleFor(a => a.Login, new LoginDto());
     }
 }
