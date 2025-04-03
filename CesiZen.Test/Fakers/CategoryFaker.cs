@@ -13,6 +13,13 @@ internal class CategoryFaker
             .RuleFor(a => a.Name, f => f.Name.JobTitle());
     }
 
+    public static Faker<CategoryResponseDto> FakeCategoryResponseDtoGenerator(int id = 0)
+    {
+        return new Faker<CategoryResponseDto>()
+            .RuleFor(a => a.Id, f => id != 0 ? f.Random.Int(1, 200) : id)
+            .RuleFor(a => a.Name, f => f.Name.JobTitle());
+    }
+
     public static Faker<Category> FakeCategoryGenerator(int id = 0)
     {
         return new Faker<Category>()

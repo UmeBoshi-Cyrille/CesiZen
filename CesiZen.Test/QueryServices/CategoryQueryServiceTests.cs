@@ -26,8 +26,8 @@ public class CategoryQueryServiceTests
     {
         // Arrange
         int pageNumber = 1, pageSize = 10;
-        var categories = CategoryFaker.FakeCategoryDtoGenerator().Generate(34);
-        var pagedResult = new PagedResultDto<CategoryDto>
+        var categories = CategoryFaker.FakeCategoryResponseDtoGenerator().Generate(34);
+        var pagedResult = new PagedResultDto<CategoryResponseDto>
         {
             Data = categories,
             TotalCount = categories.Count,
@@ -36,7 +36,7 @@ public class CategoryQueryServiceTests
         };
 
         mockQuery.Setup(q => q.GetAllAsync(pageNumber, pageSize))
-                  .ReturnsAsync(Result<PagedResultDto<CategoryDto>>.Success(pagedResult));
+                  .ReturnsAsync(Result<PagedResultDto<CategoryResponseDto>>.Success(pagedResult));
 
         // Act
         var result = await service.GetAllAsync(pageNumber, pageSize);
@@ -55,7 +55,7 @@ public class CategoryQueryServiceTests
         int pageNumber = 1, pageSize = 10;
 
         mockQuery.Setup(q => q.GetAllAsync(pageNumber, pageSize))
-                  .ReturnsAsync(Result<PagedResultDto<CategoryDto>>.Failure(
+                  .ReturnsAsync(Result<PagedResultDto<CategoryResponseDto>>.Failure(
                         Error.NullValue("Error occurred")));
 
         // Act
@@ -72,10 +72,10 @@ public class CategoryQueryServiceTests
     {
         // Arrange
         int id = 1;
-        var category = CategoryFaker.FakeCategoryDtoGenerator().Generate();
+        var category = CategoryFaker.FakeCategoryResponseDtoGenerator().Generate();
 
         mockQuery.Setup(q => q.GetByIdAsync(id))
-                  .ReturnsAsync(Result<CategoryDto>.Success(category));
+                  .ReturnsAsync(Result<CategoryResponseDto>.Success(category));
 
         // Act
         var result = await service.GetByIdAsync(id);
@@ -91,7 +91,7 @@ public class CategoryQueryServiceTests
     {
         // Arrange
         int id = 1;
-        var queryResult = Result<CategoryDto>.Failure(
+        var queryResult = Result<CategoryResponseDto>.Failure(
             Error.NullValue("Error occurred"));
 
         mockQuery.Setup(q => q.GetByIdAsync(id))
