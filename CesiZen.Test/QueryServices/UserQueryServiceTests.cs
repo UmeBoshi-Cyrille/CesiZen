@@ -29,7 +29,7 @@ public class UserQueryServiceTests
         // Arrange
         int userId = 1;
         var user = UserFaker.FakeUserGenerator().Generate();
-        var expectedDto = user.Map();
+        var expectedDto = user.MapMinimumDto();
 
         mockUserQuery.Setup(q => q.GetByIdAsync(userId))
             .ReturnsAsync(Result<User>.Success(user));

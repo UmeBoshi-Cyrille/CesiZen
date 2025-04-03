@@ -21,7 +21,7 @@ internal class UserCommand : AbstractRepository, IUserCommand
             context.Users.Add(entity);
             await context.SaveChangesAsync();
 
-            var result = entity.Map();
+            var result = entity.MapMinimumDto();
 
             return Result<UserMinimumDto>.Success(result, UserInfos.LogInsertionSucceeded(entity.Username!));
         }

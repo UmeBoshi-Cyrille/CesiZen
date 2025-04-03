@@ -17,9 +17,9 @@ internal class UserFaker
             .RuleFor(a => a.IsActive, f => f.Random.Bool());
     }
 
-    public static Faker<UserDto> FakeDtoGenerator()
+    public static Faker<UserAccountDto> FakeDtoGenerator()
     {
-        return new Faker<UserDto>()
+        return new Faker<UserAccountDto>()
             .RuleFor(a => a.Firstname, f => f.Name.FirstName())
             .RuleFor(a => a.Lastname, f => f.Name.LastName())
             .RuleFor(a => a.Username, f => f.Name.LastName())

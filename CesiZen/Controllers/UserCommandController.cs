@@ -32,7 +32,7 @@ public class UserCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "Admin")]
-    public async Task<IActionResult> Update([FromBody] UserDto dto)
+    public async Task<IActionResult> Update([FromBody] UserAccountDto dto)
     {
         var result = await userCommandService.Update(dto);
 
