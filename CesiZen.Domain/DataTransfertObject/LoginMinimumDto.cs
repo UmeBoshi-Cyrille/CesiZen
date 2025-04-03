@@ -1,6 +1,6 @@
 ﻿namespace CesiZen.Domain.DataTransfertObject;
 
-public class LoginDto
+public class LoginMinimumDto
 {
     public int Id { get; set; }
 

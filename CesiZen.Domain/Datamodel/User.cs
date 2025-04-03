@@ -31,8 +31,6 @@ public class User
 
     public string Role { get; set; } = string.Empty;
 
-    public DateTime? RefreshTokenExpiryTime { get; set; }
-
     public Login? Login { get; set; }
 
     public RefreshToken? RefreshToken { get; set; }

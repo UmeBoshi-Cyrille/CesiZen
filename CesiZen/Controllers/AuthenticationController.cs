@@ -9,13 +9,11 @@ namespace CesiZen.Api.Controllers;
 [Route("api/authentication")]
 public class AuthenticationController : LoginController
 {
-    private readonly IConfiguration configuration;
     private readonly IAuthenticateService authenticateService;
     private readonly ITokenProvider tokenProvider;
     private readonly IPasswordService passwordService;
 
     public AuthenticationController(
-        IConfiguration configuration,
         IAuthenticateService authenticateService,
         ITokenProvider tokenProvider,
         IPasswordService passwordService,
@@ -25,7 +23,6 @@ public class AuthenticationController : LoginController
         this.authenticateService = authenticateService;
         this.tokenProvider = tokenProvider;
         this.passwordService = passwordService;
-        this.configuration = configuration;
     }
 
     /// <summary>

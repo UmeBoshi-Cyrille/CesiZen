@@ -43,6 +43,6 @@ internal class UserFaker
             .RuleFor(a => a.Firstname, f => f.Name.FirstName())
             .RuleFor(a => a.Lastname, f => f.Name.LastName())
             .RuleFor(a => a.IsActive, f => f.Random.Bool())
-            .RuleFor(a => a.Login, new LoginDto());
+            .RuleFor(a => a.Login, new LoginMinimumDto());
     }
 }

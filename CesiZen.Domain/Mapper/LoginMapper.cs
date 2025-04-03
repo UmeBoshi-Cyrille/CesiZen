@@ -15,9 +15,9 @@ public static class LoginMapper
         };
     }
 
-    public static LoginDto MapDto(this Login model)
+    public static LoginMinimumDto MapDto(this Login model)
     {
-        return new LoginDto
+        return new LoginMinimumDto
         {
             Id = model.Id,
             Email = model.Email,

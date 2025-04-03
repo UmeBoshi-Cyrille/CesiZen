@@ -51,6 +51,7 @@ public class CategoryQueryController : ControllerBase
     /// <response code="200">The category was successfully retrieved.</response>
     /// <response code="404">No category was found for the specified ID.</response>
     /// <response code="500">An internal server error occurred while processing the request.</response>
+    /// <returns>
     /// the category corresponding to the unique identifier.
     /// - A 200 status code with the category data if found.
     /// - A 404 status code if the category is not found.

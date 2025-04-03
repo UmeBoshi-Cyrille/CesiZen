@@ -2,5 +2,5 @@
 
 public record UserDto : UserMinimumDto
 {
-    public LoginDto? Login { get; set; }
+    public LoginMinimumDto? Login { get; set; }
 }
