@@ -105,6 +105,21 @@ public static class UserMapper
         return user;
     }
 
+    public static AuthenticationUserDto MapAuthenticationUserDto(this User model)
+    {
+        return new AuthenticationUserDto
+        {
+            Id = model.Id,
+            Username = model.Username,
+            CreatedAt = model.CreatedAt,
+            IsActive = model.IsActive,
+            Role = model.Role,
+            Login = model.Login!.MapAuthenticationLoginDto(),
+            RefreshToken = model.RefreshToken!.MapDto(),
+            SessionId = model.Session!.SessionId
+        };
+    }
+
     public static EmailSenderDto MapEmailSender(string email, string template, string token, string subject)
     {
         return new EmailSenderDto()

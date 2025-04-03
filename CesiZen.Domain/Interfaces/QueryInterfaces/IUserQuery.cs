@@ -1,5 +1,4 @@
-﻿using CesiZen.Domain.Datamodel;
-using CesiZen.Domain.DataTransfertObject;
+﻿using CesiZen.Domain.DataTransfertObject;
 
 namespace CesiZen.Domain.Interfaces;
 
@@ -13,7 +12,7 @@ public interface IUserQuery
 
     Task<IResult<UserDto>> GetByUsername(string username);
 
-    Task<IResult<User>> GetByIdentifier(string identifier, bool isEmail = false);
+    Task<IResult<AuthenticationUserDto>> GetByIdentifier(string identifier, bool isEmail = false);
 
     Task<IResult<int>> GetUserId(string sessionId);
 }

@@ -25,6 +25,20 @@ public static class LoginMapper
         };
     }
 
+    public static AuthenticationLoginDto MapAuthenticationLoginDto(this Login model)
+    {
+        return new AuthenticationLoginDto
+        {
+            Id = model.Id,
+            Email = model.Email,
+            Password = model.Password,
+            Salt = model.Salt,
+            AccessFailedCount = model.AccessFailedCount,
+            AccountIsLocked = model.AccountIsLocked,
+            LockoutEndTime = model.LockoutEndTime,
+        };
+    }
+
     //public static AuthenticateResponseDto Map(this CategoryDto dto)
     //{
     //    return new Category

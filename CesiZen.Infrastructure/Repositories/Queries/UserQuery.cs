@@ -1,5 +1,4 @@
 using CesiZen.Domain.BusinessResult;
-using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using CesiZen.Domain.Mapper;
@@ -109,31 +108,20 @@ public class UserQuery : AbstractRepository, IUserQuery
         return Result<UserDto>.Success(user);
     }
 
-    public async Task<IResult<User>> GetByIdentifier(string identifier, bool isEmail = false)
+    public async Task<IResult<AuthenticationUserDto>> GetByIdentifier(string identifier, bool isEmail = false)
     {
-        User user;
-
         if (isEmail)
         {
-            user = await context.Users
-                        .AsNoTracking()
-                        .Include(x => x.Login)
-                        .FirstOrDefaultAsync(x => x.Login.Email == identifier)!;
+            var resultByEmail = await GetByEmailIdentifier(identifier);
+
+            return resultByEmail;
         }
         else
         {
-            user = await context.Users
-                    .AsNoTracking()
-                    .Include(x => x.Login)
-                    .FirstOrDefaultAsync(x => x.Username == identifier)!;
-        }
+            var resultByName = await GetByUsernameIdentifier(identifier);
 
-        if (user == null)
-        {
-            return Result<User>.Failure(UserErrors.LogNotFound(identifier));
+            return resultByName;
         }
-
-        return Result<User>.Success(user);
     }
 
     public async Task<IResult<int>> GetUserId(string sessionId)
@@ -150,5 +138,43 @@ public class UserQuery : AbstractRepository, IUserQuery
         }
 
         return Result<int>.Failure(UserErrors.LogNotFound(sessionId));
+    }
+
+    private async Task<IResult<AuthenticationUserDto>> GetByEmailIdentifier(string email)
+    {
+        var user = await context.Users
+                        .AsNoTracking()
+                        .Where(x => x.Login!.Email == email)
+                        .Include(x => x.Login)
+                        .Include(x => x.RefreshToken)
+                        .Include(x => x.Session)
+                        .Select(x => x.MapAuthenticationUserDto())
+                        .FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            return Result<AuthenticationUserDto>.Failure(UserErrors.LogNotFound(email));
+        }
+
+        return Result<AuthenticationUserDto>.Success(user);
+    }
+
+    private async Task<IResult<AuthenticationUserDto>> GetByUsernameIdentifier(string username)
+    {
+        var user = await context.Users
+                    .AsNoTracking()
+                        .Where(x => x.Username == username)
+                        .Include(x => x.Login)
+                        .Include(x => x.RefreshToken)
+                        .Include(x => x.Session)
+                        .Select(x => x.MapAuthenticationUserDto())
+                        .FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            return Result<AuthenticationUserDto>.Failure(UserErrors.LogNotFound(username));
+        }
+
+        return Result<AuthenticationUserDto>.Success(user);
     }
 }
