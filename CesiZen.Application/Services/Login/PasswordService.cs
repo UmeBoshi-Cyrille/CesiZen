@@ -197,13 +197,6 @@ public class PasswordService : IPasswordService
         return salt!;
     }
 
-    private async Task SavePasswordResetToken(Login login, string token)
-    {
-        login.PasswordResetToken = token;
-        login.PasswordResetTokenExpiry = DateTime.UtcNow.AddHours(24);
-        await loginCommand.AddResetPasswordToken(login);
-    }
-
     private MessageEventArgs BuildEmailVerificationMessage(string email, string token)
     {
         var template = Message.GetResource("Templates", "TEMPLATE_RESET_PASSWORD");
