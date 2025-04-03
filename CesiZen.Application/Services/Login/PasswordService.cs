@@ -29,24 +29,24 @@ public class PasswordService : IPasswordService
     }
 
     #region Public Methods
-    public Authentifier HashPassword(string password, Login? login = null)
+    public Authentifier HashPassword(string password, string hashSalt)
     {
         byte[]? salt = null;
 
-        if (login != null)
-            salt = GetSalt(login.Salt);
+        if (!string.IsNullOrEmpty(hashSalt))
+            salt = GetSalt(hashSalt);
 
         var authentifier = HashSaltedPassword(password, salt);
 
         return authentifier;
     }
 
-    public bool IsCorrectPassword(Login login, string providedPassword)
+    public bool IsCorrectPassword(string hashSalt, string currentPassword, string providedPassword)
     {
-        var salt = GetSalt(login.Salt);
+        var salt = GetSalt(hashSalt);
 
         var hashProvidedpassword = PasswordHasher(providedPassword, salt);
-        var currentHash = Convert.FromHexString(login.Password);
+        var currentHash = Convert.FromHexString(currentPassword);
         var providedHash = Convert.FromHexString(hashProvidedpassword);
 
         return CryptographicOperations.FixedTimeEquals(providedHash, currentHash);
@@ -56,7 +56,12 @@ public class PasswordService : IPasswordService
     {
         var login = await loginQuery.GetByUserId(userId);
 
-        var result = await ResetPassword(login.Value, dto);
+        var result = await ResetPasswordTask(userId, login.Value, dto);
+
+        if (result.IsFailure)
+        {
+            return Result.Failure(LoginErrors.ResetPasswordNotFound);
+        }
 
         return Result.Success(UserInfos.ClientPasswordModified);
     }
@@ -105,20 +110,20 @@ public class PasswordService : IPasswordService
     #endregion
 
     #region Private Methods
-    private async Task<IResult> ResetPassword(Login login, PasswordResetDto dto)
+    private async Task<IResult> ResetPasswordTask(int userId, AuthenticationLoginDto login, PasswordResetDto dto)
     {
         if (login == null)
         {
             return Result.Failure(LoginErrors.LoginNotFound);
         }
 
-        if (!IsCorrectPassword(login, dto.CurrentPassword!))
+        if (!IsCorrectPassword(login.Salt, login.Password, dto.CurrentPassword!))
         {
             return Result.Failure(LoginErrors.PasswordNotMatch);
         }
 
-        var authentifier = HashPassword(dto.NewPassword!, login);
-        await loginCommand.UpdatePassword(login.UserId, authentifier.Password);
+        var authentifier = HashPassword(dto.NewPassword!, login.Salt);
+        await loginCommand.UpdatePassword(userId, authentifier.Password);
 
         return Result.Success(LoginInfos.ResetPasswordSucceed);
     }

@@ -1,7 +1,7 @@
 ﻿using CesiZen.Domain.BusinessResult;
-using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
+using CesiZen.Domain.Mapper;
 using Serilog;
 
 namespace CesiZen.Application.Services;
@@ -109,18 +109,18 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
     }
 
     #region Private Methods
-    private async Task<IResult<User>> GetLogin(string identifier)
+    private async Task<IResult<AuthenticationUserDto>> GetLogin(string identifier)
     {
         if (string.IsNullOrEmpty(identifier))
-            return Result<User>.Failure(UserErrors.LogNotFound(identifier));
+            return Result<AuthenticationUserDto>.Failure(UserErrors.LogNotFound(identifier));
 
         var validity = identifier.IsValidEmail();
         var user = await userQuery.GetByIdentifier(identifier, validity);
 
-        return Result<User>.Success(user.Value);
+        return Result<AuthenticationUserDto>.Success(user.Value);
     }
 
-    private IResult LoginAttemps(Login login, string password)
+    private IResult LoginAttemps(AuthenticationLoginDto login, string providedPassword)
     {
         if (!IsLoginUnlocked(login).Result)
         {
@@ -130,7 +130,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
                         Message.GetResource("ErrorMessages", "CLIENT_LOGINATTEMPS_LOCKTIME"), time)));
         }
 
-        var result = passwordService.IsCorrectPassword(login, password);
+        var result = passwordService.IsCorrectPassword(login.Salt, login.Password, providedPassword);
 
         if (result)
         {
@@ -149,27 +149,29 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
                     Message.GetResource("ErrorMessages", "CLIENT_AUTHENTICATION_FAILED")));
     }
 
-    private async Task<bool> IsLoginUnlocked(Login login)
+    private async Task<bool> IsLoginUnlocked(AuthenticationLoginDto dto)
     {
-        if (login.AccountIsLocked)
+        if (dto.AccountIsLocked)
         {
-            if (login.LockoutEndTime > DateTime.UtcNow)
+            if (dto.LockoutEndTime > DateTime.UtcNow)
             {
                 return false;
             }
 
-            login.AccountIsLocked = false;
-            login.AccessFailedCount = 0;
-            login.LockoutEndTime = null;
+            dto.AccountIsLocked = false;
+            dto.AccessFailedCount = 0;
+            dto.LockoutEndTime = null;
+            var login = dto.MapLoginAccess();
             await loginCommand.UpdateLoginAttemps(login);
         }
 
         return true;
     }
 
-    private async Task<bool> IsLimitAttempsReached(Login login)
+    private async Task<bool> IsLimitAttempsReached(AuthenticationLoginDto dto)
     {
-        login.AccessFailedCount++;
+        dto.AccessFailedCount++;
+        var login = dto.MapLoginAccess();
         await loginCommand.UpdateLoginAttempsCount(login);
 
         if (login.AccessFailedCount >= 5)
@@ -184,7 +186,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
         return true;
     }
 
-    private static int CalculateLockTime(Login login)
+    private static int CalculateLockTime(AuthenticationLoginDto login)
     {
         TimeSpan remainingTime = (TimeSpan)(login.LockoutEndTime - DateTime.UtcNow)!;
 
