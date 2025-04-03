@@ -92,18 +92,17 @@ public class ArticleQueryController : ControllerBase
     }
 
     /// <summary>
-    /// Get last articles by id
+    /// Get last articles published
     /// </summary>
-    /// <param name="amount">id provided by the client</param>
+    /// <param name="amount">last articles amount desired</param>
     /// <response code="200">data retrieved</response>
     /// <response code="404">Not Found</response>
     /// <response code="500">service unvalaible</response>
-    /// <returns></returns>
+    /// <returns>Last articles published</returns>
     [HttpGet("get-last")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ActionName("GetLast")]
     public async Task<ActionResult<List<ArticleMinimumDto>>> GetLast(int amount)
     {
         var result = await articleService.GetLast(amount);
