@@ -15,8 +15,24 @@ public static class ArticleMapper
             Author = dto.Author,
             Content = dto.Content,
             ImagePath = dto.ImagePath,
-            Images = dto.Images is not null ? dto.Images : new List<Image>(),
+            Images = dto.Images is not null ? dto.Images.ToList().Map() : new List<Image>(),
             UpdatedAt = DateTime.UtcNow
+        };
+    }
+
+    public static ArticleDto Map(this Article model)
+    {
+        return new ArticleDto
+        {
+            Id = model.Id,
+            Title = model.Title,
+            Description = model.Description,
+            Author = model.Author,
+            Content = model.Content,
+            ImagePath = model.ImagePath,
+            Images = model.Images is not null ? model.Images!.ToList().Map()! : new List<ImageDto>(),
+            UpdatedAt = model.UpdatedAt,
+            CreatedAt = model.CreatedAt
         };
     }
 
@@ -33,22 +49,6 @@ public static class ArticleMapper
             Categories = dto.Images is not null ? dto.Categories!.ToList().Map() : new List<Category>(),
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
-        };
-    }
-
-    public static ArticleDto Map(this Article model)
-    {
-        return new ArticleDto
-        {
-            Id = model.Id,
-            Title = model.Title,
-            Description = model.Description,
-            Author = model.Author,
-            Content = model.Content,
-            ImagePath = model.ImagePath,
-            Images = model.Images!,
-            UpdatedAt = model.UpdatedAt,
-            CreatedAt = model.CreatedAt
         };
     }
 
