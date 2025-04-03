@@ -39,6 +39,7 @@ public enum ErrorType
     AttempsReached,
     AuthenticationFailed,
     AuthenticationMismatch,
+    BadRequest,
     DeletionFailed,
     DisconnectFailed,
     EmailVerificationFailed,
