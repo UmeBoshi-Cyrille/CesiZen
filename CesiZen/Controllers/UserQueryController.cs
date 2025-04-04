@@ -19,15 +19,20 @@ public class UserQueryController : ControllerBase
     }
 
     /// <summary>
-    /// Get paginated users by term.
+    /// Retrieves a paginated list of users filtered by a search term.
     /// </summary>
-    /// <param name="pageNumber">last record</param>
-    /// <param name="pageSize">number of element by page</param>
-    /// <param name="searchTerm">term provided by the client for the research</param>
-    /// <response code="200">data retrieved</response>
-    /// <response code="404">Not Found</response>
-    /// <response code="500">service unvalaible</response>
-    /// <returns></returns>
+    /// <param name="pageNumber">The page number to retrieve, starting from 1.</param>
+    /// <param name="pageSize">The number of users to include per page.</param>
+    /// <param name="searchTerm">The keyword or term provided by the client to filter users.</param>
+    /// <response code="200">The paginated list of users was successfully retrieved.</response>
+    /// <response code="404">No users were found matching the search term.</response>
+    /// <response code="500">An internal server error occurred while processing the request.</response>
+    /// <returns>
+    /// A list of user filtered by a search term.
+    /// - A 200 status code with the paginated list of users matching the search term.
+    /// - A 404 status code if no users are found for the given search term.
+    /// - A 500 status code if there is a server error.
+    /// </returns>
     [HttpGet("search")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -50,14 +55,19 @@ public class UserQueryController : ControllerBase
     }
 
     /// <summary>
-    /// Get paginated users
+    /// Retrieves a paginated list of users.
     /// </summary>
-    /// <param name="pageNumber">last record</param>
-    /// <param name="pageSize">number of element by page</param>
-    /// <response code="200">data retrieved</response>
-    /// <response code="404">Not Found</response>
-    /// <response code="500">service unvalaible</response>
-    /// <returns></returns>
+    /// <param name="pageNumber">The page number to retrieve, starting from 1.</param>
+    /// <param name="pageSize">The number of users to include per page.</param>
+    /// <response code="200">The paginated list of users was successfully retrieved.</response>
+    /// <response code="404">No users were found for the specified page.</response>
+    /// <response code="500">An internal server error occurred while processing the request.</response>
+    /// <returns>
+    /// A list of users
+    /// - A 200 status code with the paginated list of users if successful.
+    /// - A 404 status code if no users are found for the specified page.
+    /// - A 500 status code if there is a server error.
+    /// </returns>
     [HttpGet("get")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -74,13 +84,18 @@ public class UserQueryController : ControllerBase
     }
 
     /// <summary>
-    /// Get user by id
+    /// Retrieves a user by their unique identifier.
     /// </summary>
-    /// <param name="id">id provided by the client</param>
-    /// <response code="200">data retrieved</response>
-    /// <response code="404">Not Found</response>
-    /// <response code="500">service unvalaible</response>
-    /// <returns></returns>
+    /// <param name="id">The unique identifier of the user to provide.</param>
+    /// <response code="200">The user was successfully retrieved.</response>
+    /// <response code="404">No user was found for the specified ID.</response>
+    /// <response code="500">An internal server error occurred while processing the request.</response>
+    /// <returns>
+    /// Desired user.
+    /// - A 200 status code with the user data if found.
+    /// - A 404 status code if the user is not found.
+    /// - A 500 status code if there is a server error.
+    /// </returns>
     [HttpGet("{id:int}/details")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -96,13 +111,18 @@ public class UserQueryController : ControllerBase
     }
 
     /// <summary>
-    /// Get user by user name
+    /// Retrieves a user by their unique username.
     /// </summary>
-    /// <param name="username">username provided by the client</param>
-    /// <response code="200">data retrieved</response>
-    /// <response code="404">Not Found</response>
-    /// <response code="500">service unvalaible</response>
-    /// <returns></returns>
+    /// <param name="username">The username of the user to provide.</param>
+    /// <response code="200">The user was successfully retrieved.</response>
+    /// <response code="404">No user was found for the specified Username.</response>
+    /// <response code="500">An internal server error occurred while processing the request.</response>
+    /// <returns>
+    /// Desired user.
+    /// - A 200 status code with the user data if found.
+    /// - A 404 status code if the user is not found.
+    /// - A 500 status code if there is a server error.
+    /// </returns>
     [HttpGet("user")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

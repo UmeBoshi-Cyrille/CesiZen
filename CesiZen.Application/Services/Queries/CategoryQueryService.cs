@@ -1,7 +1,6 @@
 ﻿using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
-using CesiZen.Domain.Mapper;
 using Serilog;
 
 namespace CesiZen.Application.Services;
@@ -15,33 +14,29 @@ public class CategoryQueryService : AService, ICategoryQueryService
         this.query = query;
     }
 
-    public async Task<IResult<PagedResultDto<CategoryRequestDto>>> GetAllAsync(int pageNumber, int pageSize)
+    public async Task<IResult<PagedResultDto<CategoryResponseDto>>> GetAllAsync(int pageNumber, int pageSize)
     {
         var result = await query.GetAllAsync(pageNumber, pageSize);
 
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result<PagedResultDto<CategoryRequestDto>>.Failure(CategoryErrors.ClientMultipleNotFound);
+            return Result<PagedResultDto<CategoryResponseDto>>.Failure(CategoryErrors.ClientMultipleNotFound);
         }
 
-        var dto = result.Value.Map();
-
-        return Result<PagedResultDto<CategoryRequestDto>>.Success(dto);
+        return Result<PagedResultDto<CategoryResponseDto>>.Success(result.Value);
     }
 
-    public async Task<IResult<CategoryRequestDto>> GetByIdAsync(int id)
+    public async Task<IResult<CategoryResponseDto>> GetByIdAsync(int id)
     {
         var result = await query.GetByIdAsync(id);
 
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result<CategoryRequestDto>.Failure(CategoryErrors.ClientNotFound);
+            return Result<CategoryResponseDto>.Failure(CategoryErrors.ClientNotFound);
         }
 
-        var dto = result.Value.MapDto();
-
-        return Result<CategoryRequestDto>.Success(dto);
+        return Result<CategoryResponseDto>.Success(result.Value);
     }
 }

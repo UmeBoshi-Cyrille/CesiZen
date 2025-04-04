@@ -10,15 +10,27 @@ namespace CesiZen.Application.Services;
 public class ArticleCommandService : AService, IArticleCommandService
 {
     private readonly IArticleCommand command;
+    private readonly ICategoryQuery categoryQuery;
 
-    public ArticleCommandService(ILogger logger, IArticleCommand command) : base(logger)
+    public ArticleCommandService(
+        ILogger logger,
+        IArticleCommand command,
+        ICategoryQuery categoryQuery) : base(logger)
     {
         this.command = command;
+        this.categoryQuery = categoryQuery;
     }
 
     public async Task<IResult<ArticleMinimumDto>> Insert(NewArticleDto dto)
     {
         var article = dto.MapNew();
+
+        if (dto.Categories is not null && dto.Categories!.Any())
+        {
+            var categories = await categoryQuery.GetManyById(dto.Categories!);
+            article.Categories = categories.Value;
+        }
+
         var result = await command.Insert(article);
 
         if (result.IsFailure)

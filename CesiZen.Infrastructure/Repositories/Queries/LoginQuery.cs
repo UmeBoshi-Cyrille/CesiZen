@@ -1,6 +1,8 @@
 using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.Datamodel;
+using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
+using CesiZen.Domain.Mapper;
 using CesiZen.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,18 +28,20 @@ public class LoginQuery : AbstractRepository, ILoginQuery
         return Result<Login>.Success(login);
     }
 
-    public async Task<IResult<Login>> GetByUserId(int userId)
+    public async Task<IResult<AuthenticationLoginDto>> GetByUserId(int userId)
     {
         var login = await context.Logins
                            .AsNoTracking()
-                           .FirstOrDefaultAsync(x => x.UserId == userId);
+                           .Where(x => x.UserId == userId)
+                           .Select(x => x.MapAuthenticationLoginDto())
+                           .FirstOrDefaultAsync();
 
         if (login == null)
         {
-            return Result<Login>.Failure(UserErrors.LogNotFound(nameof(userId)));
+            return Result<AuthenticationLoginDto>.Failure(UserErrors.LogNotFound(nameof(userId)));
         }
 
-        return Result<Login>.Success(login);
+        return Result<AuthenticationLoginDto>.Success(login);
     }
 
     public async Task<IResult<Login>> GetByResetPasswordToken(string token)
@@ -54,15 +58,15 @@ public class LoginQuery : AbstractRepository, ILoginQuery
         return Result<Login>.Success(login);
     }
 
-    public async Task<IResult> CheckEmail(string providedEmail)
+    public async Task<IResult> CheckEmail(string email)
     {
         var exist = await context.Logins
                             .AsNoTracking()
-                            .AnyAsync(x => x.Email == providedEmail);
+                            .AnyAsync(x => x.Email == email);
 
         if (exist)
         {
-            return Result<Login>.Failure(UserErrors.LogNotUnique(providedEmail));
+            return Result<Login>.Failure(UserErrors.LogNotUnique(email));
         }
 
         return Result.Success();

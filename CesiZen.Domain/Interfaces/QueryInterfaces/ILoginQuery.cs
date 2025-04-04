@@ -1,10 +1,11 @@
 using CesiZen.Domain.Datamodel;
+using CesiZen.Domain.DataTransfertObject;
 
 namespace CesiZen.Domain.Interfaces;
 
 public interface ILoginQuery
 {
-    Task<IResult<Login>> GetByUserId(int userId);
+    Task<IResult<AuthenticationLoginDto>> GetByUserId(int userId);
 
     Task<IResult<Login>> GetByEmail(string email);
 

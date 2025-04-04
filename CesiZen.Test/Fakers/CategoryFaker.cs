@@ -6,9 +6,16 @@ namespace CesiZen.Test.Fakers;
 
 internal class CategoryFaker
 {
-    public static Faker<CategoryRequestDto> FakeCategoryRequestDtoGenerator(int id = 0)
+    public static Faker<CategoryDto> FakeCategoryDtoGenerator(int id = 0)
     {
-        return new Faker<CategoryRequestDto>()
+        return new Faker<CategoryDto>()
+            .RuleFor(a => a.Id, f => id != 0 ? f.Random.Int(1, 200) : id)
+            .RuleFor(a => a.Name, f => f.Name.JobTitle());
+    }
+
+    public static Faker<CategoryResponseDto> FakeCategoryResponseDtoGenerator(int id = 0)
+    {
+        return new Faker<CategoryResponseDto>()
             .RuleFor(a => a.Id, f => id != 0 ? f.Random.Int(1, 200) : id)
             .RuleFor(a => a.Name, f => f.Name.JobTitle());
     }

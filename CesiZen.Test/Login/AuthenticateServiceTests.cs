@@ -80,16 +80,16 @@ public class AuthenticateServiceTests
         // Arrange
         var dto = LoginFaker.FakeRequestDtoGenerator().Generate();
         var login = LoginFaker.FakeLoginGenerator().Generate();
-        var user = UserFaker.FakeUserGenerator().Generate();
-        user.Login = login;
+        var user = UserFaker.FakeAuthenticationUserDtoGenerator().Generate();
+        user.Login = login.MapAuthenticationLoginDto();
         var tokenDto = tokenProvider.GenerateRefreshToken(login.UserId);
         var token = tokenProvider.GenerateAccessToken(tokenDto.Value);
         login.Email = dto.Identifier;
         login.Password = passwordService.HashPassword(dto.Password).Password;
 
         loginQueryMock.Setup(x => x.GetByEmail(It.IsAny<string>())).ReturnsAsync(Result<Login>.Success(login));
-        userQueryMock.Setup(x => x.GetByIdentifier(It.IsAny<string>(), It.IsAny<bool>())).ReturnsAsync(Result<User>.Success(user));
-        passwordServiceMock.Setup(x => x.IsCorrectPassword(It.IsAny<Login>(), It.IsAny<string>())).Returns(true);
+        userQueryMock.Setup(x => x.GetByIdentifier(It.IsAny<string>(), It.IsAny<bool>())).ReturnsAsync(Result<AuthenticationUserDto>.Success(user));
+        passwordServiceMock.Setup(x => x.IsCorrectPassword(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(true);
         tokenProviderMock.Setup(x => x.GenerateRefreshToken(It.IsAny<int>())).Returns(Result<TokenBuilderDto>.Success(tokenDto.Value));
         tokenProviderMock.Setup(x => x.GenerateAccessToken(It.IsAny<TokenBuilderDto>())).Returns(token);
 
@@ -107,14 +107,14 @@ public class AuthenticateServiceTests
     {
         // Arrange
         var login = LoginFaker.FakeLoginGenerator().Generate();
-        var user = UserFaker.FakeUserGenerator().Generate();
-        user.Login = login;
+        var user = UserFaker.FakeAuthenticationUserDtoGenerator().Generate();
+        user.Login = login.MapAuthenticationLoginDto();
         var dto = login.Map();
         dto.Password = "wrongPassword";
 
         loginQueryMock.Setup(x => x.GetByEmail(It.IsAny<string>())).ReturnsAsync(Result<Login>.Success(login));
-        userQueryMock.Setup(x => x.GetByIdentifier(It.IsAny<string>(), It.IsAny<bool>())).ReturnsAsync(Result<User>.Success(user));
-        passwordServiceMock.Setup(x => x.IsCorrectPassword(It.IsAny<Login>(), It.IsAny<string>())).Returns(false);
+        userQueryMock.Setup(x => x.GetByIdentifier(It.IsAny<string>(), It.IsAny<bool>())).ReturnsAsync(Result<AuthenticationUserDto>.Success(user));
+        passwordServiceMock.Setup(x => x.IsCorrectPassword(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(false);
 
         // Act
         var result = await authenticationService.Authenticate(dto);
@@ -163,7 +163,6 @@ public class AuthenticateServiceTests
     {
         // Arrange
         var email = "fake@email.com";
-        var login = LoginFaker.FakeLoginGenerator().Generate();
         var token = tokenProvider.GenerateVerificationToken();
         loginQueryMock.Setup(x => x.GetByEmail(It.IsAny<string>()))
             .ReturnsAsync(Result<Login>.Failure(UserErrors.ClientNotFound));
