@@ -41,6 +41,26 @@ public class CategoryQuery : AbstractRepository, ICategoryQuery
         }
     }
 
+    public async Task<IResult<List<Category>>> GetManyById(List<int> categoriesId)
+    {
+        try
+        {
+            var result = await context.Categories
+            .Where(x => categoriesId.Contains(x.Id))
+            .ToListAsync();
+
+            if (result is null || !result.Any())
+                return Result<List<Category>>.Failure(CategoryErrors.LogMultipleNotFound);
+
+            return Result<List<Category>>.Success(result);
+        }
+        catch (Exception ex)
+        {
+            return Result<List<Category>>.Failure(CategoryErrors.LogMultipleNotFound, ex.Message);
+        }
+
+    }
+
     public async Task<IResult<CategoryResponseDto>> GetByIdAsync(int id)
     {
         try

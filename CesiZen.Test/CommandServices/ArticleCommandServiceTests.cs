@@ -17,6 +17,7 @@ public class ArticleCommandServiceTests
 {
     private readonly Mock<ILogger> mockLogger;
     private readonly Mock<IArticleCommand> mockCommand;
+    private readonly Mock<ICategoryQuery> mockCategoryQuery;
     private readonly ArticleCommandService service;
     private readonly Mock<CesizenDbContext> mockContext;
     private Mock<DbSet<Article>> mockSet;
@@ -25,8 +26,9 @@ public class ArticleCommandServiceTests
     {
         mockLogger = new Mock<ILogger>();
         mockCommand = new Mock<IArticleCommand>();
+        mockCategoryQuery = new Mock<ICategoryQuery>();
         mockContext = new Mock<CesizenDbContext>(Tools.SetContext());
-        service = new ArticleCommandService(mockLogger.Object, mockCommand.Object);
+        service = new ArticleCommandService(mockLogger.Object, mockCommand.Object, mockCategoryQuery.Object);
         mockSet = null!;
     }
 
