@@ -100,9 +100,10 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
         {
             var result = await context.Articles
                     .AsNoTracking()
+                    .Where(c => c.Id == id)
                     .Include(x => x.Images)
                     .Select(x => x.Map())
-                    .FirstOrDefaultAsync(x => x.Id == id);
+                    .FirstOrDefaultAsync();
 
             return Result<ArticleDto>.Success(result!);
         }
