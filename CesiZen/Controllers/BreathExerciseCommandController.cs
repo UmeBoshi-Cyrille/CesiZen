@@ -19,13 +19,18 @@ public class BreathExerciseCommandController : ControllerBase
     }
 
     /// <summary>
-    /// Create new breath exercise
+    /// Creates a new breath exercise resource.
     /// </summary>
-    /// <param name="dto">data provided by the client</param>
-    /// <response code="201">operation succeeded</response>
-    /// <response code="400">Bad request</response>
-    /// <response code="500">service unvalaible</response>
-    /// <returns></returns>
+    /// <param name="dto">An object to provide containing the data required to create the breath exercise.</param>
+    /// <response code="201">The breath exercise was successfully created.</response>
+    /// <response code="400">The request was invalid or contained errors (e.g., validation failure).</response>
+    /// <response code="500">An unexpected server error occurred while processing the request.</response>
+    /// <returns>
+    /// An <see cref="ActionResult"/> containing:
+    /// - A 201 status code with the details of the newly created breath exercise if the operation succeeds.
+    /// - A 400 status code if the request is invalid, such as missing required fields or failing validation checks.
+    /// - A 500 status code if an unexpected server-side error occurs during the creation process.
+    /// </returns>
     [HttpPost("create")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -46,16 +51,24 @@ public class BreathExerciseCommandController : ControllerBase
     }
 
     /// <summary>
-    /// Update breath exercise data
+    /// Updates the details of an existing breath exercise.
     /// </summary>
-    /// <param name="id">id provided by the client</param>
-    /// <param name="dto">data provided by the client</param>
-    /// <response code="200">operation succeeded</response>
-    /// <response code="400">Bad request</response>
-    /// <response code="500">service unvalaible</response>
-    /// <returns></returns>
+    /// <param name="id">The unique identifier of the breath exercise to update, provided by the client.</param>
+    /// <param name="dto">An object containing the updated data to provide for the breath exercise.</param>
+    /// <response code="200">The breath exercise was successfully updated.</response>
+    /// <response code="400">The request was invalid or contained errors (e.g., validation failure).</response>
+    /// <response code="404">The specified breath exercise was not found.</response>
+    /// <response code="500">An unexpected server error occurred while processing the request.</response>
+    /// <returns>
+    /// An <see cref="ActionResult"/> containing:
+    /// - A 200 status code with the updated breath exercise details if the operation succeeds.
+    /// - A 400 status code if the request is invalid, such as missing required fields or failing validation checks.
+    /// - A 404 status code if the specified breath exercise does not exist.
+    /// - A 500 status code if an unexpected server-side error occurs during the update process.
+    /// </returns>
     [HttpPut("{id:int}/update")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "User")]
@@ -65,21 +78,34 @@ public class BreathExerciseCommandController : ControllerBase
 
         return result.Match<IActionResult>(
             success: () => Ok(new { message = result.Info.Message }),
-            failure: error => BadRequest(new { message = error.Message })
+            failure: error => error.Type switch
+            {
+                ErrorType.NotFound => NotFound(new { message = error.Message }),
+                ErrorType.OperationFailed => BadRequest(new { message = error.Message }),
+                _ => StatusCode(StatusCodes.Status500InternalServerError, new { message = error.Message })
+            }
         );
     }
 
     /// <summary>
-    /// Delete breath exercise
+    /// Deletes a breath exercise resource identified by its unique ID.
     /// </summary>
-    /// <param name="id">id provided by the client</param>
-    /// <response code="200">operation succeeded</response>
-    /// <response code="400">Bad request</response>
-    /// <response code="500">service unvalaible</response>
-    /// <returns></returns>
+    /// <param name="id">The unique identifier to provide of the breath exercise to be deleted.</param>
+    /// <response code="204">The breath exercise was successfully deleted.</response>
+    /// <response code="404">The specified breath exercise was not found.</response>
+    /// <response code="400">The request was invalid or contained errors.</response>
+    /// <response code="500">An unexpected server error occurred while processing the request.</response>
+    /// <returns>
+    /// An <see cref="ActionResult"/> containing:
+    /// - A 204 status code if the breath exercise is successfully deleted and no content is returned.
+    /// - A 404 status code if the specified breath exercise does not exist.
+    /// - A 400 status code if the request is invalid (e.g., malformed ID).
+    /// - A 500 status code if an unexpected server-side error occurs during the deletion process.
+    /// </returns>
     [HttpDelete("{id:int}/delete")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "User")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -87,7 +113,11 @@ public class BreathExerciseCommandController : ControllerBase
 
         return result.Match<IActionResult>(
             success: () => Ok(new { message = result.Info.Message }),
-            failure: error => BadRequest(new { message = error.Message })
+            failure: error => error.Type switch
+            {
+                ErrorType.BadRequest => BadRequest(new { message = error.Message }),
+                _ => StatusCode(StatusCodes.Status500InternalServerError, new { message = error.Message })
+            }
         );
     }
 }

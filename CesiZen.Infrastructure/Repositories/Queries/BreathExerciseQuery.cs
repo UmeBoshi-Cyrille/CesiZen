@@ -1,6 +1,7 @@
 ﻿using CesiZen.Domain.BusinessResult;
-using CesiZen.Domain.Datamodel;
+using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
+using CesiZen.Domain.Mapper;
 using CesiZen.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,39 +13,43 @@ public class BreathExerciseQuery : AbstractRepository, IBreathExerciseQuery
     {
     }
 
-    public async Task<IResult<List<BreathExercise>>> GetAllByIdAsync(int userId)
+    public async Task<IResult<List<BreathExerciseMinimumDto>>> GetAllByIdAsync(int userId)
     {
         try
         {
             var result = await context.BreathExercises
                                 .Where(p => p.UserId == userId)
                                 .OrderBy(p => p.EditedAt)
+                                .Select(x => x.MapMinimumDto())
                                 .ToListAsync();
 
             if (result is null)
             {
-                return Result<List<BreathExercise>>.Failure(BreathExerciseErrors.LogMultipleNotFound);
+                return Result<List<BreathExerciseMinimumDto>>.Failure(BreathExerciseErrors.LogMultipleNotFound);
             }
 
-            return Result<List<BreathExercise>>.Success(result);
+            return Result<List<BreathExerciseMinimumDto>>.Success(result);
         }
         catch (Exception ex)
         {
-            return Result<List<BreathExercise>>.Failure(BreathExerciseErrors.LogMultipleNotFound, ex.Message);
+            return Result<List<BreathExerciseMinimumDto>>.Failure(BreathExerciseErrors.LogMultipleNotFound, ex.Message);
         }
     }
 
-    public async Task<IResult<BreathExercise>> GetByIdAsync(int id)
+    public async Task<IResult<BreathExerciseDto>> GetByIdAsync(int id)
     {
         try
         {
-            var result = await context.BreathExercises.FindAsync(id);
+            var result = await context.BreathExercises
+                .Where(x => x.Id == id)
+                .Select(x => x.Map())
+                .FirstOrDefaultAsync();
 
-            return Result<BreathExercise>.Success(result!);
+            return Result<BreathExerciseDto>.Success(result!);
         }
         catch (Exception ex)
         {
-            return Result<BreathExercise>.Failure(BreathExerciseErrors.LogNotFound(nameof(id)), nameof(id), ex.Message);
+            return Result<BreathExerciseDto>.Failure(BreathExerciseErrors.LogNotFound(nameof(id)), nameof(id), ex.Message);
         }
     }
 }

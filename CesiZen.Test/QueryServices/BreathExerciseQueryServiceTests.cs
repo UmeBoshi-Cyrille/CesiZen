@@ -1,6 +1,5 @@
 ﻿using CesiZen.Application.Services;
 using CesiZen.Domain.BusinessResult;
-using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using CesiZen.Test.Fakers;
@@ -27,9 +26,9 @@ public class BreathExerciseQueryServiceTests
     {
         // Arrange
         int userId = 1;
-        var breathExercises = BreathExerciseFaker.FakeBreathExerciseGenerator(userId).Generate(5);
+        var breathExercises = BreathExerciseFaker.FakeBreathExerciseMinimumDtoGenerator().Generate(5);
         mockQuery.Setup(q => q.GetAllByIdAsync(userId))
-            .ReturnsAsync(Result<List<BreathExercise>>.Success(breathExercises));
+            .ReturnsAsync(Result<List<BreathExerciseMinimumDto>>.Success(breathExercises));
 
         // Act
         var result = await service.GetAllByIdAsync(userId);
@@ -46,7 +45,7 @@ public class BreathExerciseQueryServiceTests
         // Arrange
         int userId = 1;
         mockQuery.Setup(q => q.GetAllByIdAsync(userId))
-            .ReturnsAsync(Result<List<BreathExercise>>.Failure(Error.NullValue("Error message")));
+            .ReturnsAsync(Result<List<BreathExerciseMinimumDto>>.Failure(Error.NullValue("Error message")));
 
         // Act
         var result = await service.GetAllByIdAsync(userId);
@@ -61,9 +60,9 @@ public class BreathExerciseQueryServiceTests
     {
         // Arrange
         int id = 1;
-        var breathExercise = BreathExerciseFaker.FakeBreathExerciseGenerator().Generate();
+        var breathExercise = BreathExerciseFaker.FakeBreathExerciseDtoGenerator().Generate();
         mockQuery.Setup(q => q.GetByIdAsync(id))
-            .ReturnsAsync(Result<BreathExercise>.Success(breathExercise));
+            .ReturnsAsync(Result<BreathExerciseDto>.Success(breathExercise));
 
         // Act
         var result = await service.GetByIdAsync(id);
@@ -79,7 +78,7 @@ public class BreathExerciseQueryServiceTests
         // Arrange
         int id = 1;
         mockQuery.Setup(q => q.GetByIdAsync(id))
-            .ReturnsAsync(Result<BreathExercise>.Failure(Error.NullValue("Error message")));
+            .ReturnsAsync(Result<BreathExerciseDto>.Failure(Error.NullValue("Error message")));
 
         // Act
         var result = await service.GetByIdAsync(id);

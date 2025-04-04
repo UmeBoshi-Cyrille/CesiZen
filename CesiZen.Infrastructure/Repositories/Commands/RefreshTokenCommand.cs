@@ -17,19 +17,21 @@ public class TokenCommand : AbstractRepository, IRefreshTokenCommand
     {
         try
         {
-            var token = await context.RefreshTokens.FirstOrDefaultAsync(r => r.UserId == entity.UserId);
+            var hasToken = context.RefreshTokens.Any(r => r.UserId == entity.UserId);
 
-            if (token is not null)
+            if (hasToken)
             {
-                token.Token = entity.Token;
-                token.ExpirationTime = entity.ExpirationTime;
+                await context.RefreshTokens.ExecuteUpdateAsync(x => x
+                .SetProperty(x => x.Token, entity.Token)
+                .SetProperty(x => x.ExpirationTime, entity.ExpirationTime));
             }
             else
             {
-                Insert(entity);
+                context.RefreshTokens.Add(entity);
+                await context.SaveChangesAsync();
             }
 
-            await context.SaveChangesAsync();
+
 
             return Result.Success();
         }
@@ -59,6 +61,6 @@ public class TokenCommand : AbstractRepository, IRefreshTokenCommand
 
     private void Insert(RefreshToken entity)
     {
-        context.RefreshTokens.Add(entity);
+
     }
 }

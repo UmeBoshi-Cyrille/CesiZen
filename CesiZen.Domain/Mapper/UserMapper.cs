@@ -7,6 +7,51 @@ namespace CesiZen.Domain.Mapper;
 public static class UserMapper
 {
     #region Simple Mapper Methods
+    public static User MapAccountDto(this UserAccountDto dto)
+    {
+        User user = new();
+
+        Login login = new()
+        {
+            Email = dto.Email,
+            Password = dto.Password,
+            EmailVerified = false,
+        };
+
+        user.Firstname = dto.Firstname;
+        user.Lastname = dto.Lastname;
+        user.Username = dto.Username;
+        user.IsActive = true;
+        user.Login = login;
+        user.UpdatedAt = DateTime.UtcNow;
+
+        return user;
+    }
+
+    public static User Map(this AccountActivationDto dto)
+    {
+        User user = new();
+
+        user.Id = dto.Id;
+        user.IsActive = dto.IsActive;
+
+        return user;
+    }
+
+    public static User Map(this UserMinimumDto dto)
+    {
+        return new User
+        {
+            Id = dto.Id,
+            Firstname = dto.Firstname,
+            Lastname = dto.Lastname,
+            Username = dto.Username,
+            CreatedAt = dto.CreatedAt,
+            UpdatedAt = dto.UpdatedAt,
+            IsActive = dto.IsActive,
+        };
+    }
+
     public static User Map(this NewUserDto dto, Authentifier authentifier, string emailVerificationToken, IConfiguration configuration)
     {
         User user = new();
@@ -31,42 +76,7 @@ public static class UserMapper
         return user;
     }
 
-    public static User Map(this UserDto dto)
-    {
-        User user = new();
-
-        Login login = new()
-        {
-            Email = dto.Email,
-            Password = dto.Password,
-            EmailVerified = false,
-        };
-
-        user.Firstname = dto.Firstname;
-        user.Lastname = dto.Lastname;
-        user.Username = dto.Username;
-        user.IsActive = true;
-        user.Login = login;
-        user.UpdatedAt = DateTime.UtcNow;
-
-        return user;
-    }
-
-    public static User Map(this UserMinimumDto dto)
-    {
-        return new User
-        {
-            Id = dto.Id,
-            Firstname = dto.Firstname,
-            Lastname = dto.Lastname,
-            Username = dto.Username,
-            CreatedAt = dto.CreatedAt,
-            UpdatedAt = dto.UpdatedAt,
-            IsActive = dto.IsActive,
-        };
-    }
-
-    public static UserMinimumDto Map(this User model)
+    public static UserMinimumDto MapMinimumDto(this User model)
     {
         return new UserMinimumDto
         {
@@ -80,14 +90,34 @@ public static class UserMapper
         };
     }
 
-    public static User Map(this AccountActivationDto dto)
+    public static UserDto MapDto(this User model)
     {
-        User user = new();
+        return new UserDto
+        {
+            Id = model.Id,
+            Firstname = model.Firstname,
+            Lastname = model.Lastname,
+            Username = model.Username,
+            CreatedAt = model.CreatedAt,
+            UpdatedAt = model.UpdatedAt,
+            IsActive = model.IsActive,
+            Login = model.Login!.MapDto()
+        };
+    }
 
-        user.Id = dto.Id;
-        user.IsActive = dto.IsActive;
-
-        return user;
+    public static AuthenticationUserDto MapAuthenticationUserDto(this User model)
+    {
+        return new AuthenticationUserDto
+        {
+            Id = model.Id,
+            Username = model.Username,
+            CreatedAt = model.CreatedAt,
+            IsActive = model.IsActive,
+            Role = model.Role,
+            Login = model.Login!.MapAuthenticationLoginDto(),
+            RefreshToken = model.RefreshToken is null ? null : model.RefreshToken!.MapDto(),
+            SessionId = model.Session is null ? string.Empty : model.Session!.SessionId
+        };
     }
 
     public static EmailSenderDto MapEmailSender(string email, string template, string token, string subject)
@@ -109,7 +139,7 @@ public static class UserMapper
 
         for (var i = 0; i < model.Count; i++)
         {
-            var item = model[i].Map();
+            var item = model[i].MapMinimumDto();
             dto.Add(item);
         }
 
@@ -129,13 +159,13 @@ public static class UserMapper
         return model;
     }
 
-    public static List<User> Map(this List<UserDto> dto)
+    public static List<User> Map(this List<UserAccountDto> dto)
     {
         List<User> model = new();
 
         for (var i = 0; i < dto.Count; i++)
         {
-            var item = dto[i].Map();
+            var item = dto[i].MapAccountDto();
             model.Add(item);
         }
 

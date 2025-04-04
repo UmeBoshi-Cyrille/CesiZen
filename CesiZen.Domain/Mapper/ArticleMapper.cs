@@ -46,7 +46,6 @@ public static class ArticleMapper
             Content = dto.Content,
             ImagePath = dto.ImagePath,
             Images = dto.Images is not null ? dto.Images.ToList().Map() : new List<Image>(),
-            Categories = dto.Images is not null ? dto.Categories!.ToList().Map() : new List<Category>(),
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };

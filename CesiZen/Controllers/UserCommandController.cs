@@ -20,19 +20,24 @@ public class UserCommandController : ControllerBase
     }
 
     /// <summary>
-    /// Update user data
+    /// Updates the data of an existing user.
     /// </summary>
-    /// <param name="dto">data provided by the client</param>
-    /// <response code="200">operation succeeded</response>
-    /// <response code="400">Bad request</response>
-    /// <response code="500">service unvalaible</response>
-    /// <returns></returns>
+    /// <param name="dto">The updated user data to provide.</param>
+    /// <response code="200">The user data was successfully updated.</response>
+    /// <response code="400">The request was invalid or contained errors.</response>
+    /// <response code="500">An internal server error occurred while processing the request.</response>
+    /// <returns>
+    /// An <see cref="ActionResult"/> containing:
+    /// - A 200 status code if the update operation succeeds.
+    /// - A 400 status code if the request is invalid (e.g., missing required fields or invalid data).
+    /// - A 500 status code if there is a server error.
+    /// </returns>
     [HttpPut("update")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "Admin")]
-    public async Task<IActionResult> Update([FromBody] UserDto dto)
+    public async Task<IActionResult> Update([FromBody] UserAccountDto dto)
     {
         var result = await userCommandService.Update(dto);
 
@@ -43,14 +48,19 @@ public class UserCommandController : ControllerBase
     }
 
     /// <summary>
-    /// Update user name
+    /// Updates the username of an existing user.
     /// </summary>
-    /// <param name="id">id provided by the client</param>
-    /// <param name="username">username provided by the client</param>
-    /// <response code="200">operation succeeded</response>
-    /// <response code="400">Bad request</response>
-    /// <response code="500">service unvalaible</response>
-    /// <returns></returns>
+    /// <param name="id">The unique identifier of the user to provide.</param>
+    /// <param name="username">The new username to update.</param>
+    /// <response code="200">The username was successfully updated.</response>
+    /// <response code="400">The request was invalid or contained errors (e.g., validation failure).</response>
+    /// <response code="500">An unexpected server error occurred while processing the request.</response>
+    /// <returns>
+    /// An <see cref="ActionResult"/> containing:
+    /// - A 200 status code if the username update operation succeeds.
+    /// - A 400 status code if the request is invalid, such as missing required fields or providing invalid data.
+    /// - A 500 status code if a server-side error occurs, indicating the server was unable to process the request.
+    /// </returns>
     [HttpPut("{id:int}/update-username")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -67,13 +77,18 @@ public class UserCommandController : ControllerBase
     }
 
     /// <summary>
-    /// Enable/Disable user account
+    /// Enables or disables a user account based on the provided data.
     /// </summary>
-    /// <param name="dto">data provided by the client</param>
-    /// <response code="200">operation succeeded</response>
-    /// <response code="400">Bad request</response>
-    /// <response code="500">service unvalaible</response>
-    /// <returns></returns>
+    /// <param name="dto">An object containing the user ID and the desired account status (enabled or disabled).</param>
+    /// <response code="200">The user account status was successfully updated.</response>
+    /// <response code="400">The request was invalid or contained errors (e.g., validation failure).</response>
+    /// <response code="500">An unexpected server error occurred while processing the request.</response>
+    /// <returns>
+    /// An <see cref="ActionResult"/> containing:
+    /// - A 200 status code if the operation succeeds and the account status is updated.
+    /// - A 400 status code if the request is invalid, such as missing required fields or invalid data.
+    /// - A 500 status code if an unexpected server-side error occurs, indicating the server was unable to process the request.
+    /// </returns>
     [Authorize]
     [HttpPut("account-activation")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -91,13 +106,20 @@ public class UserCommandController : ControllerBase
     }
 
     /// <summary>
-    /// Allows to delete User data and account
+    /// Deletes a user account and associated data.
     /// </summary>
-    /// <param name="id">id provided by the client</param>
-    /// <response code="200">operation succeeded</response>
-    /// <response code="400">Bad request</response>
-    /// <response code="500">service unvalaible</response>
-    /// <returns></returns>
+    /// <param name="id">The unique identifier of the user to be deleted, provided by the client.</param>
+    /// <response code="200">The user account was successfully deleted.</response>
+    /// <response code="400">The request was invalid or contained errors.</response>
+    /// <response code="404">The specified user was not found.</response>
+    /// <response code="500">An unexpected server error occurred while processing the request.</response>
+    /// <returns>
+    /// An <see cref="ActionResult"/> containing:
+    /// - A 200 status code with a confirmation message if the deletion succeeds.
+    /// - A 400 status code if the request is invalid (e.g., missing or malformed ID).
+    /// - A 404 status code if the user does not exist.
+    /// - A 500 status code if an unexpected server-side error occurs.
+    /// </returns>
     [HttpDelete("{id:int}/delete")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

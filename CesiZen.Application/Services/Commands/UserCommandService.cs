@@ -15,9 +15,9 @@ public class UserCommandService : AService, IUserCommandService
         this.command = command;
     }
 
-    public async Task<IResult> Update(UserDto dto)
+    public async Task<IResult> Update(UserAccountDto dto)
     {
-        var user = dto.Map();
+        var user = dto.MapAccountDto();
         var result = await command.Update(user);
 
         if (result.IsSuccess)

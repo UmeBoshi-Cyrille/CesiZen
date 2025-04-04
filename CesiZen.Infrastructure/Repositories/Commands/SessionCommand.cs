@@ -17,19 +17,20 @@ public class SessionCommand : AbstractRepository, ISessionCommand
     {
         try
         {
-            var session = await context.Sessions
-                .FirstOrDefaultAsync(r => r.UserId == entity.UserId);
+            var hasSession = context.Sessions
+                .Any(r => r.UserId == entity.UserId);
 
-            if (session is not null)
+            if (hasSession)
             {
-                session.SessionId = entity.SessionId;
+                await context.Sessions.ExecuteUpdateAsync(x => x
+                .SetProperty(x => x.SessionId, entity.SessionId));
             }
             else
             {
-                Insert(entity);
-            }
+                context.Entry(entity).State = EntityState.Added;
 
-            await context.SaveChangesAsync();
+                await context.SaveChangesAsync();
+            }
 
             return Result.Success();
         }
@@ -62,10 +63,5 @@ public class SessionCommand : AbstractRepository, ISessionCommand
         {
             return Result.Failure(SessionErrors.LogDeletionFailed(nameof(id)), nameof(id), ex.Message);
         }
-    }
-
-    private void Insert(Session entity)
-    {
-        context.Sessions.Add(entity);
     }
 }

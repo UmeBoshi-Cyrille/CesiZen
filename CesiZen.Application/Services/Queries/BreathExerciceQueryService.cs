@@ -1,7 +1,6 @@
 ﻿using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
-using CesiZen.Domain.Mapper;
 using Serilog;
 
 namespace CesiZen.Application.Services;
@@ -25,9 +24,7 @@ public class BreathExerciseQueryService : AService, IBreathExerciseQueryService
             return Result<List<BreathExerciseMinimumDto>>.Failure(BreathExerciseErrors.ClientMultipleNotFound);
         }
 
-        var dto = result.Value.Map();
-
-        return Result<List<BreathExerciseMinimumDto>>.Success(dto);
+        return Result<List<BreathExerciseMinimumDto>>.Success(result.Value);
     }
 
     public async Task<IResult<BreathExerciseDto>> GetByIdAsync(int id)
@@ -40,8 +37,6 @@ public class BreathExerciseQueryService : AService, IBreathExerciseQueryService
             return Result<BreathExerciseDto>.Failure(BreathExerciseErrors.ClientNotFound);
         }
 
-        var dto = result.Value.Map();
-
-        return Result<BreathExerciseDto>.Success(dto);
+        return Result<BreathExerciseDto>.Success(result.Value);
     }
 }

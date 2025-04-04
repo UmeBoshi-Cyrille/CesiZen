@@ -26,5 +26,5 @@ public class NewArticleDto
     [MaxLength(54)]
     public string ImagePath { get; set; } = string.Empty;
     public ICollection<ImageDto>? Images { get; set; }
-    public ICollection<CategoryDto>? Categories { get; set; }
+    public List<int>? Categories { get; set; }
 }

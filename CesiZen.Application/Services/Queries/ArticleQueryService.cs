@@ -1,7 +1,6 @@
 ﻿using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
-using CesiZen.Domain.Mapper;
 using Serilog;
 
 namespace CesiZen.Application.Services;
@@ -25,9 +24,7 @@ public class ArticleQueryService : AService, IArticleQueryService
             return Result<PagedResultDto<ArticleMinimumDto>>.Failure(ArticleErrors.ClientMultipleNotFound);
         }
 
-        var dto = result.Value.Map();
-
-        return Result<PagedResultDto<ArticleMinimumDto>>.Success(dto);
+        return Result<PagedResultDto<ArticleMinimumDto>>.Success(result.Value);
     }
 
     public async Task<IResult<PagedResultDto<ArticleMinimumDto>>> SearchArticles(PageParametersDto parameters, string searchTerm = "")
@@ -40,9 +37,7 @@ public class ArticleQueryService : AService, IArticleQueryService
             return Result<PagedResultDto<ArticleMinimumDto>>.Failure(ArticleErrors.ClientMultipleNotFound);
         }
 
-        var dto = result.Value.Map();
-
-        return Result<PagedResultDto<ArticleMinimumDto>>.Success(dto);
+        return Result<PagedResultDto<ArticleMinimumDto>>.Success(result.Value);
     }
 
     public async Task<IResult<ArticleDto>> GetByIdAsync(int id)
@@ -55,9 +50,7 @@ public class ArticleQueryService : AService, IArticleQueryService
             return Result<ArticleDto>.Failure(ArticleErrors.ClientNotFound);
         }
 
-        var dto = result.Value.Map();
-
-        return Result<ArticleDto>.Success(dto);
+        return Result<ArticleDto>.Success(result.Value);
     }
 
     public async Task<IResult<List<ArticleMinimumDto>>> GetLast(int amount)
@@ -70,8 +63,19 @@ public class ArticleQueryService : AService, IArticleQueryService
             return Result<List<ArticleMinimumDto>>.Failure(ArticleErrors.ClientNotFound);
         }
 
-        var dto = result.Value.Map();
+        return Result<List<ArticleMinimumDto>>.Success(result.Value);
+    }
 
-        return Result<List<ArticleMinimumDto>>.Success(dto);
+    public async Task<IResult<PagedResultDto<ArticleMinimumDto>>> GetByCategory(int categoryId, int pageNumber, int pageSize)
+    {
+        var result = await query.GetByCategory(categoryId, pageNumber, pageSize);
+
+        if (result.IsFailure)
+        {
+            logger.Error(result.Error.Message);
+            return Result<PagedResultDto<ArticleMinimumDto>>.Failure(ArticleErrors.ClientNotFound);
+        }
+
+        return Result<PagedResultDto<ArticleMinimumDto>>.Success(result.Value);
     }
 }

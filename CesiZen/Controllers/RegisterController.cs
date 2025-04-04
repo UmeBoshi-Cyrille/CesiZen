@@ -20,13 +20,18 @@ public class RegisterController : LoginController
     }
 
     /// <summary>
-    /// Register new user
+    /// Registers a new user and creates their account.
     /// </summary>
-    /// <param name="dto">data provided by the client</param>
-    /// <response code="200">operation succeeded</response>
-    /// <response code="400">Bad request</response>
-    /// <response code="500">service unvalaible</response>
-    /// <returns></returns>
+    /// <param name="dto">The data provided by the client, including user details such as username, password, and other required fields.</param>
+    /// <response code="200">The user was successfully registered.</response>
+    /// <response code="400">The request was invalid or contained errors (e.g., validation failure).</response>
+    /// <response code="500">An unexpected server error occurred while processing the request.</response>
+    /// <returns>
+    /// An <see cref="ActionResult"/> containing:
+    /// - A 200 status code with the newly created user data if the registration succeeds.
+    /// - A 400 status code if the request is invalid, such as missing required fields or failing validation checks.
+    /// - A 500 status code if an unexpected server-side error occurs during the registration process.
+    /// </returns>
     [HttpPost("register")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
