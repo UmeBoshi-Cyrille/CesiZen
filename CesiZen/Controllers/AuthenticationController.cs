@@ -1,4 +1,5 @@
-﻿using CesiZen.Domain.BusinessResult;
+﻿using CesiZen.Application.Authorization;
+using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -157,6 +158,7 @@ public class AuthenticationController : LoginController
     [HttpPost("logout")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "User, Admin")]
     public async Task<IActionResult> Logout(string accessToken)
     {
         var result = await authenticateService.Disconnect(accessToken);
