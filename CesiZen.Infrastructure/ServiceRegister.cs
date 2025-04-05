@@ -4,6 +4,7 @@ using CesiZen.Infrastructure.Notifiers;
 using CesiZen.Infrastructure.Providers;
 using CesiZen.Infrastructure.Repositories;
 using EntityFramework.Exceptions.PostgreSQL;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,7 +29,6 @@ public static class ServiceRegister
         services.AddDbContext<CesizenDbContext>(options =>
             options.UseNpgsql(connectionString)
             .UseExceptionProcessor());
-
 
         return services;
     }
@@ -65,5 +65,14 @@ public static class ServiceRegister
         services.AddScoped<IUserCommand, UserCommand>();
 
         return services;
+    }
+
+    public static void InitializeDb(this WebApplication app)
+    {
+        using (var scope = app.Services.CreateScope())
+        {
+            var context = scope.ServiceProvider.GetRequiredService<CesizenDbContext>();
+            DbInitializer.InitiliazeData(context);
+        }
     }
 }
