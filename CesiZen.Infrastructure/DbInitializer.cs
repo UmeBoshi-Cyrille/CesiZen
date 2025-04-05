@@ -55,12 +55,19 @@ internal static class DbInitializer
     private static void AddUserWithLoginAndExercises(CesizenDbContext context)
     {
         var users = UserSeeder.FakeGenerator().Generate(50);
+        var logins = UserSeeder.FakeLoginGenerator().Generate(50);
+
+        for (var i = 0; i < users.Count; i++)
+        {
+            logins[i].UserId = users[i].Id;
+        }
 
         var contains = context.Users.Contains(users[0]);
 
         if (!contains)
         {
             context.Users.AddRange(users);
+            context.Logins.AddRange(logins);
             context.SaveChanges();
         }
     }

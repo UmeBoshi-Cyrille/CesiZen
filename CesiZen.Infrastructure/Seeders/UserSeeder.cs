@@ -21,7 +21,6 @@ internal static class UserSeeder
             .RuleFor(i => i.UpdatedAt, f => f.Date.Past(2).ToUniversalTime())
             .RuleFor(i => i.IsActive, f => f.Random.Bool())
             .RuleFor(i => i.Role, f => f.PickRandom("User", "Admin"))
-            .RuleFor(i => i.Login, FakeLoginGenerator())
             .RuleFor(i => i.BreathExercises, (f, u) =>
             {
                 return BreathExerciseSeeder.FakeGenerator().Generate(f.Random.Int(1, 7))
@@ -33,28 +32,29 @@ internal static class UserSeeder
             });
     }
 
-    private static Login FakeLoginGenerator()
+    public static Faker<Login> FakeLoginGenerator()
     {
         var passwordRegex = @"^(?=.*[!@#$%^&*()_+\-=\[\]{};':""\\|,.<>\/?])(?=.*[a-zA-Z])(?=.*\d)(?=.{12,})[^\s]+$";
 
-        var fakeLogin = new Faker<Login>()
+        return new Faker<Login>()
             .UseSeed(42)
             .RuleFor(i => i.Id, f => f.IndexFaker + 1)
             .RuleFor(i => i.Email, f => f.Internet.Email())
             .RuleFor(i => i.EmailVerified, f => f.Random.Bool())
-            .RuleFor(i => i.Password, f => f.Internet.Password(f.Random.Int(12, 16), true, passwordRegex));
+            .RuleFor(i => i.Password, (f, l) =>
+            {
+                var authentifier = f.Internet.Password(f.Random.Int(12, 16), true, passwordRegex).HashSaltedPassword();
+                l.Password = authentifier.Password;
+                l.Salt = authentifier.HashSalt;
 
+                return l.Password;
+            })
+            .RuleFor(i => i.Salt, (f, l) => l.Salt);
 
-        var login = fakeLogin.Generate();
-        var auth = HashSaltedPassword(login.Password);
-        login.Password = auth.Password;
-        login.Salt = auth.HashSalt;
-
-        return login;
     }
 
     #region Password Hasher
-    private static Authentifier HashSaltedPassword(string password)
+    private static Authentifier HashSaltedPassword(this string password)
     {
         var keySize = GetPasswordKeySize();
         var salt = RandomNumberGenerator.GetBytes(keySize);
