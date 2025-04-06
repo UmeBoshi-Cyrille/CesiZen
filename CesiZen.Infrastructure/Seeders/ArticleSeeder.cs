@@ -9,7 +9,6 @@ internal static class ArticleSeeder
     {
         var result = new Faker<Article>()
             .UseSeed(42)
-            .RuleFor(i => i.Id, f => f.IndexFaker + 1)
             .RuleFor(i => i.CreatedAt, f => f.Date.Past(3).ToUniversalTime())
             .RuleFor(i => i.UpdatedAt, f => f.Date.Past(2).ToUniversalTime())
             .RuleFor(i => i.Title, f => f.Lorem.Sentence(f.Random.Int(1, 5)))

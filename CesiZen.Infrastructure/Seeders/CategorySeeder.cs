@@ -9,7 +9,6 @@ internal static class CategorySeeder
     {
         return new Faker<Category>()
             .UseSeed(42)
-            .RuleFor(i => i.Id, f => f.IndexFaker + 1)
             .RuleFor(i => i.Name, f => f.Commerce.Categories(1).First());
     }
 }

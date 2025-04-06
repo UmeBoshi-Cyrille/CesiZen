@@ -6,6 +6,8 @@ namespace CesiZen.Domain.Datamodel;
 
 public class Login
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     [Required(ErrorMessage = "Email is Required")]

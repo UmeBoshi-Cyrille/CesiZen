@@ -59,7 +59,7 @@ internal static class DbInitializer
 
         for (var i = 0; i < users.Count; i++)
         {
-            logins[i].UserId = users[i].Id;
+            users[i].Login = logins[i];
         }
 
         var contains = context.Users.Contains(users[0]);
@@ -67,7 +67,7 @@ internal static class DbInitializer
         if (!contains)
         {
             context.Users.AddRange(users);
-            context.Logins.AddRange(logins);
+
             context.SaveChanges();
         }
     }

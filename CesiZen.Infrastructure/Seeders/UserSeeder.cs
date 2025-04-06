@@ -13,10 +13,13 @@ internal static class UserSeeder
 
         return new Faker<User>()
             .UseSeed(42)
-            .RuleFor(i => i.Id, f => f.IndexFaker + 1)
             .RuleFor(i => i.Firstname, f => f.Name.FirstName())
             .RuleFor(i => i.Lastname, f => f.Name.LastName())
-            .RuleFor(i => i.Username, f => $"{f.Name.JobTitle}{f.Name.JobType}{f.Name.FirstName}")
+            .RuleFor(i => i.Username, (f, i) =>
+            {
+                var name = i.Firstname + i.Lastname;
+                return name + f.IndexFaker + 1;
+            })
             .RuleFor(i => i.CreatedAt, f => f.Date.Past(3).ToUniversalTime())
             .RuleFor(i => i.UpdatedAt, f => f.Date.Past(2).ToUniversalTime())
             .RuleFor(i => i.IsActive, f => f.Random.Bool())
@@ -38,7 +41,6 @@ internal static class UserSeeder
 
         return new Faker<Login>()
             .UseSeed(42)
-            .RuleFor(i => i.Id, f => f.IndexFaker + 1)
             .RuleFor(i => i.Email, f => f.Internet.Email())
             .RuleFor(i => i.EmailVerified, f => f.Random.Bool())
             .RuleFor(i => i.Password, (f, l) =>
