@@ -10,7 +10,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         builder.HasKey(u => u.Id);
 
-        builder.HasIndex(u => u.Username);
+        builder.HasIndex(u => u.Username).IsUnique();
+
+        builder.Property(u => u.Id)
+            .ValueGeneratedOnAdd();
 
         builder.Property(u => u.Firstname)
             .HasMaxLength(255)

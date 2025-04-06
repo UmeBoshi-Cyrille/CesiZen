@@ -10,7 +10,7 @@ public class SessionConfiguration : IEntityTypeConfiguration<Session>
     {
         builder.HasKey(u => u.Id);
 
-        builder.HasIndex(u => u.Id);
+        builder.HasIndex(u => u.Id).IsUnique();
 
         builder.HasIndex(x => x.SessionId)
         .IsUnique();

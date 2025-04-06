@@ -10,7 +10,7 @@ public class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
     {
         builder.HasKey(u => u.Id);
 
-        builder.HasIndex(u => u.Id);
+        builder.HasIndex(u => u.Id).IsUnique();
 
         builder.HasIndex(x => x.Token)
             .IsUnique();

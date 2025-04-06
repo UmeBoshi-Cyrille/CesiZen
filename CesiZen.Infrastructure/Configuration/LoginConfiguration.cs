@@ -13,6 +13,9 @@ public class LoginConfiguration : IEntityTypeConfiguration<Login>
         builder.HasIndex(x => x.Id)
             .IsUnique();
 
+        builder.Property(u => u.Id)
+            .ValueGeneratedOnAdd();
+
         builder.HasIndex(x => x.Email).IsUnique();
 
         builder.Property(x => x.Email)
