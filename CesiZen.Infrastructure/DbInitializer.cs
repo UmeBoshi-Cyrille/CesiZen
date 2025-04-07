@@ -25,7 +25,7 @@ internal static class DbInitializer
             .Select(c => c.First())
             .ToList();
 
-        var contains = context.Articles.Contains(articles[0]);
+        var contains = context.Articles.Any(a => a.Author == articles[0].Author);
 
         if (!contains)
         {
@@ -62,7 +62,7 @@ internal static class DbInitializer
             users[i].Login = logins[i];
         }
 
-        var contains = context.Users.Contains(users[0]);
+        var contains = context.Users.Any(u => u.Username == users[0].Username);
 
         if (!contains)
         {
