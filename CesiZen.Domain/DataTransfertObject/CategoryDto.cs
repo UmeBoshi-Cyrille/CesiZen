@@ -8,4 +8,7 @@ public class CategoryDto
 
     [MaxLength(54)]
     public string Name { get; set; } = string.Empty;
+
+    [MaxLength(54)]
+    public string ImagePath { get; set; } = string.Empty;
 }
