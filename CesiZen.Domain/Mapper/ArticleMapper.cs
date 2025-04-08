@@ -61,7 +61,7 @@ public static class ArticleMapper
             Author = model.Author,
             CreatedAt = model.CreatedAt,
             ImagePath = model.ImagePath,
-            Categories = model.Categories!.ToList().MapDto()
+            Categories = model.Categories is null || !model.Categories.Any() ? new List<CategoryDto>() : model.Categories.ToList().MapDto()
         };
     }
 
