@@ -77,16 +77,14 @@ public class BreathExerciseQueryController : ControllerBase
     [RoleAuthorization(Roles = "User")]
     public async Task<ActionResult<BreathExerciseDto>> GetExercise(int id)
     {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        if (string.IsNullOrEmpty(userIdClaim))
+        if (!User.Identity?.IsAuthenticated ?? false)
         {
-            return Unauthorized(new { message = "User Id not found" });
+            return Unauthorized(new { message = "not authenticated" });
         }
 
-        if (!int.TryParse(userIdClaim, out var userId))
+        if (!User.IsInRole("User"))
         {
-            return BadRequest(new { message = "Invalid User Id format" });
+            return Forbid();
         }
 
         var result = await exerciseService.GetByIdAsync(id);
