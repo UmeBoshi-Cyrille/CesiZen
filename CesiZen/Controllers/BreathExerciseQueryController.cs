@@ -3,6 +3,7 @@ using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CesiZen.Api.Controllers;
 
@@ -20,7 +21,6 @@ public class BreathExerciseQueryController : ControllerBase
     /// <summary>
     /// Retrieves a list of breath exercises associated with a specific user.
     /// </summary>
-    /// <param name="userId">The unique identifier of the user to provide.</param>
     /// <response code="200">The breath exercises were successfully retrieved.</response>
     /// <response code="404">No breath exercises were found for the specified user.</response>
     /// <response code="500">An internal server error occurred while processing the request.</response>
@@ -35,8 +35,15 @@ public class BreathExerciseQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "User")]
-    public async Task<ActionResult<List<BreathExerciseMinimumDto>>> GetExercises([FromQuery] int userId)
+    public async Task<ActionResult<List<BreathExerciseMinimumDto>>> GetExercises()
     {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim))
+        {
+            return Unauthorized(new { message = "User Id not found" });
+        }
+
         var result = await exerciseService.GetAllByIdAsync(userId);
 
         return result.Match<ActionResult, List<BreathExerciseMinimumDto>>(
@@ -65,6 +72,13 @@ public class BreathExerciseQueryController : ControllerBase
     [RoleAuthorization(Roles = "User")]
     public async Task<ActionResult<BreathExerciseDto>> GetExercise(int id)
     {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim))
+        {
+            return Unauthorized(new { message = "User Id not found" });
+        }
+
         var result = await exerciseService.GetByIdAsync(id);
 
         return result.Match<ActionResult, BreathExerciseDto>(
