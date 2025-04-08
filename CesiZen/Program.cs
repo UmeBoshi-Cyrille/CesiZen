@@ -45,8 +45,8 @@ app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
 app.UseCors("AllowAngularClient");
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
