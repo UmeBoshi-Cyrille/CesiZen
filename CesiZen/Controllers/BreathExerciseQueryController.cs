@@ -44,6 +44,11 @@ public class BreathExerciseQueryController : ControllerBase
             return Unauthorized(new { message = "User Id not found" });
         }
 
+        if (!int.TryParse(userIdClaim, out var userId))
+        {
+            return BadRequest(new { message = "Invalid User Id format" });
+        }
+
         var result = await exerciseService.GetAllByIdAsync(userId);
 
         return result.Match<ActionResult, List<BreathExerciseMinimumDto>>(
@@ -77,6 +82,11 @@ public class BreathExerciseQueryController : ControllerBase
         if (string.IsNullOrEmpty(userIdClaim))
         {
             return Unauthorized(new { message = "User Id not found" });
+        }
+
+        if (!int.TryParse(userIdClaim, out var userId))
+        {
+            return BadRequest(new { message = "Invalid User Id format" });
         }
 
         var result = await exerciseService.GetByIdAsync(id);
