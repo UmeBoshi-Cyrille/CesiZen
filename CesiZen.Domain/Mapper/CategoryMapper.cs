@@ -12,6 +12,7 @@ public static class CategoryMapper
         {
             Id = dto.Id!,
             Name = dto.Name,
+            ImagePath = dto.ImagePath,
         };
     }
 
@@ -29,6 +30,7 @@ public static class CategoryMapper
         {
             Id = model.Id,
             Name = model.Name,
+            ImagePath = model.ImagePath,
         };
     }
 
@@ -38,6 +40,7 @@ public static class CategoryMapper
         {
             Id = model.Id,
             Name = model.Name,
+            ImagePath = model.ImagePath,
         };
     }
     #endregion
