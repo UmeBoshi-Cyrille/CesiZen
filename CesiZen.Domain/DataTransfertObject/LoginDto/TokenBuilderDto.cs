@@ -5,6 +5,6 @@ public class TokenBuilderDto
     public string SessionId { get; set; } = string.Empty;
     public string TokenId { get; set; } = string.Empty;
     public int ExpirationTime { get; set; }
-    public string Username { get; set; } = string.Empty;
+    public int UserId { get; set; }
     public string Role { get; set; } = string.Empty;
 }

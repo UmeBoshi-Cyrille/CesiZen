@@ -47,7 +47,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
         }
 
         var tokenDto = tokenProvider.GenerateRefreshToken(user.Value.Id);
-        tokenDto.Value.Username = dto.Identifier;
+        tokenDto.Value.UserId = user.Value.Id;
         tokenDto.Value.Role = user.Value.Role;
 
         var token = tokenProvider.GenerateAccessToken(tokenDto.Value);
