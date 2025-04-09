@@ -38,6 +38,16 @@ public class CategoryCommandController : ControllerBase
     [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> Create([FromBody] string name)
     {
+        if (!User.Identity?.IsAuthenticated ?? false)
+        {
+            return Unauthorized(new { message = "not authenticated" });
+        }
+
+        if (!User.IsInRole("Admin"))
+        {
+            return Forbid();
+        }
+
         var dto = new CategoryDto { Name = name };
         var result = await categoryService.Insert(dto);
 
@@ -71,6 +81,16 @@ public class CategoryCommandController : ControllerBase
     [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> Update(int id, [FromBody] CategoryDto dto)
     {
+        if (!User.Identity?.IsAuthenticated ?? false)
+        {
+            return Unauthorized(new { message = "not authenticated" });
+        }
+
+        if (!User.IsInRole("Admin"))
+        {
+            return Forbid();
+        }
+
         dto.Id = id;
         var result = await categoryService.Update(dto);
 
@@ -102,6 +122,16 @@ public class CategoryCommandController : ControllerBase
     [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id)
     {
+        if (!User.Identity?.IsAuthenticated ?? false)
+        {
+            return Unauthorized(new { message = "not authenticated" });
+        }
+
+        if (!User.IsInRole("Admin"))
+        {
+            return Forbid();
+        }
+
         var result = await categoryService.Delete(id);
 
         return result.Match<IActionResult>(
