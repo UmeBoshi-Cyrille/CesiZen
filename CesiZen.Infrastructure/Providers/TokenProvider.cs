@@ -139,7 +139,7 @@ public class TokenProvider : ITokenProvider
         {
             Subject = new ClaimsIdentity(
             [
-                new Claim(ClaimTypes.NameIdentifier, builder.Username),
+                new Claim(ClaimTypes.NameIdentifier, builder.UserId.ToString()),
                 new Claim(ClaimTypes.Role, builder.Role),
                 new Claim("token_id", builder.TokenId),
                 new Claim("session_id", builder.SessionId),
