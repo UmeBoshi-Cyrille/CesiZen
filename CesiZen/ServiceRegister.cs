@@ -119,6 +119,7 @@ internal static class ServiceRegister
             options.AddPolicy("AllowAngularClient", policy =>
             {
                 policy.WithOrigins("http://localhost:4200")
+                .AllowCredentials()
                 .AllowAnyHeader()
                 .AllowAnyMethod();
             });

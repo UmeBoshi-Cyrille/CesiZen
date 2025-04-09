@@ -3,6 +3,7 @@ using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CesiZen.Api.Controllers;
 
@@ -38,6 +39,20 @@ public class BreathExerciseCommandController : ControllerBase
     [RoleAuthorization(Roles = "User")]
     public async Task<IActionResult> Create([FromBody] NewBreathExerciseDto dto)
     {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim))
+        {
+            return Unauthorized(new { message = "User Id not found" });
+        }
+
+        if (!int.TryParse(userIdClaim, out var userId))
+        {
+            return BadRequest(new { message = "Invalid User Id format" });
+        }
+
+        dto.userId = userId;
+
         var result = await exerciseCommandService.Insert(dto);
 
         return result.Match<BreathExerciseMinimumDto, ActionResult>(
@@ -74,6 +89,20 @@ public class BreathExerciseCommandController : ControllerBase
     [RoleAuthorization(Roles = "User")]
     public async Task<IActionResult> Update(int id, [FromBody] BreathExerciseDto dto)
     {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim))
+        {
+            return Unauthorized(new { message = "User Id not found" });
+        }
+
+        if (!int.TryParse(userIdClaim, out var userId))
+        {
+            return BadRequest(new { message = "Invalid User Id format" });
+        }
+
+        dto.userId = userId;
+
         var result = await exerciseCommandService.Update(dto);
 
         return result.Match<IActionResult>(
@@ -109,6 +138,16 @@ public class BreathExerciseCommandController : ControllerBase
     [RoleAuthorization(Roles = "User")]
     public async Task<IActionResult> Delete(int id)
     {
+        if (!User.Identity?.IsAuthenticated ?? false)
+        {
+            return Unauthorized(new { message = "not authenticated" });
+        }
+
+        if (!User.IsInRole("User"))
+        {
+            return Forbid();
+        }
+
         var result = await exerciseCommandService.Delete(id);
 
         return result.Match<IActionResult>(
