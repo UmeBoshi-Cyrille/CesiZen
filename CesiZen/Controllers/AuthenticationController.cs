@@ -170,7 +170,7 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "User, Admin")]
-    public async Task<IActionResult> Logout(string accessToken)
+    public async Task<IActionResult> Logout()
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
