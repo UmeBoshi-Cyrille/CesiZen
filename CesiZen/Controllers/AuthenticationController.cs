@@ -3,6 +3,7 @@ using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CesiZen.Api.Controllers;
 
@@ -118,7 +119,6 @@ public class AuthenticationController : LoginController
     /// Invalidates the user's session and associated refresh tokens.
     /// This operation ensures that the user must reauthenticate to access the application.
     /// </summary>
-    /// <param name="userId">The unique identifier of the user whose session and refresh tokens are to be invalidated.</param>
     /// <response code="200">The session and refresh tokens were successfully invalidated.</response>
     /// <response code="401">The user is not authorized to perform this operation.</response>
     /// <response code="500">An unexpected server error occurred while processing the request.</response>
@@ -132,8 +132,20 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> InvalidateTokens(int userId)
+    public async Task<IActionResult> InvalidateTokens()
     {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim))
+        {
+            return Unauthorized(new { message = "Could not find user" });
+        }
+
+        if (!int.TryParse(userIdClaim, out var userId))
+        {
+            return BadRequest(new { message = "wrong format." });
+        }
+
         var result = await tokenProvider.InvalidateTokens(userId);
 
         if (result.IsFailure)
@@ -147,7 +159,6 @@ public class AuthenticationController : LoginController
     /// <summary>
     /// Logs the user out of the application by invalidating the provided access token.
     /// </summary>
-    /// <param name="accessToken">The access token to provide to identify the session to be terminated.</param>
     /// <response code="204">The user session was successfully terminated.</response>
     /// <response code="500">An unexpected server error occurred while processing the request.</response>
     /// <returns>
@@ -161,7 +172,19 @@ public class AuthenticationController : LoginController
     [RoleAuthorization(Roles = "User, Admin")]
     public async Task<IActionResult> Logout(string accessToken)
     {
-        var result = await authenticateService.Disconnect(accessToken);
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim))
+        {
+            return Unauthorized(new { message = "Could not find user" });
+        }
+
+        if (!int.TryParse(userIdClaim, out var userId))
+        {
+            return BadRequest(new { message = "wrong format." });
+        }
+
+        var result = await authenticateService.Disconnect(userId);
 
         Response.Cookies.Delete("JWTCookie");
 
@@ -226,19 +249,15 @@ public class AuthenticationController : LoginController
     {
         var result = await passwordService.ForgotPasswordResponse(email, token);
 
-        var successMessage = "If the email has been verified.";
-        var failMessage = "Couldn't send email to the provided adress";
-
         if (result.IsSuccess)
-            return Ok(new { successMessage });
+            return Ok(new { message = result.Info.Message });
 
-        return BadRequest(new { failMessage });
+        return BadRequest(new { message = result.Error.Message });
     }
 
     /// <summary>
     /// Resets the user's password by verifying the provided user ID and token, and updating it to a new password.
     /// </summary>
-    /// <param name="userId">The unique identifier to provide of the user whose password is being reset.</param>
     /// <param name="dto">An object containing the new password and its confirmation, provided by the client.</param>
     /// <response code="200">The password was successfully reset.</response>
     /// <response code="400">The request was invalid or contained errors (e.g., mismatched passwords).</response>
@@ -253,8 +272,20 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> ResetPassword(int userId, PasswordResetDto dto)
+    public async Task<IActionResult> ResetPassword(PasswordResetDto dto)
     {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim))
+        {
+            return Unauthorized(new { message = "Could not find user" });
+        }
+
+        if (!int.TryParse(userIdClaim, out var userId))
+        {
+            return BadRequest(new { message = "wrong format." });
+        }
+
         var result = await passwordService.ResetPassword(userId, dto);
 
         if (result.IsFailure)

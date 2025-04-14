@@ -8,5 +8,5 @@ public interface IAuthenticateService
 
     Task<IResult> VerifyEmail(string token, string email);
 
-    Task<IResult> Disconnect(string accessToken);
+    Task<IResult> Disconnect(int userId);
 }
