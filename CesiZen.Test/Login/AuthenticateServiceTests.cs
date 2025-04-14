@@ -206,43 +206,22 @@ public class AuthenticateServiceTests
         tokenProviderMock.Setup(x => x.InvalidateTokens(userId)).ReturnsAsync(Result.Success());
 
         // Act
-        var result = await authenticationService.Disconnect(accessToken);
+        var result = await authenticationService.Disconnect(userId);
 
         // Assert
         Assert.True(result.IsSuccess);
     }
 
     [Fact]
-    public async Task DisconnectTest_InvalidToken_ReturnsFailure()
+    public async Task DisconnectTest_InvaliduserId_ReturnsFailure()
     {
         // Arrange
-        var accessToken = "validtoken";
-        var sessionId = "session";
-        userQueryMock.Setup(x => x.GetUserId(sessionId))
+        var userId = 123;
+        tokenProviderMock.Setup(x => x.InvalidateTokens(It.IsAny<int>()))
             .ReturnsAsync(Result<int>.Failure(UserErrors.ClientNotFound));
 
         // Act
-        var result = await authenticationService.Disconnect(accessToken);
-
-        // Assert
-        Assert.True(result.IsFailure);
-        Assert.Equal(UserErrors.ClientNotFound.Message, result.Error.Message);
-    }
-
-    [Fact]
-    public async Task DisconnectTest_CouldNotInvalidate_ReturnsFailure()
-    {
-        // Arrange
-        var accessToken = "validtoken";
-        var sessionId = "session";
-        var userId = 123;
-        tokenProviderMock.Setup(x => x.GetSessionId(accessToken)).Returns(sessionId);
-        userQueryMock.Setup(x => x.GetUserId(sessionId)).ReturnsAsync(Result<int>.Success(userId));
-        tokenProviderMock.Setup(x => x.InvalidateTokens(userId))
-            .ReturnsAsync(Result.Failure(UserErrors.ClientNotFound));
-
-        // Act
-        var result = await authenticationService.Disconnect(accessToken);
+        var result = await authenticationService.Disconnect(userId);
 
         // Assert
         Assert.True(result.IsFailure);

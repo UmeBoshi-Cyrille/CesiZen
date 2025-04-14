@@ -96,7 +96,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
             return Result.Failure(UserErrors.ClientDisconnectFailed);
         }
 
-        return Result.Success();
+        return Result.Success(LoginInfos.Logout);
     }
 
     #region Private Methods

@@ -124,6 +124,24 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vous êtes déconnecté..
+        /// </summary>
+        internal static string CLIENT_LOGOUT {
+            get {
+                return ResourceManager.GetString("CLIENT_LOGOUT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Votre identité a été vérifié, vous pouvez à présent modifier votre mot de passe oublié..
+        /// </summary>
+        internal static string CLIENT_RESET_PASSWORD_VALID {
+            get {
+                return ResourceManager.GetString("CLIENT_RESET_PASSWORD_VALID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mot de passe modifié..
         /// </summary>
         internal static string CLIENT_RESETPASSWORD_SUCCESS {
