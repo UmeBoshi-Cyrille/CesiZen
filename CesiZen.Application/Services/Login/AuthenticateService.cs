@@ -87,25 +87,16 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
         return Result.Success(UserInfos.ClientEmailVerified);
     }
 
-    public async Task<IResult> Disconnect(string accessToken)
+    public async Task<IResult> Disconnect(int userId)
     {
-        var sessionId = tokenProvider.GetSessionId(accessToken);
-
-        var userId = userQuery.GetUserId(sessionId!).Result;
-
-        if (string.IsNullOrEmpty(sessionId) || userId.IsFailure)
-        {
-            return Result.Failure(UserErrors.ClientNotFound);
-        }
-
-        var result = await tokenProvider.InvalidateTokens(userId.Value);
+        var result = await tokenProvider.InvalidateTokens(userId);
 
         if (result.IsFailure)
         {
             return Result.Failure(UserErrors.ClientDisconnectFailed);
         }
 
-        return Result.Success();
+        return Result.Success(LoginInfos.Logout);
     }
 
     #region Private Methods

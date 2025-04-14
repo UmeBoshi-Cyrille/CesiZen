@@ -77,16 +77,6 @@ public class BreathExerciseQueryController : ControllerBase
     [RoleAuthorization(Roles = "User")]
     public async Task<ActionResult<BreathExerciseDto>> GetExercise(int id)
     {
-        if (!User.Identity?.IsAuthenticated ?? false)
-        {
-            return Unauthorized(new { message = "not authenticated" });
-        }
-
-        if (!User.IsInRole("User"))
-        {
-            return Forbid();
-        }
-
         var result = await exerciseService.GetByIdAsync(id);
 
         return result.Match<ActionResult, BreathExerciseDto>(

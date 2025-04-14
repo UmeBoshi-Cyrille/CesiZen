@@ -39,16 +39,6 @@ public class UserCommandController : ControllerBase
     [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> Update([FromBody] UserAccountDto dto)
     {
-        if (!User.Identity?.IsAuthenticated ?? false)
-        {
-            return Unauthorized(new { message = "not authenticated" });
-        }
-
-        if (!User.IsInRole("Admin"))
-        {
-            return Forbid();
-        }
-
         var result = await userCommandService.Update(dto);
 
         return result.Match<IActionResult>(
@@ -78,16 +68,6 @@ public class UserCommandController : ControllerBase
     [RoleAuthorization(Roles = "User")]
     public async Task<IActionResult> UpdateUsername([FromBody] int id, string username)
     {
-        if (!User.Identity?.IsAuthenticated ?? false)
-        {
-            return Unauthorized(new { message = "not authenticated" });
-        }
-
-        if (!User.IsInRole("User"))
-        {
-            return Forbid();
-        }
-
         var result = await userCommandService.UpdateUserName(id, username);
 
         return result.Match<IActionResult>(
@@ -117,16 +97,6 @@ public class UserCommandController : ControllerBase
     [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> AccountActivation([FromBody] AccountActivationDto dto)
     {
-        if (!User.Identity?.IsAuthenticated ?? false)
-        {
-            return Unauthorized(new { message = "not authenticated" });
-        }
-
-        if (!User.IsInRole("Admin"))
-        {
-            return Forbid();
-        }
-
         var result = await userCommandService.ActivationAsync(dto);
 
         return result.Match<IActionResult>(
@@ -157,16 +127,6 @@ public class UserCommandController : ControllerBase
     [RoleAuthorization(Roles = "User, Admin")]
     public async Task<IActionResult> Delete(int id)
     {
-        if (!User.Identity?.IsAuthenticated ?? false)
-        {
-            return Unauthorized(new { message = "not authenticated" });
-        }
-
-        if (!User.IsInRole("User") || !User.IsInRole("Admin"))
-        {
-            return Forbid();
-        }
-
         var result = await userCommandService.Delete(id);
 
         return result.Match<IActionResult>(
