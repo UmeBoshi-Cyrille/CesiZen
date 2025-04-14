@@ -40,16 +40,6 @@ public class UserQueryController : ControllerBase
     [RoleAuthorization(Roles = "Admin")]
     public async Task<ActionResult<PagedResultDto<UserMinimumDto>>> SearchUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] string searchTerm = "")
     {
-        if (!User.Identity?.IsAuthenticated ?? false)
-        {
-            return Unauthorized(new { message = "not authenticated" });
-        }
-
-        if (!User.IsInRole("Admin"))
-        {
-            return Forbid();
-        }
-
         var parameters = new PageParametersDto()
         {
             PageNumber = pageNumber,
@@ -85,16 +75,6 @@ public class UserQueryController : ControllerBase
     [RoleAuthorization(Roles = "Admin")]
     public async Task<ActionResult<PagedResultDto<UserMinimumDto>>> GetAllAsync([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
-        if (!User.Identity?.IsAuthenticated ?? false)
-        {
-            return Unauthorized(new { message = "not authenticated" });
-        }
-
-        if (!User.IsInRole("Admin"))
-        {
-            return Forbid();
-        }
-
         var result = await queryService.GetAllAsync(pageNumber, pageSize);
 
         return result.Match<ActionResult, PagedResultDto<UserMinimumDto>>(
@@ -123,16 +103,6 @@ public class UserQueryController : ControllerBase
     [RoleAuthorization(Roles = "User")]
     public async Task<ActionResult<UserMinimumDto>> GetById(int id)
     {
-        if (!User.Identity?.IsAuthenticated ?? false)
-        {
-            return Unauthorized(new { message = "not authenticated" });
-        }
-
-        if (!User.IsInRole("User"))
-        {
-            return Forbid();
-        }
-
         var result = await queryService.GetByIdAsync(id);
         return result.Match<ActionResult, UserMinimumDto>(
             success: value => Ok(new { value }),
@@ -160,16 +130,6 @@ public class UserQueryController : ControllerBase
     [RoleAuthorization(Roles = "Admin")]
     public async Task<ActionResult<UserMinimumDto>> GetByName([FromQuery] string username)
     {
-        if (!User.Identity?.IsAuthenticated ?? false)
-        {
-            return Unauthorized(new { message = "not authenticated" });
-        }
-
-        if (!User.IsInRole("Admin"))
-        {
-            return Forbid();
-        }
-
         var result = await queryService.GetByUsername(username);
 
         return result.Match<ActionResult, UserMinimumDto>(

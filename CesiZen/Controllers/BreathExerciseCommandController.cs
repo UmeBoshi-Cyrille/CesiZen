@@ -138,16 +138,6 @@ public class BreathExerciseCommandController : ControllerBase
     [RoleAuthorization(Roles = "User")]
     public async Task<IActionResult> Delete(int id)
     {
-        if (!User.Identity?.IsAuthenticated ?? false)
-        {
-            return Unauthorized(new { message = "not authenticated" });
-        }
-
-        if (!User.IsInRole("User"))
-        {
-            return Forbid();
-        }
-
         var result = await exerciseCommandService.Delete(id);
 
         return result.Match<IActionResult>(

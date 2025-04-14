@@ -40,16 +40,6 @@ public class ArticleCommandController : ControllerBase
     {
         try
         {
-            if (!User.Identity?.IsAuthenticated ?? false)
-            {
-                return Unauthorized(new { message = "not authenticated" });
-            }
-
-            if (!User.IsInRole("Admin"))
-            {
-                return Forbid();
-            }
-
             var result = await articleCommandService.Insert(dto);
 
             return result.Match<ArticleMinimumDto, ActionResult>(
@@ -90,16 +80,6 @@ public class ArticleCommandController : ControllerBase
     [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> Update(int id, [FromBody] ArticleDto dto)
     {
-        if (!User.Identity?.IsAuthenticated ?? false)
-        {
-            return Unauthorized(new { message = "not authenticated" });
-        }
-
-        if (!User.IsInRole("Admin"))
-        {
-            return Forbid();
-        }
-
         dto.Id = id;
         var result = await articleCommandService.Update(dto);
 
@@ -130,16 +110,6 @@ public class ArticleCommandController : ControllerBase
     [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> UpdateTitle(int id, [FromBody] string title)
     {
-        if (!User.Identity?.IsAuthenticated ?? false)
-        {
-            return Unauthorized(new { message = "not authenticated" });
-        }
-
-        if (!User.IsInRole("Admin"))
-        {
-            return Forbid();
-        }
-
         var result = await articleCommandService.UpdateTitleAsync(id, title);
 
         return result.Match<IActionResult>(
@@ -169,16 +139,6 @@ public class ArticleCommandController : ControllerBase
     [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> UpdateDescription(int id, [FromBody] string description)
     {
-        if (!User.Identity?.IsAuthenticated ?? false)
-        {
-            return Unauthorized(new { message = "not authenticated" });
-        }
-
-        if (!User.IsInRole("Admin"))
-        {
-            return Forbid();
-        }
-
         var result = await articleCommandService.UpdateDescriptionAsync(id, description);
 
         return result.Match<IActionResult>(
@@ -208,16 +168,6 @@ public class ArticleCommandController : ControllerBase
     [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> UpdateContent(int id, [FromBody] string content)
     {
-        if (!User.Identity?.IsAuthenticated ?? false)
-        {
-            return Unauthorized(new { message = "not authenticated" });
-        }
-
-        if (!User.IsInRole("Admin"))
-        {
-            return Forbid();
-        }
-
         var result = await articleCommandService.UpdateContentAsync(id, content);
 
         return result.Match<IActionResult>(
@@ -246,16 +196,6 @@ public class ArticleCommandController : ControllerBase
     [RoleAuthorization(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id)
     {
-        if (!User.Identity?.IsAuthenticated ?? false)
-        {
-            return Unauthorized(new { message = "not authenticated" });
-        }
-
-        if (!User.IsInRole("Admin"))
-        {
-            return Forbid();
-        }
-
         var result = await articleCommandService.Delete(id);
 
         return result.Match<IActionResult>(
