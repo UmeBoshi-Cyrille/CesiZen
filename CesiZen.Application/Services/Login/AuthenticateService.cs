@@ -52,6 +52,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
 
         var token = tokenProvider.GenerateAccessToken(tokenDto.Value);
         response.Token = token;
+        response.User = user.Value.Map();
 
         return Result<AuthenticateResponseDto>.Success(response, UserInfos.ClientAuthentified);
     }

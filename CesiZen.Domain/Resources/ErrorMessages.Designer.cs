@@ -88,6 +88,15 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Votre déconnection a échoué..
+        /// </summary>
+        internal static string CLIENT_DISCONNECTION_FAILED {
+            get {
+                return ResourceManager.GetString("CLIENT_DISCONNECTION_FAILED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to échec de la vérification du de l&apos;email.
         /// </summary>
         internal static string CLIENT_EMAIL_VERIFICATION_FAILED {
