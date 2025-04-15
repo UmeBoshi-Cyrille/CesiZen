@@ -95,7 +95,7 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Authenticate(AuthenticateRequestDto dto)
+    public async Task<ActionResult<UserResponseDto>> Authenticate(AuthenticateRequestDto dto)
     {
         var response = await authenticateService.Authenticate(dto);
 
@@ -112,7 +112,8 @@ public class AuthenticationController : LoginController
 
         Response.Cookies.Append("JWTCookie", response.Value.Token!, cookieOptions);
 
-        return Ok(new { message = response.Info.Message });
+        //return Ok(response.Value.User);
+        return CreatedAtRoute(nameof(UserQueryController.GetProfile), null, response.Value.User);
     }
 
     /// <summary>

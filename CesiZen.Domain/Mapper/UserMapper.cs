@@ -52,6 +52,30 @@ public static class UserMapper
         };
     }
 
+    public static UserResponseDto MapResponseDto(this UserMinimumDto dto)
+    {
+        return new UserResponseDto
+        {
+            Id = dto.Id,
+            Username = dto.Username,
+            CreatedAt = dto.CreatedAt,
+            Role = dto.Role,
+            IsActive = dto.IsActive,
+        };
+    }
+
+    public static UserResponseDto Map(this AuthenticationUserDto dto)
+    {
+        return new UserResponseDto
+        {
+            Id = dto.Id,
+            Username = dto.Username,
+            CreatedAt = dto.CreatedAt,
+            Role = dto.Role,
+            IsActive = dto.IsActive,
+        };
+    }
+
     public static User Map(this NewUserDto dto, Authentifier authentifier, string emailVerificationToken, IConfiguration configuration)
     {
         User user = new();
