@@ -47,7 +47,7 @@ public class CategoryCommandController : ControllerBase
                 "CategoryQuery",
                 new { id = createdCategory.Id },
                 new { data = createdCategory, message = result.Info.Message }),
-            failure: error => BadRequest(new { message = error.Message })
+            failure: error => BadRequest(new { message = Error.Alert, errors = error.Message })
         );
     }
 
@@ -76,7 +76,7 @@ public class CategoryCommandController : ControllerBase
 
         return result.Match<IActionResult>(
             success: () => Ok(new { result.Info.Message }),
-            failure: error => BadRequest(new { message = error.Message })
+            failure: error => BadRequest(new { message = Error.Alert, errors = error.Message })
         );
     }
 
@@ -106,7 +106,7 @@ public class CategoryCommandController : ControllerBase
 
         return result.Match<IActionResult>(
             success: () => Ok(new { result.Info.Message }),
-            failure: error => BadRequest(new { message = error.Message })
+            failure: error => BadRequest(new { message = Error.Alert, errors = error.Message })
         );
     }
 }

@@ -58,6 +58,22 @@ public class LoginQuery : AbstractRepository, ILoginQuery
         return Result<Login>.Success(login);
     }
 
+    public async Task<IResult<Login>> GetByEmailVerificationToken(string token)
+    {
+        var login = await context.Logins
+                           .AsNoTracking()
+                           .FirstOrDefaultAsync(x => x.EmailVerificationToken == token);
+
+        if (login == null)
+        {
+            return Result<Login>.Failure(
+                Error.NotFound(string.Format(
+                    ResourceMessages.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "Login", token)));
+        }
+
+        return Result<Login>.Success(login);
+    }
+
     public async Task<IResult> CheckEmail(string email)
     {
         var exist = await context.Logins
@@ -85,7 +101,7 @@ public class LoginQuery : AbstractRepository, ILoginQuery
         {
             return Result<ResetPassword>.Failure(
                 Error.NotFound(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "Login", email)));
+                    ResourceMessages.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "Login", email)));
         }
 
         return Result<ResetPassword>.Success(resetPassword);

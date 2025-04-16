@@ -31,6 +31,7 @@ public enum InfoType
     AccountDisabled,
     Authentified,
     CollectCompleted,
+    CookieDeleted,
     DeleteCompleted,
     EmailVerified,
     EmailVerification,

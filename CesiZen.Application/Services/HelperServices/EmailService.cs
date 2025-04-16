@@ -25,7 +25,7 @@ public class EmailService : IEmailService
         message.Subject = "Email Verification";
 
         var verificationLink = $"{configuration["App:Url"]}/verify?token={verificationToken}";
-        var template = Message.GetResource("Templates", "VERIFICATION_EMAIL");
+        var template = ResourceMessages.GetResource("Templates", "VERIFICATION_EMAIL");
         var htmlTemplate = template.Replace("{{url}}", verificationLink);
         message.Body = new TextPart("plain")
         {

@@ -21,6 +21,7 @@ public sealed class Error
     }
 
     public static Error None => new(ErrorType.None, string.Empty);
+    public static Error Alert => new(ErrorType.ErrorAlert, ResourceMessages.GetResource("ErrorMessages", "CLIENT_ERROR_ALERT"));
     public static Error NotFound(string message) => new(ErrorType.NotFound, message);
     public static Error NullValue(string message) => new(ErrorType.NullValue, message);
     public static Error AuthenticationFailed(string message) => new(ErrorType.AuthenticationFailed, message);
@@ -43,12 +44,14 @@ public enum ErrorType
     DeletionFailed,
     DisconnectFailed,
     EmailVerificationFailed,
+    ErrorAlert,
     ExpiredLink,
     InsertionFailed,
     LockTime,
     LoginAttempsCount,
     LoginAttempsReached,
     None,
+    NotConnected,
     NotFound,
     NotMatch,
     NotUnique,
@@ -61,6 +64,7 @@ public enum ErrorType
     RegistrationFailed,
     ResetPasswordAttempsReached,
     TimeOut,
+    Unknown,
     UpdateFailed,
     UpdatePropertyFailed,
     WrongFormat,

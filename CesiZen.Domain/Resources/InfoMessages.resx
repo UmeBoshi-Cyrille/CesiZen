@@ -123,9 +123,6 @@
   <data name="CLIENT_INSERTION_SUCCESS" xml:space="preserve">
     <value>{0} a été créé.</value>
   </data>
-  <data name="CLIENT_DELETE_SUCCESS" xml:space="preserve">
-    <value>{0} a été supprimé.</value>
-  </data>
   <data name="CLIENT_EMAIL_VERIFICATION" xml:space="preserve">
     <value>Un Email a été envoyé pour la vérification.</value>
   </data>
@@ -194,5 +191,11 @@
   </data>
   <data name="CLIENT_RESET_PASSWORD_VALID" xml:space="preserve">
     <value>Votre identité a été vérifié, vous pouvez à présent modifier votre mot de passe oublié.</value>
+  </data>
+  <data name="CLIENT_DELETE_COOKIE" xml:space="preserve">
+    <value>Suppression du cookie réussi.</value>
+  </data>
+  <data name="CLIENT_DELETE_SUCCESS" xml:space="preserve">
+    <value>{0} a été supprimé.</value>
   </data>
 </root>

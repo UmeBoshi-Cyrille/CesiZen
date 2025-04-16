@@ -43,7 +43,7 @@ public class UserCommandController : ControllerBase
 
         return result.Match<IActionResult>(
             success: () => Ok(new { message = result.Info.Message }),
-            failure: error => BadRequest(new { message = error.Message })
+            failure: error => BadRequest(new { message = Error.Alert, errors = error.Message })
         );
     }
 
@@ -72,7 +72,7 @@ public class UserCommandController : ControllerBase
 
         return result.Match<IActionResult>(
             success: () => Ok(new { message = result.Info.Message }),
-            failure: error => BadRequest(new { message = error.Message })
+            failure: error => BadRequest(new { message = Error.Alert, errors = error.Message })
         );
     }
 
@@ -101,7 +101,7 @@ public class UserCommandController : ControllerBase
 
         return result.Match<IActionResult>(
             success: () => Ok(new { message = result.Info.Message }),
-            failure: error => BadRequest(new { message = error.Message })
+            failure: error => BadRequest(new { message = Error.Alert, errors = error.Message })
         );
     }
 
@@ -131,7 +131,7 @@ public class UserCommandController : ControllerBase
 
         return result.Match<IActionResult>(
             success: () => Ok(new { message = result.Info.Message }),
-            failure: error => BadRequest(new { message = error.Message })
+            failure: error => BadRequest(new { message = Error.Alert, errors = error.Message })
         );
     }
 }

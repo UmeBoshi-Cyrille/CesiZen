@@ -106,6 +106,15 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Une erreur est survenue !.
+        /// </summary>
+        internal static string CLIENT_ERROR_ALERT {
+            get {
+                return ResourceManager.GetString("CLIENT-ERROR-ALERT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Le lien a expiré..
         /// </summary>
         internal static string CLIENT_EXPIRED_LINK {
@@ -169,11 +178,29 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Veuillez-vous connecter pour accéder à cette fonctionnalité..
+        /// </summary>
+        internal static string CLIENT_PLEASE_CONNECT {
+            get {
+                return ResourceManager.GetString("CLIENT_PLEASE_CONNECT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vous avez atteint le nombre maximum de tentatives de renouvellement du mot de passe ! Votre compte est bloqué pendant 1 heure..
         /// </summary>
         internal static string CLIENT_RESET_PASSWORD_ATTEMPS_REACHED {
             get {
                 return ResourceManager.GetString("CLIENT_RESET_PASSWORD_ATTEMPS_REACHED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Utilisateur inconnu..
+        /// </summary>
+        internal static string CLIENT_UNKNOWN_USER {
+            get {
+                return ResourceManager.GetString("CLIENT_UNKNOWN_USER", resourceCulture);
             }
         }
         
