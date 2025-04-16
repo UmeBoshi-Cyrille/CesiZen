@@ -48,7 +48,7 @@ public class ArticleCommandController : ControllerBase
                 "ArticleQuery",
                 new { id = createdArticle.Id },
                 new { data = createdArticle, message = result.Info.Message }),
-            failure: error => BadRequest(new { message = error.Message })
+            failure: error => BadRequest(new { message = Error.Alert, errors = error.Message })
         );
         }
         catch (Exception ex)
@@ -85,7 +85,7 @@ public class ArticleCommandController : ControllerBase
 
         return result.Match<IActionResult>(
             success: () => Ok(new { message = result.Info.Message }),
-            failure: error => BadRequest(new { message = error.Message })
+            failure: error => BadRequest(new { message = Error.Alert, errors = error.Message })
         );
     }
 
@@ -114,7 +114,7 @@ public class ArticleCommandController : ControllerBase
 
         return result.Match<IActionResult>(
             success: () => Ok(new { message = result.Info.Message }),
-            failure: error => BadRequest(new { message = error.Message })
+            failure: error => BadRequest(new { message = Error.Alert, errors = error.Message })
         );
     }
 
@@ -143,7 +143,7 @@ public class ArticleCommandController : ControllerBase
 
         return result.Match<IActionResult>(
             success: () => Ok(new { message = result.Info.Message }),
-            failure: error => BadRequest(new { message = error.Message })
+            failure: error => BadRequest(new { message = Error.Alert, errors = error.Message })
         );
     }
 
@@ -172,7 +172,7 @@ public class ArticleCommandController : ControllerBase
 
         return result.Match<IActionResult>(
             success: () => Ok(new { message = result.Info.Message }),
-            failure: error => BadRequest(new { message = error.Message })
+            failure: error => BadRequest(new { message = Error.Alert, errors = error.Message })
         );
     }
 
@@ -200,7 +200,7 @@ public class ArticleCommandController : ControllerBase
 
         return result.Match<IActionResult>(
             success: () => Ok(new { message = result.Info.Message }),
-            failure: error => BadRequest(new { message = error.Message })
+            failure: error => BadRequest(new { message = Error.Alert, errors = error.Message })
         );
     }
 }

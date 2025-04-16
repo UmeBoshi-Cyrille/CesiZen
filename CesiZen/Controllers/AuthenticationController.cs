@@ -46,16 +46,48 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [AllowAnonymous]
     public async Task<IActionResult> VerifyEmail(string token, string email)
     {
-        var result = await authenticateService.VerifyEmail(token, email);
+        var response = await authenticateService.VerifyEmail(token, email);
 
-        if (result.IsFailure)
+        if (response.IsFailure)
         {
-            return NotFound(new { message = result.Error.Message });
+            return NotFound(new { message = Error.Alert, errors = response.Error.Message };
         }
 
-        return Ok(new { message = result.Info.Message });
+        return Ok(new { message = response.Info.Message });
+    }
+
+    /// <summary>
+    /// Resend an email with a new fresh token for email validation.
+    /// </summary>
+    /// <param name="token">The old unique token to provide for verification.</param>
+    /// <param name="email">The email address provided by the client.</param>
+    /// <response code="200">The email is successfully sent.</response>
+    /// <response code="404">The specified email or token was not found.</response>
+    /// <response code="500">An unexpected server error occurred while processing the request.</response>
+    /// <returns>
+    /// An <see cref="ActionResult"/> containing:
+    /// - A 200 status code if the email is successfully sent.
+    /// - A 404 status code if the email or verification token is not found.
+    /// - A 500 status code if an unexpected server-side error occurs during the verification process.
+    /// </returns>
+    [HttpGet("resend-verify-email")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [AllowAnonymous]
+    public async Task<IActionResult> ResendVerifyEmail(string token, string email)
+    {
+        var response = await authenticateService.ResendEmailVerification(token, email);
+
+        if (response.IsFailure)
+        {
+            return BadRequest(new { message = Error.Alert, errors = response.Error.Message });
+        }
+
+        return Ok(new { message = response.Info.Message });
     }
 
     /// <summary>
@@ -71,6 +103,7 @@ public class AuthenticationController : LoginController
     [HttpGet("delete-cookie")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [AllowAnonymous]
     public IActionResult DeleteCookie()
     {
         Response.Cookies.Delete("JWTCookie");
@@ -96,12 +129,13 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<UserResponseDto>> Authenticate(AuthenticateRequestDto dto)
+    [AllowAnonymous]
+    public async Task<ActionResult<UserResponseDto>> Authenticate([FromBody] AuthenticateRequestDto dto)
     {
         var response = await authenticateService.Authenticate(dto);
 
         if (response.IsFailure)
-            return Unauthorized(new { message = response.Error.Message });
+            return Unauthorized(new { message = Error.Alert, errors = response.Error.Message });
 
         var cookieOptions = new CookieOptions
         {
@@ -114,7 +148,7 @@ public class AuthenticationController : LoginController
         Response.Cookies.Append("JWTCookie", response.Value.Token!, cookieOptions);
 
         //return Ok(response.Value.User);
-        return CreatedAtRoute(nameof(UserQueryController.GetProfile), null, response.Value.User);
+        return CreatedAtRoute(nameof(UserQueryController.GetProfile), null, response.Value);
     }
 
     /// <summary>
@@ -134,18 +168,19 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization("User, Admin")]
     public async Task<IActionResult> InvalidateTokens()
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         if (string.IsNullOrEmpty(userIdClaim))
         {
-            return Unauthorized(new { message = "Could not find user" });
+            return Unauthorized(new { message = Error.Alert, errors = UserErrors.NotConnected });
         }
 
         if (!int.TryParse(userIdClaim, out var userId))
         {
-            return BadRequest(new { message = "wrong format." });
+            return BadRequest(new { message = Error.Alert, errors = UserErrors.Unknown });
         }
 
         var result = await tokenProvider.InvalidateTokens(userId);
@@ -178,12 +213,12 @@ public class AuthenticationController : LoginController
 
         if (string.IsNullOrEmpty(userIdClaim))
         {
-            return Unauthorized(new { message = "Could not find user" });
+            return Unauthorized(new { message = Error.Alert, errors = UserErrors.NotConnected });
         }
 
         if (!int.TryParse(userIdClaim, out var userId))
         {
-            return BadRequest(new { message = "wrong format." });
+            return BadRequest(new { message = Error.Alert, errors = UserErrors.Unknown });
         }
 
         var result = await authenticateService.Disconnect(userId);
@@ -213,18 +248,18 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> ForgotPasswordRequest(string email)
     {
-        var result = await passwordService.ForgotPasswordRequest(email);
+        var response = await passwordService.ForgotPasswordRequest(email);
 
-        if (result.IsFailure)
+        if (response.IsFailure)
         {
-            return BadRequest(new { message = result.Error.Message });
+            return BadRequest(new { message = Error.Alert, errors = response.Error.Message });
         }
 
         SubscribeNotifierEvent();
-        notifier.NotifyObservers(result.Value);
+        notifier.NotifyObservers(response.Value);
         UnsubscribeNotifierEvent();
 
-        return Ok(new { message = result.Info.Message });
+        return Ok(new { message = response.Info.Message });
     }
 
 
@@ -249,12 +284,12 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> ForgotPasswordResponse(string email, string token)
     {
-        var result = await passwordService.ForgotPasswordResponse(email, token);
+        var response = await passwordService.ForgotPasswordResponse(email, token);
 
-        if (result.IsSuccess)
-            return Ok(new { message = result.Info.Message });
+        if (response.IsSuccess)
+            return Ok(new { message = response.Info.Message });
 
-        return BadRequest(new { message = result.Error.Message });
+        return BadRequest(new { message = Error.Alert, errors = response.Error.Message });
     }
 
     /// <summary>
@@ -280,19 +315,19 @@ public class AuthenticationController : LoginController
 
         if (string.IsNullOrEmpty(userIdClaim))
         {
-            return Unauthorized(new { message = "Could not find user" });
+            return Unauthorized(new { message = Error.Alert, errors = UserErrors.NotConnected });
         }
 
         if (!int.TryParse(userIdClaim, out var userId))
         {
-            return BadRequest(new { message = "wrong format." });
+            return BadRequest(new { message = Error.Alert, errors = UserErrors.Unknown });
         }
 
-        var result = await passwordService.ResetPassword(userId, dto);
+        var response = await passwordService.ResetPassword(userId, dto);
 
-        if (result.IsFailure)
-            return BadRequest(new { message = result.Error.Message });
+        if (response.IsFailure)
+            return BadRequest(new { message = Error.Alert, errors = response.Error.Message });
 
-        return Ok(new { message = result.Info.Message });
+        return Ok(new { message = response.Info.Message });
     }
 }

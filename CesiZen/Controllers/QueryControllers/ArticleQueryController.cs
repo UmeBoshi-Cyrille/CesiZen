@@ -47,7 +47,7 @@ public class ArticleQueryController : ControllerBase
 
         return result.Match<ActionResult, PagedResultDto<ArticleMinimumDto>>(
              success: value => Ok(new { value }),
-             failure: error => NotFound(new { message = error.Message })
+             failure: error => NotFound(new { message = Error.Alert, errors = error.Message })
         );
     }
 
@@ -75,7 +75,7 @@ public class ArticleQueryController : ControllerBase
 
         return result.Match<ActionResult, PagedResultDto<ArticleMinimumDto>>(
              success: value => Ok(new { value }),
-             failure: error => NotFound(new { message = error.Message })
+             failure: error => NotFound(new { message = Error.Alert, errors = error.Message })
         );
     }
 
@@ -102,7 +102,7 @@ public class ArticleQueryController : ControllerBase
         var result = await articleService.GetByIdAsync(id);
         return result.Match<ActionResult, ArticleDto>(
             success: value => Ok(new { value }),
-            failure: error => NotFound(new { message = error.Message })
+            failure: error => NotFound(new { message = Error.Alert, errors = error.Message })
         );
     }
 
@@ -130,7 +130,7 @@ public class ArticleQueryController : ControllerBase
         var result = await articleService.GetLast(amount);
         return result.Match<ActionResult, List<ArticleMinimumDto>>(
             success: value => Ok(new { value }),
-            failure: error => NotFound(new { message = error.Message })
+            failure: error => NotFound(new { message = Error.Alert, errors = error.Message })
         );
     }
 
@@ -158,7 +158,7 @@ public class ArticleQueryController : ControllerBase
         var result = await articleService.GetByCategory(categoryId, pageNumber, pageSize);
         return result.Match<ActionResult, PagedResultDto<ArticleMinimumDto>>(
             success: value => Ok(new { value }),
-            failure: error => NotFound(new { message = error.Message })
+            failure: error => NotFound(new { message = Error.Alert, errors = error.Message })
         );
     }
 }

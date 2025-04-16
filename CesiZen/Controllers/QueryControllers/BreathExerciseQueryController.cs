@@ -53,7 +53,7 @@ public class BreathExerciseQueryController : ControllerBase
 
         return result.Match<ActionResult, List<BreathExerciseMinimumDto>>(
              success: value => Ok(new { value }),
-             failure: error => NotFound(new { message = error.Message })
+             failure: error => NotFound(new { message = Error.Alert, errors = error.Message })
         );
     }
 
@@ -81,7 +81,7 @@ public class BreathExerciseQueryController : ControllerBase
 
         return result.Match<ActionResult, BreathExerciseDto>(
             success: value => Ok(new { value }),
-            failure: error => NotFound(new { message = error.Message })
+            failure: error => NotFound(new { message = Error.Alert, errors = error.Message })
         );
     }
 }
