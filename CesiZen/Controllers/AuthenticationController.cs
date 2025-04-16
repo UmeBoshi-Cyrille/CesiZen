@@ -53,7 +53,7 @@ public class AuthenticationController : LoginController
 
         if (response.IsFailure)
         {
-            return NotFound(new { message = Error.Alert, errors = response.Error.Message };
+            return NotFound(new { message = Error.Alert, errors = response.Error.Message });
         }
 
         return Ok(new { message = response.Info.Message });
@@ -86,6 +86,10 @@ public class AuthenticationController : LoginController
         {
             return BadRequest(new { message = Error.Alert, errors = response.Error.Message });
         }
+
+        SubscribeNotifierEvent();
+        notifier.NotifyObservers(response.Value);
+        UnsubscribeNotifierEvent();
 
         return Ok(new { message = response.Info.Message });
     }

@@ -2,6 +2,7 @@
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using CesiZen.Domain.Mapper;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 
 namespace CesiZen.Application.Services;
@@ -10,6 +11,8 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
 {
     private readonly ILoginCommand loginCommand;
     private readonly IUserQuery userQuery;
+    private readonly IConfiguration configuration;
+
 
     public AuthenticationService(
         ILogger logger,
@@ -19,11 +22,13 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
         ILoginQuery loginQuery,
         ILoginCommand loginCommand,
         ITokenProvider tokenProvider,
-        IEmailService emailService
+        IEmailService emailService,
+        IConfiguration configuration
         ) : base(logger, userCommand, passwordService, loginQuery, tokenProvider)
     {
         this.loginCommand = loginCommand;
         this.userQuery = userQuery;
+        this.configuration = configuration;
     }
 
     public async Task<IResult<AuthenticateResponseDto>> Authenticate(AuthenticateRequestDto dto)
@@ -97,6 +102,22 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
         }
 
         return Result.Success(LoginInfos.Logout);
+    }
+
+    public async Task<IResult<MessageEventArgs>> ResendEmailVerification(string token, string email)
+    {
+        var login = await loginQuery.GetByEmailVerificationToken(token);
+
+        if (login.Value == null)
+        {
+            logger.Error(login.Error.Message);
+            return Result<MessageEventArgs>.Failure(LoginErrors.LoginNotFound);
+        }
+
+        string verificationToken = tokenProvider.GenerateVerificationToken();
+        var message = RegisterService.BuildEmailVerificationMessage(email, verificationToken, configuration);
+
+        return Result<MessageEventArgs>.Success(message, LoginInfos.EmailVerification);
     }
 
     #region Private Methods
