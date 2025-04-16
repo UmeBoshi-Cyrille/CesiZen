@@ -121,7 +121,8 @@ internal static class ServiceRegister
                 policy.WithOrigins("http://localhost:4200")
                 .AllowCredentials()
                 .AllowAnyHeader()
-                .AllowAnyMethod();
+                .AllowAnyMethod()
+                .SetPreflightMaxAge(TimeSpan.FromMinutes(10));
             });
         });
 
