@@ -88,11 +88,11 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} a été supprimé..
+        ///   Looks up a localized string similar to Suppression du cookie réussi..
         /// </summary>
-        internal static string CLIENT_DELETE_SUCCESS {
+        internal static string CLIENT_DELETE_COOKIE {
             get {
-                return ResourceManager.GetString("CLIENT_DELETE_SUCCESS", resourceCulture);
+                return ResourceManager.GetString("CLIENT_DELETE_COOKIE", resourceCulture);
             }
         }
         

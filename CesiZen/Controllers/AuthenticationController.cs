@@ -2,6 +2,7 @@
 using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -74,7 +75,7 @@ public class AuthenticationController : LoginController
     {
         Response.Cookies.Delete("JWTCookie");
 
-        var successMessage = string.Format(Message.GetResource("InfoMessages", "CLIENT_DELETE_SUCCESS"), "Cookie");
+        var successMessage = LoginInfos.CookieDeleted;
         return Ok(new { message = successMessage });
     }
 

@@ -8,4 +8,5 @@ public class LoginInfos
     public static Info ResetPasswordSucceed = new(InfoType.ResetPasswordSucceed, ResourceMessages.GetResource("InfoMessages", "CLIENT_RESETPASSWORD_SUCCESS"));
     public static Info ResetPasswordValid = new(InfoType.ResetPasswordValid, ResourceMessages.GetResource("InfoMessages", "CLIENT_RESET_PASSWORD_VALID"));
     public static Info Logout = new(InfoType.Logout, ResourceMessages.GetResource("InfoMessages", "CLIENT_LOGOUT"));
+    public static Info CookieDeleted = new(InfoType.CookieDeleted, ResourceMessages.GetResource("InfoMessages", "CLIENT_DELETE_COOKIE"));
 }

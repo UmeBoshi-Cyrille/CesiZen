@@ -1,3 +1,4 @@
+﻿using CesiZen.Domain.BusinessResult;
 ﻿using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -42,7 +43,7 @@ public class RegisterController : LoginController
 
         if (response.IsFailure)
         {
-            return BadRequest(new { message = response.Error.Message });
+            return BadRequest(new { message = Error.Alert, errors = response.Error.Message });
         }
 
         SubscribeNotifierEvent();
