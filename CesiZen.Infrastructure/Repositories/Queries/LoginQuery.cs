@@ -85,7 +85,7 @@ public class LoginQuery : AbstractRepository, ILoginQuery
         {
             return Result<ResetPassword>.Failure(
                 Error.NotFound(string.Format(
-                    Message.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "Login", email)));
+                    ResourceMessages.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "Login", email)));
         }
 
         return Result<ResetPassword>.Success(resetPassword);

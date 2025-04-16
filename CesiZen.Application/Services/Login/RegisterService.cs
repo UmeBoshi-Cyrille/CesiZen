@@ -66,14 +66,14 @@ public class RegisterService : ALoginService, IRegisterService
 
     private MessageEventArgs BuildEmailVerificationMessage(string email, string token)
     {
-        var template = Message.GetResource("Templates", "TEMPLATE_VERIFICATION_EMAIL");
+        var template = ResourceMessages.GetResource("Templates", "TEMPLATE_VERIFICATION_EMAIL");
         var verificationLink = $"{configuration["App:Url"]}/verify?token={token}";
         var htmlTemplate = template.Replace("{{url}}", verificationLink);
 
         return new MessageEventArgs
         {
             Email = email,
-            Subject = Message.GetResource("Templates", "SUBJECT_VERIFICATION_EMAIL"),
+            Subject = ResourceMessages.GetResource("Templates", "SUBJECT_VERIFICATION_EMAIL"),
             Body = htmlTemplate,
         };
     }

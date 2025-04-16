@@ -52,7 +52,6 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
 
         var token = tokenProvider.GenerateAccessToken(tokenDto.Value);
         response.Token = token;
-        response.User = user.Value.Map();
 
         return Result<AuthenticateResponseDto>.Success(response, UserInfos.ClientAuthentified);
     }
@@ -119,7 +118,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
             var time = CalculateLockTime(login).ToString();
             return Result.Failure(
                     Error.AuthenticationFailed(string.Format(
-                        Message.GetResource("ErrorMessages", "CLIENT_LOGINATTEMPS_LOCKTIME"), time)));
+                        ResourceMessages.GetResource("ErrorMessages", "CLIENT_LOGINATTEMPS_LOCKTIME"), time)));
         }
 
         var result = passwordService.IsCorrectPassword(login.Salt, login.Password, providedPassword);
@@ -133,12 +132,12 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
         {
             return Result.Failure(
                     Error.AuthenticationFailed(
-                        Message.GetResource("ErrorMessages", "CLIENT_LOGINATTEMPS")));
+                        ResourceMessages.GetResource("ErrorMessages", "CLIENT_LOGINATTEMPS")));
         }
 
         return Result.Failure(
                 Error.AuthenticationFailed(
-                    Message.GetResource("ErrorMessages", "CLIENT_AUTHENTICATION_FAILED")));
+                    ResourceMessages.GetResource("ErrorMessages", "CLIENT_AUTHENTICATION_FAILED")));
     }
 
     private async Task<bool> IsLoginUnlocked(AuthenticationLoginDto dto)
