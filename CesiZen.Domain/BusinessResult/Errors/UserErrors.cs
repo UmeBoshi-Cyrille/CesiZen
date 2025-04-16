@@ -17,6 +17,8 @@ public static class UserErrors
     public static Error ClientPasswordNotMatch => new(ErrorType.PasswordNotMatch, ResourceMessages.GetResource("ErrorMessages", "CLIENT_PASSWORD_NOTMATCH"));
     public static Error ClientNotUnique(string value) => new(ErrorType.NotUnique, string.Format(ResourceMessages.GetResource("ErrorMessages", "CLIENT_ACCOUNT_UNICITY_CONSTRAINT"), "L'email", value));
     public static Error ClientDisconnectFailed => new(ErrorType.DisconnectFailed, string.Format(ResourceMessages.GetResource("ErrorMessages", "CLIENT_DISCONNECTION_FAILED")));
+    public static Error NotConnected => new(ErrorType.NotConnected, ResourceMessages.GetResource("ErrorMessages", "CLIENT_PLEASE_CONNECT"));
+    public static Error Unknown => new(ErrorType.Unknown, ResourceMessages.GetResource("ErrorMessages", "CLIENT_UNKNOWN_USER"));
     #endregion
 
     #region Log Messages
