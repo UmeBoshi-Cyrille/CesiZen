@@ -97,6 +97,15 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} a été supprimé..
+        /// </summary>
+        internal static string CLIENT_DELETE_SUCCESS {
+            get {
+                return ResourceManager.GetString("CLIENT_DELETE_SUCCESS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Un Email a été envoyé pour la vérification..
         /// </summary>
         internal static string CLIENT_EMAIL_VERIFICATION {

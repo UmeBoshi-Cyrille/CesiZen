@@ -195,4 +195,7 @@
   <data name="CLIENT_DELETE_COOKIE" xml:space="preserve">
     <value>Suppression du cookie réussi.</value>
   </data>
+  <data name="CLIENT_DELETE_SUCCESS" xml:space="preserve">
+    <value>{0} a été supprimé.</value>
+  </data>
 </root>
