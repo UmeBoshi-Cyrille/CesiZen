@@ -198,4 +198,13 @@
   <data name="CLIENT_DISCONNECTION_FAILED" xml:space="preserve">
     <value>Votre déconnection a échoué.</value>
   </data>
+  <data name="CLIENT-ERROR-ALERT" xml:space="preserve">
+    <value>Une erreur est survenue !</value>
+  </data>
+  <data name="CLIENT_PLEASE_CONNECT" xml:space="preserve">
+    <value>Veuillez-vous connecter pour accéder à cette fonctionnalité.</value>
+  </data>
+  <data name="CLIENT_UNKNOWN_USER" xml:space="preserve">
+    <value>Utilisateur inconnu.</value>
+  </data>
 </root>

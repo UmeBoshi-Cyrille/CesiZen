@@ -4,7 +4,7 @@ namespace CesiZen.Domain.DataTransfertObject;
 
 public class AuthenticateRequestDto
 {
-    [DefaultValue("user@example.com")]
+    [DefaultValue("example@gmail.com")]
     public required string Identifier { get; set; }
 
     [DefaultValue("password")]

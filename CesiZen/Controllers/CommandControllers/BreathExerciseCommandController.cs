@@ -61,7 +61,7 @@ public class BreathExerciseCommandController : ControllerBase
                 "BreathExerciseQuery",
                 new { id = createdExercise.Id },
                 new { data = createdExercise, message = result.Info.Message }),
-            failure: error => BadRequest(new { message = error.Message })
+            failure: error => BadRequest(new { message = Error.Alert, errors = error.Message })
         );
     }
 
@@ -109,9 +109,9 @@ public class BreathExerciseCommandController : ControllerBase
             success: () => Ok(new { message = result.Info.Message }),
             failure: error => error.Type switch
             {
-                ErrorType.NotFound => NotFound(new { message = error.Message }),
-                ErrorType.OperationFailed => BadRequest(new { message = error.Message }),
-                _ => StatusCode(StatusCodes.Status500InternalServerError, new { message = error.Message })
+                ErrorType.NotFound => NotFound(new { message = Error.Alert, errors = error.Message }),
+                ErrorType.OperationFailed => BadRequest(new { message = Error.Alert, errors = error.Message }),
+                _ => StatusCode(StatusCodes.Status500InternalServerError, new { message = Error.Alert, errors = error.Message })
             }
         );
     }
@@ -144,8 +144,8 @@ public class BreathExerciseCommandController : ControllerBase
             success: () => Ok(new { message = result.Info.Message }),
             failure: error => error.Type switch
             {
-                ErrorType.BadRequest => BadRequest(new { message = error.Message }),
-                _ => StatusCode(StatusCodes.Status500InternalServerError, new { message = error.Message })
+                ErrorType.BadRequest => BadRequest(new { message = Error.Alert, errors = error.Message }),
+                _ => StatusCode(StatusCodes.Status500InternalServerError, new { message = Error.Alert, errors = error.Message })
             }
         );
     }

@@ -5,46 +5,44 @@ namespace CesiZen.Domain.DataTransfertObject;
 
 public class NewUserDto
 {
-    [MaxLength(54)]
-    [MinLength(2)]
-    [RegularExpression(@"^[a-zA-Z]+$",
-        ErrorMessage = "Unauthorised characters")]
-    [Required(ErrorMessage = "FirstName is required")]
-    [DefaultValue("Firstname")]
+    [MaxLength(50, ErrorMessage = "50 caractères autorisés")]
+    [MinLength(2, ErrorMessage = "2 caractères minimum requis")]
+    [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Caractères présents non autorisés")]
+    [Required(ErrorMessage = "Le champs prénom est obligatoire.")]
+    [DefaultValue("Prénom")]
     public required string Firstname { get; set; }
-    [MaxLength(54)]
-    [MinLength(2)]
-    [RegularExpression(@"^[a-zA-Z]+$",
-        ErrorMessage = "Unauthorised characters")]
-    [Required(ErrorMessage = "LastName is required")]
-    [DefaultValue("Lastname")]
+
+    [MaxLength(50, ErrorMessage = "50 caractères autorisés")]
+    [MinLength(2, ErrorMessage = "2 caractères minimum requis")]
+    [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Caractères présents non autorisés")]
+    [Required(ErrorMessage = "Le champs nom est obligatoire.")]
+    [DefaultValue("Nom")]
     public required string Lastname { get; set; }
 
-    [MaxLength(54)]
-    [MinLength(3)]
-    [RegularExpression(@"^[a-zA-Z]+$",
-        ErrorMessage = "Unauthorised characters")]
-    [DefaultValue("Username")]
+    [MaxLength(50, ErrorMessage = "50 caractères autorisés")]
+    [MinLength(3, ErrorMessage = "3 caractères minimum requis")]
+    [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Caractères présents non autorisés")]
+    [Required(ErrorMessage = "Le champs pseudonyme est obligatoire.")]
+    [DefaultValue("Pseudonyme")]
     public required string Username { get; set; }
 
     [DefaultValue("example@gmail.com")]
-    [Required(ErrorMessage = "Email is Required")]
-    [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]{2,3}$",
-        ErrorMessage = "Invalid Email format")]
+    [Required(ErrorMessage = "Le champs email est obligatoire.")]
+    [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]{2,3}$", ErrorMessage = "Format d'email invalide. [Respecter le format: example@gmail.com]")]
     public required string Email { get; set; } = string.Empty;
 
-    [MaxLength(50)]
-    [MinLength(12)]
+    [MaxLength(50, ErrorMessage = "50 caractères autorisés")]
+    [MinLength(12, ErrorMessage = "12 caractères minimum requis")]
     [DefaultValue("password")]
-    [Required(ErrorMessage = "Password is required")]
+    [Required(ErrorMessage = "Le champs Mot de passe obligatoire")]
     [RegularExpression(@"^(?=.*[!@#$%^&*()_+\-=\[\]{};':""\\|,.<>\/?])(?=.*[a-zA-Z])(?=.*\d)(?=.{12,})[^\s]+$",
-        ErrorMessage = "Password must be at least 12 characters long, contain at least one uppercase letter, one lowercase letter, one number and one special character.")]
+        ErrorMessage = "Le mot de passe doit contenir au minimum 12 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial.")]
     public required string Password { get; set; } = string.Empty;
 
-    [MaxLength(50)]
-    [MinLength(12)]
+    [MaxLength(50, ErrorMessage = "50 caractères autorisés")]
+    [MinLength(12, ErrorMessage = "12 caractères minimum requis")]
     [DefaultValue("password")]
-    [Required(ErrorMessage = "Confirm Password is required")]
-    [Compare("Password", ErrorMessage = "Password and Confirmation Password do not match.")]
+    [Required(ErrorMessage = "Confirmation de mot de passe obligatoire")]
+    [Compare("Password", ErrorMessage = "La confirmation du mot de passe ne correspondent pas.")]
     public required string ConfirmPassword { get; set; }
 }

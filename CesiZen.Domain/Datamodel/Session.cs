@@ -5,9 +5,7 @@ namespace CesiZen.Domain.Datamodel;
 public class Session
 {
     public int Id { get; set; }
-
     public string SessionId { get; set; }
-
     public int UserId { get; set; }
 
     [JsonIgnore]

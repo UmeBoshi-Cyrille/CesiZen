@@ -199,14 +199,14 @@ public class PasswordService : IPasswordService
 
     private MessageEventArgs BuildEmailVerificationMessage(string email, string token)
     {
-        var template = Message.GetResource("Templates", "TEMPLATE_RESET_PASSWORD");
+        var template = ResourceMessages.GetResource("Templates", "TEMPLATE_RESET_PASSWORD");
         var verificationLink = $"{configuration["App:Url"]}/reset-password?token={token}";
         var htmlTemplate = template.Replace("{{url}}", verificationLink);
 
         return new MessageEventArgs
         {
             Email = email,
-            Subject = Message.GetResource("Templates", "SUBJECT_RESET_PASSWORD"),
+            Subject = ResourceMessages.GetResource("Templates", "SUBJECT_RESET_PASSWORD"),
             Body = htmlTemplate,
         };
     }
@@ -220,7 +220,7 @@ public class PasswordService : IPasswordService
             var time = TimeService.CalculateLockTime(login.LockoutEndTime).ToString();
             return Result.Failure(
                     Error.AuthenticationFailed(string.Format(
-                        Message.GetResource("ErrorMessages", "CLIENT_LOGINATTEMPS_LOCKTIME"), time)));
+                        ResourceMessages.GetResource("ErrorMessages", "CLIENT_LOGINATTEMPS_LOCKTIME"), time)));
         }
 
         if (!IsLimitAttempsReached(login).Result)

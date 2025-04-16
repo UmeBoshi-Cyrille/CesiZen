@@ -52,7 +52,7 @@ public class UserQueryController : ControllerBase
 
         return result.Match<ActionResult, PagedResultDto<UserMinimumDto>>(
              success: value => Ok(new { value }),
-             failure: error => NotFound(new { message = error.Message })
+             failure: error => NotFound(new { message = Error.Alert, errors = error.Message })
         );
     }
 
@@ -81,7 +81,7 @@ public class UserQueryController : ControllerBase
 
         return result.Match<ActionResult, PagedResultDto<UserMinimumDto>>(
              success: value => Ok(new { value }),
-             failure: error => NotFound(new { message = error.Message })
+             failure: error => NotFound(new { message = Error.Alert, errors = error.Message })
         );
     }
 
@@ -108,7 +108,7 @@ public class UserQueryController : ControllerBase
         var result = await queryService.GetByIdAsync(id);
         return result.Match<ActionResult, UserMinimumDto>(
             success: value => Ok(new { value }),
-            failure: error => BadRequest(new { message = error.Message })
+            failure: error => BadRequest(new { message = Error.Alert, errors = error.Message })
         );
     }
 
@@ -136,7 +136,7 @@ public class UserQueryController : ControllerBase
 
         return result.Match<ActionResult, UserMinimumDto>(
             success: value => Ok(new { value }),
-            failure: error => NotFound(new { message = error.Message })
+            failure: error => NotFound(new { message = Error.Alert, errors = error.Message })
         );
     }
 
@@ -156,25 +156,25 @@ public class UserQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [RoleAuthorization(Roles = "User, Admin, SuperAdmin")]
+    [RoleAuthorization(Roles = "User, Admin")]
     public async Task<ActionResult<UserMinimumDto>> GetProfile()
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         if (string.IsNullOrEmpty(userIdClaim))
         {
-            return Unauthorized(new { message = "Could not find user" });
+            return Unauthorized(new { message = Error.Alert, errors = UserErrors.NotConnected });
         }
 
         if (!int.TryParse(userIdClaim, out var userId))
         {
-            return BadRequest(new { message = "wrong format." });
+            return BadRequest(new { message = Error.Alert, errors = UserErrors.Unknown });
         }
 
         var result = await queryService.GetByIdAsync(userId);
         return result.Match<ActionResult, UserMinimumDto>(
             success: value => Ok(value),
-            failure: error => BadRequest(new { message = error.Message })
+            failure: error => BadRequest(new { message = Error.Alert, errors = error.Message })
         );
     }
 
@@ -194,19 +194,19 @@ public class UserQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [RoleAuthorization(Roles = "User, Admin, SuperAdmin")]
+    [RoleAuthorization(Roles = "User, Admin")]
     public async Task<ActionResult<UserResponseDto>> GetMinimumProfile()
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         if (string.IsNullOrEmpty(userIdClaim))
         {
-            return Unauthorized(new { message = "Could not find user" });
+            return Unauthorized(new { message = Error.Alert, errors = UserErrors.NotConnected });
         }
 
         if (!int.TryParse(userIdClaim, out var userId))
         {
-            return BadRequest(new { message = "wrong format." });
+            return BadRequest(new { message = Error.Alert, errors = UserErrors.Unknown });
         }
 
         var result = await queryService.GetByIdAsync(userId);
@@ -214,7 +214,7 @@ public class UserQueryController : ControllerBase
 
         return result.Match<ActionResult, UserMinimumDto>(
             success: value => Ok(response),
-            failure: error => BadRequest(new { message = error.Message })
+            failure: error => BadRequest(new { message = Error.Alert, errors = error.Message })
         );
     }
 }

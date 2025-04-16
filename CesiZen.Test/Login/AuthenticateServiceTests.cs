@@ -6,6 +6,7 @@ using CesiZen.Domain.Interfaces;
 using CesiZen.Domain.Mapper;
 using CesiZen.Infrastructure.Providers;
 using CesiZen.Test.Fakers;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using Serilog;
 
@@ -25,6 +26,7 @@ public class AuthenticateServiceTests
     private readonly Mock<ILoginCommand> loginCommandMock;
     private readonly Mock<ITokenProvider> tokenProviderMock;
     private readonly Mock<IEmailService> emailServiceMock;
+    private readonly Mock<IConfiguration> configurationMock;
     private readonly AuthenticationService authenticationService;
 
     private readonly TokenProvider tokenProvider;
@@ -45,6 +47,7 @@ public class AuthenticateServiceTests
         loginCommandMock = new Mock<ILoginCommand>();
         tokenProviderMock = new Mock<ITokenProvider>();
         emailServiceMock = new Mock<IEmailService>();
+        configurationMock = new Mock<IConfiguration>();
 
         authenticationService = new AuthenticationService(
             loggerMock.Object,
@@ -54,7 +57,8 @@ public class AuthenticateServiceTests
             loginQueryMock.Object,
             loginCommandMock.Object,
             tokenProviderMock.Object,
-            emailServiceMock.Object
+            emailServiceMock.Object,
+            configurationMock.Object
         );
 
         tokenProvider = new TokenProvider(

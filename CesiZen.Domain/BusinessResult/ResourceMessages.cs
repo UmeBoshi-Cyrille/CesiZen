@@ -3,7 +3,7 @@ using System.Resources;
 
 namespace CesiZen.Domain.BusinessResult;
 
-public static class Message
+public static class ResourceMessages
 {
     public static string GetResource(string fileName, string resourceKey)
     {

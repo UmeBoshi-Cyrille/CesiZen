@@ -46,7 +46,7 @@ public class RegisterService : ALoginService, IRegisterService
             return Result<MessageEventArgs>.Failure(UserErrors.ClientRegisterFailed);
         }
 
-        var message = BuildEmailVerificationMessage(dto.Email, verificationToken);
+        var message = BuildEmailVerificationMessage(dto.Email, verificationToken, configuration);
 
         logger.Information(result.Info.Message);
         return Result<MessageEventArgs>.Success(message, UserInfos.ClientInsertionSucceeded);
@@ -64,16 +64,17 @@ public class RegisterService : ALoginService, IRegisterService
         return result;
     }
 
-    private MessageEventArgs BuildEmailVerificationMessage(string email, string token)
+    internal static MessageEventArgs BuildEmailVerificationMessage(string email, string token, IConfiguration configuration)
     {
-        var template = Message.GetResource("Templates", "TEMPLATE_VERIFICATION_EMAIL");
-        var verificationLink = $"{configuration["App:Url"]}/verify?token={token}";
+        var template = ResourceMessages.GetResource("Templates", "TEMPLATE_VERIFICATION_EMAIL");
+        string encodedToken = Uri.EscapeDataString(token!);
+        var verificationLink = $"{configuration["App:Url"]}/verify?token={encodedToken}";
         var htmlTemplate = template.Replace("{{url}}", verificationLink);
 
         return new MessageEventArgs
         {
             Email = email,
-            Subject = Message.GetResource("Templates", "SUBJECT_VERIFICATION_EMAIL"),
+            Subject = ResourceMessages.GetResource("Templates", "SUBJECT_VERIFICATION_EMAIL"),
             Body = htmlTemplate,
         };
     }

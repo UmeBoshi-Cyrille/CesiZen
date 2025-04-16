@@ -1,6 +1,7 @@
 ﻿using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CesiZen.Api.Controllers;
@@ -34,13 +35,14 @@ public class CategoryQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [AllowAnonymous]
     public async Task<ActionResult<PagedResultDto<CategoryResponseDto>>> GetCategories([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var result = await categoryService.GetAllAsync(pageNumber, pageSize);
 
         return result.Match<ActionResult, PagedResultDto<CategoryResponseDto>>(
              success: value => Ok(new { value }),
-             failure: error => NotFound(new { message = error.Message })
+             failure: error => NotFound(new { message = Error.Alert, errors = error.Message })
         );
     }
 
@@ -61,12 +63,13 @@ public class CategoryQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [AllowAnonymous]
     public async Task<ActionResult<CategoryResponseDto>> GetCategory(int id)
     {
         var result = await categoryService.GetByIdAsync(id);
         return result.Match<ActionResult, CategoryResponseDto>(
             success: value => Ok(new { value }),
-            failure: error => NotFound(new { message = error.Message })
+            failure: error => NotFound(new { message = Error.Alert, errors = error.Message })
         );
     }
 }
