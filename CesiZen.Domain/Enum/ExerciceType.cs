@@ -2,7 +2,7 @@
 
 public enum ExerciceType
 {
-    A748,
-    A55,
-    A46
+    A748 = 1,
+    A55 = 2,
+    A46 = 3
 }
