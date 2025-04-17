@@ -31,8 +31,6 @@ public class TokenCommand : AbstractRepository, IRefreshTokenCommand
                 await context.SaveChangesAsync();
             }
 
-
-
             return Result.Success();
         }
         catch (UniqueConstraintException ex)

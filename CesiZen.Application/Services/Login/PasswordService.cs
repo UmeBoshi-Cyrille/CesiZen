@@ -200,7 +200,8 @@ public class PasswordService : IPasswordService
     private MessageEventArgs BuildEmailVerificationMessage(string email, string token)
     {
         var template = ResourceMessages.GetResource("Templates", "TEMPLATE_RESET_PASSWORD");
-        var verificationLink = $"{configuration["App:Url"]}/reset-password?token={token}";
+        string encodedToken = Uri.EscapeDataString(token!);
+        var verificationLink = $"{configuration["App:Url"]}/reset-password?token={encodedToken}";
         var htmlTemplate = template.Replace("{{url}}", verificationLink);
 
         return new MessageEventArgs

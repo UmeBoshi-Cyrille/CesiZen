@@ -25,6 +25,6 @@ public record PasswordResetDto
     [MinLength(12, ErrorMessage = "12 caractères minimum requis")]
     [DefaultValue("password")]
     [Required(ErrorMessage = "Confirmation de mot de passe obligatoire")]
-    [Compare("Password", ErrorMessage = "La confirmation du mot de passe ne correspondent pas.")]
+    [Compare("NewPassword", ErrorMessage = "La confirmation du mot de passe ne correspondent pas.")]
     public string? ConfirmPassword { get; set; }
 }

@@ -9,5 +9,7 @@ public static class RefreshTokenInfos
     public static Info LogDeleteCompleted(string id) => new(InfoType.DeleteCompleted, string.Format(ResourceMessages.GetResource("InfoMessages", "LOG_DELETION_SUCCESS"), "RefreshToken", id));
     public static Info LogCollectCompleted(string argument) => new(InfoType.CollectCompleted, string.Format(ResourceMessages.GetResource("InfoMessages", "LOG_COLLECT_COMPLETED"), "RefreshToken", argument));
     public static Info LogFormatCompleted(string property) => new(InfoType.FormatCompleted, string.Format(ResourceMessages.GetResource("InfoMessages", "LOG_FORMAT_COMPLETED"), "RefreshToken", property));
+    public static Info TokenRenewed => new(InfoType.Success, ResourceMessages.GetResource("InfoMessages", "CLIENT_RENEW_AUTH"));
+    public static Info Expired => new(InfoType.Expired, ResourceMessages.GetResource("InfoMessages", "LOG_EXPIRED_TOKEN"));
     #endregion
 }

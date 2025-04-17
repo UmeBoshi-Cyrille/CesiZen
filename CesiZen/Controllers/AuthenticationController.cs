@@ -2,6 +2,7 @@
 using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -141,17 +142,24 @@ public class AuthenticationController : LoginController
         if (response.IsFailure)
             return Unauthorized(new { message = Error.Alert, errors = response.Error.Message });
 
-        var cookieOptions = new CookieOptions
+        var clientType = Request.Headers["X-Client-Type"].ToString();
+
+        if (clientType == "mobile")
         {
-            HttpOnly = true, // Prevents JavaScript access to tokens, mitigating XSS attacks.
-            Secure = true, // Cookies marked as secure are only transmitted over HTTPS connections.
-            SameSite = SameSiteMode.None, // Helps mitigate CSRF attacks when configured properly
-            Expires = DateTime.UtcNow.AddMinutes(30)
-        };
+            return Ok(new { token = response.Value.Token, message = response.Info.Message });
+        }
 
-        Response.Cookies.Append("JWTCookie", response.Value.Token!, cookieOptions);
+        SendSecureCookie(token: response.Value.Token!);
+        //var cookieOptions = new CookieOptions
+        //{
+        //    HttpOnly = true, // Prevents JavaScript access to tokens, mitigating XSS attacks.
+        //    Secure = true, // Cookies marked as secure are only transmitted over HTTPS connections.
+        //    SameSite = SameSiteMode.None, // Helps mitigate CSRF attacks when configured properly
+        //    Expires = DateTime.UtcNow.AddMinutes(30)
+        //};
 
-        //return Ok(response.Value.User);
+        //Response.Cookies.Append("JWTCookie", response.Value.Token!, cookieOptions);
+
         return CreatedAtRoute(nameof(UserQueryController.GetProfile), null, response.Value);
     }
 
@@ -333,5 +341,47 @@ public class AuthenticationController : LoginController
             return BadRequest(new { message = Error.Alert, errors = response.Error.Message });
 
         return Ok(new { message = response.Info.Message });
+    }
+
+    /// <summary>
+    /// Check access token validity and refresh it if valid.
+    /// </summary>
+    /// <response code="200">The session was successfully reset.</response>
+    /// <response code="400">The request was invalid.</response>
+    /// <response code="500">An unexpected server error occurred while processing the request.</response>
+    /// <returns>
+    /// An <see cref="ActionResult"/> containing:
+    /// - A 200 status code if the token reset operation succeeds.
+    /// - A 400 status code if the request is invalid (e.g., malformed token).
+    /// - A 500 status code if an unexpected server-side error occurs during processing.
+    /// </returns>
+    [HttpPost("refresh-access-token")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "User, Admin, SuperAdmin")]
+    public async Task<IActionResult> RefreshAccessToken()
+    {
+        var accessToken = HttpContext.GetTokenAsync("access_token");
+
+        var response = await tokenProvider.RefreshAccessTokenAsync(accessToken.Result!);
+
+        if (response.IsFailure)
+            return BadRequest(new { message = response.Error.Message });
+
+        return Ok(new { message = response.Info.Message });
+    }
+
+    private void SendSecureCookie(string token)
+    {
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true, // Prevents JavaScript access to tokens, mitigating XSS attacks.
+            Secure = true, // Cookies marked as secure are only transmitted over HTTPS connections.
+            SameSite = SameSiteMode.Strict, // Helps mitigate CSRF attacks when configured properly
+            Expires = DateTime.UtcNow.AddMinutes(30)
+        };
+
+        Response.Cookies.Append("JWTCookie", token, cookieOptions);
     }
 }

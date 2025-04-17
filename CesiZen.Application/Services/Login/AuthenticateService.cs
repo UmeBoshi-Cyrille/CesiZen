@@ -51,7 +51,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
             return Result<AuthenticateResponseDto>.Failure(UserErrors.ClientAuthenticationFailed);
         }
 
-        var tokenDto = tokenProvider.GenerateRefreshToken(user.Value.Id);
+        var tokenDto = await tokenProvider.GenerateRefreshToken(user.Value.Id);
         tokenDto.Value.UserId = user.Value.Id;
         tokenDto.Value.Role = user.Value.Role;
 

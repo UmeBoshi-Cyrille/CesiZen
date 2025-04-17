@@ -45,14 +45,14 @@ public class TokenProvider : ITokenProvider
         return token;
     }
 
-    public IResult<TokenBuilderDto> GenerateRefreshToken(int userId)
+    public async Task<IResult<TokenBuilderDto>> GenerateRefreshToken(int userId)
     {
         var sessionId = GenerateSessionId();
         var tokenId = GenerateTokenId();
         var refreshToken = GenerateRefreshToken(sessionId, tokenId);
 
         var session = new Session(sessionId, userId);
-        sessionCommand.UpSert(session);
+        await sessionCommand.UpSert(session);
         SaveRefreshToken(userId, refreshToken);
 
         var dto = new TokenBuilderDto()
@@ -78,7 +78,7 @@ public class TokenProvider : ITokenProvider
         {
             var token = RefreshAccessToken(accessToken);
 
-            return Result<string>.Success(token);
+            return Result<string>.Success(token, RefreshTokenInfos.TokenRenewed);
         }
 
         var sessionId = GetSessionId(accessToken);

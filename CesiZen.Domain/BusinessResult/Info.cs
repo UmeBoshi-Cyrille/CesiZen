@@ -35,6 +35,7 @@ public enum InfoType
     DeleteCompleted,
     EmailVerified,
     EmailVerification,
+    Expired,
     FormatCompleted,
     InsertionSucceeded,
     Logout,

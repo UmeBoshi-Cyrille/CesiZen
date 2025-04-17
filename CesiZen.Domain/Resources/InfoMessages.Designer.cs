@@ -142,6 +142,15 @@ namespace CesiZen.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to authentification maintenue.
+        /// </summary>
+        internal static string CLIENT_RENEW_AUTH {
+            get {
+                return ResourceManager.GetString("CLIENT_RENEW_AUTH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Votre identité a été vérifié, vous pouvez à présent modifier votre mot de passe oublié..
         /// </summary>
         internal static string CLIENT_RESET_PASSWORD_VALID {
@@ -246,6 +255,15 @@ namespace CesiZen.Domain.Resources {
         internal static string LOG_EMAIL_VERIFIED {
             get {
                 return ResourceManager.GetString("LOG_EMAIL_VERIFIED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Session expirée..
+        /// </summary>
+        internal static string LOG_EXPIRED_TOKEN {
+            get {
+                return ResourceManager.GetString("LOG_EXPIRED_TOKEN", resourceCulture);
             }
         }
         

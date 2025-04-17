@@ -54,6 +54,7 @@ public class CategoryCommandController : ControllerBase
     /// <summary>
     /// Updates the details of an existing category.
     /// </summary>
+    /// <param name="id">Category id to provide.</param>
     /// <param name="dto">An object to provide containing the updated data for the category.</param>
     /// <response code="200">The category was successfully updated.</response>
     /// <response code="400">The request was invalid or contained errors (e.g., validation failure).</response>

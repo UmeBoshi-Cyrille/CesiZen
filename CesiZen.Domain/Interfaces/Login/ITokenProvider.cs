@@ -6,7 +6,7 @@ public interface ITokenProvider
 {
     string GenerateAccessToken(TokenBuilderDto dto);
 
-    IResult<TokenBuilderDto> GenerateRefreshToken(int userId);
+    Task<IResult<TokenBuilderDto>> GenerateRefreshToken(int userId);
 
     Task<IResult<string>> RefreshAccessTokenAsync(string accessToken);
 
