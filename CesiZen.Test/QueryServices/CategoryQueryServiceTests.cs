@@ -28,6 +28,7 @@ public class CategoryQueryServiceTests
         mockQuery = new Mock<ICategoryQuery>();
         mockSet = new Mock<DbSet<Category>>();
         mockContext = new Mock<CesizenDbContext>(Tools.SetContext());
+        mockSet = new Mock<DbSet<Category>>();
         service = new CategoryQueryService(mockLogger.Object, mockQuery.Object);
         repository = new CategoryQuery(mockContext.Object);
     }
