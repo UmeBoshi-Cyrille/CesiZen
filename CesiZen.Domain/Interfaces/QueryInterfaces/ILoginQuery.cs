@@ -13,7 +13,7 @@ public interface ILoginQuery
 
     Task<IResult> CheckEmail(string email);
 
-    Task<IResult<ResetPassword>> GetResetPassword(string email, string token);
+    Task<IResult<ResetPasswordDto>> GetResetPassword(string email, string token);
 
     Task<IResult<Login>> GetByEmailVerificationToken(string token);
 }

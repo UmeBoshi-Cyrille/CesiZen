@@ -91,21 +91,21 @@ public class PasswordService : IPasswordService
         return Result<MessageEventArgs>.Success(message, UserInfos.ClientVerificationEmailSent);
     }
 
-    public async Task<IResult> ForgotPasswordResponse(string email, string token)
+    public async Task<IResult<int>> ForgotPasswordResponse(string email, string token)
     {
         var resetPassword = await loginQuery.GetResetPassword(email, token);
 
         if (resetPassword.IsFailure)
         {
-            return Result<string>.Failure(LoginErrors.ResetPasswordNotFound);
+            return Result<int>.Failure(LoginErrors.ResetPasswordNotFound);
         }
 
         if (resetPassword.Value.ExpirationTime < DateTime.UtcNow)
         {
-            return Result.Failure(LoginErrors.ExpiredLink);
+            return Result<int>.Failure(LoginErrors.ExpiredLink);
         }
 
-        return Result.Success();
+        return Result<int>.Success(resetPassword.Value.userId);
     }
     #endregion
 
