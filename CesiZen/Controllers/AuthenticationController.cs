@@ -43,7 +43,7 @@ public class AuthenticationController : LoginController
     /// - A 404 status code if the email or verification token is not found.
     /// - A 500 status code if an unexpected server-side error occurs during the verification process.
     /// </returns>
-    [HttpGet("verify")]
+    [HttpGet("verify-email")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -327,7 +327,7 @@ public class AuthenticationController : LoginController
         var response = await passwordService.ResetPassword(id, dto);
 
         if (response.IsFailure)
-        return BadRequest(new { message = Error.Alert, errors = response.Error.Message });
+            return BadRequest(new { message = Error.Alert, errors = response.Error.Message });
 
         return Ok(new { message = response.Info.Message });
     }

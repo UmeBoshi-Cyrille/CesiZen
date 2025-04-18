@@ -30,7 +30,7 @@ public class BreathExerciseQueryController : ControllerBase
     /// - A 404 status code if no breath exercises are found for the specified user.
     /// - A 500 status code if there is a server error.
     /// </returns>
-    [HttpGet("get")]
+    [HttpGet("index")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]

@@ -65,7 +65,7 @@ public class ArticleQueryController : ControllerBase
     /// - A 404 status code if no articles are found.
     /// - A 500 status code if there is a server error.
     /// </returns>
-    [HttpGet("get")]
+    [HttpGet("index")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
