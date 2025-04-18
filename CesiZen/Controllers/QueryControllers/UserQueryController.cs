@@ -125,7 +125,7 @@ public class UserQueryController : ControllerBase
     /// - A 404 status code if the user is not found.
     /// - A 500 status code if there is a server error.
     /// </returns>
-    [HttpGet("user")]
+    [HttpGet("details")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
