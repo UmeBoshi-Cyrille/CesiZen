@@ -43,7 +43,7 @@ public class AuthenticationController : LoginController
     /// - A 404 status code if the email or verification token is not found.
     /// - A 500 status code if an unexpected server-side error occurs during the verification process.
     /// </returns>
-    [HttpGet("verify-email")]
+    [HttpPost("verify-email")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -74,7 +74,7 @@ public class AuthenticationController : LoginController
     /// - A 404 status code if the email or verification token is not found.
     /// - A 500 status code if an unexpected server-side error occurs during the verification process.
     /// </returns>
-    [HttpGet("resend-verify-email")]
+    [HttpPost("resend-verify-email")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
