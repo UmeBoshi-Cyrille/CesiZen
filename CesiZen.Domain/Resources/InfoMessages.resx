@@ -198,4 +198,10 @@
   <data name="CLIENT_DELETE_SUCCESS" xml:space="preserve">
     <value>{0} a été supprimé.</value>
   </data>
+  <data name="CLIENT_RENEW_AUTH" xml:space="preserve">
+    <value>authentification maintenue</value>
+  </data>
+  <data name="LOG_EXPIRED_TOKEN" xml:space="preserve">
+    <value>Session expirée.</value>
+  </data>
 </root>

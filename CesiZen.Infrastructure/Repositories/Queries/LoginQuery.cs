@@ -66,9 +66,7 @@ public class LoginQuery : AbstractRepository, ILoginQuery
 
         if (login == null)
         {
-            return Result<Login>.Failure(
-                Error.NotFound(string.Format(
-                    ResourceMessages.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "Login", token)));
+            return Result<Login>.Failure(LoginErrors.LoginNotFound);
         }
 
         return Result<Login>.Success(login);
@@ -88,22 +86,19 @@ public class LoginQuery : AbstractRepository, ILoginQuery
         return Result.Success();
     }
 
-    public async Task<IResult<ResetPassword>> GetResetPassword(string email, string token)
+    public async Task<IResult<ResetPasswordDto>> GetResetPassword(string email, string token)
     {
-        var resetPasswords = await context.Logins
+        var resetPassword = await context.Logins
                            .AsNoTracking()
-                           .Select(x => x.ResetPasswords!.Where(t => t.ResetToken == token))
+                           .Include(x => x.ResetPasswords!.Where(t => t.ResetToken == token))
+                           .Select(x => x.MapResetPasswordDto(token))
                            .FirstOrDefaultAsync();
-
-        var resetPassword = resetPasswords!.FirstOrDefault(t => t.ResetToken == token);
 
         if (resetPassword == null)
         {
-            return Result<ResetPassword>.Failure(
-                Error.NotFound(string.Format(
-                    ResourceMessages.GetResource("ErrorMessages", "LOG_GETONE_NOTFOUND"), "Login", email)));
+            return Result<ResetPasswordDto>.Failure(LoginErrors.LoginNotFound);
         }
 
-        return Result<ResetPassword>.Success(resetPassword);
+        return Result<ResetPasswordDto>.Success(resetPassword);
     }
 }

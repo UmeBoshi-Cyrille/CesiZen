@@ -12,5 +12,5 @@ public interface IPasswordService
 
     Task<IResult<MessageEventArgs>> ForgotPasswordRequest(string email);
 
-    Task<IResult> ForgotPasswordResponse(string email, string token);
+    Task<IResult<int>> ForgotPasswordResponse(string email, string token);
 }

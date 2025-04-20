@@ -2,7 +2,6 @@
 using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
-using CesiZen.Domain.Mapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -70,7 +69,7 @@ public class UserQueryController : ControllerBase
     /// - A 404 status code if no users are found for the specified page.
     /// - A 500 status code if there is a server error.
     /// </returns>
-    [HttpGet("get")]
+    [HttpGet("index")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -102,7 +101,7 @@ public class UserQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [RoleAuthorization(Roles = "User")]
+    [RoleAuthorization(Roles = "User, Admin")]
     public async Task<ActionResult<UserMinimumDto>> GetById(int id)
     {
         var result = await queryService.GetByIdAsync(id);
@@ -125,7 +124,7 @@ public class UserQueryController : ControllerBase
     /// - A 404 status code if the user is not found.
     /// - A 500 status code if there is a server error.
     /// </returns>
-    [HttpGet("user")]
+    [HttpGet("details")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -174,46 +173,6 @@ public class UserQueryController : ControllerBase
         var result = await queryService.GetByIdAsync(userId);
         return result.Match<ActionResult, UserMinimumDto>(
             success: value => Ok(value),
-            failure: error => BadRequest(new { message = Error.Alert, errors = error.Message })
-        );
-    }
-
-    /// <summary>
-    /// Retrieves a user profil by their unique identifier.
-    /// </summary>
-    /// <response code="200">The user was successfully retrieved.</response>
-    /// <response code="404">No user was found for the specified ID.</response>
-    /// <response code="500">An internal server error occurred while processing the request.</response>
-    /// <returns>
-    /// Desired user.
-    /// - A 200 status code with the user data if found.
-    /// - A 404 status code if the user is not found.
-    /// - A 500 status code if there is a server error.
-    /// </returns>
-    [HttpGet("minimum-profile", Name = "GetMinimumProfile")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [RoleAuthorization(Roles = "User, Admin")]
-    public async Task<ActionResult<UserResponseDto>> GetMinimumProfile()
-    {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        if (string.IsNullOrEmpty(userIdClaim))
-        {
-            return Unauthorized(new { message = Error.Alert, errors = UserErrors.NotConnected });
-        }
-
-        if (!int.TryParse(userIdClaim, out var userId))
-        {
-            return BadRequest(new { message = Error.Alert, errors = UserErrors.Unknown });
-        }
-
-        var result = await queryService.GetByIdAsync(userId);
-        var response = result.Value.MapResponseDto();
-
-        return result.Match<ActionResult, UserMinimumDto>(
-            success: value => Ok(response),
             failure: error => BadRequest(new { message = Error.Alert, errors = error.Message })
         );
     }

@@ -1,5 +1,4 @@
-﻿using CesiZen.Domain.Enum;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace CesiZen.Domain.DataTransfertObject;
@@ -20,5 +19,5 @@ public class NewBreathExerciseDto
 
     public int userId { get; set; }
 
-    public ExerciceType ExerciseType { get; set; }
+    public int ExerciseType { get; set; }
 }

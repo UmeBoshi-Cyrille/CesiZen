@@ -4,6 +4,7 @@ using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CesiZen.Api.Controllers;
 
@@ -12,11 +13,13 @@ namespace CesiZen.Api.Controllers;
 public class UserCommandController : ControllerBase
 {
     private readonly IUserCommandService userCommandService;
+    private readonly ILoginCommandService loginCommandService;
 
     public UserCommandController(
-        IUserCommandService userCommandService)
+        IUserCommandService userCommandService, ILoginCommandService loginCommandService)
     {
         this.userCommandService = userCommandService;
+        this.loginCommandService = loginCommandService;
     }
 
     /// <summary>
@@ -69,6 +72,47 @@ public class UserCommandController : ControllerBase
     public async Task<IActionResult> UpdateUsername([FromBody] int id, string username)
     {
         var result = await userCommandService.UpdateUserName(id, username);
+
+        return result.Match<IActionResult>(
+            success: () => Ok(new { message = result.Info.Message }),
+            failure: error => BadRequest(new { message = Error.Alert, errors = error.Message })
+        );
+    }
+
+    /// <summary>
+    /// Updates the Email of an existing user.
+    /// </summary>
+    /// <param name="id">The unique identifier of the user to provide.</param>
+    /// <param name="email">The new email to update.</param>
+    /// <response code="200">The email was successfully updated.</response>
+    /// <response code="400">The request was invalid or contained errors (e.g., validation failure).</response>
+    /// <response code="500">An unexpected server error occurred while processing the request.</response>
+    /// <returns>
+    /// An <see cref="ActionResult"/> containing:
+    /// - A 200 status code if the email update operation succeeds.
+    /// - A 400 status code if the request is invalid, such as missing required fields or providing invalid data.
+    /// - A 500 status code if a server-side error occurs, indicating the server was unable to process the request.
+    /// </returns>
+    [HttpPut("{id:int}/update-email")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "User")]
+    public async Task<IActionResult> UpdateEmail(string email)
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim))
+        {
+            return Unauthorized(new { message = "User Id not found" });
+        }
+
+        if (!int.TryParse(userIdClaim, out var userId))
+        {
+            return BadRequest(new { message = "Invalid User Id format" });
+        }
+
+        var result = await loginCommandService.UpdateEmail(userId, email);
 
         return result.Match<IActionResult>(
             success: () => Ok(new { message = result.Info.Message }),

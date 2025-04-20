@@ -189,7 +189,7 @@ public class ArticleCommandController : ControllerBase
     /// - A 400 status code if the request is invalid (e.g., malformed or missing ID).
     /// - A 500 status code if an unexpected server-side error occurs during processing.
     /// </returns>
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{id:int}/delete")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]

@@ -2,6 +2,8 @@
 
 public static class LoginErrors
 {
+    public static Error ClientUpdateFailed => new(ErrorType.UpdateFailed, ResourceMessages.GetResource("ErrorMessages", "CLIENT_UPDATE_FAILED"));
+
     public static Error AuthenticationFailed => new(ErrorType.AuthenticationFailed, ResourceMessages.GetResource("ErrorMessages", "CLIENT_AUTHENTICATION_FAILED"));
     public static Error AuthenticationMismatch => new(ErrorType.AuthenticationMismatch, ResourceMessages.GetResource("ErrorMessages", "CLIENT_AUTHENTICATION_MISMATCH"));
     public static Error EmailVerificationFailed => new(ErrorType.EmailVerificationFailed, ResourceMessages.GetResource("ErrorMessages", "CLIENT_EMAIL_VERIFICATION_FAILED"));
