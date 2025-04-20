@@ -65,7 +65,7 @@ public class ArticleQueryController : ControllerBase
     /// - A 404 status code if no articles are found.
     /// - A 500 status code if there is a server error.
     /// </returns>
-    [HttpGet("get")]
+    [HttpGet("index")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -121,7 +121,7 @@ public class ArticleQueryController : ControllerBase
     /// Returns a 404 status code if no articles are found.
     /// Returns a 500 status code if an unexpected error occurs.
     /// </returns>
-    [HttpGet("get-last")]
+    [HttpGet("index-last")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -149,7 +149,7 @@ public class ArticleQueryController : ControllerBase
     /// Returns a 404 status code if no articles are found for the given category.
     /// Returns a 500 status code if an internal server error occurs.
     /// </returns>
-    [HttpGet("get-by-category")]
+    [HttpGet("index-by-category")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]

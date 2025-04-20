@@ -43,7 +43,7 @@ public class AuthenticationController : LoginController
     /// - A 404 status code if the email or verification token is not found.
     /// - A 500 status code if an unexpected server-side error occurs during the verification process.
     /// </returns>
-    [HttpGet("verify")]
+    [HttpPost("verify-email")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -74,7 +74,7 @@ public class AuthenticationController : LoginController
     /// - A 404 status code if the email or verification token is not found.
     /// - A 500 status code if an unexpected server-side error occurs during the verification process.
     /// </returns>
-    [HttpGet("resend-verify-email")]
+    [HttpPost("resend-verify-email")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -299,9 +299,37 @@ public class AuthenticationController : LoginController
         var response = await passwordService.ForgotPasswordResponse(email, token);
 
         if (response.IsSuccess)
-            return Ok(new { message = response.Info.Message });
+            return Ok(new { id = response.Value, message = response.Info.Message });
 
         return BadRequest(new { message = Error.Alert, errors = response.Error.Message });
+    }
+
+    /// <summary>
+    /// Resets the user's password by verifying the provided user ID and token, and updating it to a new password.
+    /// </summary>
+    /// <param name="id">Id provided from the response to reset user Id.</param>
+    /// <param name="dto">An object containing the new password and its confirmation, provided by the client.</param>
+    /// <response code="200">The password was successfully reset.</response>
+    /// <response code="400">The request was invalid or contained errors (e.g., mismatched passwords).</response>
+    /// <response code="500">An unexpected server error occurred while processing the request.</response>
+    /// <returns>
+    /// An <see cref="ActionResult"/> containing:
+    /// - A 200 status code if the password reset operation succeeds.
+    /// - A 400 status code if the request is invalid (e.g., malformed token or mismatched passwords).
+    /// - A 500 status code if an unexpected server-side error occurs during processing.
+    /// </returns>
+    [HttpPost("reset-forgotten-password")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> ResetForgottenPassword(int id, PasswordResetDto dto)
+    {
+        var response = await passwordService.ResetPassword(id, dto);
+
+        if (response.IsFailure)
+            return BadRequest(new { message = Error.Alert, errors = response.Error.Message });
+
+        return Ok(new { message = response.Info.Message });
     }
 
     /// <summary>

@@ -26,6 +26,17 @@ public static class LoginMapper
         };
     }
 
+    public static ResetPasswordDto MapResetPasswordDto(this Login model, string token)
+    {
+        var expirationTime = model.ResetPasswords!.Where(r => r.ResetToken == token).Select(r => r.ExpirationTime).ToList();
+
+        return new ResetPasswordDto
+        {
+            userId = model.UserId,
+            ExpirationTime = expirationTime[0]
+        };
+    }
+
     //public static Login MapLoginAccess(this AuthenticationLoginDto dto)
     //{
     //    return new Login
