@@ -117,9 +117,16 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
     {
         try
         {
-            var articles = await context.Articles
+            var query = context.Articles
+                .AsNoTracking()
+                .Where(c => c.Categories!.Any(c => c.Id == categoryId))
+                .OrderBy(x => x.CreatedAt);
+
+            var totalCount = await query.CountAsync();
+            var articles = await query
                     .AsNoTracking()
-                    .Where(c => c.Categories!.Any(c => c.Id == categoryId))
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
                     .Select(x => x.MapMinimumDto())
                     .ToListAsync();
 
