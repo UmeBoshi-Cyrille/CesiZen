@@ -160,7 +160,7 @@ public class AuthenticationController : LoginController
 
         //Response.Cookies.Append("JWTCookie", response.Value.Token!, cookieOptions);
 
-        return CreatedAtRoute(nameof(UserQueryController.GetProfile), null, response.Value);
+        return CreatedAtRoute(nameof(UserQueryController.GetProfile), null, new { response.Value.User, response.Value.IsLoggedIn });
     }
 
     /// <summary>
@@ -406,7 +406,7 @@ public class AuthenticationController : LoginController
         {
             HttpOnly = true, // Prevents JavaScript access to tokens, mitigating XSS attacks.
             Secure = true, // Cookies marked as secure are only transmitted over HTTPS connections.
-            SameSite = SameSiteMode.Strict, // Helps mitigate CSRF attacks when configured properly
+            SameSite = SameSiteMode.Lax, // Helps mitigate CSRF attacks when configured properly
             Expires = DateTime.UtcNow.AddMinutes(30)
         };
 
