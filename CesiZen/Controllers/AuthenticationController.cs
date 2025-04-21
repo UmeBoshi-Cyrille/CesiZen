@@ -406,7 +406,7 @@ public class AuthenticationController : LoginController
         {
             HttpOnly = true, // Prevents JavaScript access to tokens, mitigating XSS attacks.
             Secure = true, // Cookies marked as secure are only transmitted over HTTPS connections.
-            SameSite = SameSiteMode.Lax, // Helps mitigate CSRF attacks when configured properly
+            SameSite = SameSiteMode.None, // Helps mitigate CSRF attacks when configured properly
             Expires = DateTime.UtcNow.AddMinutes(30)
         };
 
