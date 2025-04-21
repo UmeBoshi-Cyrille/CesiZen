@@ -8,7 +8,7 @@ using System.Security.Claims;
 namespace CesiZen.Api.Controllers;
 
 [ApiController]
-[Route("/api/breath-exercise/query")]
+[Route("/api/breath-exercises/query")]
 public class BreathExerciseQueryController : ControllerBase
 {
     private readonly IBreathExerciseQueryService exerciseService;
