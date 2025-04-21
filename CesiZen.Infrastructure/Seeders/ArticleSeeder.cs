@@ -35,7 +35,7 @@ internal static class ArticleSeeder
         var articleCategories = articles
             .SelectMany(article =>
                 categories.OrderBy(c => random.Next())
-                .Take(random.Next(1, 5))
+                .Take(random.Next(50, 200))
                 .Select(category => new ArticleCategory
                 {
                     ArticlesId = article.Id,
