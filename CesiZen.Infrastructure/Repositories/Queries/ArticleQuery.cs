@@ -133,7 +133,7 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
             var result = new PagedResultDto<ArticleMinimumDto>
             {
                 Data = articles,
-                TotalCount = articles.Count,
+                TotalCount = totalCount,
                 PageNumber = pageNumber,
                 PageSize = pageSize
             };
