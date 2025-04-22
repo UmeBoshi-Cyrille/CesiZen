@@ -33,7 +33,6 @@ public static class ServiceRegister
         services.AddScoped<IArticleQueryService, ArticleQueryService>();
         services.AddScoped<ICategoryQueryService, CategoryQueryService>();
         services.AddScoped<IBreathExerciseQueryService, BreathExerciseQueryService>();
-        services.AddScoped<IUserQueryService, UserQueryService>();
 
         return services;
     }
@@ -41,11 +40,11 @@ public static class ServiceRegister
     private static IServiceCollection AddCommandServices(this IServiceCollection services)
     {
         services.AddScoped<IUserCommandService, UserCommandService>();
+        services.AddScoped<ILoginCommandService, LoginCommandService>();
 
         services.AddScoped<ICategoryCommandService, CategoryCommandService>();
         services.AddScoped<IArticleCommandService, ArticleCommandService>();
         services.AddScoped<IBreathExerciseCommandService, BreathExerciseCommandService>();
-        services.AddScoped<IUserCommandService, UserCommandService>();
 
         return services;
     }

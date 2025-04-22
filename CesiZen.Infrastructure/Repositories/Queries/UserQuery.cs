@@ -50,7 +50,7 @@ public class UserQuery : AbstractRepository, IUserQuery
 
     public async Task<IResult<PagedResultDto<UserMinimumDto>>> GetAllAsync(int pageNumber, int pageSize)
     {
-        var totalCount = await context.Categories
+        var totalCount = await context.Users
                 .AsNoTracking().CountAsync();
 
         var users = await context.Users
