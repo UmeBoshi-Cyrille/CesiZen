@@ -156,7 +156,7 @@ public class UserQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "User, Admin")]
-    public async Task<ActionResult<UserMinimumDto>> GetProfile()
+    public async Task<ActionResult<UserDto>> GetProfile()
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -171,7 +171,7 @@ public class UserQueryController : ControllerBase
         }
 
         var result = await queryService.GetByIdAsync(userId);
-        return result.Match<ActionResult, UserMinimumDto>(
+        return result.Match<ActionResult, UserDto>(
             success: value => Ok(value),
             failure: error => BadRequest(new { message = Error.Alert, errors = error.Message })
         );
