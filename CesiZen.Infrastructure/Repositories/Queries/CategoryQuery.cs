@@ -18,7 +18,11 @@ public class CategoryQuery : AbstractRepository, ICategoryQuery
     {
         try
         {
-            var data = await context.Set<Category>()
+            var totalCount = await context.Categories
+                .AsNoTracking().CountAsync();
+
+            var data = await context.Categories
+                .AsNoTracking()
                 .OrderBy(x => x.Name)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
@@ -28,7 +32,7 @@ public class CategoryQuery : AbstractRepository, ICategoryQuery
             var result = new PagedResultDto<CategoryResponseDto>
             {
                 Data = data,
-                TotalCount = data.Count,
+                TotalCount = totalCount,
                 PageNumber = pageNumber,
                 PageSize = pageSize
             };

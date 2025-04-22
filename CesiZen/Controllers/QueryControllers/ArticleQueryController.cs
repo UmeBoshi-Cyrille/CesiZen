@@ -1,6 +1,7 @@
 ﻿using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CesiZen.Api.Controllers;
@@ -35,6 +36,7 @@ public class ArticleQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [AllowAnonymous]
     public async Task<ActionResult<PagedResultDto<ArticleMinimumDto>>> SearchArticles(int pageNumber = 1, int pageSize = 10, [FromQuery] string searchTerm = "")
     {
         var parameters = new PageParametersDto()
@@ -69,6 +71,7 @@ public class ArticleQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [AllowAnonymous]
     public async Task<ActionResult<PagedResultDto<ArticleMinimumDto>>> GetArticles(int pageNumber = 1, int pageSize = 10)
     {
         var result = await articleService.GetAllAsync(pageNumber, pageSize);
@@ -97,6 +100,7 @@ public class ArticleQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ActionName("GetArticle")]
+    [AllowAnonymous]
     public async Task<ActionResult<ArticleDto>> GetArticle(int id)
     {
         var result = await articleService.GetByIdAsync(id);
@@ -125,6 +129,7 @@ public class ArticleQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [AllowAnonymous]
     public async Task<ActionResult<List<ArticleMinimumDto>>> GetLast(int amount)
     {
         var result = await articleService.GetLast(amount);
@@ -153,6 +158,7 @@ public class ArticleQueryController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [AllowAnonymous]
     public async Task<ActionResult<PagedResultDto<ArticleMinimumDto>>> GetByCategory(int categoryId, int pageNumber = 1, int pageSize = 10)
     {
         var result = await articleService.GetByCategory(categoryId, pageNumber, pageSize);
