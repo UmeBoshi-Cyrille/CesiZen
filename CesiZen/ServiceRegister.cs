@@ -110,6 +110,12 @@ internal static class ServiceRegister
                     return Task.CompletedTask;
                 }
             };
+        }).AddCookie(options =>
+        {
+            options.Cookie.HttpOnly = true;
+            options.Cookie.SameSite = SameSiteMode.None;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+            options.Cookie.Domain = "localhost";
         });
 
         services.AddSingleton<IAuthorizationHandler, RoleManager>();

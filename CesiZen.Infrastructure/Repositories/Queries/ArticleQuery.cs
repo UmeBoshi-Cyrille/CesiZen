@@ -15,6 +15,9 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
 
     public async Task<IResult<PagedResultDto<ArticleMinimumDto>>> GetAllAsync(int pageNumber, int pageSize)
     {
+        var totalCount = await context.Articles
+                .AsNoTracking().CountAsync();
+
         var articles = await context.Articles
                .AsNoTracking()
                .OrderBy(x => x.Title)
@@ -31,7 +34,7 @@ public class ArticleQuery : AbstractRepository, IArticleQuery
         var result = new PagedResultDto<ArticleMinimumDto>
         {
             Data = articles,
-            TotalCount = articles.Count,
+            TotalCount = totalCount,
             PageNumber = pageNumber,
             PageSize = pageSize
         };
