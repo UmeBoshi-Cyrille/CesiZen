@@ -22,8 +22,10 @@ public class SessionCommand : AbstractRepository, ISessionCommand
 
             if (hasSession)
             {
-                await context.Sessions.ExecuteUpdateAsync(x => x
-                .SetProperty(x => x.SessionId, entity.SessionId));
+                await context.Sessions
+                    .Where(x => x.UserId == entity.UserId)
+                    .ExecuteUpdateAsync(x => x
+                        .SetProperty(x => x.SessionId, entity.SessionId));
             }
             else
             {
