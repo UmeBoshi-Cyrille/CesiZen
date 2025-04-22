@@ -10,7 +10,7 @@ public class BreathExerciseMinimumDto
     [MaxLength(100)]
     public string Title { get; set; } = string.Empty;
 
-    public DateTime EditedAt { get; set; }
+    public int Time { get; set; }
 
     public ExerciceType ExerciseType { get; set; }
 }
