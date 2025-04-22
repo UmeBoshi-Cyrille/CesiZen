@@ -48,7 +48,7 @@ public static class BreathExerciseMapper
         {
             Id = model.Id,
             Title = model.Title,
-            EditedAt = model.EditedAt,
+            Time = model.Time,
             ExerciseType = model.ExerciseType
         };
     }
