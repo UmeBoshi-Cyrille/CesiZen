@@ -50,6 +50,9 @@ public class UserQuery : AbstractRepository, IUserQuery
 
     public async Task<IResult<PagedResultDto<UserMinimumDto>>> GetAllAsync(int pageNumber, int pageSize)
     {
+        var totalCount = await context.Users
+                .AsNoTracking().CountAsync();
+
         var users = await context.Users
                 .AsNoTracking()
                 .OrderBy(x => x.Username)
@@ -66,7 +69,7 @@ public class UserQuery : AbstractRepository, IUserQuery
         var result = new PagedResultDto<UserMinimumDto>
         {
             Data = users,
-            TotalCount = users.Count,
+            TotalCount = totalCount,
             PageNumber = pageNumber,
             PageSize = pageSize
         };

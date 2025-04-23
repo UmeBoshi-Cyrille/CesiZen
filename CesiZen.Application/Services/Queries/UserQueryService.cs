@@ -40,17 +40,17 @@ public class UserQueryService : AService, IUserQueryService
         return Result<PagedResultDto<UserMinimumDto>>.Success(result.Value);
     }
 
-    public async Task<IResult<UserMinimumDto>> GetByIdAsync(int id)
+    public async Task<IResult<UserDto>> GetByIdAsync(int id)
     {
         var result = await query.GetByIdAsync(id);
 
         if (result.IsFailure)
         {
             logger.Error(result.Error.Message);
-            return Result<UserMinimumDto>.Failure(UserErrors.ClientNotFound);
+            return Result<UserDto>.Failure(UserErrors.ClientNotFound);
         }
 
-        return Result<UserMinimumDto>.Success(result.Value);
+        return Result<UserDto>.Success(result.Value);
     }
 
     public async Task<IResult<UserDto>> GetByUsername(string username)

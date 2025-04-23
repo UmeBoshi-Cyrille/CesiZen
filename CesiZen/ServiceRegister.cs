@@ -113,8 +113,8 @@ internal static class ServiceRegister
         }).AddCookie(options =>
         {
             options.Cookie.HttpOnly = true;
-            options.Cookie.SameSite = SameSiteMode.None;
-            options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+            options.Cookie.SameSite = SameSiteMode.Strict;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             options.Cookie.Domain = "localhost";
         });
 
@@ -124,7 +124,7 @@ internal static class ServiceRegister
         {
             options.AddPolicy("AllowAngularClient", policy =>
             {
-                policy.WithOrigins("http://localhost:4200")
+                policy.WithOrigins("https://localhost:4200")
                 .AllowCredentials()
                 .AllowAnyHeader()
                 .AllowAnyMethod()

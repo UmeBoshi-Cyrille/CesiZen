@@ -134,7 +134,7 @@ public class UserCommandController : ControllerBase
     /// - A 500 status code if an unexpected server-side error occurs, indicating the server was unable to process the request.
     /// </returns>
     [Authorize]
-    [HttpPut("account-activation")]
+    [HttpPatch("account-activation")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
