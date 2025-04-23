@@ -36,7 +36,7 @@ public class BreathExerciseCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [RoleAuthorization(Roles = "User")]
+    [RoleAuthorization(Roles = "User, Admin")]
     public async Task<IActionResult> Create([FromBody] NewBreathExerciseDto dto)
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -86,7 +86,7 @@ public class BreathExerciseCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [RoleAuthorization(Roles = "User")]
+    [RoleAuthorization(Roles = "User, Admin")]
     public async Task<IActionResult> Update(int id, [FromBody] BreathExerciseDto dto)
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -135,7 +135,7 @@ public class BreathExerciseCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [RoleAuthorization(Roles = "User")]
+    [RoleAuthorization(Roles = "User, Admin")]
     public async Task<IActionResult> Delete(int id)
     {
         var result = await exerciseCommandService.Delete(id);
