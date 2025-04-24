@@ -203,4 +203,47 @@ public class ArticleCommandController : ControllerBase
             failure: error => BadRequest(new { message = Error.Alert, errors = error.Message })
         );
     }
+
+    /// <summary>
+    /// Upload an image and stock it in the server.
+    /// </summary>
+    /// <param name="file">The provided file.</param>
+    /// <response code="200">The image was successfully uploaded.</response>
+    /// <response code="400">The request was invalid or contained errors.</response>
+    /// <response code="500">An unexpected server error occurred while processing the request.</response>
+    /// <returns>
+    /// An <see cref="ActionResult"/> containing:
+    /// - A 204 status code if the image is successfully uploaded.
+    /// - A 400 status code if the request is invalid (e.g., malformed or missing).
+    /// - A 500 status code if an unexpected server-side error occurs during processing.
+    /// </returns>
+    [HttpPost("upload-image")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [RoleAuthorization(Roles = "User, Admin")]
+    public async Task<IActionResult> UploadImage(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+            return BadRequest("Aucun fichier sélectionné.");
+
+        // Vérifie que le dossier existe
+        var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "assets", "img");
+        if (!Directory.Exists(folderPath))
+            Directory.CreateDirectory(folderPath);
+
+        // Génère un nom de fichier unique
+        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+        var filePath = Path.Combine(folderPath, fileName);
+
+        // Enregistre le fichier
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            await file.CopyToAsync(stream);
+        }
+
+        // Retourne le chemin relatif pour accès web
+        var relativePath = $"/assets/img/{fileName}";
+        return Ok(new { path = relativePath });
+    }
 }
