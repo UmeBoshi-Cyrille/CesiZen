@@ -52,7 +52,6 @@ public class UserCommandController : ControllerBase
     /// <summary>
     /// Updates the username of an existing user.
     /// </summary>
-    /// <param name="id">The unique identifier of the user to provide.</param>
     /// <param name="username">The new username to update.</param>
     /// <response code="200">The username was successfully updated.</response>
     /// <response code="400">The request was invalid or contained errors (e.g., validation failure).</response>
@@ -63,11 +62,11 @@ public class UserCommandController : ControllerBase
     /// - A 400 status code if the request is invalid, such as missing required fields or providing invalid data.
     /// - A 500 status code if a server-side error occurs, indicating the server was unable to process the request.
     /// </returns>
-    [HttpPatch("{id:int}/update-username")]
+    [HttpPatch("update-username")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [RoleAuthorization(Roles = "User")]
+    [RoleAuthorization(Roles = "User, Admin")]
     public async Task<IActionResult> UpdateUsername([FromBody] string username)
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -93,7 +92,6 @@ public class UserCommandController : ControllerBase
     /// <summary>
     /// Updates the Email of an existing user.
     /// </summary>
-    /// <param name="id">The unique identifier of the user to provide.</param>
     /// <param name="email">The new email to update.</param>
     /// <response code="200">The email was successfully updated.</response>
     /// <response code="400">The request was invalid or contained errors (e.g., validation failure).</response>
@@ -104,12 +102,12 @@ public class UserCommandController : ControllerBase
     /// - A 400 status code if the request is invalid, such as missing required fields or providing invalid data.
     /// - A 500 status code if a server-side error occurs, indicating the server was unable to process the request.
     /// </returns>
-    [HttpPatch("{id:int}/update-email")]
+    [HttpPatch("update-email")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [RoleAuthorization(Roles = "User")]
-    public async Task<IActionResult> UpdateEmail(string email)
+    [RoleAuthorization(Roles = "User, Admin")]
+    public async Task<IActionResult> UpdateEmail([FromBody] string email)
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
