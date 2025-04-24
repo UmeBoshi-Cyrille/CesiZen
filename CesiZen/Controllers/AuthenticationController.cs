@@ -48,7 +48,7 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [AllowAnonymous]
-    public async Task<IActionResult> VerifyEmail(string token, string email)
+    public async Task<IActionResult> VerifyEmail([FromBody] string token, string email)
     {
         var response = await authenticateService.VerifyEmail(token, email);
 
@@ -79,7 +79,7 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [AllowAnonymous]
-    public async Task<IActionResult> ResendVerifyEmail(string token, string email)
+    public async Task<IActionResult> ResendVerifyEmail([FromBody] string token, string email)
     {
         var response = await authenticateService.ResendEmailVerification(token, email);
 
@@ -258,7 +258,7 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> ForgotPasswordRequest(string email)
+    public async Task<IActionResult> ForgotPasswordRequest([FromBody] string email)
     {
         var response = await passwordService.ForgotPasswordRequest(email);
 
@@ -294,7 +294,7 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> ForgotPasswordResponse(string email, string token)
+    public async Task<IActionResult> ForgotPasswordResponse([FromBody] string email, string token)
     {
         var response = await passwordService.ForgotPasswordResponse(email, token);
 
@@ -322,7 +322,7 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> ResetForgottenPassword(int id, PasswordResetDto dto)
+    public async Task<IActionResult> ResetForgottenPassword([FromQuery] int id, [FromBody] PasswordResetDto dto)
     {
         var response = await passwordService.ResetPassword(id, dto);
 
@@ -349,7 +349,7 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> ResetPassword(PasswordResetDto dto)
+    public async Task<IActionResult> ResetPassword([FromBody] PasswordResetDto dto)
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
