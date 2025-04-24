@@ -65,4 +65,17 @@ public class UserQueryService : AService, IUserQueryService
 
         return Result<UserDto>.Success(result.Value);
     }
+
+    public async Task<IResult<UserProfileDto>> GetProfile(int id)
+    {
+        var result = await query.GetProfile(id);
+
+        if (result.IsFailure)
+        {
+            logger.Error(result.Error.Message);
+            return Result<UserProfileDto>.Failure(UserErrors.ClientNotFound);
+        }
+
+        return Result<UserProfileDto>.Success(result.Value);
+    }
 }

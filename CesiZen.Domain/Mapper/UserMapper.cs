@@ -52,6 +52,18 @@ public static class UserMapper
         };
     }
 
+    public static UserProfileDto MapProfileDto(this User model)
+    {
+        return new UserProfileDto
+        {
+            Firstname = model.Firstname,
+            Lastname = model.Lastname,
+            Username = model.Username,
+            CreatedAt = model.CreatedAt,
+            Email = model.Login!.Email,
+        };
+    }
+
     public static UserResponseDto MapResponseDto(this UserMinimumDto dto)
     {
         return new UserResponseDto

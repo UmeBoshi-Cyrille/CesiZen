@@ -54,4 +54,13 @@ internal static class UserFaker
             .RuleFor(a => a.IsActive, f => f.Random.Bool())
             .RuleFor(a => a.Login, new LoginMinimumDto());
     }
+
+    public static Faker<UserProfileDto> FakeUserProfileDtoGenerator()
+    {
+        return new Faker<UserProfileDto>()
+            .RuleFor(a => a.Firstname, f => f.Name.FirstName())
+            .RuleFor(a => a.Lastname, f => f.Name.LastName())
+            .RuleFor(a => a.Username, f => f.Name.LastName())
+            .RuleFor(a => a.Email, f => f.Internet.Email());
+    }
 }
