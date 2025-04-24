@@ -15,4 +15,6 @@ public interface IUserQuery
     Task<IResult<AuthenticationUserDto>> GetByIdentifier(string identifier, bool isEmail = false);
 
     Task<IResult<int>> GetUserId(string sessionId);
+
+    Task<IResult<UserProfileDto>> GetProfile(int id);
 }

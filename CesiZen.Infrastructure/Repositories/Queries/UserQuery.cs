@@ -180,4 +180,21 @@ public class UserQuery : AbstractRepository, IUserQuery
 
         return Result<AuthenticationUserDto>.Success(user);
     }
+
+    public async Task<IResult<UserProfileDto>> GetProfile(int id)
+    {
+        var user = await context.Users
+            .AsNoTracking()
+            .Where(x => x.Id == id)
+            .Include(x => x.Login)
+            .Select(x => x.MapProfileDto())
+            .FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            return Result<UserProfileDto>.Failure(UserErrors.LogNotFound(nameof(id)));
+        }
+
+        return Result<UserProfileDto>.Success(user);
+    }
 }

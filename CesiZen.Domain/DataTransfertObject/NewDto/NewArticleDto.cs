@@ -29,7 +29,7 @@ public class NewArticleDto
     public string Content { get; set; } = string.Empty;
 
     [MaxLength(200, ErrorMessage = "200 caractères autorisés")]
-    [MinLength(10, ErrorMessage = "10 caractères minimum requis")]
+    //[MinLength(7, ErrorMessage = "7 caractères minimum requis")]
     public string ImagePath { get; set; } = string.Empty;
     public ICollection<ImageDto>? Images { get; set; }
     public List<int>? Categories { get; set; }
