@@ -2,7 +2,6 @@
 using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -64,14 +63,26 @@ public class UserCommandController : ControllerBase
     /// - A 400 status code if the request is invalid, such as missing required fields or providing invalid data.
     /// - A 500 status code if a server-side error occurs, indicating the server was unable to process the request.
     /// </returns>
-    [HttpPut("{id:int}/update-username")]
+    [HttpPatch("{id:int}/update-username")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "User")]
-    public async Task<IActionResult> UpdateUsername([FromBody] int id, string username)
+    public async Task<IActionResult> UpdateUsername([FromBody] string username)
     {
-        var result = await userCommandService.UpdateUserName(id, username);
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim))
+        {
+            return Unauthorized(new { message = "User Id not found" });
+        }
+
+        if (!int.TryParse(userIdClaim, out var userId))
+        {
+            return BadRequest(new { message = "Invalid User Id format" });
+        }
+
+        var result = await userCommandService.UpdateUserName(userId, username);
 
         return result.Match<IActionResult>(
             success: () => Ok(new { message = result.Info.Message }),
@@ -93,7 +104,7 @@ public class UserCommandController : ControllerBase
     /// - A 400 status code if the request is invalid, such as missing required fields or providing invalid data.
     /// - A 500 status code if a server-side error occurs, indicating the server was unable to process the request.
     /// </returns>
-    [HttpPut("{id:int}/update-email")]
+    [HttpPatch("{id:int}/update-email")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -133,7 +144,6 @@ public class UserCommandController : ControllerBase
     /// - A 400 status code if the request is invalid, such as missing required fields or invalid data.
     /// - A 500 status code if an unexpected server-side error occurs, indicating the server was unable to process the request.
     /// </returns>
-    [Authorize]
     [HttpPatch("account-activation")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
