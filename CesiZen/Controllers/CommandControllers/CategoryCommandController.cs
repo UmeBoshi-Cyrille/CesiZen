@@ -2,6 +2,7 @@
 using CesiZen.Domain.BusinessResult;
 using CesiZen.Domain.DataTransfertObject;
 using CesiZen.Domain.Interfaces;
+using CesiZen.Domain.Mapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CesiZen.Api.Controllers;
@@ -21,7 +22,7 @@ public class CategoryCommandController : ControllerBase
     /// <summary>
     /// Creates a new category resource.
     /// </summary>
-    /// <param name="name">The name of the new category to create.</param>
+    /// <param name="newDto">The new category to create.</param>
     /// <response code="201">The category was successfully created.</response>
     /// <response code="400">The request was invalid or contained errors (e.g., validation failure).</response>
     /// <response code="500">An unexpected server error occurred while processing the request.</response>
@@ -36,9 +37,9 @@ public class CategoryCommandController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "Admin")]
-    public async Task<IActionResult> Create([FromBody] string name)
+    public async Task<IActionResult> Create([FromBody] NewCategoryDto newDto)
     {
-        var dto = new CategoryDto { Name = name };
+        var dto = newDto.MapDto();
         var result = await categoryService.Insert(dto);
 
         return result.Match<CategoryDto, ActionResult>(
