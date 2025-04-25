@@ -1,5 +1,4 @@
-﻿using CesiZen.Domain.Datamodel;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace CesiZen.Domain.DataTransfertObject;
 

@@ -13,6 +13,7 @@ public static class CategoryMapper
             Id = dto.Id!,
             Name = dto.Name,
             ImagePath = dto.ImagePath,
+            Alternative = dto.Alternative,
         };
     }
 
@@ -31,6 +32,7 @@ public static class CategoryMapper
             Id = model.Id,
             Name = model.Name,
             ImagePath = model.ImagePath,
+            Alternative = model.Alternative,
         };
     }
 
@@ -41,6 +43,17 @@ public static class CategoryMapper
             Id = model.Id,
             Name = model.Name,
             ImagePath = model.ImagePath,
+            Alternative = model.Alternative,
+        };
+    }
+
+    public static CategoryDto MapDto(this NewCategoryDto model)
+    {
+        return new CategoryDto
+        {
+            Name = model.Name,
+            ImagePath = model.ImagePath,
+            Alternative = model.Alternative,
         };
     }
     #endregion
