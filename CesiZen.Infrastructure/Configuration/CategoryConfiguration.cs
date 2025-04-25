@@ -14,5 +14,8 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
             .IsUnique();
 
         builder.HasIndex(x => x.Name).IsUnique();
+
+        builder.Property(x => x.Alternative)
+            .HasMaxLength(255);
     }
 }

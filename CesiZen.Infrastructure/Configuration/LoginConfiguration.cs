@@ -23,9 +23,19 @@ public class LoginConfiguration : IEntityTypeConfiguration<Login>
             .IsRequired();
 
         builder.Property(x => x.Password)
+            .HasMaxLength(255)
             .IsRequired();
 
         builder.Property(x => x.Salt)
+            .HasMaxLength(255)
+            .IsRequired();
+
+        builder.Property(x => x.EmailVerificationToken)
+            .HasMaxLength(255)
+            .IsRequired();
+
+        builder.Property(x => x.PasswordResetToken)
+            .HasMaxLength(255)
             .IsRequired();
     }
 }
