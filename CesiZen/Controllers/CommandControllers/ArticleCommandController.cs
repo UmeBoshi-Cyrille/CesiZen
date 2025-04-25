@@ -243,7 +243,7 @@ public class ArticleCommandController : ControllerBase
         }
 
         // Retourne le chemin relatif pour accès web
-        var relativePath = $"/assets/img/{fileName}";
+        var relativePath = fileName;
         return Ok(new { path = relativePath });
     }
 }

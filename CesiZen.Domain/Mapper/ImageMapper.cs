@@ -6,6 +6,36 @@ namespace CesiZen.Domain.Mapper;
 public static class ImageMapper
 {
 
+    public static Image Map(this NewImageDto dto)
+    {
+        return new Image
+        {
+            Title = dto.Title,
+            Alternative = dto.Alternative,
+            Path = dto.Path,
+        };
+    }
+
+    public static ImageDto MapDto(this NewImageDto dto)
+    {
+        return new ImageDto
+        {
+            Title = dto.Title,
+            Alternative = dto.Alternative,
+            Path = dto.Path,
+        };
+    }
+
+    public static NewImageDto MapDto(this Image model)
+    {
+        return new NewImageDto
+        {
+            Title = model.Title,
+            Alternative = model.Alternative,
+            Path = model.Path,
+        };
+    }
+
     public static Image Map(this ImageDto dto)
     {
         return new Image
@@ -51,4 +81,31 @@ public static class ImageMapper
 
         return model;
     }
+
+    public static List<Image> Mapdto(this List<NewImageDto> dto)
+    {
+        List<Image> model = new();
+
+        for (var i = 0; i < dto.Count; i++)
+        {
+            var item = dto[i].Map();
+            model.Add(item);
+        }
+
+        return model;
+    }
+
+    public static List<ImageDto> Map(this List<NewImageDto> dto)
+    {
+        List<ImageDto> model = new();
+
+        for (var i = 0; i < dto.Count; i++)
+        {
+            var item = dto[i].MapDto();
+            model.Add(item);
+        }
+
+        return model;
+    }
+
 }

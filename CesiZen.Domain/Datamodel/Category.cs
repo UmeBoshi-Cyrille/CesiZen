@@ -10,5 +10,7 @@ public class Category
 
     [MaxLength(54)]
     public string ImagePath { get; set; } = string.Empty;
+
+    public string Alternative { get; set; } = string.Empty;
     public ICollection<Article>? Articles { get; set; }
 }

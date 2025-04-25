@@ -68,7 +68,8 @@ public class RegisterService : ALoginService, IRegisterService
     {
         var template = ResourceMessages.GetResource("Templates", "TEMPLATE_VERIFICATION_EMAIL");
         string encodedToken = Uri.EscapeDataString(token!);
-        var verificationLink = $"{configuration["App:Url"]}/verify?token={encodedToken}";
+        string encodedEmail = Uri.EscapeDataString(email);
+        var verificationLink = $"{configuration["App:Url"]}/verify?token={encodedToken}&email={encodedEmail}";
         var htmlTemplate = template.Replace("{{url}}", verificationLink);
 
         return new MessageEventArgs
