@@ -48,7 +48,7 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [AllowAnonymous]
-    public async Task<IActionResult> VerifyEmail([FromBody] string token, string email)
+    public async Task<IActionResult> VerifyEmail([FromQuery] string token, string email)
     {
         var response = await authenticateService.VerifyEmail(token, email);
 
