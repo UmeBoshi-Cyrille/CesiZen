@@ -258,9 +258,10 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> ForgotPasswordRequest([FromBody] string email)
+    [AllowAnonymous]
+    public async Task<IActionResult> ForgotPasswordRequest([FromBody] ForgetPasswordEmail email)
     {
-        var response = await passwordService.ForgotPasswordRequest(email);
+        var response = await passwordService.ForgotPasswordRequest(email.Email);
 
         if (response.IsFailure)
         {
