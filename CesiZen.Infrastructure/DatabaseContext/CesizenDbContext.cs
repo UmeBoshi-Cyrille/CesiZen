@@ -14,6 +14,7 @@ public class CesizenDbContext : DbContext
     public virtual DbSet<BreathExercise> BreathExercises { get; set; }
     public virtual DbSet<Category> Categories { get; set; }
     public virtual DbSet<Image> Images { get; set; }
+    public virtual DbSet<ResetPassword> ResetPasswords { get; set; }
 
     public CesizenDbContext(DbContextOptions options)
         : base(options)
