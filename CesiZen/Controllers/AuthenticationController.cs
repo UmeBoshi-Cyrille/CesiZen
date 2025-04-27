@@ -16,17 +16,20 @@ public class AuthenticationController : LoginController
     private readonly IAuthenticateService authenticateService;
     private readonly ITokenProvider tokenProvider;
     private readonly IPasswordService passwordService;
+    private readonly ILoginQuery loginService;
 
     public AuthenticationController(
         IAuthenticateService authenticateService,
         ITokenProvider tokenProvider,
         IPasswordService passwordService,
+        ILoginQuery loginService,
         INotifier notifier,
         IObserver observer) : base(notifier, observer)
     {
         this.authenticateService = authenticateService;
         this.tokenProvider = tokenProvider;
         this.passwordService = passwordService;
+        this.loginService = loginService;
     }
 
     /// <summary>
@@ -295,7 +298,8 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> ForgotPasswordResponse([FromBody] string email, string token)
+    [AllowAnonymous]
+    public async Task<IActionResult> ForgotPasswordResponse([FromQuery] string email, string token)
     {
         var response = await passwordService.ForgotPasswordResponse(email, token);
 
@@ -323,9 +327,12 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> ResetForgottenPassword([FromQuery] int id, [FromBody] PasswordResetDto dto)
+    [AllowAnonymous]
+    public async Task<IActionResult> ResetForgottenPassword([FromQuery] string email, [FromBody] PasswordResetDto dto)
     {
-        var response = await passwordService.ResetPassword(id, dto);
+        var userId = await loginService.GetUserIdByEmail(email);
+
+        var response = await passwordService.ResetPassword(userId.Value, dto);
 
         if (response.IsFailure)
             return BadRequest(new { message = Error.Alert, errors = response.Error.Message });

@@ -1,15 +1,17 @@
-﻿using CesiZen.Domain.Datamodel;
+﻿using CesiZen.Domain.BusinessResult;
+using CesiZen.Domain.Datamodel;
 using CesiZen.Domain.Interfaces;
+using Serilog;
 
 namespace CesiZen.Application.Services;
 
-public class LoginQueryService : ILoginQueryService
+public class LoginQueryService : AService, ILoginQueryService
 {
-    private readonly ILoginQuery queries;
+    private readonly ILoginQuery query;
 
-    public LoginQueryService(ILoginQuery queries)
+    public LoginQueryService(ILoginQuery query, ILogger logger) : base(logger)
     {
-        this.queries = queries;
+        this.query = query;
     }
 
     public Task<IResult<Login>> GetByEmail(string email)
@@ -20,5 +22,18 @@ public class LoginQueryService : ILoginQueryService
     public Task<IResult<Login>> GetByUserId(int userId)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<IResult<int>> GetUserIdByEmail(string email)
+    {
+        var result = await query.GetUserIdByEmail(email);
+
+        if (result.IsFailure)
+        {
+            logger.Error(result.Error.Message);
+            return Result<int>.Failure(LoginErrors.EmailVerificationFailed);
+        }
+
+        return Result<int>.Success(result.Value);
     }
 }

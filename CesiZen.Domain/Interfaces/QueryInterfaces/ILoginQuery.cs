@@ -9,6 +9,8 @@ public interface ILoginQuery
 
     Task<IResult<Login>> GetByEmail(string email);
 
+    Task<IResult<int>> GetUserIdByEmail(string email);
+
     Task<IResult<Login>> GetByResetPasswordToken(string token);
 
     Task<IResult> CheckEmail(string email);
