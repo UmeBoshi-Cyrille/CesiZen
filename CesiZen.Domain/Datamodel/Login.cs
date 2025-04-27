@@ -19,7 +19,7 @@ public class Login
 
     [DataType(DataType.DateTime)]
     public DateTime? LockoutEndTime { get; set; }
-    public int? ResetFailedCount { get; set; }
+    public int ResetFailedCount { get; set; } = 0;
     public bool ResetIsLocked { get; set; }
     public DateTime? ResetLockoutEndTime { get; set; }
     public ICollection<ResetPassword>? ResetPasswords { get; set; }

@@ -7,4 +7,6 @@ public interface ILoginQueryService
     Task<IResult<Login>> GetByUserId(int userId);
 
     Task<IResult<Login>> GetByEmail(string email);
+
+    Task<IResult<int>> GetUserIdByEmail(string email);
 }

@@ -200,8 +200,10 @@ public class PasswordService : IPasswordService
     private MessageEventArgs BuildEmailVerificationMessage(string email, string token)
     {
         var template = ResourceMessages.GetResource("Templates", "TEMPLATE_RESET_PASSWORD");
-        var verificationLink = $"{configuration["App:Url"]}/reset-password?token={token}";
-        var htmlTemplate = template.Replace("{{url}}", verificationLink);
+        string encodedToken = Uri.EscapeDataString(token!);
+        string encodedEmail = Uri.EscapeDataString(email);
+        var verificationLink = $"{configuration["App:resetLink"]}/verify?token={encodedToken}&email={encodedEmail}";
+        var htmlTemplate = template.Replace("{{resetLink}}", verificationLink);
 
         return new MessageEventArgs
         {
@@ -254,7 +256,7 @@ public class PasswordService : IPasswordService
         login.ResetFailedCount++;
         await loginCommand.UpdateResetPasswordAttempsCount(login.Id, login.ResetFailedCount);
 
-        if (login.ResetFailedCount >= 5)
+        if (login.ResetFailedCount >= 50)
         {
             login.AccountIsLocked = true;
             login.LockoutEndTime = DateTime.UtcNow.AddMinutes(5);
