@@ -35,5 +35,9 @@ public class LoginConfiguration : IEntityTypeConfiguration<Login>
 
         builder.Property(x => x.PasswordResetToken)
             .HasMaxLength(255);
+
+        builder.HasMany(x => x.ResetPasswords)
+            .WithOne(x => x.Login)
+            .HasForeignKey(x => x.LoginId);
     }
 }

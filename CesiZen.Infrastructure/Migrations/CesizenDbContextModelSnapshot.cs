@@ -34,7 +34,7 @@ namespace CesiZen.Infrastructure.Migrations
 
                     b.HasIndex("CategoriesId");
 
-                    b.ToTable("ArticleCategory");
+                    b.ToTable("ArticleCategory", (string)null);
                 });
 
             modelBuilder.Entity("CesiZen.Domain.Datamodel.Article", b =>
@@ -85,7 +85,7 @@ namespace CesiZen.Infrastructure.Migrations
 
                     b.HasIndex("Title");
 
-                    b.ToTable("Articles");
+                    b.ToTable("Articles", (string)null);
                 });
 
             modelBuilder.Entity("CesiZen.Domain.Datamodel.BreathExercise", b =>
@@ -122,7 +122,7 @@ namespace CesiZen.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("BreathExercises");
+                    b.ToTable("BreathExercises", (string)null);
                 });
 
             modelBuilder.Entity("CesiZen.Domain.Datamodel.Category", b =>
@@ -156,7 +156,7 @@ namespace CesiZen.Infrastructure.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("CesiZen.Domain.Datamodel.Image", b =>
@@ -190,7 +190,7 @@ namespace CesiZen.Infrastructure.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.ToTable("Images");
+                    b.ToTable("Images", (string)null);
                 });
 
             modelBuilder.Entity("CesiZen.Domain.Datamodel.Login", b =>
@@ -262,7 +262,7 @@ namespace CesiZen.Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Logins");
+                    b.ToTable("Logins", (string)null);
                 });
 
             modelBuilder.Entity("CesiZen.Domain.Datamodel.RefreshToken", b =>
@@ -294,7 +294,7 @@ namespace CesiZen.Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("RefreshTokens", (string)null);
                 });
 
             modelBuilder.Entity("CesiZen.Domain.Datamodel.ResetPassword", b =>
@@ -326,7 +326,7 @@ namespace CesiZen.Infrastructure.Migrations
 
                     b.HasIndex("ResetToken");
 
-                    b.ToTable("ResetPasswords");
+                    b.ToTable("ResetPasswords", (string)null);
                 });
 
             modelBuilder.Entity("CesiZen.Domain.Datamodel.Session", b =>
@@ -355,7 +355,7 @@ namespace CesiZen.Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Sessions");
+                    b.ToTable("Sessions", (string)null);
                 });
 
             modelBuilder.Entity("CesiZen.Domain.Datamodel.User", b =>
@@ -404,7 +404,7 @@ namespace CesiZen.Infrastructure.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("ArticleCategory", b =>

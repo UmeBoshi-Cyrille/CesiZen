@@ -66,6 +66,20 @@ public class PasswordService : IPasswordService
         return Result.Success(UserInfos.ClientPasswordModified);
     }
 
+    public async Task<IResult> ResetForgottenPassword(int userId, ResetForgottenPasswordDto dto)
+    {
+        var login = await loginQuery.GetByUserId(userId);
+
+        var result = await ResetForgottenPasswordTask(userId, login.Value, dto.NewPassword!);
+
+        if (result.IsFailure)
+        {
+            return Result.Failure(LoginErrors.ResetPasswordNotFound);
+        }
+
+        return Result.Success(UserInfos.ClientPasswordModified);
+    }
+
     public async Task<IResult<MessageEventArgs>> ForgotPasswordRequest(string email)
     {
         var login = await loginQuery.GetByEmail(email);
@@ -123,6 +137,19 @@ public class PasswordService : IPasswordService
         }
 
         var authentifier = HashPassword(dto.NewPassword!, login.Salt);
+        await loginCommand.UpdatePassword(userId, authentifier.Password);
+
+        return Result.Success(LoginInfos.ResetPasswordSucceed);
+    }
+
+    private async Task<IResult> ResetForgottenPasswordTask(int userId, AuthenticationLoginDto login, string newPassword)
+    {
+        if (login == null)
+        {
+            return Result.Failure(LoginErrors.LoginNotFound);
+        }
+
+        var authentifier = HashPassword(newPassword!, login.Salt);
         await loginCommand.UpdatePassword(userId, authentifier.Password);
 
         return Result.Success(LoginInfos.ResetPasswordSucceed);
