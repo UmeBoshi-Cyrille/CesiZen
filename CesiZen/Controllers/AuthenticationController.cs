@@ -328,11 +328,11 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [AllowAnonymous]
-    public async Task<IActionResult> ResetForgottenPassword([FromQuery] string email, [FromBody] PasswordResetDto dto)
+    public async Task<IActionResult> ResetForgottenPassword([FromQuery] string email, [FromBody] ResetForgottenPasswordDto dto)
     {
         var userId = await loginService.GetUserIdByEmail(email);
 
-        var response = await passwordService.ResetPassword(userId.Value, dto);
+        var response = await passwordService.ResetForgottenPassword(userId.Value, dto);
 
         if (response.IsFailure)
             return BadRequest(new { message = Error.Alert, errors = response.Error.Message });
