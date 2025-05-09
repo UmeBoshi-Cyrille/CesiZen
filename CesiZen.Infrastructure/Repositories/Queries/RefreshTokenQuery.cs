@@ -18,7 +18,8 @@ public class RefreshTokenQuery : AbstractRepository, IRefreshTokenQuery
     {
         var result = await context.RefreshTokens
                 .AsNoTracking()
-                .FirstOrDefaultAsync(context => context.UserId == userId);
+                .Where(x => x.UserId == userId)
+                .FirstOrDefaultAsync();
 
         if (result == null)
         {

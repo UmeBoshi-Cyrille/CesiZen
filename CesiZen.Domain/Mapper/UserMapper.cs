@@ -149,6 +149,7 @@ public static class UserMapper
             CreatedAt = model.CreatedAt,
             UpdatedAt = model.UpdatedAt,
             IsActive = model.IsActive,
+            Role = model.Role,
             Login = model.Login!.MapDto()
         };
     }

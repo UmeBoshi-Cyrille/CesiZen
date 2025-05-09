@@ -66,6 +66,7 @@ public class AuthenticateServiceTests
             sessionQueryMock.Object,
             sessionCommandMock.Object,
             refreshTokenCommandMock.Object,
+            userQueryMock.Object,
             refreshTokenQueryMock.Object,
             loggerMock.Object,
             LoginFaker.FakeSettings()
