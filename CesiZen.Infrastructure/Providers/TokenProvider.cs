@@ -221,7 +221,7 @@ public class TokenProvider : ITokenProvider
         var expirationTime = GetAccessTokenExpirationTime(token);
         var remainingTime = expirationTime - DateTime.UtcNow;
 
-        return remainingTime > TimeSpan.FromMinutes(2) ? true : false;
+        return remainingTime < TimeSpan.FromMinutes(2) ? true : false;
     }
 
     private DateTime GetAccessTokenExpirationTime(string token)
