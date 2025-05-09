@@ -38,7 +38,7 @@ public static class LoginFaker
     {
         return new JwtSettings()
         {
-            SecretKey = "ABCDEFGH_ABCDEFGH_ABCDEFGH_ABCDEFGH",
+            SecretKey = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             Audience = "audiance",
             Issuer = "issuer",
             ExpirationMinutes = 60

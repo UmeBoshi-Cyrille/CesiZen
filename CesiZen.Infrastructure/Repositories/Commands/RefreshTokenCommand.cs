@@ -21,9 +21,11 @@ public class TokenCommand : AbstractRepository, IRefreshTokenCommand
 
             if (hasToken)
             {
-                await context.RefreshTokens.ExecuteUpdateAsync(x => x
-                .SetProperty(x => x.Token, entity.Token)
-                .SetProperty(x => x.ExpirationTime, entity.ExpirationTime));
+                await context.RefreshTokens
+                    .Where(x => x.UserId == entity.UserId)
+                    .ExecuteUpdateAsync(x => x
+                        .SetProperty(x => x.Token, entity.Token)
+                        .SetProperty(x => x.ExpirationTime, entity.ExpirationTime));
             }
             else
             {

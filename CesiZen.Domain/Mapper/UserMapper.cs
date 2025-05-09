@@ -88,6 +88,18 @@ public static class UserMapper
         };
     }
 
+    public static UserResponseDto Map(this UserDto dto)
+    {
+        return new UserResponseDto
+        {
+            Id = dto.Id,
+            Username = dto.Username,
+            CreatedAt = dto.CreatedAt,
+            Role = dto.Role,
+            IsActive = dto.IsActive,
+        };
+    }
+
     public static User Map(this NewUserDto dto, Authentifier authentifier, string emailVerificationToken, IConfiguration configuration)
     {
         User user = new();
@@ -137,6 +149,7 @@ public static class UserMapper
             CreatedAt = model.CreatedAt,
             UpdatedAt = model.UpdatedAt,
             IsActive = model.IsActive,
+            Role = model.Role,
             Login = model.Login!.MapDto()
         };
     }

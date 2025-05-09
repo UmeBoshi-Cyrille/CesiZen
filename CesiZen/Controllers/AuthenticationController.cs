@@ -108,7 +108,7 @@ public class AuthenticationController : LoginController
     /// - A 200 status code if the cookie was successfully deleted.
     /// - A 500 status code if an unexpected server-side error occurs during the cookie removal process.
     /// </returns>
-    [HttpGet("delete-cookie")]
+    [HttpPost("delete-cookie")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [AllowAnonymous]
@@ -153,17 +153,8 @@ public class AuthenticationController : LoginController
         }
 
         SendSecureCookie(token: response.Value.Token!);
-        //var cookieOptions = new CookieOptions
-        //{
-        //    HttpOnly = true, // Prevents JavaScript access to tokens, mitigating XSS attacks.
-        //    Secure = true, // Cookies marked as secure are only transmitted over HTTPS connections.
-        //    SameSite = SameSiteMode.None, // Helps mitigate CSRF attacks when configured properly
-        //    Expires = DateTime.UtcNow.AddMinutes(30)
-        //};
 
-        //Response.Cookies.Append("JWTCookie", response.Value.Token!, cookieOptions);
-
-        return CreatedAtRoute(nameof(UserQueryController.GetProfile), null, new { response.Value.User, response.Value.IsLoggedIn });
+        return CreatedAtRoute(nameof(UserQueryController.GetProfile), null, new { response.Value.User, response.Value.IsLoggedIn, response.Value.TokenExpirationTime, response.Value.Token });
     }
 
     /// <summary>
@@ -204,6 +195,8 @@ public class AuthenticationController : LoginController
         {
             return Unauthorized();
         }
+
+        Response.Cookies.Delete("JWTCookie");
 
         return Ok(new { message = result.Info.Message });
     }
@@ -312,7 +305,7 @@ public class AuthenticationController : LoginController
     /// <summary>
     /// Resets the user's password by verifying the provided user ID and token, and updating it to a new password.
     /// </summary>
-    /// <param name="id">Id provided from the response to reset user Id.</param>
+    /// <param name="email">Email provided from the response to reset user Id.</param>
     /// <param name="dto">An object containing the new password and its confirmation, provided by the client.</param>
     /// <response code="200">The password was successfully reset.</response>
     /// <response code="400">The request was invalid or contained errors (e.g., mismatched passwords).</response>
@@ -395,17 +388,23 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [RoleAuthorization(Roles = "User, Admin, SuperAdmin")]
-    public async Task<IActionResult> RefreshAccessToken()
+    [RoleAuthorization(Roles = "User, Admin")]
+    public async Task<ActionResult<AuthenticateResponseDto>> RefreshAccessToken()
     {
         var accessToken = HttpContext.GetTokenAsync("access_token");
+        var principal = HttpContext.User;
 
-        var response = await tokenProvider.RefreshAccessTokenAsync(accessToken.Result!);
+        var response = await tokenProvider.RefreshAccessTokenAsync(accessToken.Result!, principal);
 
         if (response.IsFailure)
+        {
+            Response.Cookies.Delete("JWTCookie");
             return BadRequest(new { message = response.Error.Message });
+        }
 
-        return Ok(new { message = response.Info.Message });
+        SendSecureCookie(token: response.Value.Token!);
+
+        return CreatedAtRoute(nameof(UserQueryController.GetProfile), null, new { response.Value.User, response.Value.IsLoggedIn, response.Value.TokenExpirationTime, response.Value.Token });
     }
 
     private void SendSecureCookie(string token)
@@ -415,7 +414,8 @@ public class AuthenticationController : LoginController
             HttpOnly = true, // Prevents JavaScript access to tokens, mitigating XSS attacks.
             Secure = true, // Cookies marked as secure are only transmitted over HTTPS connections.
             SameSite = SameSiteMode.Strict, // Helps mitigate CSRF attacks when configured properly
-            Expires = DateTime.UtcNow.AddMinutes(60)
+            Expires = DateTime.UtcNow.AddMinutes(5),
+            Path = "/"
         };
 
         Response.Cookies.Append("JWTCookie", token, cookieOptions);

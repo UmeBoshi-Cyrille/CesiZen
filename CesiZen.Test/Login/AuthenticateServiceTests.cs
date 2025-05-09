@@ -9,6 +9,7 @@ using CesiZen.Test.Fakers;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using Serilog;
+using System.Security.Claims;
 
 namespace CesiZen.Test.LoginServices;
 
@@ -65,6 +66,7 @@ public class AuthenticateServiceTests
             sessionQueryMock.Object,
             sessionCommandMock.Object,
             refreshTokenCommandMock.Object,
+            userQueryMock.Object,
             refreshTokenQueryMock.Object,
             loggerMock.Object,
             LoginFaker.FakeSettings()
@@ -203,9 +205,10 @@ public class AuthenticateServiceTests
     {
         // Arrange
         var accessToken = "validtoken";
+        var principal = new ClaimsPrincipal(new ClaimsIdentity(accessToken));
         var sessionId = "session";
         var userId = 123;
-        tokenProviderMock.Setup(x => x.GetSessionId(accessToken)).Returns(sessionId);
+        tokenProviderMock.Setup(x => x.GetSessionId(principal)).Returns(sessionId);
         userQueryMock.Setup(x => x.GetUserId(sessionId)).ReturnsAsync(Result<int>.Success(userId));
         tokenProviderMock.Setup(x => x.InvalidateTokens(userId)).ReturnsAsync(Result.Success());
 
