@@ -397,9 +397,9 @@ public class AuthenticationController : LoginController
         if (response.IsFailure)
             return BadRequest(new { message = response.Error.Message });
 
-        SendSecureCookie(response.Value.Token!);
+        SendSecureCookie(token: response.Value.Token!);
 
-        return Ok(new { message = response.Info.Message, response.Value.User, response.Value.IsLoggedIn, response.Value.TokenExpirationTime });
+        return CreatedAtRoute(nameof(UserQueryController.GetProfile), null, new { response.Value.User, response.Value.IsLoggedIn, response.Value.TokenExpirationTime, response.Value.Token });
     }
 
     private void SendSecureCookie(string token)
@@ -409,7 +409,8 @@ public class AuthenticationController : LoginController
             HttpOnly = true, // Prevents JavaScript access to tokens, mitigating XSS attacks.
             Secure = true, // Cookies marked as secure are only transmitted over HTTPS connections.
             SameSite = SameSiteMode.Strict, // Helps mitigate CSRF attacks when configured properly
-            Expires = DateTime.UtcNow.AddMinutes(5)
+            Expires = DateTime.UtcNow.AddMinutes(5),
+            Path = "/"
         };
 
         Response.Cookies.Append("JWTCookie", token, cookieOptions);

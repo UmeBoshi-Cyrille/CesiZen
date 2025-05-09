@@ -71,23 +71,34 @@ public class TokenProvider : ITokenProvider
     public async Task<IResult<AuthenticateResponseDto>> RefreshAccessTokenAsync(string accessToken, ClaimsPrincipal principal)
     {
         var result = new AuthenticateResponseDto();
-        var userId = principal?.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-        var user = await userQuery.GetByIdAsync(int.Parse(userId!));
+        var userIdClaim = principal?.FindFirst(ClaimTypes.NameIdentifier)!.Value;
 
-        if (CheckAccessTokenExpirationTime(accessToken))
+        if (string.IsNullOrEmpty(userIdClaim))
         {
-            result.Token = accessToken;
-            result.TokenExpirationTime = jwtSettings.ExpirationMinutes;
-            result.IsLoggedIn = true;
-            result.User = user.Value.Map();
-            return Result<AuthenticateResponseDto>.Success(result, Info.Success("Token is still valid"));
-        };
+            return Result<AuthenticateResponseDto>.Failure(Error.AuthenticationFailed("user id Not found"));
+        }
 
-        var check = await CheckRefreshTokenValidity(principal);
+        if (!int.TryParse(userIdClaim, out var userId))
+        {
+            return Result<AuthenticateResponseDto>.Failure(Error.AuthenticationFailed("user id Not found"));
+        }
+
+        var user = await userQuery.GetByIdAsync(userId);
+
+        //if (CheckAccessTokenExpirationTime(accessToken))
+        //{
+        //    result.Token = accessToken;
+        //    result.TokenExpirationTime = jwtSettings.ExpirationMinutes;
+        //    result.IsLoggedIn = true;
+        //    result.User = user.Value.Map();
+        //    return Result<AuthenticateResponseDto>.Success(result, Info.Success("Token is still valid"));
+        //};
+
+        var check = await CheckRefreshTokenValidity(principal!, userId);
 
         if (check)
         {
-            var token = RefreshAccessToken(principal);
+            var token = RefreshAccessToken(principal!, user.Value);
 
             result.Token = token;
             result.TokenExpirationTime = jwtSettings.ExpirationMinutes;
@@ -96,10 +107,7 @@ public class TokenProvider : ITokenProvider
             return Result<AuthenticateResponseDto>.Success(result, RefreshTokenInfos.TokenRenewed);
         }
 
-        var sessionId = GetSessionId(principal);
-        var session = await sessionQuery.GetBySessionId(sessionId!);
-
-        await InvalidateTokens(session.Value.UserId);
+        await InvalidateTokens(userId);
 
         return Result<AuthenticateResponseDto>.Failure(Error.AuthenticationFailed("Token has expired"));
     }
@@ -196,10 +204,12 @@ public class TokenProvider : ITokenProvider
         return Guid.NewGuid().ToString();
     }
 
-    private string RefreshAccessToken(ClaimsPrincipal principal)
+    private string RefreshAccessToken(ClaimsPrincipal principal, UserDto userdto)
     {
         TokenBuilderDto dto = new();
 
+        dto.UserId = userdto.Id;
+        dto.Role = userdto.Role;
         dto.TokenId = principal?.FindFirstValue("token_id")!;
         dto.SessionId = principal?.FindFirstValue("session_id")!;
 
@@ -211,7 +221,7 @@ public class TokenProvider : ITokenProvider
         var expirationTime = GetAccessTokenExpirationTime(token);
         var remainingTime = expirationTime - DateTime.UtcNow;
 
-        return remainingTime < TimeSpan.FromMinutes(2) ? true : false;
+        return remainingTime > TimeSpan.FromMinutes(2) ? true : false;
     }
 
     private DateTime GetAccessTokenExpirationTime(string token)
@@ -239,10 +249,8 @@ public class TokenProvider : ITokenProvider
         const int iterations = 350000;
         HashAlgorithmName hashAlgorithmName = HashAlgorithmName.SHA512;
 
-        var secret = jwtSettings.RefreshSecret;
-
         var hash = Rfc2898DeriveBytes.Pbkdf2(
-            Encoding.UTF8.GetBytes(sessionId + secret),
+            Encoding.UTF8.GetBytes(sessionId),
             salt,
             iterations,
             hashAlgorithmName,
@@ -264,10 +272,9 @@ public class TokenProvider : ITokenProvider
         tokenCommand.UpSert(token);
     }
 
-    private async Task<bool> CheckRefreshTokenValidity(ClaimsPrincipal principal)
+    private async Task<bool> CheckRefreshTokenValidity(ClaimsPrincipal principal, int userId)
     {
-        var userId = principal?.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-        var currentToken = await tokenQuery.GetById(int.Parse(userId!));
+        var currentToken = await tokenQuery.GetById(userId);
         var providedToken = GetProvidedRefreshToken(principal!);
 
         if (IsRefreshTokenValid(currentToken.Value.Token, providedToken) &&
@@ -281,10 +288,7 @@ public class TokenProvider : ITokenProvider
 
     private string GetProvidedRefreshToken(ClaimsPrincipal principal)
     {
-        var secret = jwtSettings.RefreshSecret;
-
-        var rawTokenId = principal?.FindFirstValue("token_id");
-        var sessionId = principal?.FindFirstValue("session_id");
+        var sessionId = principal?.FindFirstValue("session_id")!.Trim();
 
         var salt = jwtSettings.SecretKey;
         var tokenId = Convert.FromBase64String(salt!);
