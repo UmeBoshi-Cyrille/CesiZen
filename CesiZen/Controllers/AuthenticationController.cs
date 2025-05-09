@@ -196,6 +196,8 @@ public class AuthenticationController : LoginController
             return Unauthorized();
         }
 
+        Response.Cookies.Delete("JWTCookie");
+
         return Ok(new { message = result.Info.Message });
     }
 
@@ -395,7 +397,10 @@ public class AuthenticationController : LoginController
         var response = await tokenProvider.RefreshAccessTokenAsync(accessToken.Result!, principal);
 
         if (response.IsFailure)
+        {
+            Response.Cookies.Delete("JWTCookie");
             return BadRequest(new { message = response.Error.Message });
+        }
 
         SendSecureCookie(token: response.Value.Token!);
 
