@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
-using System.Text;
 
 namespace CesiZen.Api;
 
@@ -78,7 +77,7 @@ internal static class ServiceRegister
             SecretKey = configuration.GetValue<string>("Jwt:Secret")
         };
         configuration.GetSection("Jwt").Bind(jwtSettings);
-        services.AddSingleton(jwtSettings);
+        services.AddScoped(_ => jwtSettings);
 
         // Configure Jwt authentication
         services.AddAuthentication(options =>
@@ -90,7 +89,7 @@ internal static class ServiceRegister
         {
             options.TokenValidationParameters = new TokenValidationParameters
             {
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey!)),
+                IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(jwtSettings.SecretKey!)),
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ClockSkew = TimeSpan.Zero,

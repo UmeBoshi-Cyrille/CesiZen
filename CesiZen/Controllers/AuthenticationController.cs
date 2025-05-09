@@ -387,7 +387,7 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [RoleAuthorization(Roles = "User, Admin")]
-    public async Task<ActionResult<AuthenticateMinimumResponseDto>> RefreshAccessToken()
+    public async Task<ActionResult<AuthenticateResponseDto>> RefreshAccessToken()
     {
         var accessToken = HttpContext.GetTokenAsync("access_token");
         var principal = HttpContext.User;

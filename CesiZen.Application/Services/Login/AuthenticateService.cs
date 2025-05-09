@@ -58,6 +58,7 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
         var token = tokenProvider.GenerateAccessToken(tokenDto.Value);
         response.Token = token;
         response.User = user.Value.Map();
+        response.TokenExpirationTime = GetTokenExpirationTime();
 
         return Result<AuthenticateResponseDto>.Success(response, UserInfos.ClientAuthentified);
     }
@@ -122,6 +123,13 @@ public sealed class AuthenticationService : ALoginService, IAuthenticateService
     }
 
     #region Private Methods
+    private int GetTokenExpirationTime()
+    {
+        var i = int.TryParse(configuration["Jwt:ExpirationMinutes"], out int result);
+
+        return result;
+    }
+
     private async Task<IResult<AuthenticationUserDto>> GetLogin(string identifier)
     {
         if (string.IsNullOrEmpty(identifier))
