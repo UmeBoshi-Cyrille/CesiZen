@@ -395,17 +395,20 @@ public class AuthenticationController : LoginController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [RoleAuthorization(Roles = "User, Admin, SuperAdmin")]
-    public async Task<IActionResult> RefreshAccessToken()
+    [RoleAuthorization(Roles = "User, Admin")]
+    public async Task<ActionResult<AuthenticateMinimumResponseDto>> RefreshAccessToken()
     {
         var accessToken = HttpContext.GetTokenAsync("access_token");
+        var principal = HttpContext.User;
 
-        var response = await tokenProvider.RefreshAccessTokenAsync(accessToken.Result!);
+        var response = await tokenProvider.RefreshAccessTokenAsync(accessToken.Result!, principal);
 
         if (response.IsFailure)
             return BadRequest(new { message = response.Error.Message });
 
-        return Ok(new { message = response.Info.Message });
+        SendSecureCookie(response.Value.Token!);
+
+        return Ok(new { message = response.Info.Message, response.Value.User, response.Value.IsLoggedIn, response.Value.TokenExpirationTime });
     }
 
     private void SendSecureCookie(string token)
@@ -415,7 +418,7 @@ public class AuthenticationController : LoginController
             HttpOnly = true, // Prevents JavaScript access to tokens, mitigating XSS attacks.
             Secure = true, // Cookies marked as secure are only transmitted over HTTPS connections.
             SameSite = SameSiteMode.Strict, // Helps mitigate CSRF attacks when configured properly
-            Expires = DateTime.UtcNow.AddMinutes(60)
+            Expires = DateTime.UtcNow.AddMinutes(5)
         };
 
         Response.Cookies.Append("JWTCookie", token, cookieOptions);

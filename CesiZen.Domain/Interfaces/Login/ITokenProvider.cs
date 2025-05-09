@@ -1,4 +1,5 @@
 ﻿using CesiZen.Domain.DataTransfertObject;
+using System.Security.Claims;
 
 namespace CesiZen.Domain.Interfaces;
 
@@ -8,11 +9,11 @@ public interface ITokenProvider
 
     Task<IResult<TokenBuilderDto>> GenerateRefreshToken(int userId);
 
-    Task<IResult<string>> RefreshAccessTokenAsync(string accessToken);
+    Task<IResult<AuthenticateResponseDto>> RefreshAccessTokenAsync(string accessToken, ClaimsPrincipal principal);
 
     Task<IResult> InvalidateTokens(int userId);
 
     string GenerateVerificationToken();
 
-    string? GetSessionId(string token);
+    string? GetSessionId(ClaimsPrincipal principal);
 }
