@@ -114,7 +114,7 @@ internal static class ServiceRegister
             options.Cookie.HttpOnly = true;
             options.Cookie.SameSite = SameSiteMode.Strict;
             options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-            options.Cookie.Domain = "localhost";
+            //options.Cookie.Domain = "localhost";
         });
 
         services.AddSingleton<IAuthorizationHandler, RoleManager>();
@@ -123,7 +123,12 @@ internal static class ServiceRegister
         {
             options.AddPolicy("AllowAngularClient", policy =>
             {
-                policy.WithOrigins("https://localhost:4200")
+                policy.WithOrigins(
+                    "https://localhost:4200",           // Angular en local sur PC
+                    "https://192.168.1.121:4200",        // Angular sur mobile ou autre poste via IP locale
+                    "http://localhost:8100",           // Ionic/Capacitor en local
+                    "http://192.168.1.121:8100"         // Capacitor sur mobile via IP locale
+                )
                 .AllowCredentials()
                 .AllowAnyHeader()
                 .AllowAnyMethod()
