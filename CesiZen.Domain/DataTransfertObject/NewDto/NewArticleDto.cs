@@ -7,13 +7,13 @@ public class NewArticleDto
 {
     [MaxLength(255, ErrorMessage = "255 caractères autorisés")]
     [MinLength(2, ErrorMessage = "2 caractères minimum requis")]
-    [RegularExpression(@"^\S[a-zA-ZÀ-ÿ\s !^()-_;'’:"",.?\p{L}+]+\S$", ErrorMessage = "Caractères présents non autorisés.")]
+    [RegularExpression(@"^\S[a-zA-ZÀ-ÿ\s !^()%-“”«»_…;'’:"",.?\p{L}+]+\S$", ErrorMessage = "Caractères présents non autorisés.")]
     [DefaultValue("Titre")]
     [Required(ErrorMessage = "Le titre est obligatoire")]
     public string Title { get; set; } = string.Empty;
 
     [MaxLength(3000, ErrorMessage = "3000 caractères autorisés")]
-    [RegularExpression(@"^\S[a-zA-ZÀ-ÿ\s !^()%-_;'’:"",.?\p{L}+]+$", ErrorMessage = "Caractères présents non autorisés.")]
+    [RegularExpression(@"^\S[a-zA-ZÀ-ÿ\s !^()%-“”«»_…;'’:"",.?\p{L}+]+$", ErrorMessage = "Caractères présents non autorisés.")]
     [Required(ErrorMessage = "La description est obligatoire")]
     public string Description { get; set; } = string.Empty;
 
